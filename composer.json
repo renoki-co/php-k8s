@@ -1,0 +1,39 @@
+{
+    "name": "renoki-co/:package_name",
+    "description": ":package_description",
+    "keywords": ["laravel", "php"],
+    "license": "MIT",
+    "homepage": "https://github.com/renoki-co/:package_name",
+    "authors": [
+        {
+            "name": ":author_name",
+            "homepage": ":author_link",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "RenokiCo\\:package_namespace\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RenokiCo\\:package_namespace\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "orchestra/testbench": "~4.2.0",
+        "orchestra/database": "~4.2.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
