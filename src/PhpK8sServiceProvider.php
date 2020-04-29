@@ -4,7 +4,7 @@ namespace RenokiCo\PhpK8s;
 
 use Illuminate\Support\ServiceProvider;
 
-class PackageServiceProvider extends ServiceProvider
+class PhpK8sServiceProvider extends ServiceProvider
 {
     /**
      * Boot the service provider.
