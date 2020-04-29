@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\:package_namespace\Test;
+namespace RenokiCo\PhpK8s\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 

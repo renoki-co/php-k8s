@@ -1,13 +1,13 @@
 {
-    "name": "renoki-co/:package_name",
-    "description": ":package_description",
+    "name": "renoki-co/php-k8s",
+    "description": "Build resources in PHP for any Kubernetes cluster.",
     "keywords": ["laravel", "php"],
     "license": "MIT",
-    "homepage": "https://github.com/renoki-co/:package_name",
+    "homepage": "https://github.com/renoki-co/php-k8s",
     "authors": [
         {
-            "name": ":author_name",
-            "homepage": ":author_link",
+            "name": "Alex Renoki",
+            "homepage": "https://github.com/rennokki",
             "role": "Developer"
         }
     ],
@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RenokiCo\\:package_namespace\\": "src/"
+            "RenokiCo\\PhpK8s\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RenokiCo\\:package_namespace\\Test\\": "tests"
+            "RenokiCo\\PhpK8s\\Test\\": "tests"
         }
     },
     "scripts": {

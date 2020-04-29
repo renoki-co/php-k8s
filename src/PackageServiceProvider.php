@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\:package_namespace;
+namespace RenokiCo\PhpK8s;
 
 use Illuminate\Support\ServiceProvider;
 

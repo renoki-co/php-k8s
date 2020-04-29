@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\:package_namespace\Test\Models;
+namespace RenokiCo\PhpK8s\Test\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
