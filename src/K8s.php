@@ -23,4 +23,9 @@ class K8s
     {
         return new Kinds\K8sConfigMap;
     }
+
+    public static function service()
+    {
+        return new Kinds\K8sService;
+    }
 }

@@ -8,6 +8,7 @@ Currently, only the following resources can be handled:
 - storageclasses
 - secrets
 - configmaps
+- services
 
 # Work in Progress
 
@@ -16,7 +17,6 @@ The following list of resources are work in progress and they will be available 
 - persistentvolumeclaims
 - persistentvolumes
 - pods
-- services
 - daemonsets
 - deployments
 - replicasets
