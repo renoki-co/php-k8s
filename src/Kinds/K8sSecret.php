@@ -58,7 +58,7 @@ class K8sSecret
      * Wether the toArray() method to show the decoded version
      *
      * @param  bool  $enabled
-     * @return void
+     * @return $this
      */
     public function decoded($enabled = true)
     {
