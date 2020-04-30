@@ -19,7 +19,7 @@ class K8sConfigMap
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/configuration/secret/
+     * See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
      *
      * @param  array  $payload
      * @return void
