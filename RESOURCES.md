@@ -24,6 +24,7 @@ The following list of resources are work in progress and they will be available 
 - horizontalpodautoscalers
 - cronjobs
 - jobs
+- ingress
 
 # Discussable
 
