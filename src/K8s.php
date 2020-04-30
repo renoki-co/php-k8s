@@ -18,4 +18,9 @@ class K8s
     {
         return new Kinds\K8sSecret;
     }
+
+    public static function configmap()
+    {
+        return new Kinds\K8sConfigMap;
+    }
 }
