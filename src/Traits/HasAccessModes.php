@@ -7,7 +7,7 @@ trait HasAccessModes
     /**
      * The access modes options for the resource.
      * See for PersistentVolume: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
-     * See for PersistentVolumeClaim: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes-1
+     * See for PersistentVolumeClaim: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes-1.
      * @var array
      */
     protected $accessModes = [];

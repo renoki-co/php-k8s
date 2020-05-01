@@ -9,7 +9,7 @@ trait HasStorageClass
     /**
      * The storage class for the resource.
      * See for PersistentVolume: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
-     * See for PersistentVolumeClaim: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#create-persistent-volume-claim-from-an-existing-pvc
+     * See for PersistentVolumeClaim: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#create-persistent-volume-claim-from-an-existing-pvc.
      * @var array
      */
     protected $storageClassName = 'standard';
