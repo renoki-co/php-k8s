@@ -20,6 +20,8 @@ class PersistentVolumeTest extends TestCase
             ->version('test')
             ->name('files')
             ->namespace('kube-system')
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->reclaimPolicy('Delete')
             ->mountOptions(['debug', ['nfsvers', '4.1']])
             ->capacity(100, 'Gi')
@@ -32,6 +34,8 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('test', $payload['apiVersion']);
         $this->assertEquals('files', $payload['metadata']['name']);
         $this->assertEquals('kube-system', $payload['metadata']['namespace']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals('Delete', $payload['spec']['persistentVolumeReclaimPolicy']);
         $this->assertEquals(['debug', 'nfsvers=4.1'], $payload['spec']['mountOptions']);
         $this->assertEquals('100Gi', $payload['spec']['capacity']['storage']);
@@ -46,6 +50,8 @@ class PersistentVolumeTest extends TestCase
             ->version('test')
             ->name('files')
             ->namespace('kube-system')
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->reclaimPolicy('Delete')
             ->mountOptions(['debug', ['nfsvers', '4.1']])
             ->capacity(100, 'Gi')
@@ -62,6 +68,8 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('test', $payload['apiVersion']);
         $this->assertEquals('files', $payload['metadata']['name']);
         $this->assertEquals('kube-system', $payload['metadata']['namespace']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals('Delete', $payload['spec']['persistentVolumeReclaimPolicy']);
         $this->assertEquals(['debug', 'nfsvers=4.1'], $payload['spec']['mountOptions']);
         $this->assertEquals('100Gi', $payload['spec']['capacity']['storage']);

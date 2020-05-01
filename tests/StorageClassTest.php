@@ -26,6 +26,8 @@ class StorageClassTest extends TestCase
         $sc = K8s::storageClass()
             ->version('test')
             ->name('gp2-expandable')
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->provisioner('csi.aws.amazon.com')
             ->parameters(['type' => 'gp2'])
             ->reclaimPolicy('Delete')
@@ -38,6 +40,8 @@ class StorageClassTest extends TestCase
 
         $this->assertEquals('test', $payload['apiVersion']);
         $this->assertEquals('gp2-expandable', $payload['metadata']['name']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals('csi.aws.amazon.com', $payload['provisioner']);
         $this->assertEquals(['type' => 'gp2'], $payload['parameters']);
         $this->assertEquals('Delete', $payload['reclaimPolicy']);
@@ -59,6 +63,8 @@ class StorageClassTest extends TestCase
         $sc = K8s::storageClass()
             ->version('test')
             ->name('gp2-expandable')
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->provisioner('csi.aws.amazon.com')
             ->parameters(['type' => 'gp2'])
             ->reclaimPolicy('Delete')
@@ -75,6 +81,8 @@ class StorageClassTest extends TestCase
 
         $this->assertEquals('test', $payload['apiVersion']);
         $this->assertEquals('gp2-expandable', $payload['metadata']['name']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals('csi.aws.amazon.com', $payload['provisioner']);
         $this->assertEquals(['type' => 'gp2'], $payload['parameters']);
         $this->assertEquals('Delete', $payload['reclaimPolicy']);

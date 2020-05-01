@@ -2,6 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Traits\HasAnnotations;
+use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasMountOptions;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasReclaimPolicy;
@@ -9,7 +11,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sStorageClass
 {
-    use HasMountOptions, HasName, HasReclaimPolicy, HasVersion;
+    use HasAnnotations, HasLabels, HasMountOptions, HasName, HasReclaimPolicy, HasVersion;
 
     /**
      * The provisioner of the StorageClass.
@@ -65,6 +67,8 @@ class K8sStorageClass
         if ($payload) {
             $this->version = $payload['apiVersion'] ?? 'storage.k8s.io/v1';
             $this->name = $payload['metadata']['name'] ?? null;
+            $this->labels = $payload['metadata']['labels'] ?? [];
+            $this->annotations = $payload['metadata']['annotations'] ?? [];
             $this->provisioner = $payload['provisioner'] ?? null;
             $this->parameters = $payload['parameters'] ?? [];
             $this->reclaimPolicy = $payload['reclaimPolicy'] ?? 'Retain';
@@ -152,6 +156,8 @@ class K8sStorageClass
             'kind' => 'StorageClass',
             'metadata' => [
                 'name' => $this->name,
+                'labels' => $this->labels,
+                'annotations' => $this->annotations,
             ],
             'provisioner' => $this->provisioner,
             'parameters' => $this->parameters,

@@ -2,13 +2,14 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sNamespace
 {
-    use HasLabels, HasName, HasVersion;
+    use HasAnnotations, HasLabels, HasName, HasVersion;
 
     /**
      * Create a new kind instance.
@@ -23,6 +24,7 @@ class K8sNamespace
             $this->version = $payload['apiVersion'] ?? 'v1';
             $this->name = $payload['metadata']['name'] ?? null;
             $this->labels = $payload['metadata']['labels'] ?? null;
+            $this->annotations = $payload['metadata']['annotations'] ?? null;
         }
     }
 
@@ -39,6 +41,7 @@ class K8sNamespace
             'metadata' => [
                 'name' => $this->name,
                 'labels' => $this->labels,
+                'annotations' => $this->annotations,
             ],
         ];
     }

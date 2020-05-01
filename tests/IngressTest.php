@@ -20,9 +20,8 @@ class IngressTest extends TestCase
             ->version('test')
             ->name('nginx')
             ->namespace('staging')
-            ->annotations([
-                'some.annotation/test' => 'https',
-            ])
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->rules([[
                 'host' => 'test.domain.com',
                 'http' => [
@@ -49,6 +48,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $payload['metadata']['name']);
         $this->assertEquals('staging', $payload['metadata']['namespace']);
         $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
 
         $this->assertEquals([
             [
@@ -84,9 +84,8 @@ class IngressTest extends TestCase
             ->version('test')
             ->name('nginx')
             ->namespace('staging')
-            ->annotations([
-                'some.annotation/test' => 'https',
-            ])
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->rules([[
                 'host' => 'test.domain.com',
                 'http' => [
@@ -117,6 +116,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $payload['metadata']['name']);
         $this->assertEquals('staging', $payload['metadata']['namespace']);
         $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
 
         $this->assertEquals([
             [

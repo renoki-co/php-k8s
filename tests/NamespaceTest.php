@@ -19,13 +19,15 @@ class NamespaceTest extends TestCase
         $ns = K8s::namespace()
             ->version('test')
             ->name('production')
-            ->labels(['type' => 'test']);
+            ->labels(['type' => 'test'])
+            ->annotations(['some.annotation/test' => 'https']);
 
         $payload = $ns->toArray();
 
         $this->assertEquals('test', $payload['apiVersion']);
         $this->assertEquals('production', $payload['metadata']['name']);
         $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
     }
 
     public function test_namespace_import()
@@ -33,7 +35,8 @@ class NamespaceTest extends TestCase
         $ns = K8s::namespace()
             ->version('test')
             ->name('production')
-            ->labels(['type' => 'test']);
+            ->labels(['type' => 'test'])
+            ->annotations(['some.annotation/test' => 'https']);
 
         $payload = $ns->toArray();
 
@@ -44,6 +47,7 @@ class NamespaceTest extends TestCase
         $this->assertEquals('test', $payload['apiVersion']);
         $this->assertEquals('production', $payload['metadata']['name']);
         $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
     }
 
     public function test_namespace_instance_passed_in_the_namespace_method_for_example_resource()

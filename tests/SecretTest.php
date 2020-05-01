@@ -20,6 +20,8 @@ class SecretTest extends TestCase
             ->version('test')
             ->name('passwords')
             ->namespace('kube-config')
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->data(['password1' => 'secret']);
 
         $encodedPayload = $secret->toArray();
@@ -39,6 +41,8 @@ class SecretTest extends TestCase
             ->version('test')
             ->name('passwords')
             ->namespace('kube-config')
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->data(['password1' => 'secret']);
 
         $encodedPayload = $secret->toArray();
