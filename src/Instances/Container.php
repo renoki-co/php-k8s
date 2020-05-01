@@ -73,6 +73,13 @@ class Container
      */
     protected $volumeMounts = [];
 
+    /**
+     * Set the working directory on startup.
+     *
+     * @var string
+     */
+    protected $workingDir;
+
     public function __construct(array $payload = [])
     {
         if ($payload) {
@@ -85,6 +92,7 @@ class Container
             $this->env = $payload['env'] ?? [];
             $this->ports = $payload['ports'] ?? [];
             $this->volumeMounts = $payload['volumeMounts'] ?? [];
+            $this->workingDir = $payload['workingDir'] ?? null;
         }
     }
 
@@ -243,6 +251,19 @@ class Container
     }
 
     /**
+     * Set the working directory.
+     *
+     * @param  string  $workingDir
+     * @return $this
+     */
+    public function workingDir(string $workingDir)
+    {
+        $this->workingDir = $workingDir;
+
+        return $this;
+    }
+
+    /**
      * Add a new volume to the mounted volumes.
      *
      * @param  string|\RenokiCo\PhpK8s\Kinds\K8sPersistentVolume  $volume
@@ -287,6 +308,7 @@ class Container
             'env' => $this->env,
             'ports' => $this->ports,
             'volumeMounts' => $this->volumeMounts,
+            'workingDir' => $this->workingDir,
         ];
     }
 }

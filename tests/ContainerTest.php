@@ -40,7 +40,8 @@ class ContainerTest extends TestCase
                 'readOnly' => true,
             ]])
             ->addVolume($pv, '/tmp', '/lib/io1')
-            ->addVolume('mysql', '/var', '/lib/mysql');
+            ->addVolume('mysql', '/var', '/lib/mysql')
+            ->workingDir('/var/lib/mysql');
 
         $payload = $container->toArray();
 
@@ -48,6 +49,7 @@ class ContainerTest extends TestCase
         $this->assertEquals('Always', $payload['imagePullPolicy']);
         $this->assertEquals('mysqld', $payload['command']);
         $this->assertEquals(['--test', '123'], $payload['args']);
+        $this->assertEquals('/var/lib/mysql', $payload['workingDir']);
 
         $this->assertEquals([
             'limits' => ['cpu' => 2, 'memory' => '4Gi'],
@@ -89,7 +91,8 @@ class ContainerTest extends TestCase
                 'mountPath' => '/tmp',
                 'subPath' => '/lib/mysql',
                 'readOnly' => true,
-            ]]);
+            ]])
+            ->workingDir('/var/lib/mysql');
 
         $payload = $container->toArray();
 
@@ -101,6 +104,7 @@ class ContainerTest extends TestCase
         $this->assertEquals('Always', $payload['imagePullPolicy']);
         $this->assertEquals('mysqld', $payload['command']);
         $this->assertEquals(['--test', '123'], $payload['args']);
+        $this->assertEquals('/var/lib/mysql', $payload['workingDir']);
 
         $this->assertEquals([
             'limits' => ['cpu' => 2, 'memory' => '4Gi'],
