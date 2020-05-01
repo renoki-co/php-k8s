@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
+use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasNamespace;
 use RenokiCo\PhpK8s\Traits\HasSelector;
@@ -10,7 +11,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sService
 {
-    use HasAnnotations, HasName, HasNamespace, HasSelector, HasVersion;
+    use HasAnnotations, HasLabels, HasName, HasNamespace, HasSelector, HasVersion;
 
     /**
      * The type of the Service.
@@ -57,6 +58,7 @@ class K8sService
             $this->version = $payload['apiVersion'] ?? 'v1';
             $this->name = $payload['metadata']['name'] ?? null;
             $this->namespace = $payload['metadata']['namespace'] ?? 'default';
+            $this->labels = $payload['metadata']['labels'] ?? [];
             $this->annotations = $payload['metadata']['annotations'] ?? [];
             $this->selector = $payload['spec']['selector'] ?? [];
             $this->type = $payload['spec']['type'] ?? 'NodePort';
@@ -152,6 +154,7 @@ class K8sService
             'metadata' => [
                 'name' => $this->name,
                 'namespace' => $this->namespace,
+                'labels' => $this->labels,
                 'annotations' => $this->annotations,
             ],
             'spec' => [

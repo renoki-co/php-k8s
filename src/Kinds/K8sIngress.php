@@ -3,13 +3,14 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
+use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasNamespace;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sIngress
 {
-    use HasAnnotations, HasName, HasNamespace, HasVersion;
+    use HasAnnotations, HasLabels, HasName, HasNamespace, HasVersion;
 
     /**
      * The Ingress rules.
@@ -32,6 +33,7 @@ class K8sIngress
             $this->version = $payload['apiVersion'] ?? 'v1';
             $this->name = $payload['metadata']['name'] ?? null;
             $this->namespace = $payload['metadata']['namespace'] ?? 'default';
+            $this->labels = $payload['metadata']['labels'] ?? [];
             $this->annotations = $payload['metadata']['annotations'] ?? [];
             $this->rules = $payload['spec']['rules'] ?? [];
         }
@@ -79,6 +81,7 @@ class K8sIngress
             'metadata' => [
                 'name' => $this->name,
                 'namespace' => $this->namespace,
+                'labels' => $this->labels,
                 'annotations' => $this->annotations,
             ],
             'spec' => [

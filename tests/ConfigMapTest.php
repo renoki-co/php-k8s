@@ -20,11 +20,16 @@ class ConfigMapTest extends TestCase
             ->version('test')
             ->name('settings')
             ->namespace('kube-config')
+            ->annotations(['test.annotation' => 'yes'])
+            ->labels(['app' => 'test'])
             ->data(['mysetting' => 'somevalue']);
 
         $payload = $configmap->toArray();
 
         $this->assertEquals('test', $payload['apiVersion']);
+        $this->assertEquals('kube-config', $payload['metadata']['namespace']);
+        $this->assertEquals(['test.annotation' => 'yes'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals('kube-config', $payload['metadata']['namespace']);
         $this->assertEquals('settings', $payload['metadata']['name']);
         $this->assertEquals(['mysetting' => 'somevalue'], $payload['data']);
@@ -36,6 +41,8 @@ class ConfigMapTest extends TestCase
             ->version('test')
             ->name('settings')
             ->namespace('kube-config')
+            ->annotations(['test.annotation' => 'yes'])
+            ->labels(['app' => 'test'])
             ->data(['mysetting' => 'somevalue']);
 
         $payload = $configmap->toArray();
@@ -45,6 +52,8 @@ class ConfigMapTest extends TestCase
         $payload = $configmap->toArray();
 
         $this->assertEquals('test', $payload['apiVersion']);
+        $this->assertEquals('kube-config', $payload['metadata']['namespace']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals('kube-config', $payload['metadata']['namespace']);
         $this->assertEquals('settings', $payload['metadata']['name']);
         $this->assertEquals(['mysetting' => 'somevalue'], $payload['data']);

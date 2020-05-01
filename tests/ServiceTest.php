@@ -20,9 +20,8 @@ class ServiceTest extends TestCase
             ->version('test')
             ->name('nginx')
             ->namespace('staging')
-            ->annotations([
-                'some.annotation/test' => 'https',
-            ])
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->selector(['app' => 'MyApp'])
             ->type('LoadBalancer')
             ->externalIps(['192.168.1.1'])
@@ -41,6 +40,7 @@ class ServiceTest extends TestCase
         $this->assertEquals('nginx', $payload['metadata']['name']);
         $this->assertEquals('staging', $payload['metadata']['namespace']);
         $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals(['app' => 'MyApp'], $payload['spec']['selector']);
         $this->assertEquals('LoadBalancer', $payload['spec']['type']);
         $this->assertEquals('10.0.0.0', $payload['spec']['clusterIP']);
@@ -68,9 +68,8 @@ class ServiceTest extends TestCase
             ->version('test')
             ->name('nginx')
             ->namespace('staging')
-            ->annotations([
-                'some.annotation/test' => 'https',
-            ])
+            ->annotations(['some.annotation/test' => 'https'])
+            ->labels(['app' => 'test'])
             ->selector(['app' => 'MyApp'])
             ->type('LoadBalancer')
             ->externalIps(['192.168.1.1'])
@@ -93,6 +92,7 @@ class ServiceTest extends TestCase
         $this->assertEquals('nginx', $payload['metadata']['name']);
         $this->assertEquals('staging', $payload['metadata']['namespace']);
         $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals(['app' => 'MyApp'], $payload['spec']['selector']);
         $this->assertEquals('LoadBalancer', $payload['spec']['type']);
         $this->assertEquals('10.0.0.0', $payload['spec']['clusterIP']);
