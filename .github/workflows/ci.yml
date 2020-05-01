@@ -31,11 +31,11 @@ jobs:
         chmod +x minikube
     - name: Install Kubectl binary
       run: |
-        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v${{ matrix.kubernetes }}/bin/linux/amd64/kubectl
         chmod +x kubectl
-    - name: Starting Kubernetes v{{ matrix.kubernetes }}
+    - name: Starting Kubernetes v${{ matrix.kubernetes }}
       run: |
-        ./minikube start --kubernetes-version v{{ matrix.kubernetes }}
+        ./minikube start --kubernetes-version v${{ matrix.kubernetes }}
     - name: Run Kubernetes Proxy
       run: |
         ./kubectl proxy --port=8080 &
