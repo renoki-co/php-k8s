@@ -2,10 +2,14 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use RenokiCo\PhpK8s\Connection;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\ResourcesList;
 
 class K8sResource implements Arrayable, Jsonable
@@ -52,23 +56,66 @@ class K8sResource implements Arrayable, Jsonable
         return $this;
     }
 
-    public function get($identifier = null)
+    /**
+     * Get a list with all resources.
+     *
+     * @return \RenokiCo\PhpK8s\ResourcesList
+     */
+    public function getAll()
     {
-        if ($identifier) {
-            return $this->call('GET', $this->resourceApiPath());
-        }
-
         return $this->call('GET', $this->resourcesApiPath());
     }
 
+    /**
+     * Get a specific resource.
+     *
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     */
+    public function get()
+    {
+        return $this->call('GET', $this->resourceApiPath());
+    }
+
+    /**
+     * Create the resource.
+     *
+     * @return mixed
+     */
+    public function create()
+    {
+        return $this->call('POST', $this->resourcesApiPath());
+    }
+
+    /**
+     * Call the API with the specified method and path.
+     *
+     * @param  string  $method
+     * @param  string  $path
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
+     * @throws RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
     public function call($method = 'GET', string $path)
     {
+        if (! $this->connection) {
+            throw new KubernetesAPIException('There is no connection to the Kubernetes cluster.');
+        }
+
         $client = new Client;
         $apiUrl = $this->connection->getApiUrl();
         $callableUrl = "{$apiUrl}/{$this->version}{$path}";
         $resourceClass = get_class($this);
 
-        $response = $client->request($method, $callableUrl);
+        try {
+            $response = $client->request($method, $callableUrl, [
+                RequestOptions::JSON => $this->toArray(),
+            ]);
+        } catch (ClientException $e) {
+            $error = @json_decode(
+                (string) $e->getResponse()->getBody(), true
+            );
+
+            throw new KubernetesAPIException($error['message']);
+        }
 
         $json = @json_decode($response->getBody(), true);
 
@@ -79,7 +126,8 @@ class K8sResource implements Arrayable, Jsonable
             $results = [];
 
             foreach($json['items'] as $item) {
-                $results[] = new $resourceClass($item);
+                $results[] = (new $resourceClass($item))
+                    ->onConnection($this->connection);
             }
 
             return new ResourcesList($results);
@@ -89,6 +137,7 @@ class K8sResource implements Arrayable, Jsonable
         // is the same as the current class, so pass it
         // for the payload.
 
-        return new $resourceClass($json);
+        return (new $resourceClass($json))
+            ->onConnection($this->connection);
     }
 }
