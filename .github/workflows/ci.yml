@@ -17,7 +17,7 @@ jobs:
       matrix:
         php: ['7.0', '7.1', '7.2', '7.3', '7.4']
         kubernetes: ['1.14', '1.15', '1.16', '1.17', '1.18']
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} with Kubernetes v${{ matrix.kubernetes }}
     steps:
     - uses: actions/checkout@v1
     - uses: actions/cache@v1
@@ -35,10 +35,10 @@ jobs:
         chmod +x kubectl
     - name: Starting Kubernetes v{{ matrix.kubernetes }}
       run: |
-        minikube start --kubernetes-version v{{ matrix.kubernetes }}
+        ./minikube start --kubernetes-version v{{ matrix.kubernetes }}
     - name: Run Kubernetes Proxy
       run: |
-        kubectl proxy --port=8080
+        ./kubectl proxy --port=8080 &
     - name: Install dependencies
       run: |
         composer install --no-interaction --prefer-source
