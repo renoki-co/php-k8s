@@ -7,7 +7,7 @@ trait HasMountOptions
     /**
      * The mounting options for the resource.
      * See for StorageClass: https://kubernetes.io/docs/concepts/storage/storage-classes/#mount-options.
-     * See for PersistentVolume: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options
+     * See for PersistentVolume: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#mount-options.
      *
      * @var array
      */
