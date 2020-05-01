@@ -25,17 +25,15 @@ jobs:
       with:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
-    - name: Install Minikube binary
-      run: |
-        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        chmod +x minikube
+    - uses: opsgang/ga-setup-minikube@v0.1.1
+      name: Starting Kubernetes v${{ matrix.kubernetes }}
+      with:
+        minikube-version: v1.10.0-beta.2
+        k8s-version: "${{ matrix.kubernetes }}"
     - name: Install Kubectl binary
       run: |
         curl -LO https://storage.googleapis.com/kubernetes-release/release/v${{ matrix.kubernetes }}/bin/linux/amd64/kubectl
         chmod +x kubectl
-    - name: Starting Kubernetes v${{ matrix.kubernetes }}
-      run: |
-        ./minikube start --kubernetes-version v${{ matrix.kubernetes }}
     - name: Run Kubernetes Proxy
       run: |
         ./kubectl proxy --port=8080 &
