@@ -55,7 +55,7 @@ class PersistentVolumeTest extends TestCase
 
         $payload = $pv->toArray();
 
-        $pv = K8s::persistentvolume($payload);
+        $pv = K8s::persistentVolume($payload);
 
         $payload = $pv->toArray();
 
