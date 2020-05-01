@@ -2,8 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
+use RenokiCo\PhpK8s\Traits\HasContainers;
+use RenokiCo\PhpK8s\Traits\HasInitContainers;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasNamespace;
@@ -11,21 +12,8 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sPod
 {
-    use HasAnnotations, HasLabels, HasName, HasNamespace, HasVersion;
-
-    /**
-     * The containers list.
-     *
-     * @var array
-     */
-    protected $containers = [];
-
-    /**
-     * The init containers list.
-     *
-     * @var array
-     */
-    protected $initContainers = [];
+    use HasAnnotations, HasContainers, HasInitContainers, HasLabels,
+        HasName, HasNamespace, HasVersion;
 
     /**
      * The volumes attached to the pod.
@@ -53,84 +41,6 @@ class K8sPod
             $this->initContainers = $payload['spec']['initContainers'] ?? [];
             $this->volumes = $payload['spec']['volumes'] ?? [];
         }
-    }
-
-    /**
-     * Add the containers for the pod.
-     *
-     * @param  array  $containers
-     * @return $this
-     */
-    public function containers(array $containers)
-    {
-        // In case any container from the list is a Container class,
-        // transform it to array using toArray().
-
-        foreach ($containers as &$container) {
-            if ($container instanceof Container) {
-                $container = $container->toArray();
-            }
-        }
-
-        $this->containers = $containers;
-
-        return $this;
-    }
-
-    /**
-     * Add a new container to the list.
-     *
-     * @param  array|\RenokiCo\PhpK8s\Instances\Container  $container
-     * @return $this
-     */
-    public function addContainer($container)
-    {
-        if ($container instanceof Container) {
-            $container = $container->toArray();
-        }
-
-        $this->containers[] = $container;
-
-        return $this;
-    }
-
-    /**
-     * Add the init containers for the pod.
-     *
-     * @param  array  $containers
-     * @return $this
-     */
-    public function initContainers(array $containers)
-    {
-        // In case any container from the list is a Container class,
-        // transform it to array using toArray().
-
-        foreach ($containers as &$container) {
-            if ($container instanceof Container) {
-                $container = $container->toArray();
-            }
-        }
-
-        $this->initContainers = $containers;
-
-        return $this;
-    }
-
-    /**
-     * Add a new container to the list.
-     *
-     * @param  array|\RenokiCo\PhpK8s\Instances\Container  $container
-     * @return $this
-     */
-    public function addInitContainer($container)
-    {
-        if ($container instanceof Container) {
-            $container = $container->toArray();
-        }
-
-        $this->initContainers[] = $container;
-
-        return $this;
     }
 
     /**
