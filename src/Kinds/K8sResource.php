@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
@@ -94,7 +93,7 @@ class K8sResource implements Arrayable, Jsonable
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
      * @throws RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function call($method = 'GET', string $path)
+    public function call($method, string $path)
     {
         if (! $this->connection) {
             throw new KubernetesAPIException('There is no connection to the Kubernetes cluster.');
@@ -125,7 +124,7 @@ class K8sResource implements Arrayable, Jsonable
         if (isset($json['items'])) {
             $results = [];
 
-            foreach($json['items'] as $item) {
+            foreach ($json['items'] as $item) {
                 $results[] = (new $resourceClass($item))
                     ->onConnection($this->connection);
             }
