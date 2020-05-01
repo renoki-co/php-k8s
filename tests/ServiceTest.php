@@ -58,7 +58,7 @@ class ServiceTest extends TestCase
                 'protocol' => 'HTTPS',
                 'port' => 443,
                 'targetPort' => 443,
-            ]
+            ],
         ], $payload['spec']['ports']);
     }
 }

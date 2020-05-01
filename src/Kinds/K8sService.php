@@ -2,11 +2,11 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Versionable;
-use RenokiCo\PhpK8s\Traits\Nameable;
-use RenokiCo\PhpK8s\Traits\Namespaceable;
 use RenokiCo\PhpK8s\Traits\Annotable;
 use RenokiCo\PhpK8s\Traits\CanSelect;
+use RenokiCo\PhpK8s\Traits\Nameable;
+use RenokiCo\PhpK8s\Traits\Namespaceable;
+use RenokiCo\PhpK8s\Traits\Versionable;
 
 class K8sService
 {
@@ -14,7 +14,7 @@ class K8sService
 
     /**
      * The type of the Service.
-     * See: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+     * See: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types.
      *
      * @var string
      */
@@ -30,7 +30,7 @@ class K8sService
 
     /**
      * The cluster ip to attach.
-     * See: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+     * See: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer.
      *
      * @var null|string
      */
@@ -38,7 +38,7 @@ class K8sService
 
     /**
      * Attach the external IPs to the Service.
-     * See: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+     * See: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips.
      *
      * @var array
      */
@@ -46,7 +46,7 @@ class K8sService
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/services-networking/service/
+     * See: https://kubernetes.io/docs/concepts/services-networking/service/.
      *
      * @param  array  $payload
      * @return void
