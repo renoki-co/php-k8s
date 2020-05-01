@@ -64,4 +64,44 @@ class NamespaceTest extends TestCase
 
         $this->assertEquals('production', $payload['metadata']['namespace']);
     }
+
+    public function test_namespace_list_resources()
+    {
+        $namespaces = K8s::namespace()
+            ->onConnection($this->connection)
+            ->getAll();
+
+        foreach ($namespaces as $ns) {
+            $this->assertInstanceOf(K8sNamespace::class, $ns);
+        }
+    }
+
+    public function test_namespace_show_resource()
+    {
+        $ns = K8s::namespace()
+            ->onConnection($this->connection)
+            ->name('default')
+            ->get();
+
+        $this->assertInstanceOf(K8sNamespace::class, $ns);
+    }
+
+    public function test_namespace_create_resource()
+    {
+        $ns = K8s::namespace()
+            ->onConnection($this->connection)
+            ->name('production')
+            ->labels(['type' => 'test'])
+            ->annotations(['some.annotation/test' => 'https'])
+            ->create();
+
+        $this->assertInstanceOf(K8sNamespace::class, $ns);
+
+        $payload = $ns->toArray();
+
+        $this->assertEquals('v1', $payload['apiVersion']);
+        $this->assertEquals('production', $payload['metadata']['name']);
+        $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+    }
 }
