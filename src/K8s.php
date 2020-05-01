@@ -43,4 +43,9 @@ class K8s
     {
         return new Kinds\K8sPersistentVolumeClaim($payload);
     }
+
+    public static function pod(array $payload = [])
+    {
+        return new Kinds\K8sPod($payload);
+    }
 }
