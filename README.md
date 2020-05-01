@@ -1,7 +1,7 @@
 PHP K8s
 =======
 
-[![Build Status](https://travis-ci.com/renoki-co/php-k8s.svg?branch=master)](https://travis-ci.com/renoki-co/php-k8s)
+![CI](https://github.com/renoki-co/php-k8s/workflows/CI/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/renoki-co/php-k8s/branch/master/graph/badge.svg)](https://codecov.io/gh/renoki-co/php-k8s/branch/master)
 [![StyleCI](https://github.styleci.io/repos/:styleci_code/shield?branch=master)](https://github.styleci.io/repos/:styleci_code)
 [![Latest Stable Version](https://poser.pugx.org/renoki-co/php-k8s/v/stable)](https://packagist.org/packages/renoki-co/php-k8s)
