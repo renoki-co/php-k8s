@@ -14,7 +14,7 @@ use RenokiCo\PhpK8s\Traits\HasVolumeMode;
 
 class K8sPersistentVolume
 {
-    use HasAccessModes, HasCapacity, HasMountOptions, HasName,
+    use HasAccessModes, HasCapacity, HasMountOptions, HasName, HasNamespace,
         HasReclaimPolicy, HasStorageClass, HasVersion, HasVolumeMode;
 
     /**
@@ -29,6 +29,7 @@ class K8sPersistentVolume
         if ($payload) {
             $this->version = $payload['apiVersion'] ?? 'storage.k8s.io/v1';
             $this->name = $payload['metadata']['name'] ?? null;
+            $this->namespace = $payload['metadata']['namespace'] ?? 'default';
             $this->reclaimPolicy = $payload['spec']['persistentVolumeReclaimPolicy'] ?? 'Retain';
             $this->mountOptions = $payload['spec']['mountOptions'] ?? [];
             $this->capacity = $payload['spec']['capacity']['storage'] ?? '10Gi';
@@ -50,6 +51,7 @@ class K8sPersistentVolume
             'kind' => 'PersistentVolume',
             'metadata' => [
                 'name' => $this->name,
+                'namespace' => $this->namespace,
             ],
             'spec' => [
                 'persistentVolumeReclaimPolicy' => $this->reclaimPolicy,
