@@ -28,7 +28,7 @@ jobs:
     - uses: opsgang/ga-setup-minikube@v0.1.1
       name: Starting Kubernetes v${{ matrix.kubernetes }}
       with:
-        minikube-version: v1.10.0-beta.2
+        minikube-version: 1.10.0-beta.2
         k8s-version: "${{ matrix.kubernetes }}"
     - name: Install Kubectl binary
       run: |
