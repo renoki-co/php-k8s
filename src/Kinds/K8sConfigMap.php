@@ -8,7 +8,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sConfigMap
 {
-    use HasVersion, HasName, HasNamespace;
+    use HasName, HasNamespace, HasVersion;
 
     /**
      * The data as key-value pairs.

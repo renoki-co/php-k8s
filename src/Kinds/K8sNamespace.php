@@ -8,7 +8,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sNamespace
 {
-    use HasVersion, HasName, HasLabels;
+    use HasLabels, HasName, HasVersion;
 
     /**
      * Create a new kind instance.

@@ -9,7 +9,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sIngress
 {
-    use HasVersion, HasName, HasNamespace, HasAnnotations;
+    use HasAnnotations, HasName, HasNamespace, HasVersion;
 
     /**
      * The Ingress rules.

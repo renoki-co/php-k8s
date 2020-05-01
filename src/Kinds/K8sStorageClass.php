@@ -9,7 +9,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sStorageClass
 {
-    use HasVersion, HasName, HasReclaimPolicy, HasMountOptions;
+    use HasMountOptions, HasName, HasReclaimPolicy, HasVersion;
 
     /**
      * The provisioner of the StorageClass.

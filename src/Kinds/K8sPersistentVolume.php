@@ -6,6 +6,7 @@ use RenokiCo\PhpK8s\Traits\HasAccessModes;
 use RenokiCo\PhpK8s\Traits\HasCapacity;
 use RenokiCo\PhpK8s\Traits\HasMountOptions;
 use RenokiCo\PhpK8s\Traits\HasName;
+use RenokiCo\PhpK8s\Traits\HasNamespace;
 use RenokiCo\PhpK8s\Traits\HasReclaimPolicy;
 use RenokiCo\PhpK8s\Traits\HasStorageClass;
 use RenokiCo\PhpK8s\Traits\HasVersion;
@@ -13,12 +14,12 @@ use RenokiCo\PhpK8s\Traits\HasVolumeMode;
 
 class K8sPersistentVolume
 {
-    use HasVersion, HasName, HasReclaimPolicy, HasMountOptions,
-        HasCapacity, HasAccessModes, HasStorageClass, HasVolumeMode;
+    use HasAccessModes, HasCapacity, HasMountOptions, HasName,
+        HasReclaimPolicy, HasStorageClass, HasVersion, HasVolumeMode;
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/.
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes
      *
      * @param  array  $payload
      * @return void

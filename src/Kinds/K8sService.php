@@ -10,7 +10,7 @@ use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sService
 {
-    use HasVersion, HasName, HasNamespace, HasAnnotations, HasSelector;
+    use HasAnnotations, HasName, HasNamespace, HasSelector, HasVersion;
 
     /**
      * The type of the Service.
