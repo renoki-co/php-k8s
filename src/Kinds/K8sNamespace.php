@@ -23,8 +23,8 @@ class K8sNamespace
         if ($payload) {
             $this->version = $payload['apiVersion'] ?? 'v1';
             $this->name = $payload['metadata']['name'] ?? null;
-            $this->labels = $payload['metadata']['labels'] ?? null;
-            $this->annotations = $payload['metadata']['annotations'] ?? null;
+            $this->labels = $payload['metadata']['labels'] ?? [];
+            $this->annotations = $payload['metadata']['annotations'] ?? [];
         }
     }
 
