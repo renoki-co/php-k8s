@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         php: ['7.0', '7.1', '7.2', '7.3', '7.4']
-        kubernetes: ['1.14', '1.15', '1.16', '1.17', '1.18']
+        kubernetes: ['1.14.10', '1.15.11', '1.16.9', '1.17.5', '1.18.2']
     name: PHP ${{ matrix.php }} with Kubernetes v${{ matrix.kubernetes }}
     steps:
     - uses: actions/checkout@v1
