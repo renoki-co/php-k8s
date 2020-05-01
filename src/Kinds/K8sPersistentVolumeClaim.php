@@ -18,7 +18,7 @@ class K8sPersistentVolumeClaim
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims.
      *
      * @param  array  $payload
      * @return void
