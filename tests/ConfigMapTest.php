@@ -29,4 +29,24 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('settings', $payload['metadata']['name']);
         $this->assertEquals(['mysetting' => 'somevalue'], $payload['data']);
     }
+
+    public function test_configmap_import()
+    {
+        $configmap = K8s::configmap()
+            ->version('test')
+            ->name('settings')
+            ->namespace('kube-config')
+            ->data(['mysetting' => 'somevalue']);
+
+        $payload = $configmap->toArray();
+
+        $configmap = K8s::configMap($payload);
+
+        $payload = $configmap->toArray();
+
+        $this->assertEquals('test', $payload['apiVersion']);
+        $this->assertEquals('kube-config', $payload['metadata']['namespace']);
+        $this->assertEquals('settings', $payload['metadata']['name']);
+        $this->assertEquals(['mysetting' => 'somevalue'], $payload['data']);
+    }
 }

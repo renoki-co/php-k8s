@@ -4,38 +4,38 @@ namespace RenokiCo\PhpK8s;
 
 class K8s
 {
-    public static function namespace()
+    public static function namespace(array $payload = [])
     {
-        return new Kinds\K8sNamespace;
+        return new Kinds\K8sNamespace($payload);
     }
 
-    public static function storageClass()
+    public static function storageClass(array $payload = [])
     {
-        return new Kinds\K8sStorageClass;
+        return new Kinds\K8sStorageClass($payload);
     }
 
-    public static function secret()
+    public static function secret(array $payload = [])
     {
-        return new Kinds\K8sSecret;
+        return new Kinds\K8sSecret($payload);
     }
 
-    public static function configmap()
+    public static function configmap(array $payload = [])
     {
-        return new Kinds\K8sConfigMap;
+        return new Kinds\K8sConfigMap($payload);
     }
 
-    public static function service()
+    public static function service(array $payload = [])
     {
-        return new Kinds\K8sService;
+        return new Kinds\K8sService($payload);
     }
 
-    public static function ingress()
+    public static function ingress(array $payload = [])
     {
-        return new Kinds\K8sIngress;
+        return new Kinds\K8sIngress($payload);
     }
 
-    public static function persistentVolume()
+    public static function persistentVolume(array $payload = [])
     {
-        return new Kinds\K8sPersistentVolume;
+        return new Kinds\K8sPersistentVolume($payload);
     }
 }

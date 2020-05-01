@@ -27,4 +27,22 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $payload['metadata']['name']);
         $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
     }
+
+    public function test_namespace_import()
+    {
+        $ns = K8s::namespace()
+            ->version('test')
+            ->name('production')
+            ->labels(['type' => 'test']);
+
+        $payload = $ns->toArray();
+
+        $ns = K8s::namespace($payload);
+
+        $payload = $ns->toArray();
+
+        $this->assertEquals('test', $payload['apiVersion']);
+        $this->assertEquals('production', $payload['metadata']['name']);
+        $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
+    }
 }

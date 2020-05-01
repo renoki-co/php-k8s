@@ -38,6 +38,34 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('Filesystem', $payload['spec']['volumeMode']);
     }
 
+    public function test_persistent_volume_import()
+    {
+        $pv = K8s::persistentVolume()
+            ->version('test')
+            ->name('files')
+            ->reclaimPolicy('Delete')
+            ->mountOptions(['debug', ['nfsvers', '4.1']])
+            ->capacity(100, 'Gi')
+            ->accessModes(['ReadWriteOnce'])
+            ->storageClass('gp2-expandable')
+            ->volumeMode('Filesystem');
+
+        $payload = $pv->toArray();
+
+        $pv = K8s::persistentvolume($payload);
+
+        $payload = $pv->toArray();
+
+        $this->assertEquals('test', $payload['apiVersion']);
+        $this->assertEquals('files', $payload['metadata']['name']);
+        $this->assertEquals('Delete', $payload['spec']['persistentVolumeReclaimPolicy']);
+        $this->assertEquals(['debug', 'nfsvers=4.1'], $payload['spec']['mountOptions']);
+        $this->assertEquals('100Gi', $payload['spec']['capacity']['storage']);
+        $this->assertEquals(['ReadWriteOnce'], $payload['spec']['accessModes']);
+        $this->assertEquals('gp2-expandable', $payload['spec']['storageClassName']);
+        $this->assertEquals('Filesystem', $payload['spec']['volumeMode']);
+    }
+
     public function test_persistent_volume_accepts_k8s_storage_class_for_storage_class()
     {
         $sc = K8s::storageClass()
