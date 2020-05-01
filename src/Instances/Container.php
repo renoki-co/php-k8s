@@ -3,12 +3,9 @@
 namespace RenokiCo\PhpK8s\Instances;
 
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
-use RenokiCo\PhpK8s\Traits\HasName;
 
 class Container
 {
-    use HasName;
-
     /**
      * The container image name & tag.
      *
