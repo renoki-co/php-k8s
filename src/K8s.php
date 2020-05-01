@@ -33,4 +33,9 @@ class K8s
     {
         return new Kinds\K8sIngress;
     }
+
+    public static function persistentVolume()
+    {
+        return new Kinds\K8sPersistentVolume;
+    }
 }

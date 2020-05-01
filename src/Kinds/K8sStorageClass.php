@@ -2,12 +2,14 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Traits\HasMountOptions;
 use RenokiCo\PhpK8s\Traits\HasName;
+use RenokiCo\PhpK8s\Traits\HasReclaimPolicy;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sStorageClass
 {
-    use HasVersion, HasName;
+    use HasVersion, HasName, HasReclaimPolicy, HasMountOptions;
 
     /**
      * The provisioner of the StorageClass.
@@ -26,28 +28,12 @@ class K8sStorageClass
     protected $parameters = [];
 
     /**
-     * The Reclaim Policy for the StorageClass.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#reclaim-policy.
-     *
-     * @var string
-     */
-    protected $reclaimPolicy = 'Retain';
-
-    /**
      * Specify if the volume can be expanded.
      * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#allow-volume-expansion.
      *
      * @var bool
      */
     protected $allowVolumeExpansion = true;
-
-    /**
-     * The mounting options for the StorageClass.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#mount-options.
-     *
-     * @var array
-     */
-    protected $mountOptions = [];
 
     /**
      * The method for PV claiming.
@@ -116,19 +102,6 @@ class K8sStorageClass
     }
 
     /**
-     * The Reclaim Policy for the StorageClass.
-     *
-     * @param  string  $reclaimPolicy
-     * @return $this
-     */
-    public function reclaimPolicy(string $reclaimPolicy)
-    {
-        $this->reclaimPolicy = $reclaimPolicy;
-
-        return $this;
-    }
-
-    /**
      * Allow volume expansion for the StorageClass.
      *
      * @param  bool  $enabled
@@ -137,19 +110,6 @@ class K8sStorageClass
     public function allowVolumeExpansion(bool $enabled = true)
     {
         $this->allowVolumeExpansion = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * The mount options set to the StorageClass.
-     *
-     * @param  array  $mountOptions
-     * @return $this
-     */
-    public function mountOptions(array $mountOptions = [])
-    {
-        $this->mountOptions = $mountOptions;
 
         return $this;
     }

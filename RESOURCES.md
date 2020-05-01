@@ -10,13 +10,13 @@ Currently, only the following resources can be handled:
 - configmaps
 - services
 - ingress
+- persistentvolumes
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
 - persistentvolumeclaims
-- persistentvolumes
 - pods
 - daemonsets
 - deployments
