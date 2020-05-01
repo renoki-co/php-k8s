@@ -2,7 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-trait Versionable
+trait HasVersion
 {
     /**
      * The API version.

@@ -2,13 +2,13 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Labelable;
-use RenokiCo\PhpK8s\Traits\Nameable;
-use RenokiCo\PhpK8s\Traits\Versionable;
+use RenokiCo\PhpK8s\Traits\HasLabels;
+use RenokiCo\PhpK8s\Traits\HasName;
+use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sNamespace
 {
-    use Versionable, Nameable, Labelable;
+    use HasVersion, HasName, HasLabels;
 
     /**
      * Create a new kind instance.

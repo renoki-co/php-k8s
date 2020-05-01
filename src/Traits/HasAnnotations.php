@@ -2,7 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-trait Annotable
+trait HasAnnotations
 {
     /**
      * The attached annotations.

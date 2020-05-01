@@ -2,7 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-trait Labelable
+trait HasLabels
 {
     /**
      * The attached labels.

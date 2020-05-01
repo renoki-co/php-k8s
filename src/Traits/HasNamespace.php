@@ -2,7 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-trait Namespaceable
+trait HasNamespace
 {
     /**
      * The namespace of the resource.

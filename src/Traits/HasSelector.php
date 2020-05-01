@@ -2,7 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-trait CanSelect
+trait HasSelector
 {
     /**
      * The list of selectors as key-value pairs.

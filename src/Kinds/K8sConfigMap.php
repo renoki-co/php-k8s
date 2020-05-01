@@ -2,13 +2,13 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Nameable;
-use RenokiCo\PhpK8s\Traits\Namespaceable;
-use RenokiCo\PhpK8s\Traits\Versionable;
+use RenokiCo\PhpK8s\Traits\HasName;
+use RenokiCo\PhpK8s\Traits\HasNamespace;
+use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sConfigMap
 {
-    use Versionable, Nameable, Namespaceable;
+    use HasVersion, HasName, HasNamespace;
 
     /**
      * The data as key-value pairs.

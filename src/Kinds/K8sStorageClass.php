@@ -2,12 +2,12 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Nameable;
-use RenokiCo\PhpK8s\Traits\Versionable;
+use RenokiCo\PhpK8s\Traits\HasName;
+use RenokiCo\PhpK8s\Traits\HasVersion;
 
 class K8sStorageClass
 {
-    use Versionable, Nameable;
+    use HasVersion, HasName;
 
     /**
      * The provisioner of the StorageClass.
