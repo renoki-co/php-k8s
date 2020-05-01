@@ -11,12 +11,12 @@ Currently, only the following resources can be handled:
 - services
 - ingress
 - persistentvolumes
+- persistentvolumeclaims
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
-- persistentvolumeclaims
 - pods
 - daemonsets
 - deployments
