@@ -2,9 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Versionable;
 use RenokiCo\PhpK8s\Traits\Labelable;
 use RenokiCo\PhpK8s\Traits\Nameable;
+use RenokiCo\PhpK8s\Traits\Versionable;
 
 class K8sNamespace
 {
@@ -12,7 +12,7 @@ class K8sNamespace
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+     * See: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/.
      *
      * @param  array  $payload
      * @return void

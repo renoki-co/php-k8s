@@ -2,9 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Versionable;
 use RenokiCo\PhpK8s\Traits\Nameable;
 use RenokiCo\PhpK8s\Traits\Namespaceable;
+use RenokiCo\PhpK8s\Traits\Versionable;
 
 class K8sSecret
 {
@@ -26,7 +26,7 @@ class K8sSecret
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/configuration/secret/
+     * See: https://kubernetes.io/docs/concepts/configuration/secret/.
      *
      * @param  array  $payload
      * @return void
@@ -55,7 +55,7 @@ class K8sSecret
     }
 
     /**
-     * Wether the toArray() method to show the decoded version
+     * Wether the toArray() method to show the decoded version.
      *
      * @param  bool  $enabled
      * @return $this

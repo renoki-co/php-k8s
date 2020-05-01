@@ -2,9 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Versionable;
-use RenokiCo\PhpK8s\Traits\Labelable;
 use RenokiCo\PhpK8s\Traits\Nameable;
+use RenokiCo\PhpK8s\Traits\Versionable;
 
 class K8sStorageClass
 {
@@ -12,7 +11,7 @@ class K8sStorageClass
 
     /**
      * The provisioner of the StorageClass.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#provisioner
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#provisioner.
      *
      * @var string
      */
@@ -20,7 +19,7 @@ class K8sStorageClass
 
     /**
      * The parameters attached to the StorageClass.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#parameters
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#parameters.
      *
      * @var array
      */
@@ -28,7 +27,7 @@ class K8sStorageClass
 
     /**
      * The Reclaim Policy for the StorageClass.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#reclaim-policy
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#reclaim-policy.
      *
      * @var string
      */
@@ -36,7 +35,7 @@ class K8sStorageClass
 
     /**
      * Specify if the volume can be expanded.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#allow-volume-expansion
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#allow-volume-expansion.
      *
      * @var bool
      */
@@ -44,7 +43,7 @@ class K8sStorageClass
 
     /**
      * The mounting options for the StorageClass.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#mount-options
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#mount-options.
      *
      * @var array
      */
@@ -52,7 +51,7 @@ class K8sStorageClass
 
     /**
      * The method for PV claiming.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode.
      *
      * @var string
      */
@@ -60,7 +59,7 @@ class K8sStorageClass
 
     /**
      * The allowed topologies for the StorageClass unit.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#allowed-topologies
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/#allowed-topologies.
      *
      * @var array
      */
@@ -68,7 +67,7 @@ class K8sStorageClass
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/
+     * See: https://kubernetes.io/docs/concepts/storage/storage-classes/.
      *
      * @param  array  $payload
      * @return void

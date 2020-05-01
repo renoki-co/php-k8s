@@ -2,9 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use RenokiCo\PhpK8s\Traits\Versionable;
 use RenokiCo\PhpK8s\Traits\Nameable;
 use RenokiCo\PhpK8s\Traits\Namespaceable;
+use RenokiCo\PhpK8s\Traits\Versionable;
 
 class K8sConfigMap
 {
@@ -19,7 +19,7 @@ class K8sConfigMap
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+     * See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/.
      *
      * @param  array  $payload
      * @return void
