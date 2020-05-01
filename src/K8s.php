@@ -28,4 +28,9 @@ class K8s
     {
         return new Kinds\K8sService;
     }
+
+    public static function ingress()
+    {
+        return new Kinds\K8sIngress;
+    }
 }

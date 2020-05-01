@@ -7,7 +7,7 @@ trait Nameable
     /**
      * The resource name.
      *
-     * @var string
+     * @var string|null
      */
     protected $name = null;
 
@@ -22,5 +22,15 @@ trait Nameable
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * Get the name value.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }
