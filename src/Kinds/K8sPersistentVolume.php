@@ -19,7 +19,7 @@ class K8sPersistentVolume
 
     /**
      * Create a new kind instance.
-     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes.
      *
      * @param  array  $payload
      * @return void
