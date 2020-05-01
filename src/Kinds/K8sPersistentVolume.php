@@ -28,9 +28,9 @@ class K8sPersistentVolume
         if ($payload) {
             $this->version = $payload['apiVersion'] ?? 'storage.k8s.io/v1';
             $this->name = $payload['metadata']['name'] ?? null;
-            $this->reclaimPolicy = $payload['spec']['reclaimPolicy'] ?? 'Retain';
+            $this->reclaimPolicy = $payload['spec']['persistentVolumeReclaimPolicy'] ?? 'Retain';
             $this->mountOptions = $payload['spec']['mountOptions'] ?? [];
-            $this->capacity = $payload['spec']['capacity']['stroage'] ?? '10Gi';
+            $this->capacity = $payload['spec']['capacity']['storage'] ?? '10Gi';
             $this->accessModes = $payload['spec']['accessModes'] ?? [];
             $this->storageClassName = $payload['spec']['storageClassName'] ?? 'standard';
             $this->volumeMode = $payload['spec']['volumeMode'] ?? 'Block';
