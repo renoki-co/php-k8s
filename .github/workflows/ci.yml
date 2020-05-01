@@ -26,10 +26,16 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
     - uses: opsgang/ga-setup-minikube@v0.1.1
-      name: Starting Kubernetes v${{ matrix.kubernetes }}
+      name: Installing Minikube with Kubernetes v${{ matrix.kubernetes }}
       with:
         minikube-version: 1.10.0-beta.2
         k8s-version: "${{ matrix.kubernetes }}"
+    - name: Starting Minikube
+      run: |
+        minikube config set vm-driver kvm2
+        minikube config set kubernetes-version=v1.15.1
+        minikube start
+        minikube update-context
     - name: Install Kubectl binary
       run: |
         curl -LO https://storage.googleapis.com/kubernetes-release/release/v${{ matrix.kubernetes }}/bin/linux/amd64/kubectl
