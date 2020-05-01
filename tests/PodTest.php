@@ -102,7 +102,6 @@ class PodTest extends TestCase
         $this->assertEquals([
             ['name' => 'mysql', 'awsElasticBlockStore' => ['volumeID' => 'xxx', 'fsType' => 'ext4']],
         ], $payload['spec']['volumes']);
-
     }
 
     public function test_pod_import()
