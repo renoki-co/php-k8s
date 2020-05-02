@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sService;
+use RenokiCo\PhpK8s\ResourcesList;
 
 class ServiceTest extends TestCase
 {
@@ -213,5 +214,18 @@ class ServiceTest extends TestCase
             'targetPort' => 80,
             'nodePort' => 32410,
         ]], $payload['spec']['ports']);
+
+        // ->getAll()
+        $services = K8s::service()
+            ->onConnection($this->connection)
+            ->namespace('default')
+            ->getAll();
+
+        $this->assertInstanceOf(ResourcesList::class, $services);
+        $this->assertTrue($services->count() > 0);
+
+        foreach ($services as $service) {
+            $this->assertInstanceOf(K8sService::class, $service);
+        }
     }
 }
