@@ -2,13 +2,14 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasNamespace;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
-class K8sConfigMap
+class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
 {
     use HasAnnotations, HasLabels, HasName, HasNamespace, HasVersion;
 
@@ -69,5 +70,25 @@ class K8sConfigMap
             ],
             'data' => $this->data,
         ];
+    }
+
+    /**
+     * Get the path, prefixed by '/', to point to the resource list.
+     *
+     * @return string
+     */
+    public function resourcesApiPath(): string
+    {
+        return "/namespaces/{$this->namespace}/configmaps";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource.
+     *
+     * @return string
+     */
+    public function resourceApiPath(): string
+    {
+        return "/namespaces/{$this->namespace}/configmaps/{$this->name}";
     }
 }
