@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
@@ -154,7 +153,7 @@ class K8sResource implements Arrayable, Jsonable
         if (isset($json['items'])) {
             $results = [];
 
-            foreach($json['items'] as $item) {
+            foreach ($json['items'] as $item) {
                 $results[] = (new $resourceClass($item))
                     ->onConnection($this->connection);
             }
