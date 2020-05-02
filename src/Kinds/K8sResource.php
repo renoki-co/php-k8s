@@ -50,7 +50,14 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function toJsonPayload()
     {
-        return str_replace(': []', ': {}', $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $payload = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+        $payload = str_replace(': []', ': {}', $payload);
+
+        // StorageClass: allowedTopologies might be empty and {} is not accepted.
+        $payload = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $payload);
+
+        return $payload;
     }
 
     /**
