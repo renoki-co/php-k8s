@@ -83,6 +83,13 @@ class NamespaceTest extends TestCase
 
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
+        $payload = $ns->toArray();
+
+        $this->assertEquals('v1', $payload['apiVersion']);
+        $this->assertEquals('production', $payload['metadata']['name']);
+        $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
+        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+
         // ->getAll()
         $namespaces = K8s::namespace()
             ->onConnection($this->connection)
