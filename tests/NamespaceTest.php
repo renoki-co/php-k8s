@@ -80,8 +80,8 @@ class NamespaceTest extends TestCase
 
         $this->assertEquals('v1', $payload['apiVersion']);
         $this->assertEquals('default', $payload['metadata']['name']);
-        $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
-        $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+        $this->assertEquals([], $payload['metadata']['labels']);
+        $this->assertEquals([], $payload['metadata']['annotations']);
 
         // ->getAll()
         $namespaces = K8s::namespace()
