@@ -22,6 +22,16 @@ class K8sResource implements Arrayable, Jsonable
     protected $connection;
 
     /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [];
+    }
+
+    /**
      * Convert the object to its JSON representation.
      *
      * @param  int  $options
@@ -41,16 +51,6 @@ class K8sResource implements Arrayable, Jsonable
     public function toJsonPayload()
     {
         return str_replace(': []', ': {}', $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-    }
-
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return [];
     }
 
     /**
