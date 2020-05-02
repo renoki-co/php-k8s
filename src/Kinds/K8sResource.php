@@ -34,6 +34,17 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Convert the object to its JSON representation, but
+     * escaping [] for {}.
+     *
+     * @return string
+     */
+    public function toJsonPayload()
+    {
+        return str_replace(': []', ': {}', $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    }
+
+    /**
      * Get the instance as an array.
      *
      * @return array
@@ -79,11 +90,21 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Create the resource.
      *
-     * @return mixed
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
     public function create()
     {
         return $this->call('POST', $this->resourcesApiPath());
+    }
+
+    /**
+     * Update the resource.
+     *
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     */
+    public function update()
+    {
+        return $this->call('PUT', $this->resourceApiPath());
     }
 
     /**
@@ -94,20 +115,28 @@ class K8sResource implements Arrayable, Jsonable
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
      * @throws RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function call($method = 'GET', string $path)
+    public function call($method, string $path)
     {
         if (! $this->connection) {
             throw new KubernetesAPIException('There is no connection to the Kubernetes cluster.');
         }
 
-        $client = new Client;
         $apiUrl = $this->connection->getApiUrl();
+
         $callableUrl = "{$apiUrl}/{$this->version}{$path}";
+
         $resourceClass = get_class($this);
 
         try {
+            $client = new Client;
+
             $response = $client->request($method, $callableUrl, [
-                RequestOptions::JSON => $this->toArray(),
+                RequestOptions::BODY => $this->toJsonPayload(),
+                RequestOptions::HEADERS => [
+                    'Content-Type' => $method === 'PATCH'
+                        ? 'application/application/json-patch+json'
+                        : 'application/json',
+                ],
             ]);
         } catch (ClientException $e) {
             $error = @json_decode(
