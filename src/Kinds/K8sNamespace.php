@@ -54,7 +54,7 @@ class K8sNamespace extends K8sResource implements InteractsWithK8sCluster
      */
     public function resourcesApiPath(): string
     {
-        return '/namespaces';
+        return "/api/{$this->version}/namespaces";
     }
 
     /**
@@ -64,6 +64,6 @@ class K8sNamespace extends K8sResource implements InteractsWithK8sCluster
      */
     public function resourceApiPath(): string
     {
-        return "/namespaces/{$this->name}";
+        return "/api/{$this->version}/namespaces/{$this->name}";
     }
 }

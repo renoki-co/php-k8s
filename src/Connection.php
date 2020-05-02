@@ -45,7 +45,7 @@ class Connection
      */
     public function getApiUrl(): string
     {
-        return "{$this->url}:{$this->port}/api";
+        return "{$this->url}:{$this->port}";
     }
 
     /**

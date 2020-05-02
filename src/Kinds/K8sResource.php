@@ -122,7 +122,7 @@ class K8sResource implements Arrayable, Jsonable
 
         $apiUrl = $this->connection->getApiUrl();
 
-        $callableUrl = "{$apiUrl}/{$this->version}{$path}";
+        $callableUrl = "{$apiUrl}{$path}";
 
         $resourceClass = get_class($this);
 

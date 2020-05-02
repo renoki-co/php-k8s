@@ -100,7 +100,7 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster
      */
     public function resourcesApiPath(): string
     {
-        return "/namespaces/{$this->namespace}/secrets";
+        return "/api/{$this->version}/namespaces/{$this->namespace}/secrets";
     }
 
     /**
@@ -110,7 +110,7 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster
      */
     public function resourceApiPath(): string
     {
-        return "/namespaces/{$this->namespace}/secrets/{$this->name}";
+        return "/api/{$this->version}/namespaces/{$this->namespace}/secrets/{$this->name}";
     }
 
     /**
