@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
+use RenokiCo\PhpK8s\ResourcesList;
 
 class NamespaceTest extends TestCase
 {
@@ -76,18 +77,25 @@ class NamespaceTest extends TestCase
         }
     }
 
-    public function test_namespace_show_resource()
+    public function test_namespace_api_interaction()
     {
+        // ->get()
         $ns = K8s::namespace()
             ->onConnection($this->connection)
             ->name('default')
             ->get();
 
         $this->assertInstanceOf(K8sNamespace::class, $ns);
-    }
 
-    public function test_namespace_create_resource()
-    {
+        // ->getAll()
+        $namespaces = K8s::namespace()
+            ->onConnection($this->connection)
+            ->getAll();
+
+        $this->assertInstanceOf(ResourcesList::class, $namespaces);
+        $this->assertTrue($namespaces->count() > 0);
+
+        // ->create()
         $ns = K8s::namespace()
             ->onConnection($this->connection)
             ->name('production')
@@ -103,5 +111,23 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $payload['metadata']['name']);
         $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
+
+        // ->update()
+        $ns = K8s::namespace()
+            ->onConnection($this->connection)
+            ->name('production')
+            ->get()
+            ->annotations([])
+            ->labels([])
+            ->update();
+
+        $this->assertInstanceOf(K8sNamespace::class, $ns);
+
+        $payload = $ns->toArray();
+
+        $this->assertEquals('v1', $payload['apiVersion']);
+        $this->assertEquals('production', $payload['metadata']['name']);
+        $this->assertEquals([], $payload['metadata']['labels']);
+        $this->assertEquals([], $payload['metadata']['annotations']);
     }
 }
