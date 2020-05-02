@@ -100,7 +100,6 @@ class IngressTest extends TestCase
                             'servicePort' => 80,
                         ],
                         'path' => '/test1',
-                        'pathType' => 'ImplementationSpecific',
                     ]],
                 ],
             ]])
@@ -110,7 +109,6 @@ class IngressTest extends TestCase
                     'servicePort' => 443,
                 ],
                 'path' => '/https',
-                'pathType' => 'ImplementationSpecific',
             ]]);
 
         $payload = $ingress->toArray();
@@ -147,7 +145,6 @@ class IngressTest extends TestCase
                             'servicePort' => 443,
                         ],
                         'path' => '/https',
-                        'pathType' => 'ImplementationSpecific',
                     ]],
                 ],
             ],
@@ -171,7 +168,6 @@ class IngressTest extends TestCase
                             'servicePort' => 80,
                         ],
                         'path' => '/test1',
-                        'pathType' => 'ImplementationSpecific',
                     ]],
                 ],
             ]])
@@ -231,7 +227,7 @@ class IngressTest extends TestCase
             ->getAll();
 
         $this->assertInstanceOf(ResourcesList::class, $ingresses);
-        $this->assertTrue($ingresses->count() > 0);
+        $this->assertEquals(1, $ingresses->count());
 
         foreach ($ingresses as $ingress) {
             $this->assertInstanceOf(K8sIngress::class, $ingress);
