@@ -66,13 +66,6 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $payload['metadata']['namespace']);
     }
 
-    public function test_namespace_list_resources()
-    {
-        $namespaces = K8s::namespace()
-            ->onConnection($this->connection)
-            ->getAll();
-    }
-
     public function test_namespace_api_interaction()
     {
         // ->get()
@@ -86,7 +79,7 @@ class NamespaceTest extends TestCase
         $payload = $ns->toArray();
 
         $this->assertEquals('v1', $payload['apiVersion']);
-        $this->assertEquals('production', $payload['metadata']['name']);
+        $this->assertEquals('default', $payload['metadata']['name']);
         $this->assertEquals(['type' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals(['some.annotation/test' => 'https'], $payload['metadata']['annotations']);
 
