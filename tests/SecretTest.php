@@ -91,6 +91,18 @@ class SecretTest extends TestCase
         $this->assertEquals(['password1' => base64_encode('secret')], $encodedPayload['data']);
         $this->assertEquals(['password1' => 'secret'], $decodedPayload['data']);
 
+        // ->getAll()
+        $secrets = K8s::secret()
+            ->onConnection($this->connection)
+            ->getAll();
+
+        $this->assertInstanceOf(ResourcesList::class, $secrets);
+        $this->assertTrue($secrets->count() > 0);
+
+        foreach ($secrets as $secret) {
+            $this->assertInstanceOf(K8sSecret::class, $secret);
+        }
+
         // ->get()
         $secret = K8s::secret()
             ->onConnection($this->connection)
@@ -110,14 +122,6 @@ class SecretTest extends TestCase
         $this->assertEquals(['app' => 'test'], $encodedPayload['metadata']['labels']);
         $this->assertEquals(['password1' => base64_encode('secret')], $encodedPayload['data']);
         $this->assertEquals(['password1' => 'secret'], $decodedPayload['data']);
-
-        // ->getAll()
-        $secrets = K8s::secret()
-            ->onConnection($this->connection)
-            ->getAll();
-
-        $this->assertInstanceOf(ResourcesList::class, $secrets);
-        $this->assertTrue($secrets->count() > 0);
 
         // ->update()
         $secret = K8s::secret()

@@ -71,10 +71,6 @@ class NamespaceTest extends TestCase
         $namespaces = K8s::namespace()
             ->onConnection($this->connection)
             ->getAll();
-
-        foreach ($namespaces as $ns) {
-            $this->assertInstanceOf(K8sNamespace::class, $ns);
-        }
     }
 
     public function test_namespace_api_interaction()
@@ -94,6 +90,10 @@ class NamespaceTest extends TestCase
 
         $this->assertInstanceOf(ResourcesList::class, $namespaces);
         $this->assertTrue($namespaces->count() > 0);
+
+        foreach ($namespaces as $ns) {
+            $this->assertInstanceOf(K8sNamespace::class, $ns);
+        }
 
         // ->create()
         $ns = K8s::namespace()

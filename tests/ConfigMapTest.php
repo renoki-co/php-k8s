@@ -82,6 +82,18 @@ class ConfigMapTest extends TestCase
         $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals(['mysetting' => 'somevalue'], $payload['data']);
 
+        // ->getAll()
+        $configmaps = K8s::configmap()
+            ->onConnection($this->connection)
+            ->getAll();
+
+        $this->assertInstanceOf(ResourcesList::class, $configmaps);
+        $this->assertEquals(1, $configmaps->count());
+
+        foreach ($configmaps as $configmap) {
+            $this->assertInstanceOf(K8sConfigMap::class, $configmap);
+        }
+
         // ->get()
         $configmap = K8s::configmap()
             ->onConnection($this->connection)
@@ -99,14 +111,6 @@ class ConfigMapTest extends TestCase
         $this->assertEquals(['test.annotation' => 'yes'], $payload['metadata']['annotations']);
         $this->assertEquals(['app' => 'test'], $payload['metadata']['labels']);
         $this->assertEquals(['mysetting' => 'somevalue'], $payload['data']);
-
-        // ->getAll()
-        $configmaps = K8s::configmap()
-            ->onConnection($this->connection)
-            ->getAll();
-
-        $this->assertInstanceOf(ResourcesList::class, $configmaps);
-        $this->assertEquals(1, $configmaps->count());
 
         // ->update()
         $configmap = K8s::configmap()
