@@ -2,14 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use RenokiCo\PhpK8s\Connection;
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\ResourcesList;
 
 class K8sResource implements Arrayable, Jsonable
 {
@@ -54,8 +49,9 @@ class K8sResource implements Arrayable, Jsonable
 
         $payload = str_replace(': []', ': {}', $payload);
 
-        // StorageClass: allowedTopologies might be empty and {} is not accepted.
         $payload = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $payload);
+        $payload = str_replace('"mountOptions": {}', '"mountOptions": []', $payload);
+        $payload = str_replace('"accessModes": {}', '"accessModes": []', $payload);
 
         return $payload;
     }
@@ -80,7 +76,10 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getAll()
     {
-        return $this->call('GET', $this->resourcesApiPath());
+        return $this
+            ->connection
+            ->setResourceClass(get_class($this))
+            ->call('GET', $this->resourcesApiPath(), $this->toJsonPayload());
     }
 
     /**
@@ -90,7 +89,10 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function get()
     {
-        return $this->call('GET', $this->resourceApiPath());
+        return $this
+            ->connection
+            ->setResourceClass(get_class($this))
+            ->call('GET', $this->resourceApiPath(), $this->toJsonPayload());
     }
 
     /**
@@ -100,7 +102,10 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function create()
     {
-        return $this->call('POST', $this->resourcesApiPath());
+        return $this
+            ->connection
+            ->setResourceClass(get_class($this))
+            ->call('POST', $this->resourcesApiPath(), $this->toJsonPayload());
     }
 
     /**
@@ -110,69 +115,9 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function update()
     {
-        return $this->call('PUT', $this->resourceApiPath());
-    }
-
-    /**
-     * Call the API with the specified method and path.
-     *
-     * @param  string  $method
-     * @param  string  $path
-     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
-     * @throws RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
-     */
-    public function call($method, string $path)
-    {
-        if (! $this->connection) {
-            throw new KubernetesAPIException('There is no connection to the Kubernetes cluster.');
-        }
-
-        $apiUrl = $this->connection->getApiUrl();
-
-        $callableUrl = "{$apiUrl}{$path}";
-
-        $resourceClass = get_class($this);
-
-        try {
-            $client = new Client;
-
-            $response = $client->request($method, $callableUrl, [
-                RequestOptions::BODY => $this->toJsonPayload(),
-                RequestOptions::HEADERS => [
-                    'Content-Type' => $method === 'PATCH'
-                        ? 'application/application/json-patch+json'
-                        : 'application/json',
-                ],
-            ]);
-        } catch (ClientException $e) {
-            $error = @json_decode(
-                (string) $e->getResponse()->getBody(), true
-            );
-
-            throw new KubernetesAPIException($error['message']);
-        }
-
-        $json = @json_decode($response->getBody(), true);
-
-        // If the kind is a list, transform into a ResourcesList
-        // collection of instances for the same class.
-
-        if (isset($json['items'])) {
-            $results = [];
-
-            foreach ($json['items'] as $item) {
-                $results[] = (new $resourceClass($item))
-                    ->onConnection($this->connection);
-            }
-
-            return new ResourcesList($results);
-        }
-
-        // If the items does not exist, it means the Kind
-        // is the same as the current class, so pass it
-        // for the payload.
-
-        return (new $resourceClass($json))
-            ->onConnection($this->connection);
+        return $this
+            ->connection
+            ->setResourceClass(get_class($this))
+            ->call('PUT', $this->resourceApiPath(), $this->toJsonPayload());
     }
 }
