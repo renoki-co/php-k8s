@@ -83,7 +83,7 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Set the source based on the
+     * Set the source based on the name and additional details.
      *
      * @param  string  $path
      * @param  string  $fsType
