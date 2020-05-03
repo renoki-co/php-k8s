@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasMountOptions;
@@ -9,7 +10,7 @@ use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasReclaimPolicy;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
-class K8sStorageClass
+class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
 {
     use HasAnnotations, HasLabels, HasMountOptions, HasName, HasReclaimPolicy, HasVersion;
 
@@ -145,11 +146,11 @@ class K8sStorageClass
     }
 
     /**
-     * Get the payload in API format.
+     * Get the instance as an array.
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return [
             'apiVersion' => $this->version,
@@ -167,5 +168,25 @@ class K8sStorageClass
             'volumeBindingMode' => $this->volumeBindingMode,
             'allowedTopologies' => $this->allowedTopologies,
         ];
+    }
+
+    /**
+     * Get the path, prefixed by '/', to point to the resource list.
+     *
+     * @return string
+     */
+    public function resourcesApiPath(): string
+    {
+        return "/apis/{$this->version}/storageclasses";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource.
+     *
+     * @return string
+     */
+    public function resourceApiPath(): string
+    {
+        return "/apis/{$this->version}/storageclasses/{$this->name}";
     }
 }
