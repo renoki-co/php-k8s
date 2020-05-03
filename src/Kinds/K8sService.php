@@ -2,16 +2,19 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasNamespace;
+use RenokiCo\PhpK8s\Traits\HasResourceVersion;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
-class K8sService
+class K8sService extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasAnnotations, HasLabels, HasName, HasNamespace, HasSelector, HasVersion;
+    use HasAnnotations, HasLabels, HasName, HasNamespace,
+        HasResourceVersion, HasSelector, HasVersion;
 
     /**
      * The type of the Service.
@@ -60,6 +63,7 @@ class K8sService
             $this->namespace = $payload['metadata']['namespace'] ?? 'default';
             $this->labels = $payload['metadata']['labels'] ?? [];
             $this->annotations = $payload['metadata']['annotations'] ?? [];
+            $this->resourceVersion = $payload['metadata']['resourceVersion'] ?? null;
             $this->selector = $payload['spec']['selector'] ?? [];
             $this->type = $payload['spec']['type'] ?? 'NodePort';
             $this->ports = $payload['spec']['ports'] ?? [];
@@ -142,11 +146,11 @@ class K8sService
     }
 
     /**
-     * Get the payload in API format.
+     * Get the instance as an array.
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return [
             'apiVersion' => $this->version,
@@ -156,6 +160,7 @@ class K8sService
                 'namespace' => $this->namespace,
                 'labels' => $this->labels,
                 'annotations' => $this->annotations,
+                'resourceVersion' => $this->resourceVersion,
             ],
             'spec' => [
                 'selector' => $this->selector,
@@ -165,5 +170,25 @@ class K8sService
                 'externalIPs' => $this->externalIps,
             ],
         ];
+    }
+
+    /**
+     * Get the path, prefixed by '/', to point to the resource list.
+     *
+     * @return string
+     */
+    public function resourcesApiPath(): string
+    {
+        return "/api/{$this->version}/namespaces/{$this->namespace}/services";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource.
+     *
+     * @return string
+     */
+    public function resourceApiPath(): string
+    {
+        return "/api/{$this->version}/namespaces/{$this->namespace}/services/{$this->name}";
     }
 }

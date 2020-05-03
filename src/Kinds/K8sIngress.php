@@ -2,13 +2,14 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 use RenokiCo\PhpK8s\Traits\HasNamespace;
 use RenokiCo\PhpK8s\Traits\HasVersion;
 
-class K8sIngress
+class K8sIngress extends K8sResource implements InteractsWithK8sCluster
 {
     use HasAnnotations, HasLabels, HasName, HasNamespace, HasVersion;
 
@@ -29,8 +30,10 @@ class K8sIngress
      */
     public function __construct(array $payload = [])
     {
+        $this->version = 'networking.k8s.io/v1beta1';
+
         if ($payload) {
-            $this->version = $payload['apiVersion'] ?? 'v1';
+            $this->version = $payload['apiVersion'] ?? 'networking.k8s.io/v1beta1';
             $this->name = $payload['metadata']['name'] ?? null;
             $this->namespace = $payload['metadata']['namespace'] ?? 'default';
             $this->labels = $payload['metadata']['labels'] ?? [];
@@ -69,15 +72,15 @@ class K8sIngress
     }
 
     /**
-     * Get the payload in API format.
+     * Get the instance as an array.
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return [
             'apiVersion' => $this->version,
-            'kind' => 'Service',
+            'kind' => 'Ingress',
             'metadata' => [
                 'name' => $this->name,
                 'namespace' => $this->namespace,
@@ -88,5 +91,25 @@ class K8sIngress
                 'rules' => $this->rules,
             ],
         ];
+    }
+
+    /**
+     * Get the path, prefixed by '/', to point to the resource list.
+     *
+     * @return string
+     */
+    public function resourcesApiPath(): string
+    {
+        return "/apis/{$this->version}/namespaces/{$this->namespace}/ingresses";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource.
+     *
+     * @return string
+     */
+    public function resourceApiPath(): string
+    {
+        return "/apis/{$this->version}/namespaces/{$this->namespace}/ingresses/{$this->name}";
     }
 }

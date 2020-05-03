@@ -42,11 +42,11 @@ class K8sPersistentVolumeClaim
     }
 
     /**
-     * Get the payload in API format.
+     * Get the instance as an array.
      *
      * @return array
      */
-    public function toArray(): array
+    public function toArray()
     {
         return [
             'apiVersion' => $this->version,

@@ -3,9 +3,17 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
+use RenokiCo\PhpK8s\Connection;
 
 abstract class TestCase extends Orchestra
 {
+    /**
+     * The connection to the Kubernetes cluster.
+     *
+     * @var \RenokiCo\PhpK8s\Connection
+     */
+    protected $connection;
+
     /**
      * Set up the tests.
      *
@@ -14,6 +22,8 @@ abstract class TestCase extends Orchestra
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->connection = (new Connection('http://127.0.0.1'));
     }
 
     /**
@@ -37,13 +47,6 @@ abstract class TestCase extends Orchestra
      */
     public function getEnvironmentSetUp($app)
     {
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
-            'driver'   => 'sqlite',
-            'database' => __DIR__.'/database.sqlite',
-            'prefix'   => '',
-        ]);
-        $app['config']->set('auth.providers.users.model', User::class);
-        $app['config']->set('app.key', 'wslxrEFGWY6GfGhvN9L3wH3KSRJQQpBD');
+        //
     }
 }
