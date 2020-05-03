@@ -23,7 +23,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->connection = (new Connection('127.0.0.1'));
+        $this->connection = (new Connection('http://127.0.0.1'));
     }
 
     /**

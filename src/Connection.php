@@ -73,7 +73,7 @@ class Connection
      * @param  string  $path
      * @param  string  $payload
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
-     * @throws RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function call($method, string $path, string $payload)
     {
