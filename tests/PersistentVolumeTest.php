@@ -21,12 +21,11 @@ class PersistentVolumeTest extends TestCase
             'required' => [
                 'nodeSelectorTerms' => [[
                     'matchExpressions' => [
-                        [ 'key' => 'test', 'operator' => 'In', 'values' => ['test']],
+                        ['key' => 'test', 'operator' => 'In', 'values' => ['test']],
                     ],
                 ]],
             ],
         ];
-
 
         $pv = K8s::persistentVolume()
             ->version('test')
@@ -72,7 +71,7 @@ class PersistentVolumeTest extends TestCase
             'required' => [
                 'nodeSelectorTerms' => [[
                     'matchExpressions' => [
-                        [ 'key' => 'test', 'operator' => 'In', 'values' => ['test']],
+                        ['key' => 'test', 'operator' => 'In', 'values' => ['test']],
                     ],
                 ]],
             ],
@@ -152,7 +151,7 @@ class PersistentVolumeTest extends TestCase
             'required' => [
                 'nodeSelectorTerms' => [[
                     'matchExpressions' => [
-                        [ 'key' => 'test', 'operator' => 'In', 'values' => ['test']],
+                        ['key' => 'test', 'operator' => 'In', 'values' => ['test']],
                     ],
                 ]],
             ],

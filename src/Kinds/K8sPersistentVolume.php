@@ -23,7 +23,7 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * The Local Source for the PV.
-     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes.
      *
      * @var array
      */
@@ -31,7 +31,7 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * The AWS EBS Source for the PV.
-     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes.
      *
      * @var array
      */
@@ -39,7 +39,7 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * The GCE Persistent Disk Source for the PV.
-     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes.
      *
      * @var array
      */
@@ -47,7 +47,7 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * The custom CSI Driver Source for the PV.
-     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes
+     * See: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes.
      *
      * @var array
      */
@@ -83,7 +83,7 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Set the source based on the
+     * Set the source based on the name and additional details.
      *
      * @param  string  $path
      * @param  string  $fsType
