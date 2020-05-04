@@ -61,7 +61,7 @@ class NamespaceTest extends TestCase
 
         $this->assertFalse($ns->isSynced());
 
-        $this->assertTrue($ns->save());
+        $this->assertTrue($ns->create());
 
         $this->assertTrue($ns->isSynced());
 
@@ -74,12 +74,12 @@ class NamespaceTest extends TestCase
     {
         $ns = K8s::namespace()
             ->onConnection($this->connection)
-            ->whereName('production')
-            ->get();
+            ->setName('staging')
+            ->create();
 
         $this->assertTrue($ns->isSynced());
 
-        $this->assertFalse($ns->save());
+        $this->assertTrue($ns->update());
 
         $this->assertTrue($ns->isSynced());
     }

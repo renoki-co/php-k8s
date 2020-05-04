@@ -378,11 +378,35 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Update the resource.
+     * Update the resource with a specified method.
      *
+     * @param  string  $method
      * @return bool
      */
-    public function update(): bool
+    public function update(string $method = Connection::PATCH_METHOD): bool
+    {
+        // If it didn't change, no way to trigger the change.
+        if (! $this->hasChanged()) {
+            return true;
+        }
+
+        $instance = $this
+            ->connection
+            ->setResourceClass(get_class($this))
+            ->call('PATCH', $this->resourceApiPath(), $this->toJsonPayload());
+
+        $this->syncWith($instance->toArray());
+
+        return true;
+    }
+
+    /**
+     * Replace the resource entirely.
+     *
+     * @param  string  $method
+     * @return bool
+     */
+    public function replace(string $method = Connection::PATCH_METHOD): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
@@ -397,25 +421,6 @@ class K8sResource implements Arrayable, Jsonable
         $this->syncWith($instance->toArray());
 
         return true;
-    }
-
-    /**
-     * Alias for ->create() or ->update().
-     *
-     * @return bool|\RenokiCo\PhpK8s\Kinds\K8sResource
-     */
-    public function save()
-    {
-        // If it's not synced, create the instance.
-        if (! $this->isSynced()) {
-            $instance = $this->create();
-
-            $this->syncWith($instance->toArray());
-
-            return true;
-        }
-
-        return $this->update();
     }
 
     /**

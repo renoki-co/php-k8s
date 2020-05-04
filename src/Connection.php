@@ -31,16 +31,53 @@ class Connection
     protected $resourceClass;
 
     /**
+     * Specify the patch method to use.
+     *
+     * @var string
+     */
+    protected $patchMethod = self::PATCH_METHOD;
+
+    /**
+     * Map the patch methods with the respective headers.
+     *
+     * @var array
+     */
+    protected static $patchMethods = [
+        self::PATCH_METHOD => 'application/application/json-patch+json',
+        self::MERGE_METHOD => 'application/merge-patch+json',
+        self::STRATEGIC_METHOD => 'application/strategic-merge-patch+json',
+    ];
+
+    const PATCH_METHOD = 'patch';
+
+    const MERGE_METHOD = 'merge';
+
+    const STRATEGIC_METHOD = 'strategic';
+
+    /**
      * Create a new class instance.
      *
      * @param  string  $url
      * @param  int  $port
      * @return void
      */
-    public function __construct($url, int $port = 8080)
+    public function __construct(string $url, int $port = 8080)
     {
         $this->url = $url;
         $this->port = $port;
+    }
+
+    /**
+     * Set the patch method.
+     *
+     * @param  string  $patchMethod
+     * @return $this
+     */
+    public function setPatchMethod(string $patchMethod)
+    {
+        $this->patchMethod = $patchMethod;
+
+        return $this;
     }
 
     /**
@@ -90,7 +127,7 @@ class Connection
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
                     'Content-Type' => $method === 'PATCH'
-                        ? 'application/application/json-patch+json'
+                        ? self::$patchMethods[$this->patchMethod]
                         : 'application/json',
                 ],
             ]);
