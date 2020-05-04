@@ -3,13 +3,11 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
 
 class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasAnnotations, HasLabels, HasName;
+    use HasName;
 
     /**
      * The resource Kind parameter.
