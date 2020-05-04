@@ -38,7 +38,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertFalse($cm->isSynced());
 
-        $this->assertTrue($cm->create());
+        $cm = $cm->create();
 
         $this->assertTrue($cm->isSynced());
 

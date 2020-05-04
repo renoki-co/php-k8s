@@ -61,7 +61,7 @@ class NamespaceTest extends TestCase
 
         $this->assertFalse($ns->isSynced());
 
-        $this->assertTrue($ns->create());
+        $ns = $ns->create();
 
         $this->assertTrue($ns->isSynced());
 

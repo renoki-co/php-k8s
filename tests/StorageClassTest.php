@@ -38,7 +38,7 @@ class StorageClassTest extends TestCase
 
         $this->assertFalse($sc->isSynced());
 
-        $this->assertTrue($sc->create());
+        $sc = $sc->create();
 
         $this->assertTrue($sc->isSynced());
 
