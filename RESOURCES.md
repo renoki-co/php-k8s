@@ -6,12 +6,12 @@ Currently, only the following resources can be handled:
 
 - namespaces
 - configmaps
+- storageclasses
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
-- storageclasses
 - secrets
 - services
 - ingress
