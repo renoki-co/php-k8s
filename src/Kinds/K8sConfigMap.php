@@ -30,7 +30,7 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
      */
     public function getData()
     {
-        return $this->getAttribute('data');
+        return $this->getAttribute('data', []);
     }
 
     /**
@@ -51,7 +51,7 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
      * @param  mixed  $value
      * @return $this
      */
-    public function addData($name, $value)
+    public function addData(string $name, $value)
     {
         return $this->setAttribute("data.{$name}", $value);
     }
@@ -62,7 +62,7 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
      * @param  string  $name
      * @return $this
      */
-    public function removeData($name)
+    public function removeData(string $name)
     {
         return $this->removeAttribute("data.{$name}");
     }
