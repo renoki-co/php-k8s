@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.0', '7.1', '7.2', '7.3', '7.4']
+        kubernetes: ['1.14.10', '1.15.11', '1.16.9', '1.17.5', '1.18.2']
+    name: PHP ${{ matrix.php }} with Kubernetes v${{ matrix.kubernetes }}
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      name: Cache dependencies
+      with:
+        path: ~/.composer/cache/files
+        key: composer-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+    - uses: manusa/actions-setup-minikube@v1.0.2
+      name: Setup Minikube
+      with:
+        minikube version: v1.10.0-beta.2
+        kubernetes version: "v${{ matrix.kubernetes }}"
+        github token: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Run Kubernetes Proxy
+      run: |
+        kubectl proxy --port=8080 &
+    - name: Install dependencies
+      run: |
+        composer install --no-interaction --prefer-source
+    - name: Run tests
+      run: |
+        phpunit --coverage-text --coverage-clover=coverage.xml
+    - uses: codecov/codecov-action@v1
+      with:
+        fail_ci_if_error: false
