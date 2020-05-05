@@ -14,6 +14,11 @@ class K8s
         return new Kinds\K8sConfigMap($payload);
     }
 
+    public static function secret(array $payload = [])
+    {
+        return new Kinds\K8sSecret($payload);
+    }
+
     public static function ingress(array $payload = [])
     {
         return new Kinds\K8sIngress($payload);

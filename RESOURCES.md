@@ -7,12 +7,12 @@ Currently, only the following resources can be handled:
 - namespaces
 - configmaps
 - storageclasses
+- secrets
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
-- secrets
 - services
 - ingress
 - persistentvolumes
