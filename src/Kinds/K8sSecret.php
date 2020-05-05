@@ -35,7 +35,7 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster
         $data = $this->getAttribute('data', []);
 
         if ($decode) {
-            foreach($data as $key => &$value) {
+            foreach ($data as $key => &$value) {
                 $value = base64_decode($value);
             }
         }
