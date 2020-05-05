@@ -3,16 +3,16 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use RenokiCo\PhpK8s\Connection;
+use RenokiCo\PhpK8s\KubernetesCluster;
 
 abstract class TestCase extends Orchestra
 {
     /**
-     * The connection to the Kubernetes cluster.
+     * The cluster to the Kubernetes cluster.
      *
-     * @var \RenokiCo\PhpK8s\Connection
+     * @var \RenokiCo\PhpK8s\KubernetesCluster
      */
-    protected $connection;
+    protected $cluster;
 
     /**
      * Set up the tests.
@@ -23,7 +23,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->connection = (new Connection('http://127.0.0.1'));
+        $this->cluster = (new KubernetesCluster('http://127.0.0.1'));
     }
 
     /**

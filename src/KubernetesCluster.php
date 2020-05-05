@@ -6,8 +6,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use vierbergenlars\SemVer\version;
 
-class Connection
+class KubernetesCluster
 {
     /**
      * The Cluster API port.
@@ -38,6 +39,13 @@ class Connection
     protected $patchMethod = self::PATCH_METHOD;
 
     /**
+     * The Kubernetes cluster version.
+     *
+     * @var \vierbergenlars\SemVer\version
+     */
+    protected $kubernetesVersion;
+
+    /**
      * Map the patch methods with the respective headers.
      *
      * @var array
@@ -65,6 +73,8 @@ class Connection
     {
         $this->url = $url;
         $this->port = $port;
+
+        $this->loadClusterVersion();
     }
 
     /**
@@ -149,7 +159,7 @@ class Connection
 
             foreach ($json['items'] as $item) {
                 $results[] = (new $resourceClass($item))
-                    ->onConnection($this)
+                    ->onCluster($this)
                     ->synced();
             }
 
@@ -161,7 +171,59 @@ class Connection
         // for the payload.
 
         return (new $resourceClass($json))
-            ->onConnection($this)
+            ->onCluster($this)
             ->synced();
+    }
+
+    /**
+     * Load the cluster version.
+     *
+     * @return void
+     */
+    protected function loadClusterVersion(): void
+    {
+        $apiUrl = $this->getApiUrl();
+
+        $callableUrl = "{$apiUrl}/version";
+
+        try {
+            $client = new Client;
+
+            $response = $client->request('GET', $callableUrl);
+        } catch (ClientException $e) {
+            //
+        }
+
+        $json = @json_decode($response->getBody(), true);
+
+        $this->kubernetesVersion = new version($json['gitVersion']);
+    }
+
+    /**
+     * Check if the cluster version is newer
+     * than a specific version.
+     *
+     * @param  string  $kubernetesVersion
+     * @return bool
+     */
+    public function newerThan(string $kubernetesVersion): bool
+    {
+        return version::gte(
+            $this->kubernetesVersion, $kubernetesVersion
+        );
+    }
+
+    /**
+     * Check if the cluster version is older
+     * than a specific version.
+     *
+     * @param  string  $kubernetesVersion
+     * @return bool
+     */
+    public function olderThan(string $kubernetesVersion): bool
+    {
+        return version::lt(
+            $this->kubernetesVersion, $kubernetesVersion
+        );
     }
 }

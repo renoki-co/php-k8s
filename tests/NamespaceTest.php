@@ -27,7 +27,7 @@ class NamespaceTest extends TestCase
     public function test_namespace_all()
     {
         $namespaces = K8s::namespace()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $namespaces);
@@ -42,7 +42,7 @@ class NamespaceTest extends TestCase
     public function test_namespace_get()
     {
         $ns = K8s::namespace()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('kube-system')
             ->get();
 
@@ -56,7 +56,7 @@ class NamespaceTest extends TestCase
     public function test_namespace_create()
     {
         $ns = K8s::namespace()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('production');
 
         $this->assertFalse($ns->isSynced());
@@ -73,7 +73,7 @@ class NamespaceTest extends TestCase
     public function test_namespace_update()
     {
         $ns = K8s::namespace()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('staging')
             ->create();
 
