@@ -224,7 +224,7 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Alias for ->setNamespace9)
+     * Alias for ->setNamespace().
      *
      * @param  string|\RenokiCo\PhpK8s\Kinds\K8sNamespace  $namespace
      * @return $this
@@ -262,7 +262,7 @@ class K8sResource implements Arrayable, Jsonable
     public function getResourceVersion()
     {
         if (! $this->isSynced()) {
-            return null;
+            return;
         }
 
         return $this->getAttribute('metadata.resourceVersion', null);
@@ -276,7 +276,7 @@ class K8sResource implements Arrayable, Jsonable
     public function getResourceUid()
     {
         if (! $this->isSynced()) {
-            return null;
+            return;
         }
 
         return $this->getAttribute('metadata.uid', null);
