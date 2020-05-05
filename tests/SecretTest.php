@@ -32,7 +32,7 @@ class SecretTest extends TestCase
     public function test_secret_create()
     {
         $secret = K8s::secret()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('passwords')
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
@@ -55,7 +55,7 @@ class SecretTest extends TestCase
     public function test_secret_all()
     {
         $secrets = K8s::secret()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $secrets);
@@ -70,7 +70,7 @@ class SecretTest extends TestCase
     public function test_secret_get()
     {
         $secret = K8s::secret()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('passwords')
             ->get();
 
@@ -87,7 +87,7 @@ class SecretTest extends TestCase
     public function test_secret_update()
     {
         $secret = K8s::secret()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('passwords')
             ->get();
 

@@ -31,7 +31,7 @@ class StorageClassTest extends TestCase
     public function test_storage_class_create()
     {
         $sc = K8s::storageClass()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('io1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => '10']);
@@ -53,7 +53,7 @@ class StorageClassTest extends TestCase
     public function test_storage_class_all()
     {
         $storageClasses = K8s::storageClass()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $storageClasses);
@@ -68,7 +68,7 @@ class StorageClassTest extends TestCase
     public function test_storage_class_get()
     {
         $sc = K8s::storageClass()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('io1')
             ->get();
 
@@ -85,7 +85,7 @@ class StorageClassTest extends TestCase
     public function test_storage_class_update()
     {
         $sc = K8s::storageClass()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('io1')
             ->get();
 

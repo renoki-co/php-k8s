@@ -31,7 +31,7 @@ class ConfigMapTest extends TestCase
     public function test_config_map_create()
     {
         $cm = K8s::configmap()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('settings')
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
@@ -53,7 +53,7 @@ class ConfigMapTest extends TestCase
     public function test_config_map_all()
     {
         $configmaps = K8s::configmap()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $configmaps);
@@ -68,7 +68,7 @@ class ConfigMapTest extends TestCase
     public function test_config_map_get()
     {
         $cm = K8s::configmap()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('settings')
             ->get();
 
@@ -84,7 +84,7 @@ class ConfigMapTest extends TestCase
     public function test_config_map_update()
     {
         $cm = K8s::configmap()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('settings')
             ->get();
 

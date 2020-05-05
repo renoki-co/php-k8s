@@ -37,7 +37,7 @@ class ServiceTest extends TestCase
     public function test_service_create()
     {
         $svc = K8s::service()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])
@@ -65,7 +65,7 @@ class ServiceTest extends TestCase
     public function test_service_all()
     {
         $services = K8s::service()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $services);
@@ -80,7 +80,7 @@ class ServiceTest extends TestCase
     public function test_service_get()
     {
         $svc = K8s::service()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('nginx')
             ->get();
 
@@ -100,7 +100,7 @@ class ServiceTest extends TestCase
     public function test_service_update()
     {
         $svc = K8s::service()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('nginx')
             ->get();
 

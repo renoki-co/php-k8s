@@ -5,7 +5,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
-use RenokiCo\PhpK8s\Connection;
+use RenokiCo\PhpK8s\KubernetesCluster;
 
 class K8sResource implements Arrayable, Jsonable
 {
@@ -38,12 +38,12 @@ class K8sResource implements Arrayable, Jsonable
     protected static $defaultNamespace = 'default';
 
     /**
-     * The connection instance that
+     * The cluster instance that
      * binds to the cluster API.
      *
-     * @var \RenokiCo\PhpK8s\Connection
+     * @var \RenokiCo\PhpK8s\KubernetesCluster
      */
-    protected $connection;
+    protected $cluster;
 
     /**
      * The Kubernetes resource's attributes.
@@ -282,14 +282,14 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Specify the connection to attach to.
+     * Specify the cluster to attach to.
      *
-     * @param  \RenokiCo\PhpK8s\Connection  $connection
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @return $this
      */
-    public function onConnection(Connection $connection)
+    public function onCluster(KubernetesCluster $cluster)
     {
-        $this->connection = $connection;
+        $this->cluster = $cluster;
 
         return $this;
     }
@@ -345,7 +345,7 @@ class K8sResource implements Arrayable, Jsonable
     public function all()
     {
         return $this
-            ->connection
+            ->cluster
             ->setResourceClass(get_class($this))
             ->call('GET', $this->resourcesApiPath());
     }
@@ -358,7 +358,7 @@ class K8sResource implements Arrayable, Jsonable
     public function get()
     {
         return $this
-            ->connection
+            ->cluster
             ->setResourceClass(get_class($this))
             ->call('GET', $this->resourceApiPath());
     }
@@ -371,7 +371,7 @@ class K8sResource implements Arrayable, Jsonable
     public function create()
     {
         return $this
-            ->connection
+            ->cluster
             ->setResourceClass(get_class($this))
             ->call('POST', $this->resourcesApiPath(), $this->toJsonPayload());
     }
@@ -382,7 +382,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string  $method
      * @return bool
      */
-    public function update(string $method = Connection::PATCH_METHOD): bool
+    public function update(string $method = KubernetesCluster::PATCH_METHOD): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
@@ -390,7 +390,7 @@ class K8sResource implements Arrayable, Jsonable
         }
 
         $instance = $this
-            ->connection
+            ->cluster
             ->setResourceClass(get_class($this))
             ->call('PATCH', $this->resourceApiPath(), $this->toJsonPayload());
 
@@ -405,7 +405,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string  $method
      * @return bool
      */
-    public function replace(string $method = Connection::PATCH_METHOD): bool
+    public function replace(string $method = KubernetesCluster::PATCH_METHOD): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
@@ -413,7 +413,7 @@ class K8sResource implements Arrayable, Jsonable
         }
 
         $instance = $this
-            ->connection
+            ->cluster
             ->setResourceClass(get_class($this))
             ->call('PUT', $this->resourceApiPath(), $this->toJsonPayload());
 
@@ -439,7 +439,7 @@ class K8sResource implements Arrayable, Jsonable
         // ]);
 
         $this
-            ->connection
+            ->cluster
             ->setResourceClass(get_class($this))
             ->call('DELETE', $this->resourceApiPath(), $this->toJsonPayload());
 

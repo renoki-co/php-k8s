@@ -21,10 +21,18 @@ class IngressTest extends TestCase
                     'serviceName' => 'nginx',
                     'servicePort' => 80,
                 ],
-                'pathType' => 'ImplementationSpecific',
             ]],
         ]],
     ];
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if ($this->cluster->newerThan('1.18.0')) {
+            self::$rules[0]['http']['paths'][0]['pathType'] = 'ImplementationSpecific';
+        }
+    }
 
     public function test_ingress_kind()
     {
@@ -49,7 +57,7 @@ class IngressTest extends TestCase
     public function test_ingress_create()
     {
         $ing = K8s::ingress()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setRules(self::$rules);
@@ -71,7 +79,7 @@ class IngressTest extends TestCase
     public function test_ingress_all()
     {
         $ingresss = K8s::ingress()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $ingresss);
@@ -86,7 +94,7 @@ class IngressTest extends TestCase
     public function test_ingress_get()
     {
         $ing = K8s::ingress()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('nginx')
             ->get();
 
@@ -103,7 +111,7 @@ class IngressTest extends TestCase
     public function test_ingress_update()
     {
         $ing = K8s::ingress()
-            ->onConnection($this->connection)
+            ->onCluster($this->cluster)
             ->whereName('nginx')
             ->get();
 
