@@ -6,7 +6,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\Connection;
-use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 
 class K8sResource implements Arrayable, Jsonable
 {
