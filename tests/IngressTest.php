@@ -29,6 +29,7 @@ class IngressTest extends TestCase
     {
         parent::setUp();
 
+        // >= v1.18.0: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
         if ($this->cluster->newerThan('1.18.0')) {
             self::$rules[0]['http']['paths'][0]['pathType'] = 'ImplementationSpecific';
         }
