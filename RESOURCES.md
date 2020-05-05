@@ -8,13 +8,13 @@ Currently, only the following resources can be handled:
 - configmaps
 - storageclasses
 - secrets
+- services
+- ingress
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
-- services
-- ingress
 - persistentvolumes
 - persistentvolumeclaims
 - pods
