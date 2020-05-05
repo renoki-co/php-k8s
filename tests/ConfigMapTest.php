@@ -25,6 +25,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['key2' => 'val2'], $cm->getData());
     }
 
     public function test_config_map_create()
