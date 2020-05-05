@@ -71,13 +71,18 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Create a new resource.
      *
+     * @param  null|RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return void
      */
-    public function __construct(array $attributes = [])
+    public function __construct($cluster = null, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->original = $attributes;
+
+        if ($cluster instanceof KubernetesCluster) {
+            $this->onCluster($cluster);
+        }
     }
 
     /**

@@ -136,7 +136,7 @@ class KubernetesCluster
             $response = $client->request($method, $callableUrl, [
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
-                    'Content-Type' => $method === 'PATCH'
+                    'Content-Type' => in_array($method, ['PATCH', 'PUT'])
                         ? self::$patchMethods[$this->patchMethod]
                         : 'application/json',
                 ],
@@ -158,8 +158,7 @@ class KubernetesCluster
             $results = [];
 
             foreach ($json['items'] as $item) {
-                $results[] = (new $resourceClass($item))
-                    ->onCluster($this)
+                $results[] = (new $resourceClass($this, $item))
                     ->synced();
             }
 
@@ -170,8 +169,7 @@ class KubernetesCluster
         // is the same as the current class, so pass it
         // for the payload.
 
-        return (new $resourceClass($json))
-            ->onCluster($this)
+        return (new $resourceClass($this, $json))
             ->synced();
     }
 
