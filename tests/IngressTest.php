@@ -8,6 +8,24 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class IngressTest extends TestCase
 {
+    /**
+     * The default testing rules.
+     *
+     * @var array
+     */
+    protected static $rules = [
+        ['host' => 'nginx.test.com', 'http' => [
+            'paths' => [[
+                'path' => '/',
+                'backend' => [
+                    'serviceName' => 'nginx',
+                    'servicePort' => 80,
+                ],
+                'pathType' => 'ImplementationSpecific',
+            ]],
+        ]],
+    ];
+
     public function test_ingress_kind()
     {
         $ing = K8s::ingress();
@@ -20,17 +38,12 @@ class IngressTest extends TestCase
         $ing = K8s::ingress()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
-            ->setPorts([
-                ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
-            ]);
+            ->setRules(self::$rules);
 
-        $this->assertEquals('v1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
-        $this->assertEquals(['app' => 'frontend'], $ing->getSelectors());
-        $this->assertEquals([[
-            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
-        ]], $ing->getPorts());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function test_ingress_create()
@@ -39,10 +52,7 @@ class IngressTest extends TestCase
             ->onConnection($this->connection)
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
-            ->setSelectors(['app' => 'frontend'])
-            ->setPorts([
-                ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
-            ]);
+            ->setRules(self::$rules);
 
         $this->assertFalse($ing->isSynced());
 
@@ -52,13 +62,10 @@ class IngressTest extends TestCase
 
         $this->assertInstanceOf(K8sIngress::class, $ing);
 
-        $this->assertEquals('v1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
-        $this->assertEquals(['app' => 'frontend'], $ing->getSelectors());
-        $this->assertEquals([[
-            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
-        ]], $ing->getPorts());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function test_ingress_all()
@@ -87,13 +94,10 @@ class IngressTest extends TestCase
 
         $this->assertTrue($ing->isSynced());
 
-        $this->assertEquals('v1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
-        $this->assertEquals(['app' => 'frontend'], $ing->getSelectors());
-        $this->assertEquals([[
-            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
-        ]], $ing->getPorts());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function test_ingress_update()
@@ -111,13 +115,10 @@ class IngressTest extends TestCase
 
         $this->assertTrue($ing->isSynced());
 
-        $this->assertEquals('v1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals([], $ing->getAnnotations());
-        $this->assertEquals(['app' => 'frontend'], $ing->getSelectors());
-        $this->assertEquals([[
-            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
-        ]], $ing->getPorts());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function test_ingress_delete()

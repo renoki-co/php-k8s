@@ -69,6 +69,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
      */
     public function resourceApiPath(): string
     {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
+        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
     }
 }
