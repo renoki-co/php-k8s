@@ -1,15 +1,12 @@
-# Resources
+# Resources Docs
 
-# Implemented Resources
-
-Currently, only the following resources can be handled:
-
-- namespaces
-- configmaps
-- storageclasses
-- secrets
-- services
-- ingress
+- [All Resources](kinds/Resource.md)
+<!-- - [Namespace](kinds/Namespace.md)
+- [Config Map](kinds/ConfigMap.md)
+- [Storage Class](kinds/StorageClass.md)
+- [Secret](kinds/Secret.md)
+- [Service](kinds/Service.md)
+- [Ingress](kinds/Ingress.md) -->
 
 # Work in Progress
 

@@ -25,9 +25,146 @@ composer require renoki-co/php-k8s
 
 ## 🙌 Usage
 
-``` php
-//
+Having the following YAML configuratin for your Service kind:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
 ```
+
+Can be written like this:
+
+``` php
+use RenokiCo\PhpK8s\K8s;
+use RenokiCo\PhpK8s\KubernetesCluster;
+
+// Create a new instance of KubernetesCluster
+$cluster = new KubernetesCluster('http://127.0.0.1', 8080);
+
+// Create a new NGINX service.
+$svc = K8s::service($cluster)
+    ->setName('nginx')
+    ->setNamespace('frontend')
+    ->setSelectors(['app' => 'frontend'])
+    ->setPorts([
+        ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
+    ])
+    ->create();
+```
+
+## Methods
+
+Each kind has its own class from which you can build it and then create, update, replace or delete them.
+
+In order to sync it with the cluster, you have to call the `->onCluster(...)` method, passing the instance of KubernetesCluster as the connection.
+
+Alternatively, you can pass the cluster connection as the first parameter to the `K8s` class:
+
+```php
+$ns = K8s::namespace($cluster)
+    ->setName('staging');
+```
+
+### Retrieval
+
+Getting all resources can be done by calling `->all()`:
+
+```php
+$namespaces = K8s::namespace($cluster)->all();
+```
+
+The result is an `RenokiCo\PhpK8s\ResourcesList` instance.
+
+The class is extending the default `\Illuminate\Support\Collection`, on which you can chain various methods as described here: https://laravel.com/docs/master/collections
+
+Getting resources can be filtered if needed:
+
+```php
+$stagingServices = K8s::service($cluster)
+    ->whereNamespace('staging')
+    ->all();
+```
+
+Getting only one resource is done by calling `->get()`:
+
+```php
+$stagingNginxService =
+    K8s::service($cluster)
+        ->whereNamespace('staging')
+        ->whereName('nginx')
+        ->get();
+```
+
+Filters can vary, depending if the resources are namespaceable or not.
+
+By default, the namespace is `default` and can be missed from the filters.
+
+### Creation
+
+Calling the `->create()` method after building your Kind will sync it to the Cluster:
+
+```php
+$ns = K8s::namespace()
+    ->setName('staging')
+    ->create();
+
+$ns->isSynced(); // true
+```
+
+### Updating/Replacement
+
+Kubernetes has three ways of patching:
+
+- PATCH, used as `KubernetesCluster::PATCH_METHOD`
+- MERGE, used as `KubernetesCluster::MERGE_METHOD`
+- STRATEGIC MERGE, used as `KubernetesCluster::STRATEGIC_METHOD`
+
+By default, it is set as `KubernetesCluster::PATCH_METHOD`.
+
+If you want a different way of patching, use the `setPatchMethod` within the `KubernetesCluster` class:
+
+```php
+use RenokiCo\PhpK8s\KubernetesCluster;
+
+$cluster = (new KubernetesCluster(...))
+    ->setPatchMethod(KubernetesCluster::STRATEGIC_METHOD);
+```
+
+You can call `->update()` or `->replace()` according to your needs:
+
+```php
+$ns = K8s::configmap($cluster)
+    ->whereName('env')
+    ->get();
+
+$ns->addData('API_KEY', '123')
+
+// Update the resource.
+$ns->update();
+
+// Replace the resource.
+$ns->replace();
+```
+
+### Deletion
+
+Currently, the deletion is WIP.
+
+## Per-Resource Docs
+
+Each existent resource has its own documentation, filled with examples.
+
+[Go to documentation](docs/RESOURCES.md)
 
 ## 🐛 Testing
 
