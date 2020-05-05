@@ -14,6 +14,11 @@ class K8s
         return new Kinds\K8sConfigMap($payload);
     }
 
+    public static function service(array $payload = [])
+    {
+        return new Kinds\K8sService($payload);
+    }
+
     public static function storageClass(array $payload = [])
     {
         return new Kinds\K8sStorageClass($payload);
