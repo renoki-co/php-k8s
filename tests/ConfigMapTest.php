@@ -103,7 +103,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['newkey' => 'newval'], $cm->getData());
-        $this->assertEquals('newkey', $cm->getData('newval'));
+        $this->assertEquals('newval', $cm->getData('newkey'));
     }
 
     public function test_config_map_delete()
