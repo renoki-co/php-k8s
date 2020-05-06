@@ -4,11 +4,10 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasName;
 
 class K8sService extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasName, HasAnnotations;
+    use HasAnnotations;
 
     /**
      * The resource Kind parameter.

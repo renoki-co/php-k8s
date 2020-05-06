@@ -1,12 +1,15 @@
 # Resources Docs
 
-- [All Resources](kinds/Resource.md)
-<!-- - [Namespace](kinds/Namespace.md)
+Before diving in the resource docs, please check [All Resources docs](kinds/Resource.md), which contains helpful methods that are available everywhere and helps customize your Kind classes, even though you won't find the methods you need in every single kind.
+
+# Supported Resources
+
+- [Namespace](kinds/Namespace.md)
 - [Config Map](kinds/ConfigMap.md)
-- [Storage Class](kinds/StorageClass.md)
 - [Secret](kinds/Secret.md)
+- [Storage Class](kinds/StorageClass.md)
 - [Service](kinds/Service.md)
-- [Ingress](kinds/Ingress.md) -->
+- [Ingress](kinds/Ingress.md)
 
 # Work in Progress
 

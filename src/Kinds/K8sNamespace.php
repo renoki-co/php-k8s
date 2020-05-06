@@ -3,12 +3,9 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
-use RenokiCo\PhpK8s\Traits\HasName;
 
 class K8sNamespace extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasName;
-
     /**
      * The resource Kind parameter.
      *

@@ -3,12 +3,9 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
-use RenokiCo\PhpK8s\Traits\HasName;
 
 class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasName;
-
     /**
      * The resource Kind parameter.
      *
@@ -26,10 +23,15 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
     /**
      * Get the data attribute.
      *
+     * @param  string|null  $name
      * @return mixed
      */
-    public function getData()
+    public function getData($name = null)
     {
+        if ($name) {
+            return $this->getAttribute("data.{$name}", '');
+        }
+
         return $this->getAttribute('data', []);
     }
 
