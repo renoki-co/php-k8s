@@ -418,14 +418,21 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Update the resource with a specified method.
      *
-     * @param  string  $method
+     * @param  string|null  $method
      * @return bool
      */
-    public function update(string $method = KubernetesCluster::PATCH_METHOD): bool
+    public function update(string $method = null): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
             return true;
+        }
+
+        // If requesting a specific method, overwrite
+        // the configuration patch method.
+
+        if ($method) {
+            $this->cluster->setPatchMethod($method);
         }
 
         $instance = $this
@@ -441,10 +448,9 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Replace the resource entirely.
      *
-     * @param  string  $method
      * @return bool
      */
-    public function replace(string $method = KubernetesCluster::PATCH_METHOD): bool
+    public function replace(): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {

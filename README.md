@@ -121,26 +121,7 @@ $ns = K8s::namespace()
 $ns->isSynced(); // true
 ```
 
-### Updating/Replacement
-
-Kubernetes has three ways of patching:
-
-- PATCH, used as `KubernetesCluster::PATCH_METHOD`
-- MERGE, used as `KubernetesCluster::MERGE_METHOD`
-- STRATEGIC MERGE, used as `KubernetesCluster::STRATEGIC_METHOD`
-
-By default, it is set as `KubernetesCluster::PATCH_METHOD`.
-
-If you want a different way of patching, use the `setPatchMethod` within the `KubernetesCluster` class:
-
-```php
-use RenokiCo\PhpK8s\KubernetesCluster;
-
-$cluster = (new KubernetesCluster(...))
-    ->setPatchMethod(KubernetesCluster::STRATEGIC_METHOD);
-```
-
-You can call `->update()` or `->replace()` according to your needs:
+### Updating Resources
 
 ```php
 $ns = K8s::configmap($cluster)
@@ -149,10 +130,53 @@ $ns = K8s::configmap($cluster)
 
 $ns->addData('API_KEY', '123')
 
-// Update the resource.
 $ns->update();
+```
 
-// Replace the resource.
+When patching a resource using the `update()` method, you can opt in for the following strategies:
+
+- PATCH, used as `KubernetesCluster::PATCH_METHOD`
+- MERGE, used as `KubernetesCluster::MERGE_METHOD`
+- STRATEGIC MERGE, used as `KubernetesCluster::STRATEGIC_METHOD`
+
+By default, it is set as `KubernetesCluster::PATCH_METHOD`.
+
+To change the way of patching, use the `setPatchMethod` within the `KubernetesCluster` class:
+
+```php
+use RenokiCo\PhpK8s\KubernetesCluster;
+
+$cluster = (new KubernetesCluster(...))
+    ->setPatchMethod(KubernetesCluster::STRATEGIC_METHOD);
+```
+
+Patching method can be changed directly from `update()` if customization is needed:
+
+```php
+$ns = K8s::configmap($cluster)
+    ->whereName('env')
+    ->get();
+
+$ns->addData('API_KEY', '123')
+
+// Update the resource with the strategic method.
+
+$ns->update(
+    KubernetesCluster::STRATEGIC_METHOD
+);
+```
+
+### Replacement
+
+Replacing resources will re-create them entirely:
+
+```php
+$ns = K8s::configmap($cluster)
+    ->whereName('env')
+    ->get();
+
+$ns->addData('API_KEY', '123')
+
 $ns->replace();
 ```
 

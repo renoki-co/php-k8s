@@ -136,7 +136,7 @@ class KubernetesCluster
             $response = $client->request($method, $callableUrl, [
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
-                    'Content-Type' => in_array($method, ['PATCH', 'PUT'])
+                    'Content-Type' => $method === 'PATCH'
                         ? self::$patchMethods[$this->patchMethod]
                         : 'application/json',
                 ],
