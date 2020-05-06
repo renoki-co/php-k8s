@@ -96,6 +96,12 @@ $configmap->setAttribute('data', ['key' => 'value']);
 $volume->setAttribute('spec.mountingOptions', ['debug']);
 ```
 
+For the `spec.*` paths, please consider using `->setSpec()` and `->getSpec()`:
+
+```php
+$volume->setSpec('mountingOptions', ['debug']);
+```
+
 ## removeAttribute($name)
 
 Remove an attribute from the configuration. Supports dot notation for nested fields.
