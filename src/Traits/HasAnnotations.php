@@ -12,9 +12,7 @@ trait HasAnnotations
      */
     public function setAnnotations(array $annotations)
     {
-        $this->setAttribute('metadata.annotations', $annotations);
-
-        return $this;
+        return $this->setAttribute('metadata.annotations', $annotations);
     }
 
     /**
