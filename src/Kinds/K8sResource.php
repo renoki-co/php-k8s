@@ -71,13 +71,18 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Create a new resource.
      *
+     * @param  null|RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return void
      */
-    public function __construct(array $attributes = [])
+    public function __construct($cluster = null, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->original = $attributes;
+
+        if ($cluster instanceof KubernetesCluster) {
+            $this->onCluster($cluster);
+        }
     }
 
     /**
@@ -244,6 +249,40 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Set the name.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function setName(string $name)
+    {
+        $this->setAttribute('metadata.name', $name);
+
+        return $this;
+    }
+
+    /**
+     * Alias for ->setName().
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function whereName(string $name)
+    {
+        return $this->setName($name);
+    }
+
+    /**
+     * Get the name.
+     *
+     * @return string|null
+     */
+    public function getName()
+    {
+        return $this->getAttribute('metadata.name', null);
+    }
+
+    /**
      * Get the identifier for the current resource.
      *
      * @return mixed
@@ -379,14 +418,21 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Update the resource with a specified method.
      *
-     * @param  string  $method
+     * @param  string|null  $method
      * @return bool
      */
-    public function update(string $method = KubernetesCluster::PATCH_METHOD): bool
+    public function update(string $method = null): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
             return true;
+        }
+
+        // If requesting a specific method, overwrite
+        // the configuration patch method.
+
+        if ($method) {
+            $this->cluster->setPatchMethod($method);
         }
 
         $instance = $this
@@ -402,10 +448,9 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Replace the resource entirely.
      *
-     * @param  string  $method
      * @return bool
      */
-    public function replace(string $method = KubernetesCluster::PATCH_METHOD): bool
+    public function replace(): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
