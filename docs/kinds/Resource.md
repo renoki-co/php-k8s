@@ -10,7 +10,7 @@ Get the namespace the resource is in.
 $service->getNamespace();
 ```
 
-## setNamespace()
+## setNamespace($namespace)
 
 Set the namespace for the resource, if namespaceable.
 
@@ -27,6 +27,34 @@ $ns = K8s::namespace()
 
 $service->setNamespace($ns);
 ```
+
+## whereNamespace($namespace)
+
+Alias for [setNamespace($namespace)](#setnamespacenamespace)
+
+It's just a naming convention for better filters on get.
+
+## setName($name)
+
+Set the name of the resource.
+
+```php
+$service->setName('nginx');
+```
+
+## getName()
+
+Get the name of a resource.
+
+```php
+$namespace->getName();
+```
+
+## whereName($name)
+
+Alias for [setName($name)](#setnamename)
+
+It's just a naming convention for better filters on get.
 
 ## getApiVersion()
 
