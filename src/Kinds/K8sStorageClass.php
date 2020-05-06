@@ -3,9 +3,12 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Traits\HasMountOptions;
 
 class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
 {
+    use HasMountOptions;
+
     /**
      * The resource Kind parameter.
      *
