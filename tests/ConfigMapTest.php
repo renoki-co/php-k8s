@@ -48,6 +48,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
+        $this->assertEquals('val2', $cm->getData('key2'));
     }
 
     public function test_config_map_all()
@@ -79,6 +80,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
+        $this->assertEquals('val2', $cm->getData('key2'));
     }
 
     public function test_config_map_update()
@@ -101,6 +103,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['newkey' => 'newval'], $cm->getData());
+        $this->assertEquals('newkey', $cm->getData('newval'));
     }
 
     public function test_config_map_delete()
