@@ -4,10 +4,11 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
+use RenokiCo\PhpK8s\Traits\HasSpec;
 
 class K8sService extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasAnnotations;
+    use HasAnnotations, HasSpec;
 
     /**
      * The resource Kind parameter.
@@ -38,7 +39,7 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster
      */
     public function setSelectors(array $selectors = [])
     {
-        return $this->setAttribute('spec.selector', $selectors);
+        return $this->setSpec('selector', $selectors);
     }
 
     /**
@@ -48,7 +49,7 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster
      */
     public function getSelectors(): array
     {
-        return $this->getAttribute('spec.selector', []);
+        return $this->getSpec('selector', []);
     }
 
     /**
@@ -59,7 +60,7 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster
      */
     public function setPorts(array $ports = [])
     {
-        return $this->setAttribute('spec.ports', $ports);
+        return $this->setSpec('ports', $ports);
     }
 
     /**
@@ -69,7 +70,7 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster
      */
     public function getPorts(): array
     {
-        return $this->getAttribute('spec.ports', []);
+        return $this->getSpec('ports', []);
     }
 
     /**

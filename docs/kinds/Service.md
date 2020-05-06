@@ -23,6 +23,27 @@ $svc->setAnnotations([
 ]);
 ```
 
+While the Service kind has `spec`, you can avoid writing this:
+
+```php
+$svc = K8s::service($cluster)
+    ->setAttribute('spec.ports', [...]);
+```
+
+And use the `setSpec()` method:
+
+```php
+$svc = K8s::service($cluster)
+    ->setSpec('ports', [...]);
+```
+
+Dot notation is supported:
+
+```php
+$svc = K8s::service($cluster)
+    ->setSpec('some.nested.path', [...]);
+```
+
 ### Retrieval
 
 ```php
@@ -31,4 +52,18 @@ $svc = K8s::service($cluster)
     ->get();
 
 $ports = $svc->getPorts();
+```
+
+Retrieving the spec attributes can be done like the `setSpec()` method:
+
+```php
+$svc->getSpec('ports', []);
+```
+
+The second value for the `getSpec()` method is the default value, in case the found path is not existent.
+
+Dot notation is supported:
+
+```php
+$svc->getSpec('some.nested.path', []);
 ```

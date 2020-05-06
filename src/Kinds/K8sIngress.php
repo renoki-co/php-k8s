@@ -38,7 +38,7 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
      */
     public function setRules(array $rules = [])
     {
-        return $this->setAttribute('spec.rules', $rules);
+        return $this->setSpec('rules', $rules);
     }
 
     /**
@@ -48,7 +48,7 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
      */
     public function getRules(): array
     {
-        return $this->getAttribute('spec.rules');
+        return $this->getSpec('rules');
     }
 
     /**

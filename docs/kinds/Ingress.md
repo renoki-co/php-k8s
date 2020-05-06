@@ -31,6 +31,28 @@ $ingress->setAnnotations([
 ]);
 ```
 
+While the Ingress kind has `spec`, you can avoid writing this:
+
+```php
+$ingress = K8s::ingress($cluster)
+    ->setAttribute('spec.rules', [...]);
+```
+
+And use the `setSpec()` method:
+
+```php
+$ingress = K8s::ingress($cluster)
+    ->setSpec('rules', [...]);
+```
+
+Dot notation is supported:
+
+```php
+$ingress = K8s::ingress($cluster)
+    ->setSpec('some.nested.path', [...]);
+```
+
+
 ### Retrieval
 
 ```php
@@ -39,4 +61,18 @@ $ingress = K8s::ingress($cluster)
     ->get();
 
 $rules = $ingress->getRules();
+```
+
+Retrieving the spec attributes can be done like the `setSpec()` method:
+
+```php
+$ingress->getSpec('rules', []);
+```
+
+The second value for the `getSpec()` method is the default value, in case the found path is not existent.
+
+Dot notation is supported:
+
+```php
+$ingress->getSpec('some.nested.path', []);
 ```
