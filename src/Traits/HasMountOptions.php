@@ -4,6 +4,8 @@ namespace RenokiCo\PhpK8s\Traits;
 
 trait HasMountOptions
 {
+    use HasSpec;
+
     /**
      * Set the mount options.
      *
@@ -12,9 +14,7 @@ trait HasMountOptions
      */
     public function setMountOptions(array $mountOptions)
     {
-        $this->setAttribute('spec.mountOptions', $mountOptions);
-
-        return $this;
+        return $this->setSpec('mountOptions', $mountOptions);
     }
 
     /**
@@ -24,6 +24,6 @@ trait HasMountOptions
      */
     public function getMountOptions(): array
     {
-        return $this->getAttribute('spec.mountOptions', []);
+        return $this->getSpec('mountOptions', []);
     }
 }
