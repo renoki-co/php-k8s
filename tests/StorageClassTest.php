@@ -8,24 +8,19 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class StorageClassTest extends TestCase
 {
-    public function test_storage_class_kind()
-    {
-        $sc = K8s::storageClass();
-
-        $this->assertInstanceOf(K8sStorageClass::class, $sc);
-    }
-
     public function test_storage_class_build()
     {
         $sc = K8s::storageClass()
             ->setName('io1')
             ->setProvisioner('csi.aws.amazon.com')
-            ->setParameters(['type' => 'io1', 'iopsPerGB' => 10]);
+            ->setParameters(['type' => 'io1', 'iopsPerGB' => 10])
+            ->setMountOptions(['debug']);
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
+        $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
     public function test_storage_class_create()
@@ -34,7 +29,8 @@ class StorageClassTest extends TestCase
             ->onCluster($this->cluster)
             ->setName('io1')
             ->setProvisioner('csi.aws.amazon.com')
-            ->setParameters(['type' => 'io1', 'iopsPerGB' => '10']);
+            ->setParameters(['type' => 'io1', 'iopsPerGB' => '10'])
+            ->setMountOptions(['debug']);
 
         $this->assertFalse($sc->isSynced());
 
@@ -48,6 +44,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals('io1', $sc->getName());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
+        $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
     public function test_storage_class_all()
@@ -80,6 +77,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals('io1', $sc->getName());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
+        $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
     public function test_storage_class_update()
@@ -101,6 +99,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals('io1', $sc->getName());
         $this->assertEquals(['debug'], $sc->getAttribute('mountOptions'));
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => '10'], $sc->getParameters());
+        $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
     public function test_storage_class_delete()

@@ -8,13 +8,6 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class ServiceTest extends TestCase
 {
-    public function test_service_kind()
-    {
-        $svc = K8s::service();
-
-        $this->assertInstanceOf(K8sService::class, $svc);
-    }
-
     public function test_service_build()
     {
         $svc = K8s::service()

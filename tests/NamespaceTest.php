@@ -8,13 +8,6 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class NamespaceTest extends TestCase
 {
-    public function test_namespace_kind()
-    {
-        $ns = K8s::namespace();
-
-        $this->assertInstanceOf(K8sNamespace::class, $ns);
-    }
-
     public function test_namespace_build()
     {
         $ns = K8s::namespace()

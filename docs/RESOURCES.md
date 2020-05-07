@@ -8,6 +8,7 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Config Map](kinds/ConfigMap.md)
 - [Secret](kinds/Secret.md)
 - [Storage Class](kinds/StorageClass.md)
+- [Persistent Volumes](kinds/PersistentVolume.md)
 - [Service](kinds/Service.md)
 - [Ingress](kinds/Ingress.md)
 

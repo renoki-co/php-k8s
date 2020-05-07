@@ -12,9 +12,7 @@ trait HasLabels
      */
     public function setLabels(array $labels)
     {
-        $this->setAttribute('metadata.labels', $labels);
-
-        return $this;
+        return $this->setAttribute('metadata.labels', $labels);
     }
 
     /**

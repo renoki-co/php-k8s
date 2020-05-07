@@ -1,4 +1,4 @@
-# Namespace
+# Secret
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/configuration/secret/)
 

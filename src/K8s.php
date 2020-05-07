@@ -33,4 +33,9 @@ class K8s
     {
         return new Kinds\K8sStorageClass($cluster, $payload);
     }
+
+    public static function persistentVolume($cluster = null, array $payload = [])
+    {
+        return new Kinds\K8sPersistentVolume($cluster, $payload);
+    }
 }

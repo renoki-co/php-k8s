@@ -1,4 +1,4 @@
-# Namespace
+# Storage Class
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 
@@ -11,6 +11,7 @@ $sc = K8s::storageClass($cluster)
     ->setName('gp2')
     ->setProvisioner('csi.aws.amazon.com')
     ->setParameters(['type' => 'gp2'])
+    ->setMountOptions(['debug'])
     ->create();
 ```
 
@@ -21,7 +22,7 @@ $sc = K8s::storageClass($cluster)
     ->whereName('gp2')
     ->get();
 
-$sc->setAttribute('mountOptions', ['debug']);
+$sc->setAttribute('allowedTopologies', []);
 ```
 
 ### Retrieval
