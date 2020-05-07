@@ -8,13 +8,6 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class PersistentVolumeTest extends TestCase
 {
-    public function test_persistent_volume_kind()
-    {
-        $pv = K8s::persistentVolume();
-
-        $this->assertInstanceOf(K8sPersistentVolume::class, $pv);
-    }
-
     public function test_persistent_volume_build()
     {
         $sc = K8s::storageClass()

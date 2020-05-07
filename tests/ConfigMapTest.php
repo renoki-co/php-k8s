@@ -8,13 +8,6 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class ConfigMapTest extends TestCase
 {
-    public function test_config_map_kind()
-    {
-        $cm = K8s::configmap();
-
-        $this->assertInstanceOf(K8sConfigMap::class, $cm);
-    }
-
     public function test_config_map_build()
     {
         $cm = K8s::configmap()

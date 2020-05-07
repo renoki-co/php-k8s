@@ -8,13 +8,6 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class SecretTest extends TestCase
 {
-    public function test_secret_kind()
-    {
-        $secret = K8s::secret();
-
-        $this->assertInstanceOf(K8sSecret::class, $secret);
-    }
-
     public function test_secret_build()
     {
         $secret = K8s::secret()

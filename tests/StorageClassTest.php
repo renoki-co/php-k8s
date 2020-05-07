@@ -8,13 +8,6 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class StorageClassTest extends TestCase
 {
-    public function test_storage_class_kind()
-    {
-        $sc = K8s::storageClass();
-
-        $this->assertInstanceOf(K8sStorageClass::class, $sc);
-    }
-
     public function test_storage_class_build()
     {
         $sc = K8s::storageClass()

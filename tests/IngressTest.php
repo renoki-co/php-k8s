@@ -35,13 +35,6 @@ class IngressTest extends TestCase
         }
     }
 
-    public function test_ingress_kind()
-    {
-        $ing = K8s::ingress();
-
-        $this->assertInstanceOf(K8sIngress::class, $ing);
-    }
-
     public function test_ingress_build()
     {
         $ing = K8s::ingress()
