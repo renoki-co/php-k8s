@@ -18,7 +18,6 @@ class PersistentVolumeTest extends TestCase
 
         $pv = K8s::persistentVolume()
             ->setName('app')
-            ->setSelectors(['matchLabels' => ['app' => 'bigdata']])
             ->setSource('awsElasticBlockStore', ['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'])
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
@@ -27,7 +26,6 @@ class PersistentVolumeTest extends TestCase
 
         $this->assertEquals('v1', $pv->getApiVersion());
         $this->assertEquals('app', $pv->getName());
-        $this->assertEquals(['matchLabels' => ['app' => 'bigdata']], $pv->getSelectors());
         $this->assertEquals(['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'], $pv->getSpec('awsElasticBlockStore'));
         $this->assertEquals('1Gi', $pv->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
@@ -46,7 +44,6 @@ class PersistentVolumeTest extends TestCase
         $pv = K8s::persistentVolume()
             ->onCluster($this->cluster)
             ->setName('app')
-            ->setSelectors(['matchLabels' => ['app' => 'bigdata']])
             ->setSource('awsElasticBlockStore', ['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'])
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
@@ -63,7 +60,6 @@ class PersistentVolumeTest extends TestCase
 
         $this->assertEquals('v1', $pv->getApiVersion());
         $this->assertEquals('app', $pv->getName());
-        $this->assertEquals(['matchLabels' => ['app' => 'bigdata']], $pv->getSelectors());
         $this->assertEquals(['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'], $pv->getSpec('awsElasticBlockStore'));
         $this->assertEquals('1Gi', $pv->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
@@ -99,7 +95,6 @@ class PersistentVolumeTest extends TestCase
 
         $this->assertEquals('v1', $pv->getApiVersion());
         $this->assertEquals('app', $pv->getName());
-        $this->assertEquals(['matchLabels' => ['app' => 'bigdata']], $pv->getSelectors());
         $this->assertEquals(['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'], $pv->getSpec('awsElasticBlockStore'));
         $this->assertEquals('1Gi', $pv->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
@@ -124,7 +119,6 @@ class PersistentVolumeTest extends TestCase
 
         $this->assertEquals('v1', $pv->getApiVersion());
         $this->assertEquals('app', $pv->getName());
-        $this->assertEquals(['matchLabels' => ['app' => 'bigdata']], $pv->getSelectors());
         $this->assertEquals(['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'], $pv->getSpec('awsElasticBlockStore'));
         $this->assertEquals('1Gi', $pv->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
