@@ -1,4 +1,4 @@
-# Namespace
+# Config Map
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/configuration/configmap/)
 

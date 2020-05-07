@@ -1,4 +1,4 @@
-# Namespace
+# Service
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/services-networking/service/)
 

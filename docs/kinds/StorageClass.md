@@ -1,4 +1,4 @@
-# Namespace
+# Storage Class
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/)
 

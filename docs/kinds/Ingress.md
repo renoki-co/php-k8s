@@ -1,4 +1,4 @@
-# Namespace
+# Ingress
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
