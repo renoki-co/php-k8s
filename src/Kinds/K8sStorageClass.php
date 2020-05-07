@@ -3,12 +3,9 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
-use RenokiCo\PhpK8s\Traits\HasMountOptions;
 
 class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasMountOptions;
-
     /**
      * The resource Kind parameter.
      *
@@ -53,6 +50,27 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
     public function setParameters(array $value)
     {
         return $this->setAttribute('parameters', $value);
+    }
+
+    /**
+     * Set the mount options.
+     *
+     * @param  array  $mountOptions
+     * @return $this
+     */
+    public function setMountOptions(array $mountOptions)
+    {
+        return $this->setAttribute('mountOptions', $mountOptions);
+    }
+
+    /**
+     * Get the mount options.
+     *
+     * @return array
+     */
+    public function getMountOptions(): array
+    {
+        return $this->getAttribute('mountOptions', []);
     }
 
     /**
