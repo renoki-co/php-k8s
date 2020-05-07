@@ -5,12 +5,13 @@ namespace RenokiCo\PhpK8s\Kinds;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Traits\HasAccessModes;
 use RenokiCo\PhpK8s\Traits\HasMountOptions;
+use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStorageClass;
 
 class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
 {
-    use HasAccessModes, HasMountOptions, HasSpec, HasStorageClass;
+    use HasAccessModes, HasMountOptions, HasSelector, HasSpec, HasStorageClass;
 
     /**
      * The resource Kind parameter.
