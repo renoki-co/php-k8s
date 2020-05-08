@@ -62,6 +62,12 @@ $svc = K8s::service($cluster)
     ->create();
 ```
 
+## Documentation
+
+Each existent resource has its own documentation, filled with examples.
+
+[Go to documentation](docs/RESOURCES.md)
+
 ## Methods
 
 Each kind has its own class from which you can build it and then create, update, replace or delete them.
@@ -183,12 +189,6 @@ $ns->replace();
 ### Deletion
 
 Currently, the deletion is WIP.
-
-## Per-Resource Docs
-
-Each existent resource has its own documentation, filled with examples.
-
-[Go to documentation](docs/RESOURCES.md)
 
 ## 🐛 Testing
 
