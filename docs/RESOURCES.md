@@ -9,6 +9,7 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Secret](kinds/Secret.md)
 - [Storage Class](kinds/StorageClass.md)
 - [Persistent Volumes](kinds/PersistentVolume.md)
+- [Persistent Volume Claims](kinds/PersistentVolumeClaim.md)
 - [Service](kinds/Service.md)
 - [Ingress](kinds/Ingress.md)
 
@@ -16,7 +17,6 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 
 The following list of resources are work in progress and they will be available soon:
 
-- persistentvolumeclaims
 - pods
 - daemonsets
 - deployments
