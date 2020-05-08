@@ -16,7 +16,6 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 
 The following list of resources are work in progress and they will be available soon:
 
-- persistentvolumes
 - persistentvolumeclaims
 - pods
 - daemonsets
