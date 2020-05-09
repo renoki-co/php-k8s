@@ -70,11 +70,11 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/configmaps";
     }
@@ -84,7 +84,7 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/configmaps/{$this->getIdentifier()}";
     }

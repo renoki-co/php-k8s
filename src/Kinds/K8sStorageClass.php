@@ -84,11 +84,11 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/apis/{$this->getApiVersion()}/storageclasses";
     }
@@ -98,7 +98,7 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/apis/{$this->getApiVersion()}/storageclasses/{$this->getIdentifier()}";
     }

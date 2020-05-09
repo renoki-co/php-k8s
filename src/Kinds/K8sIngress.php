@@ -53,11 +53,11 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses";
     }
@@ -67,7 +67,7 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
     }
