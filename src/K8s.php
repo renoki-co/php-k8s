@@ -44,7 +44,12 @@ class K8s
         return new Kinds\K8sPersistentVolumeClaim($cluster, $attributes);
     }
 
-    public function container(array $attributes = [])
+    public static function pod($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sPod($cluster, $attributes);
+    }
+
+    public static function container(array $attributes = [])
     {
         return new Instances\Container($attributes);
     }

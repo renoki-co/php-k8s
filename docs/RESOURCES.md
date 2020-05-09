@@ -12,12 +12,12 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Persistent Volume Claims](kinds/PersistentVolumeClaim.md)
 - [Service](kinds/Service.md)
 - [Ingress](kinds/Ingress.md)
+- [Pod](kinds/Pod.md)
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
-- pods
 - daemonsets
 - deployments
 - replicasets
