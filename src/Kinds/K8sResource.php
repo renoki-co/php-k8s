@@ -23,14 +23,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @var bool
      */
-    protected static $hasNamespace = false;
-
-    /**
-     * The default version for the resource.
-     *
-     * @var string
-     */
-    protected static $stableVersion = 'v1';
+    protected static $namespaceable = false;
 
     /**
      * The default namespace for the resource.
@@ -38,6 +31,13 @@ class K8sResource implements Arrayable, Jsonable
      * @var string
      */
     protected static $defaultNamespace = 'default';
+
+    /**
+     * The default version for the resource.
+     *
+     * @var string
+     */
+    protected static $stableVersion = 'v1';
 
     /**
      * The cluster instance that
@@ -165,7 +165,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function setNamespace($namespace)
     {
-        if (! static::$hasNamespace) {
+        if (! static::$namespaceable) {
             return $this;
         }
 

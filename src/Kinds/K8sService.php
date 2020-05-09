@@ -30,7 +30,7 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster
      *
      * @var bool
      */
-    protected static $hasNamespace = true;
+    protected static $namespaceable = true;
 
     /**
      * Set the ports spec attribute.
