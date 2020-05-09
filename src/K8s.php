@@ -4,39 +4,44 @@ namespace RenokiCo\PhpK8s;
 
 class K8s
 {
-    public static function namespace($cluster = null, array $payload = [])
+    public static function namespace($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sNamespace($cluster, $payload);
+        return new Kinds\K8sNamespace($cluster, $attributes);
     }
 
-    public static function configmap($cluster = null, array $payload = [])
+    public static function configmap($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sConfigMap($cluster, $payload);
+        return new Kinds\K8sConfigMap($cluster, $attributes);
     }
 
-    public static function secret($cluster = null, array $payload = [])
+    public static function secret($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sSecret($cluster, $payload);
+        return new Kinds\K8sSecret($cluster, $attributes);
     }
 
-    public static function ingress($cluster = null, array $payload = [])
+    public static function ingress($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sIngress($cluster, $payload);
+        return new Kinds\K8sIngress($cluster, $attributes);
     }
 
-    public static function service($cluster = null, array $payload = [])
+    public static function service($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sService($cluster, $payload);
+        return new Kinds\K8sService($cluster, $attributes);
     }
 
-    public static function storageClass($cluster = null, array $payload = [])
+    public static function storageClass($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sStorageClass($cluster, $payload);
+        return new Kinds\K8sStorageClass($cluster, $attributes);
     }
 
-    public static function persistentVolume($cluster = null, array $payload = [])
+    public static function persistentVolume($cluster = null, array $attributes = [])
     {
-        return new Kinds\K8sPersistentVolume($cluster, $payload);
+        return new Kinds\K8sPersistentVolume($cluster, $attributes);
+    }
+
+    public static function persistentVolumeClaim($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sPersistentVolumeClaim($cluster, $attributes);
     }
 
     public static function persistentVolumeClaim($cluster = null, array $payload = [])

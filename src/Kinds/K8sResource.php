@@ -110,10 +110,10 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $instance
      * @return $this
      */
-    public function syncWith(array $payload = [])
+    public function syncWith(array $attributes = [])
     {
-        $this->original = $payload;
-        $this->attributes = $payload;
+        $this->original = $attributes;
+        $this->attributes = $attributes;
 
         $this->synced();
 
@@ -322,15 +322,15 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function toJsonPayload()
     {
-        $payload = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        $payload = str_replace(': []', ': {}', $payload);
+        $attributes = str_replace(': []', ': {}', $attributes);
 
-        $payload = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $payload);
-        $payload = str_replace('"mountOptions": {}', '"mountOptions": []', $payload);
-        $payload = str_replace('"accessModes": {}', '"accessModes": []', $payload);
+        $attributes = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $attributes);
+        $attributes = str_replace('"mountOptions": {}', '"mountOptions": []', $attributes);
+        $attributes = str_replace('"accessModes": {}', '"accessModes": []', $attributes);
 
-        return $payload;
+        return $attributes;
     }
 
     /**
