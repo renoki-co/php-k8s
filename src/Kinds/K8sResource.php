@@ -4,7 +4,6 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
 

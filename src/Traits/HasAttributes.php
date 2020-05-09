@@ -2,6 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
+use Illuminate\Support\Arr;
+
 trait HasAttributes
 {
     /**
