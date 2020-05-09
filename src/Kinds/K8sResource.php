@@ -461,7 +461,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $query
      * @return void
      */
-    public function watchAll(Closure $callback,  array $query = ['pretty' => 1])
+    public function watchAll(Closure $callback, array $query = ['pretty' => 1])
     {
         if (! $this instanceof Watchable) {
             throw new KubernetesWatchException(
