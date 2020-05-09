@@ -131,6 +131,8 @@ class KubernetesCluster
             if ($this->watchPath($path, $payload, $query)) {
                 return true;
             }
+
+            return false;
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
