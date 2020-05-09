@@ -4,11 +4,13 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\KubernetesCluster;
+use RenokiCo\PhpK8s\Traits\HasAttributes;
 
 class K8sResource implements Arrayable, Jsonable
 {
+    use HasAttributes;
+
     /**
      * The resource Kind parameter.
      *
@@ -46,13 +48,6 @@ class K8sResource implements Arrayable, Jsonable
     protected $cluster;
 
     /**
-     * The Kubernetes resource's attributes.
-     *
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
      * The Kubernetes resource's attributes,
      * but stored as being the original ones.
      *
@@ -86,45 +81,6 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Set an attribute.
-     *
-     * @param  string  $name
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function setAttribute(string $name, $value)
-    {
-        Arr::set($this->attributes, $name, $value);
-
-        return $this;
-    }
-
-    /**
-     * Remove an attribute.
-     *
-     * @param string $name
-     * @return void
-     */
-    public function removeAttribute(string $name)
-    {
-        Arr::forget($this->attributes, $name);
-
-        return $this;
-    }
-
-    /**
-     * Get a specific attribute.
-     *
-     * @param  string  $name
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function getAttribute(string $name, $default = null)
-    {
-        return Arr::get($this->attributes, $name, $default);
-    }
-
-    /**
      * Mark the current resource as
      * being fetched from the cluster.
      *
@@ -153,10 +109,10 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $instance
      * @return $this
      */
-    public function syncWith(array $payload = [])
+    public function syncWith(array $attributes = [])
     {
-        $this->original = $payload;
-        $this->attributes = $payload;
+        $this->original = $attributes;
+        $this->attributes = $attributes;
 
         $this->synced();
 
@@ -365,15 +321,15 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function toJsonPayload()
     {
-        $payload = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        $payload = str_replace(': []', ': {}', $payload);
+        $attributes = str_replace(': []', ': {}', $attributes);
 
-        $payload = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $payload);
-        $payload = str_replace('"mountOptions": {}', '"mountOptions": []', $payload);
-        $payload = str_replace('"accessModes": {}', '"accessModes": []', $payload);
+        $attributes = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $attributes);
+        $attributes = str_replace('"mountOptions": {}', '"mountOptions": []', $attributes);
+        $attributes = str_replace('"accessModes": {}', '"accessModes": []', $attributes);
 
-        return $payload;
+        return $attributes;
     }
 
     /**

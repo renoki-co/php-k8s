@@ -2,6 +2,20 @@
 
 Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods.
 
+## Custom Callers
+
+In case none of the methods exist in the docs, you can call a method like `getSomething($default)` or a `setSomething($value)`, which will set or get only the first-level attributes (it won't retrieve, for example, values from `spec.*`), which the current resource or instance is not defined in the class.
+
+This applies for any class from both `RenokiCo\PhpK8s\Kinds\*` `renokiCo\PhpK8s\Instances\*` namespaces.
+
+For example, the `K8sPod` instance associated with the Pod resource does not implement any `nodeSelector` function, but you can call it anyway:
+
+```php
+$pod->setNodeSelector(['type' => 'spot']);
+
+$pod->getNodeSelector([]); // defaults to [] if not existent
+```
+
 ## getNamespace()
 
 Get the namespace the resource is in.
