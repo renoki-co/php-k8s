@@ -32,13 +32,6 @@ class KubernetesCluster
     protected $resourceClass;
 
     /**
-     * Specify the patch method to use.
-     *
-     * @var string
-     */
-    protected $patchMethod = self::PATCH_METHOD;
-
-    /**
      * The Kubernetes cluster version.
      *
      * @var \vierbergenlars\SemVer\version
@@ -46,21 +39,26 @@ class KubernetesCluster
     protected $kubernetesVersion;
 
     /**
-     * Map the patch methods with the respective headers.
+     * List all named operations with
+     * their respective methods for the
+     * HTTP request.
      *
      * @var array
      */
-    protected static $patchMethods = [
-        self::PATCH_METHOD => 'application/application/json-patch+json',
-        self::MERGE_METHOD => 'application/merge-patch+json',
-        self::STRATEGIC_METHOD => 'application/strategic-merge-patch+json',
+    protected static $operations = [
+        self::GET_OP => 'GET',
+        self::CREATE_OP => 'POST',
+        self::REPLACE_OP => 'PUT',
+        self::DELETE_OP => 'DELETE',
     ];
 
-    const PATCH_METHOD = 'patch';
+    const GET_OP = 'get';
 
-    const MERGE_METHOD = 'merge';
+    const CREATE_OP = 'create';
 
-    const STRATEGIC_METHOD = 'strategic';
+    const REPLACE_OP = 'replace';
+
+    const DELETE_OP = 'delete';
 
     /**
      * Create a new class instance.
@@ -75,19 +73,6 @@ class KubernetesCluster
         $this->port = $port;
 
         $this->loadClusterVersion();
-    }
-
-    /**
-     * Set the patch method.
-     *
-     * @param  string  $patchMethod
-     * @return $this
-     */
-    public function setPatchMethod(string $patchMethod)
-    {
-        $this->patchMethod = $patchMethod;
-
-        return $this;
     }
 
     /**
@@ -116,13 +101,13 @@ class KubernetesCluster
     /**
      * Call the API with the specified method and path.
      *
-     * @param  string  $method
+     * @param  string  $operation
      * @param  string  $path
      * @param  string  $payload
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function call($method, string $path, string $payload = '')
+    public function call($operation, string $path, string $payload = '')
     {
         $apiUrl = $this->getApiUrl();
 
@@ -130,15 +115,15 @@ class KubernetesCluster
 
         $resourceClass = $this->resourceClass;
 
+        $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
+
         try {
             $client = new Client;
 
             $response = $client->request($method, $callableUrl, [
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
-                    'Content-Type' => $method === 'PATCH'
-                        ? self::$patchMethods[$this->patchMethod]
-                        : 'application/json',
+                    'Content-Type' => 'application/json',
                 ],
             ]);
         } catch (ClientException $e) {

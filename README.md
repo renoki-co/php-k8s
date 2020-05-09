@@ -129,6 +129,10 @@ $ns->isSynced(); // true
 
 ### Updating Resources
 
+While Kubernetes has the ability to PATCH a resource or REPLACE it entirely, PHP K8s relies on REPLACE
+to update your resource since you have to retrieve it first (thus getting a synced class), edit it, then
+triggering the update.
+
 ```php
 $ns = K8s::configmap($cluster)
     ->whereName('env')
@@ -137,53 +141,6 @@ $ns = K8s::configmap($cluster)
 $ns->addData('API_KEY', '123')
 
 $ns->update();
-```
-
-When patching a resource using the `update()` method, you can opt in for the following strategies:
-
-- PATCH, used as `KubernetesCluster::PATCH_METHOD`
-- MERGE, used as `KubernetesCluster::MERGE_METHOD`
-- STRATEGIC MERGE, used as `KubernetesCluster::STRATEGIC_METHOD`
-
-By default, it is set as `KubernetesCluster::PATCH_METHOD`.
-
-To change the way of patching, use the `setPatchMethod` within the `KubernetesCluster` class:
-
-```php
-use RenokiCo\PhpK8s\KubernetesCluster;
-
-$cluster = (new KubernetesCluster(...))
-    ->setPatchMethod(KubernetesCluster::STRATEGIC_METHOD);
-```
-
-Patching method can be changed directly from `update()` if customization is needed:
-
-```php
-$ns = K8s::configmap($cluster)
-    ->whereName('env')
-    ->get();
-
-$ns->addData('API_KEY', '123')
-
-// Update the resource with the strategic method.
-
-$ns->update(
-    KubernetesCluster::STRATEGIC_METHOD
-);
-```
-
-### Replacement
-
-Replacing resources will re-create them entirely:
-
-```php
-$ns = K8s::configmap($cluster)
-    ->whereName('env')
-    ->get();
-
-$ns->addData('API_KEY', '123')
-
-$ns->replace();
 ```
 
 ### Deletion

@@ -342,7 +342,7 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('GET', $this->resourcesApiPath());
+            ->call(KubernetesCluster::GET_OP, $this->resourcesApiPath());
     }
 
     /**
@@ -355,7 +355,7 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('GET', $this->resourceApiPath());
+            ->call(KubernetesCluster::GET_OP, $this->resourceApiPath());
     }
 
     /**
@@ -368,45 +368,15 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('POST', $this->resourcesApiPath(), $this->toJsonPayload());
+            ->call(KubernetesCluster::CREATE_OP, $this->resourcesApiPath(), $this->toJsonPayload());
     }
 
     /**
-     * Update the resource with a specified method.
-     *
-     * @param  string|null  $method
-     * @return bool
-     */
-    public function update(string $method = null): bool
-    {
-        // If it didn't change, no way to trigger the change.
-        if (! $this->hasChanged()) {
-            return true;
-        }
-
-        // If requesting a specific method, overwrite
-        // the configuration patch method.
-
-        if ($method) {
-            $this->cluster->setPatchMethod($method);
-        }
-
-        $instance = $this
-            ->cluster
-            ->setResourceClass(get_class($this))
-            ->call('PATCH', $this->resourceApiPath(), $this->toJsonPayload());
-
-        $this->syncWith($instance->toArray());
-
-        return true;
-    }
-
-    /**
-     * Replace the resource entirely.
+     * Update the resource.
      *
      * @return bool
      */
-    public function replace(): bool
+    public function update(): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
@@ -416,7 +386,7 @@ class K8sResource implements Arrayable, Jsonable
         $instance = $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('PUT', $this->resourceApiPath(), $this->toJsonPayload());
+            ->call(KubernetesCluster::REPLACE_OP, $this->resourceApiPath(), $this->toJsonPayload());
 
         $this->syncWith($instance->toArray());
 
@@ -442,7 +412,7 @@ class K8sResource implements Arrayable, Jsonable
         $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('DELETE', $this->resourceApiPath(), $this->toJsonPayload());
+            ->call(KubernetesCluster::DELETE_OP, $this->resourceApiPath(), $this->toJsonPayload());
 
         $this->syncWith([]);
 
