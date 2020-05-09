@@ -2,8 +2,11 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
 
@@ -361,6 +364,54 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::GET_OP,
                 $this->resourcePath()
+            );
+    }
+
+    /**
+     * Watch the resources list until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @return void
+     */
+    public function watchAll(Closure $callback)
+    {
+        if (! $this instanceof Watchable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support watch actions.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_OP,
+                $this->allResourcesWatchPath(),
+                $callback
+            );
+    }
+
+    /**
+     * Watch the specific resource until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @return void
+     */
+    public function watch(Closure $callback)
+    {
+        if (! $this instanceof Watchable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support watch actions.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_OP,
+                $this->resourceWatchPath(),
+                $callback
             );
     }
 

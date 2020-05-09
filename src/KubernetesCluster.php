@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s;
 
+use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
@@ -50,6 +51,7 @@ class KubernetesCluster
         self::CREATE_OP => 'POST',
         self::REPLACE_OP => 'PUT',
         self::DELETE_OP => 'DELETE',
+        self::WATCH_OP => 'GET',
     ];
 
     const GET_OP = 'get';
@@ -59,6 +61,8 @@ class KubernetesCluster
     const REPLACE_OP = 'replace';
 
     const DELETE_OP = 'delete';
+
+    const WATCH_OP = 'watch';
 
     /**
      * Create a new class instance.
@@ -99,28 +103,56 @@ class KubernetesCluster
     }
 
     /**
-     * Call the API with the specified method and path.
+     * Get the callable URL for a specific path.
+     *
+     * @param  string  $path
+     * @param  array  $query
+     * @return string
+     */
+    public function getCallableUrl(string $path, array $query = ['pretty' => 1])
+    {
+        return $this->getApiUrl().$path.'?'.http_build_query($query);
+    }
+
+    /**
+     * Run a specific operation for the API path with a specific payload.
      *
      * @param  string  $operation
      * @param  string  $path
-     * @param  string  $payload
+     * @param  string|Closure  $payload
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function call($operation, string $path, string $payload = '')
+    public function runOperation(string $operation, string $path, $payload = '')
     {
-        $apiUrl = $this->getApiUrl();
-
-        $callableUrl = "{$apiUrl}{$path}";
-
-        $resourceClass = $this->resourceClass;
+        // Calling a WATCH operation will trigger a SOCKET connection.
+        if ($operation === static::WATCH_OP) {
+            if ($this->watchPath($path, $payload)) {
+                return true;
+            }
+        }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
+
+        return $this->makeRequest($method, $path, $payload);
+    }
+
+    /**
+     * Call the API with the specified method and path.
+     *
+     * @param  string  $method
+     * @param  string  $path
+     * @param  string  $payload
+     * @return void
+     */
+    protected function makeRequest(string $method, string $path, string $payload = '')
+    {
+        $resourceClass = $this->resourceClass;
 
         try {
             $client = new Client;
 
-            $response = $client->request($method, $callableUrl, [
+            $response = $client->request($method, $this->getCallableUrl($path), [
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
                     'Content-Type' => 'application/json',
@@ -156,6 +188,42 @@ class KubernetesCluster
 
         return (new $resourceClass($this, $json))
             ->synced();
+    }
+
+    /**
+     * Watch for the current resource or a resource list.
+     *
+     * @param  string   $path
+     * @param  Closure  $closure
+     * @return bool
+     */
+    protected function watchPath(string $path, Closure $closure)
+    {
+        $resourceClass = $this->resourceClass;
+
+        $sock = fopen($this->getCallableUrl($path), 'r');
+
+        $data = null;
+
+        while (($data = fgets($sock)) == true) {
+            $data = @json_decode($data, true);
+
+            ['type' => $type, 'object' => $attributes] = $data;
+
+            $call = call_user_func(
+                $closure, $type, new $resourceClass($this, $attributes)
+            );
+
+            if (! is_null($call)) {
+                return $call;
+            }
+        }
+
+        fclose($sock);
+
+        unset($data);
+
+        return false;
     }
 
     /**
