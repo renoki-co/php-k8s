@@ -368,7 +368,7 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call(KubernetesCluster::CREATE_OP, $this->resourcesApiPath(), $this->toJsonPayload());
+            ->call(KubernetesCluster::CREATE_OP, $this->allResourcesPath(), $this->toJsonPayload());
     }
 
     /**

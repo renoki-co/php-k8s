@@ -113,7 +113,7 @@ class IngressTest extends TestCase
 
         $ing->setAnnotations([]);
 
-        $this->assertTrue($ing->replace());
+        $this->assertTrue($ing->update());
 
         $this->assertTrue($ing->isSynced());
 

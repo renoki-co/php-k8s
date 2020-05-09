@@ -59,7 +59,7 @@ $secret = K8s::secret($cluster)
 
 $secret
     ->removeData('ca.pem')
-    ->replace();
+    ->update();
 
 $data = $secret->getData(); // ['key.pem' => '...']
 ```

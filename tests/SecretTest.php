@@ -90,7 +90,7 @@ class SecretTest extends TestCase
             ->removeData('postgres')
             ->addData('root', 'secret');
 
-        $this->assertTrue($secret->replace());
+        $this->assertTrue($secret->update());
 
         $this->assertTrue($secret->isSynced());
 
