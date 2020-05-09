@@ -147,6 +147,63 @@ $ns->update();
 
 Currently, the deletion is WIP.
 
+## Live Tracking
+
+PHP K8s comes with a PHP-native way to be able to track the changes via the Kubernetes cluster's WATCH API.
+
+You can watch the resource directly from the Resource class, and check & process your logic inside a closure. See more on [Kubernetes Documentation](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) about the live detection of resources.
+
+**The watch closures will run indifinitely until you return a `true` or `false`.**
+
+### Tracking one resource
+
+```php
+$pod = K8s::pod($cluster)
+    ->whereName('mysql')
+    ->get();
+
+$pod->watch(function ($type, $pod) {
+    $resourceVersion = $pod->getResourceVersion();
+
+    return true;
+});
+```
+
+Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
+
+```php
+$pod = K8s::pod($cluster)
+    ->whereName('mysql')
+    ->get();
+
+$pod->watch(function ($type, $pod) {
+
+    // Waiting for a change.
+
+}, ['resourceVersion' => $pod->getResourceVersion()]);
+```
+
+### Tracking all resources
+
+To watch all resources instead of just one, `watchAll` is available.
+
+This time, you do not need to call any filter or retrieval, because there is nothing to filter:
+
+```php
+// Create just a new K8sPod instance.
+$pods = K8s::pod($cluster);
+
+$success = $pods->watchAll(function ($type, $pod) {
+    if ($pod->getName() === 'nginx') {
+        // do something
+
+        return true;
+    }
+});
+
+// $success = true;
+```
+
 ## 🐛 Testing
 
 ``` bash
