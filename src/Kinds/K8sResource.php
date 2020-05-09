@@ -374,58 +374,6 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Watch the resources list until the closure returns true or false.
-     *
-     * @param  Closure  $callback
-     * @param  array  $query
-     * @return void
-     */
-    public function watchAll(Closure $callback,  array $query = ['pretty' => 1])
-    {
-        if (! $this instanceof Watchable) {
-            throw new KubernetesWatchException(
-                'The resource '.get_class($this).' does not support watch actions.'
-            );
-        }
-
-        return $this
-            ->cluster
-            ->setResourceClass(get_class($this))
-            ->runOperation(
-                KubernetesCluster::WATCH_OP,
-                $this->allResourcesWatchPath(),
-                $callback,
-                $query
-            );
-    }
-
-    /**
-     * Watch the specific resource until the closure returns true or false.
-     *
-     * @param  Closure  $callback
-     * @param  array  $query
-     * @return void
-     */
-    public function watch(Closure $callback, array $query = ['pretty' => 1])
-    {
-        if (! $this instanceof Watchable) {
-            throw new KubernetesWatchException(
-                'The resource '.get_class($this).' does not support watch actions.'
-            );
-        }
-
-        return $this
-            ->cluster
-            ->setResourceClass(get_class($this))
-            ->runOperation(
-                KubernetesCluster::WATCH_OP,
-                $this->resourceWatchPath(),
-                $callback,
-                $query
-            );
-    }
-
-    /**
      * Create the resource.
      *
      * @param  array  $query
@@ -504,5 +452,57 @@ class K8sResource implements Arrayable, Jsonable
         $this->synced = false;
 
         return true;
+    }
+
+    /**
+     * Watch the resources list until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watchAll(Closure $callback,  array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Watchable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support watch actions.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_OP,
+                $this->allResourcesWatchPath(),
+                $callback,
+                $query
+            );
+    }
+
+    /**
+     * Watch the specific resource until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watch(Closure $callback, array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Watchable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support watch actions.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_OP,
+                $this->resourceWatchPath(),
+                $callback,
+                $query
+            );
     }
 }
