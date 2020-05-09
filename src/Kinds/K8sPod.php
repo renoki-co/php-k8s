@@ -3,12 +3,13 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
-class K8sPod extends K8sResource implements InteractsWithK8sCluster
+class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasAnnotations, HasLabels, HasSpec;
 
@@ -31,7 +32,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster
      *
      * @var bool
      */
-    protected static $hasNamespace = true;
+    protected static $namespaceable = true;
 
     /**
      * Set the Pod containers.
@@ -99,11 +100,11 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods";
     }
@@ -113,8 +114,28 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/pods";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}";
     }
 }

@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s;
 
+use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
@@ -32,13 +33,6 @@ class KubernetesCluster
     protected $resourceClass;
 
     /**
-     * Specify the patch method to use.
-     *
-     * @var string
-     */
-    protected $patchMethod = self::PATCH_METHOD;
-
-    /**
      * The Kubernetes cluster version.
      *
      * @var \vierbergenlars\SemVer\version
@@ -46,21 +40,29 @@ class KubernetesCluster
     protected $kubernetesVersion;
 
     /**
-     * Map the patch methods with the respective headers.
+     * List all named operations with
+     * their respective methods for the
+     * HTTP request.
      *
      * @var array
      */
-    protected static $patchMethods = [
-        self::PATCH_METHOD => 'application/application/json-patch+json',
-        self::MERGE_METHOD => 'application/merge-patch+json',
-        self::STRATEGIC_METHOD => 'application/strategic-merge-patch+json',
+    protected static $operations = [
+        self::GET_OP => 'GET',
+        self::CREATE_OP => 'POST',
+        self::REPLACE_OP => 'PUT',
+        self::DELETE_OP => 'DELETE',
+        self::WATCH_OP => 'GET',
     ];
 
-    const PATCH_METHOD = 'patch';
+    const GET_OP = 'get';
 
-    const MERGE_METHOD = 'merge';
+    const CREATE_OP = 'create';
 
-    const STRATEGIC_METHOD = 'strategic';
+    const REPLACE_OP = 'replace';
+
+    const DELETE_OP = 'delete';
+
+    const WATCH_OP = 'watch';
 
     /**
      * Create a new class instance.
@@ -75,19 +77,6 @@ class KubernetesCluster
         $this->port = $port;
 
         $this->loadClusterVersion();
-    }
-
-    /**
-     * Set the patch method.
-     *
-     * @param  string  $patchMethod
-     * @return $this
-     */
-    public function setPatchMethod(string $patchMethod)
-    {
-        $this->patchMethod = $patchMethod;
-
-        return $this;
     }
 
     /**
@@ -114,31 +103,63 @@ class KubernetesCluster
     }
 
     /**
+     * Get the callable URL for a specific path.
+     *
+     * @param  string  $path
+     * @param  array  $query
+     * @return string
+     */
+    public function getCallableUrl(string $path, array $query = ['pretty' => 1])
+    {
+        return $this->getApiUrl().$path.'?'.http_build_query($query);
+    }
+
+    /**
+     * Run a specific operation for the API path with a specific payload.
+     *
+     * @param  string  $operation
+     * @param  string  $path
+     * @param  string|Closure  $payload
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
+    {
+        // Calling a WATCH operation will trigger a SOCKET connection.
+        if ($operation === static::WATCH_OP) {
+            if ($this->watchPath($path, $payload, $query)) {
+                return true;
+            }
+
+            return false;
+        }
+
+        $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
+
+        return $this->makeRequest($method, $path, $payload, $query);
+    }
+
+    /**
      * Call the API with the specified method and path.
      *
      * @param  string  $method
      * @param  string  $path
      * @param  string  $payload
-     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
-     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     * @param  array  $query
+     * @return void
      */
-    public function call($method, string $path, string $payload = '')
+    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
     {
-        $apiUrl = $this->getApiUrl();
-
-        $callableUrl = "{$apiUrl}{$path}";
-
         $resourceClass = $this->resourceClass;
 
         try {
             $client = new Client;
 
-            $response = $client->request($method, $callableUrl, [
+            $response = $client->request($method, $this->getCallableUrl($path, $query), [
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
-                    'Content-Type' => $method === 'PATCH'
-                        ? self::$patchMethods[$this->patchMethod]
-                        : 'application/json',
+                    'Content-Type' => 'application/json',
                 ],
             ]);
         } catch (ClientException $e) {
@@ -171,6 +192,43 @@ class KubernetesCluster
 
         return (new $resourceClass($this, $json))
             ->synced();
+    }
+
+    /**
+     * Watch for the current resource or a resource list.
+     *
+     * @param  string   $path
+     * @param  Closure  $closure
+     * @param  array  $query
+     * @return bool
+     */
+    protected function watchPath(string $path, Closure $closure, array $query = ['pretty' => 1])
+    {
+        $resourceClass = $this->resourceClass;
+
+        $sock = fopen($this->getCallableUrl($path, $query), 'r');
+
+        $data = null;
+
+        while (($data = fgets($sock)) == true) {
+            $data = @json_decode($data, true);
+
+            ['type' => $type, 'object' => $attributes] = $data;
+
+            $call = call_user_func(
+                $closure, $type, new $resourceClass($this, $attributes)
+            );
+
+            if (! is_null($call)) {
+                return $call;
+            }
+        }
+
+        fclose($sock);
+
+        unset($data);
+
+        return false;
     }
 
     /**

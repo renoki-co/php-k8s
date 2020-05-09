@@ -72,7 +72,7 @@ class NamespaceTest extends TestCase
 
         $this->assertTrue($ns->isSynced());
 
-        $this->assertTrue($ns->replace());
+        $this->assertTrue($ns->update());
 
         $this->assertTrue($ns->isSynced());
     }
@@ -82,5 +82,30 @@ class NamespaceTest extends TestCase
         $this->markTestIncomplete(
             'The namespace deletion does not work properly.'
         );
+    }
+
+    public function test_namespace_watch_all()
+    {
+        $watch = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $namespace) {
+                if ($namespace->getName() === 'production') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_namespace_watch_resource()
+    {
+        $watch = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->whereName('production')
+            ->watch(function ($type, $namespace) {
+                return $namespace->getName() === 'production';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

@@ -89,7 +89,7 @@ class ConfigMapTest extends TestCase
             ->removeData('key2')
             ->addData('newkey', 'newval');
 
-        $this->assertTrue($cm->replace());
+        $this->assertTrue($cm->update());
 
         $this->assertTrue($cm->isSynced());
 
@@ -104,5 +104,30 @@ class ConfigMapTest extends TestCase
         $this->markTestIncomplete(
             'The namespace deletion does not work properly.'
         );
+    }
+
+    public function test_config_map_watch_all()
+    {
+        $watch = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $configmap) {
+                if ($configmap->getName() === 'settings') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_config_map_watch_resource()
+    {
+        $watch = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->watch(function ($type, $configmap) {
+                return $configmap->getName() === 'settings';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

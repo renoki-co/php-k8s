@@ -129,6 +129,10 @@ $ns->isSynced(); // true
 
 ### Updating Resources
 
+While Kubernetes has the ability to PATCH a resource or REPLACE it entirely, PHP K8s relies on REPLACE
+to update your resource since you have to retrieve it first (thus getting a synced class), edit it, then
+triggering the update.
+
 ```php
 $ns = K8s::configmap($cluster)
     ->whereName('env')
@@ -139,56 +143,66 @@ $ns->addData('API_KEY', '123')
 $ns->update();
 ```
 
-When patching a resource using the `update()` method, you can opt in for the following strategies:
-
-- PATCH, used as `KubernetesCluster::PATCH_METHOD`
-- MERGE, used as `KubernetesCluster::MERGE_METHOD`
-- STRATEGIC MERGE, used as `KubernetesCluster::STRATEGIC_METHOD`
-
-By default, it is set as `KubernetesCluster::PATCH_METHOD`.
-
-To change the way of patching, use the `setPatchMethod` within the `KubernetesCluster` class:
-
-```php
-use RenokiCo\PhpK8s\KubernetesCluster;
-
-$cluster = (new KubernetesCluster(...))
-    ->setPatchMethod(KubernetesCluster::STRATEGIC_METHOD);
-```
-
-Patching method can be changed directly from `update()` if customization is needed:
-
-```php
-$ns = K8s::configmap($cluster)
-    ->whereName('env')
-    ->get();
-
-$ns->addData('API_KEY', '123')
-
-// Update the resource with the strategic method.
-
-$ns->update(
-    KubernetesCluster::STRATEGIC_METHOD
-);
-```
-
-### Replacement
-
-Replacing resources will re-create them entirely:
-
-```php
-$ns = K8s::configmap($cluster)
-    ->whereName('env')
-    ->get();
-
-$ns->addData('API_KEY', '123')
-
-$ns->replace();
-```
-
 ### Deletion
 
 Currently, the deletion is WIP.
+
+## Live Tracking
+
+PHP K8s comes with a PHP-native way to be able to track the changes via the Kubernetes cluster's WATCH API.
+
+You can watch the resource directly from the Resource class, and check & process your logic inside a closure. See more on [Kubernetes Documentation](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) about the live detection of resources.
+
+**The watch closures will run indifinitely until you return a `true` or `false`.**
+
+### Tracking one resource
+
+```php
+$pod = K8s::pod($cluster)
+    ->whereName('mysql')
+    ->get();
+
+$pod->watch(function ($type, $pod) {
+    $resourceVersion = $pod->getResourceVersion();
+
+    return true;
+});
+```
+
+Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
+
+```php
+$pod = K8s::pod($cluster)
+    ->whereName('mysql')
+    ->get();
+
+$pod->watch(function ($type, $pod) {
+
+    // Waiting for a change.
+
+}, ['resourceVersion' => $pod->getResourceVersion()]);
+```
+
+### Tracking all resources
+
+To watch all resources instead of just one, `watchAll` is available.
+
+This time, you do not need to call any filter or retrieval, because there is nothing to filter:
+
+```php
+// Create just a new K8sPod instance.
+$pods = K8s::pod($cluster);
+
+$success = $pods->watchAll(function ($type, $pod) {
+    if ($pod->getName() === 'nginx') {
+        // do something
+
+        return true;
+    }
+});
+
+// $success = true;
+```
 
 ## 🐛 Testing
 

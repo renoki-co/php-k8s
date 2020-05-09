@@ -3,8 +3,9 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 
-class K8sSecret extends K8sResource implements InteractsWithK8sCluster
+class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     /**
      * The resource Kind parameter.
@@ -18,7 +19,7 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster
      *
      * @var bool
      */
-    protected static $hasNamespace = true;
+    protected static $namespaceable = true;
 
     /**
      * Get the data attribute.
@@ -88,11 +89,11 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/secrets";
     }
@@ -102,8 +103,28 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/secrets/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/secrets";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/secrets/{$this->getIdentifier()}";
     }
 }

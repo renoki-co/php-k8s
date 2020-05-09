@@ -2,8 +2,11 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
 
@@ -23,14 +26,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @var bool
      */
-    protected static $hasNamespace = false;
-
-    /**
-     * The default version for the resource.
-     *
-     * @var string
-     */
-    protected static $stableVersion = 'v1';
+    protected static $namespaceable = false;
 
     /**
      * The default namespace for the resource.
@@ -38,6 +34,13 @@ class K8sResource implements Arrayable, Jsonable
      * @var string
      */
     protected static $defaultNamespace = 'default';
+
+    /**
+     * The default version for the resource.
+     *
+     * @var string
+     */
+    protected static $stableVersion = 'v1';
 
     /**
      * The cluster instance that
@@ -165,7 +168,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function setNamespace($namespace)
     {
-        if (! static::$hasNamespace) {
+        if (! static::$namespaceable) {
             return $this;
         }
 
@@ -335,78 +338,67 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get a list with all resources.
      *
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
      */
-    public function all()
+    public function all(array $query = ['pretty' => 1])
     {
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('GET', $this->resourcesApiPath());
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->allResourcesPath(),
+                $this->toJsonPayload(),
+                $query
+            );
     }
 
     /**
      * Get a specific resource.
      *
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
-    public function get()
+    public function get(array $query = ['pretty' => 1])
     {
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('GET', $this->resourceApiPath());
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
     }
 
     /**
      * Create the resource.
      *
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
-    public function create()
+    public function create(array $query = ['pretty' => 1])
     {
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('POST', $this->resourcesApiPath(), $this->toJsonPayload());
+            ->runOperation(
+                KubernetesCluster::CREATE_OP,
+                $this->allResourcesPath(),
+                $this->toJsonPayload(),
+                $query
+            );
     }
 
     /**
-     * Update the resource with a specified method.
+     * Update the resource.
      *
-     * @param  string|null  $method
+     * @param  array  $query
      * @return bool
      */
-    public function update(string $method = null): bool
-    {
-        // If it didn't change, no way to trigger the change.
-        if (! $this->hasChanged()) {
-            return true;
-        }
-
-        // If requesting a specific method, overwrite
-        // the configuration patch method.
-
-        if ($method) {
-            $this->cluster->setPatchMethod($method);
-        }
-
-        $instance = $this
-            ->cluster
-            ->setResourceClass(get_class($this))
-            ->call('PATCH', $this->resourceApiPath(), $this->toJsonPayload());
-
-        $this->syncWith($instance->toArray());
-
-        return true;
-    }
-
-    /**
-     * Replace the resource entirely.
-     *
-     * @return bool
-     */
-    public function replace(): bool
+    public function update(array $query = ['pretty' => 1]): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
@@ -416,7 +408,12 @@ class K8sResource implements Arrayable, Jsonable
         $instance = $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('PUT', $this->resourceApiPath(), $this->toJsonPayload());
+            ->runOperation(
+                KubernetesCluster::REPLACE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
 
         $this->syncWith($instance->toArray());
 
@@ -426,11 +423,12 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Delete the resource.
      *
+     * @param  array  $query
      * @param  null|int  $gracePeriod
      * @param  string  $propagationPolicy
      * @return bool
      */
-    public function delete($gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
+    public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
     {
         // $this->setAttribute('preconditions', [
         //     'resourceVersion' => $this->getResourceVersion(),
@@ -442,12 +440,69 @@ class K8sResource implements Arrayable, Jsonable
         $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call('DELETE', $this->resourceApiPath(), $this->toJsonPayload());
+            ->runOperation(
+                KubernetesCluster::DELETE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
 
         $this->syncWith([]);
 
         $this->synced = false;
 
         return true;
+    }
+
+    /**
+     * Watch the resources list until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watchAll(Closure $callback, array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Watchable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support watch actions.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_OP,
+                $this->allResourcesWatchPath(),
+                $callback,
+                $query
+            );
+    }
+
+    /**
+     * Watch the specific resource until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watch(Closure $callback, array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Watchable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support watch actions.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_OP,
+                $this->resourceWatchPath(),
+                $callback,
+                $query
+            );
     }
 }

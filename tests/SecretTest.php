@@ -90,7 +90,7 @@ class SecretTest extends TestCase
             ->removeData('postgres')
             ->addData('root', 'secret');
 
-        $this->assertTrue($secret->replace());
+        $this->assertTrue($secret->update());
 
         $this->assertTrue($secret->isSynced());
 
@@ -105,5 +105,30 @@ class SecretTest extends TestCase
         $this->markTestIncomplete(
             'The namespace deletion does not work properly.'
         );
+    }
+
+    public function test_secret_watch_all()
+    {
+        $watch = K8s::secret()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $secret) {
+                if ($secret->getName() === 'passwords') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_secret_watch_resource()
+    {
+        $watch = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('passwords')
+            ->watch(function ($type, $secret) {
+                return $secret->getName() === 'passwords';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

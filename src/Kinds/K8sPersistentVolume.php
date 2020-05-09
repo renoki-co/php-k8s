@@ -3,13 +3,14 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAccessModes;
 use RenokiCo\PhpK8s\Traits\HasMountOptions;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStorageClass;
 
-class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
+class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasAccessModes, HasMountOptions, HasSelector, HasSpec, HasStorageClass;
 
@@ -55,11 +56,11 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/api/{$this->getApiVersion()}/persistentvolumes";
     }
@@ -69,8 +70,28 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/api/{$this->getApiVersion()}/persistentvolumes/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/persistentvolumes";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/persistentvolumes/{$this->getIdentifier()}";
     }
 }

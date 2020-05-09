@@ -100,7 +100,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->assertTrue($pvc->isSynced());
 
-        $this->assertTrue($pvc->replace());
+        $this->assertTrue($pvc->update());
 
         $this->assertTrue($pvc->isSynced());
 
@@ -116,5 +116,30 @@ class PersistentVolumeClaimTest extends TestCase
         $this->markTestIncomplete(
             'The namespace deletion does not work properly.'
         );
+    }
+
+    public function test_persistent_volume_claim_watch_all()
+    {
+        $watch = K8s::persistentVolumeClaim()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $pvc) {
+                if ($pvc->getName() === 'app-pvc') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_persistent_volume_claim_watch_resource()
+    {
+        $watch = K8s::persistentVolumeClaim()
+            ->onCluster($this->cluster)
+            ->whereName('app-pvc')
+            ->watch(function ($type, $pvc) {
+                return $pvc->getName() === 'app-pvc';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

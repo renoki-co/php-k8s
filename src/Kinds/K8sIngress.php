@@ -3,10 +3,11 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
-class K8sIngress extends K8sResource implements InteractsWithK8sCluster
+class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasAnnotations, HasSpec;
 
@@ -29,7 +30,7 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
      *
      * @var bool
      */
-    protected static $hasNamespace = true;
+    protected static $namespaceable = true;
 
     /**
      * Set the spec rules.
@@ -53,11 +54,11 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', to point to the resource list.
+     * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
      */
-    public function resourcesApiPath(): string
+    public function allResourcesPath(): string
     {
         return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses";
     }
@@ -67,8 +68,28 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
      *
      * @return string
      */
-    public function resourceApiPath(): string
+    public function resourcePath(): string
     {
         return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/ingresses";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
     }
 }

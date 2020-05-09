@@ -43,7 +43,7 @@ $cm = K8s::configmap($cluster)
 
 $cm
     ->removeData('ca.pem')
-    ->replace();
+    ->update();
 
 $data = $cm->getData(); // ['key.pem' => '...']
 ```
