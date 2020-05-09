@@ -3,10 +3,11 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
-class K8sIngress extends K8sResource implements InteractsWithK8sCluster
+class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasAnnotations, HasSpec;
 
@@ -70,5 +71,25 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster
     public function resourcePath(): string
     {
         return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/ingresses";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
     }
 }

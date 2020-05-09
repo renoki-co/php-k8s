@@ -3,8 +3,9 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 
-class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
+class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     /**
      * The resource Kind parameter.
@@ -101,5 +102,25 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster
     public function resourcePath(): string
     {
         return "/apis/{$this->getApiVersion()}/storageclasses/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/watch/storageclasses";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/watch/storageclasses/{$this->getIdentifier()}";
     }
 }

@@ -108,4 +108,29 @@ class StorageClassTest extends TestCase
             'The namespace deletion does not work properly.'
         );
     }
+
+    public function test_storage_class_watch_all()
+    {
+        $watch = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $sc) {
+                if ($sc->getName() === 'io1') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_storage_class_watch_resource()
+    {
+        $watch = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->whereName('io1')
+            ->watch(function ($type, $sc) {
+                return $sc->getName() === 'io1';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
 }

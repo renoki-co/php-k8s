@@ -120,4 +120,29 @@ class ServiceTest extends TestCase
             'The namespace deletion does not work properly.'
         );
     }
+
+    public function test_service_watch_all()
+    {
+        $watch = K8s::service()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $service) {
+                if ($service->getName() === 'nginx') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_service_watch_resource()
+    {
+        $watch = K8s::service()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->watch(function ($type, $service) {
+                return $service->getName() === 'nginx';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
 }

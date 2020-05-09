@@ -132,4 +132,29 @@ class PersistentVolumeTest extends TestCase
             'The namespace deletion does not work properly.'
         );
     }
+
+    public function test_persistent_volume_watch_all()
+    {
+        $watch = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $pv) {
+                if ($pv->getName() === 'app') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_persistent_volume_watch_resource()
+    {
+        $watch = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->whereName('app')
+            ->watch(function ($type, $pv) {
+                return $pv->getName() === 'app';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
 }

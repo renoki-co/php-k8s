@@ -129,4 +129,29 @@ class IngressTest extends TestCase
             'The namespace deletion does not work properly.'
         );
     }
+
+    public function test_ingress_watch_all()
+    {
+        $watch = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $ingress) {
+                if ($ingress->getName() === 'nginx') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_ingress_watch_resource()
+    {
+        $watch = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->watch(function ($type, $ingress) {
+                return $ingress->getName() === 'nginx';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
 }

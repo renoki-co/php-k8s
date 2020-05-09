@@ -3,8 +3,9 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 
-class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
+class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     /**
      * The resource Kind parameter.
@@ -87,5 +88,25 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster
     public function resourcePath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/configmaps/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/configmaps";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/configmaps/{$this->getIdentifier()}";
     }
 }

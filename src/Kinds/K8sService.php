@@ -3,11 +3,12 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
-class K8sService extends K8sResource implements InteractsWithK8sCluster
+class K8sService extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasAnnotations, HasSelector, HasSpec;
 
@@ -71,5 +72,25 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster
     public function resourcePath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/services/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/services";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/services/{$this->getIdentifier()}";
     }
 }

@@ -105,4 +105,29 @@ class ConfigMapTest extends TestCase
             'The namespace deletion does not work properly.'
         );
     }
+
+    public function test_config_map_watch_all()
+    {
+        $watch = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $configmap) {
+                if ($configmap->getName() === 'settings') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_config_map_watch_resource()
+    {
+        $watch = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->watch(function ($type, $configmap) {
+                return $configmap->getName() === 'settings';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
 }

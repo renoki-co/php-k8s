@@ -137,4 +137,29 @@ class PodTest extends TestCase
             'The namespace deletion does not work properly.'
         );
     }
+
+    public function test_pod_watch_all()
+    {
+        $watch = K8s::pod()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $pod) {
+                if ($pod->getName() === 'mysql') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function test_pod_watch_resource()
+    {
+        $watch = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->watch(function ($type, $pod) {
+                return $pod->getName() === 'mysql';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
 }
