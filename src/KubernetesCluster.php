@@ -120,21 +120,22 @@ class KubernetesCluster
      * @param  string  $operation
      * @param  string  $path
      * @param  string|Closure  $payload
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function runOperation(string $operation, string $path, $payload = '')
+    public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         // Calling a WATCH operation will trigger a SOCKET connection.
         if ($operation === static::WATCH_OP) {
-            if ($this->watchPath($path, $payload)) {
+            if ($this->watchPath($path, $payload, $query)) {
                 return true;
             }
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
 
-        return $this->makeRequest($method, $path, $payload);
+        return $this->makeRequest($method, $path, $payload, $query);
     }
 
     /**
@@ -143,16 +144,17 @@ class KubernetesCluster
      * @param  string  $method
      * @param  string  $path
      * @param  string  $payload
+     * @param  array  $query
      * @return void
      */
-    protected function makeRequest(string $method, string $path, string $payload = '')
+    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
     {
         $resourceClass = $this->resourceClass;
 
         try {
             $client = new Client;
 
-            $response = $client->request($method, $this->getCallableUrl($path), [
+            $response = $client->request($method, $this->getCallableUrl($path, $query), [
                 RequestOptions::BODY => $payload,
                 RequestOptions::HEADERS => [
                     'Content-Type' => 'application/json',
@@ -195,13 +197,14 @@ class KubernetesCluster
      *
      * @param  string   $path
      * @param  Closure  $closure
+     * @param  array  $query
      * @return bool
      */
-    protected function watchPath(string $path, Closure $closure)
+    protected function watchPath(string $path, Closure $closure, array $query = ['pretty' => 1])
     {
         $resourceClass = $this->resourceClass;
 
-        $sock = fopen($this->getCallableUrl($path), 'r');
+        $sock = fopen($this->getCallableUrl($path, $query), 'r');
 
         $data = null;
 

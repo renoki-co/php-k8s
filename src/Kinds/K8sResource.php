@@ -338,32 +338,38 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get a list with all resources.
      *
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
      */
-    public function all()
+    public function all(array $query = ['pretty' => 1])
     {
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
-                $this->allResourcesPath()
+                $this->allResourcesPath(),
+                $this->toJsonPayload(),
+                $query
             );
     }
 
     /**
      * Get a specific resource.
      *
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
-    public function get()
+    public function get(array $query = ['pretty' => 1])
     {
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
-                $this->resourcePath()
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
             );
     }
 
@@ -371,9 +377,10 @@ class K8sResource implements Arrayable, Jsonable
      * Watch the resources list until the closure returns true or false.
      *
      * @param  Closure  $callback
+     * @param  array  $query
      * @return void
      */
-    public function watchAll(Closure $callback)
+    public function watchAll(Closure $callback,  array $query = ['pretty' => 1])
     {
         if (! $this instanceof Watchable) {
             throw new KubernetesWatchException(
@@ -387,7 +394,8 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
                 $this->allResourcesWatchPath(),
-                $callback
+                $callback,
+                $query
             );
     }
 
@@ -395,9 +403,10 @@ class K8sResource implements Arrayable, Jsonable
      * Watch the specific resource until the closure returns true or false.
      *
      * @param  Closure  $callback
+     * @param  array  $query
      * @return void
      */
-    public function watch(Closure $callback)
+    public function watch(Closure $callback, array $query = ['pretty' => 1])
     {
         if (! $this instanceof Watchable) {
             throw new KubernetesWatchException(
@@ -411,16 +420,18 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
                 $this->resourceWatchPath(),
-                $callback
+                $callback,
+                $query
             );
     }
 
     /**
      * Create the resource.
      *
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
-    public function create()
+    public function create(array $query = ['pretty' => 1])
     {
         return $this
             ->cluster
@@ -428,16 +439,18 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::CREATE_OP,
                 $this->allResourcesPath(),
-                $this->toJsonPayload()
+                $this->toJsonPayload(),
+                $query
             );
     }
 
     /**
      * Update the resource.
      *
+     * @param  array  $query
      * @return bool
      */
-    public function update(): bool
+    public function update(array $query = ['pretty' => 1]): bool
     {
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
@@ -450,7 +463,8 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::REPLACE_OP,
                 $this->resourcePath(),
-                $this->toJsonPayload()
+                $this->toJsonPayload(),
+                $query
             );
 
         $this->syncWith($instance->toArray());
@@ -461,11 +475,12 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Delete the resource.
      *
+     * @param  array  $query
      * @param  null|int  $gracePeriod
      * @param  string  $propagationPolicy
      * @return bool
      */
-    public function delete($gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
+    public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
     {
         // $this->setAttribute('preconditions', [
         //     'resourceVersion' => $this->getResourceVersion(),
@@ -480,7 +495,8 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::DELETE_OP,
                 $this->resourcePath(),
-                $this->toJsonPayload()
+                $this->toJsonPayload(),
+                $query
             );
 
         $this->syncWith([]);
