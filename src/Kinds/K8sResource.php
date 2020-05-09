@@ -6,9 +6,12 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\KubernetesCluster;
+use RenokiCo\PhpK8s\Traits\HasAttributes;
 
 class K8sResource implements Arrayable, Jsonable
 {
+    use HasAttributes;
+
     /**
      * The resource Kind parameter.
      *
@@ -46,13 +49,6 @@ class K8sResource implements Arrayable, Jsonable
     protected $cluster;
 
     /**
-     * The Kubernetes resource's attributes.
-     *
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
      * The Kubernetes resource's attributes,
      * but stored as being the original ones.
      *
@@ -83,45 +79,6 @@ class K8sResource implements Arrayable, Jsonable
         if ($cluster instanceof KubernetesCluster) {
             $this->onCluster($cluster);
         }
-    }
-
-    /**
-     * Set an attribute.
-     *
-     * @param  string  $name
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function setAttribute(string $name, $value)
-    {
-        Arr::set($this->attributes, $name, $value);
-
-        return $this;
-    }
-
-    /**
-     * Remove an attribute.
-     *
-     * @param string $name
-     * @return void
-     */
-    public function removeAttribute(string $name)
-    {
-        Arr::forget($this->attributes, $name);
-
-        return $this;
-    }
-
-    /**
-     * Get a specific attribute.
-     *
-     * @param  string  $name
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function getAttribute(string $name, $default = null)
-    {
-        return Arr::get($this->attributes, $name, $default);
     }
 
     /**
