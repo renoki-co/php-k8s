@@ -342,7 +342,10 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call(KubernetesCluster::GET_OP, $this->allResourcesPath());
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->allResourcesPath()
+            );
     }
 
     /**
@@ -355,7 +358,10 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call(KubernetesCluster::GET_OP, $this->resourcePath());
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->resourcePath()
+            );
     }
 
     /**
@@ -368,7 +374,11 @@ class K8sResource implements Arrayable, Jsonable
         return $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call(KubernetesCluster::CREATE_OP, $this->allResourcesPath(), $this->toJsonPayload());
+            ->runOperation(
+                KubernetesCluster::CREATE_OP,
+                $this->allResourcesPath(),
+                $this->toJsonPayload()
+            );
     }
 
     /**
@@ -386,7 +396,11 @@ class K8sResource implements Arrayable, Jsonable
         $instance = $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call(KubernetesCluster::REPLACE_OP, $this->resourcePath(), $this->toJsonPayload());
+            ->runOperation(
+                KubernetesCluster::REPLACE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload()
+            );
 
         $this->syncWith($instance->toArray());
 
@@ -412,7 +426,11 @@ class K8sResource implements Arrayable, Jsonable
         $this
             ->cluster
             ->setResourceClass(get_class($this))
-            ->call(KubernetesCluster::DELETE_OP, $this->resourcePath(), $this->toJsonPayload());
+            ->runOperation(
+                KubernetesCluster::DELETE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload()
+            );
 
         $this->syncWith([]);
 
