@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sService;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -114,13 +115,6 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_service_watch_all()
     {
         $watch = K8s::service()
@@ -144,5 +138,22 @@ class ServiceTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_service_delete()
+    {
+        $service = K8s::service()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
+
+        $this->assertTrue($service->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $service = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
     }
 }

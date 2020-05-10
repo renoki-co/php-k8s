@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sIngress;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -123,13 +124,6 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_ingress_watch_all()
     {
         $watch = K8s::ingress()
@@ -153,5 +147,22 @@ class IngressTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_ingress_delete()
+    {
+        $ingress = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
+
+        $this->assertTrue($ingress->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $ingress = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
     }
 }

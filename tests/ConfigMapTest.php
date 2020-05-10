@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -99,13 +100,6 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('newval', $cm->getData('newkey'));
     }
 
-    public function test_config_map_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_config_map_watch_all()
     {
         $watch = K8s::configmap()
@@ -129,5 +123,22 @@ class ConfigMapTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_config_map_delete()
+    {
+        $cm = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->get();
+
+        $this->assertTrue($cm->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $cm = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->get();
     }
 }

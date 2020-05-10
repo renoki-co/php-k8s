@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sSecret;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -100,13 +101,6 @@ class SecretTest extends TestCase
         $this->assertEquals(['root' => 'secret'], $secret->getData(true));
     }
 
-    public function test_secret_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_secret_watch_all()
     {
         $watch = K8s::secret()
@@ -130,5 +124,22 @@ class SecretTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_secret_delete()
+    {
+        $secret = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('passwords')
+            ->get();
+
+        $this->assertTrue($secret->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $secret = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('passwords')
+            ->get();
     }
 }

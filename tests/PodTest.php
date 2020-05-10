@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -131,13 +132,6 @@ class PodTest extends TestCase
         $this->assertEquals([], $pod->getAnnotations());
     }
 
-    public function test_storage_class_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_pod_watch_all()
     {
         $watch = K8s::pod()
@@ -161,5 +155,24 @@ class PodTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_pod_delete()
+    {
+        $pod = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->get();
+
+        $this->assertTrue($pod->delete());
+
+        sleep(15);
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $pod = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->get();
     }
 }

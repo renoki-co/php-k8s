@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -102,13 +103,6 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_storage_class_watch_all()
     {
         $watch = K8s::storageClass()
@@ -132,5 +126,22 @@ class StorageClassTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_storage_class_delete()
+    {
+        $sc = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->whereName('io1')
+            ->get();
+
+        $this->assertTrue($sc->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $sc = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->whereName('io1')
+            ->get();
     }
 }

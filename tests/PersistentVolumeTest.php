@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -126,13 +127,6 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_persistent_volume_watch_all()
     {
         $watch = K8s::persistentVolume()
@@ -156,5 +150,22 @@ class PersistentVolumeTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_persistent_volume_delete()
+    {
+        $pv = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->whereName('app')
+            ->get();
+
+        $this->assertTrue($pv->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $pv = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->whereName('app')
+            ->get();
     }
 }

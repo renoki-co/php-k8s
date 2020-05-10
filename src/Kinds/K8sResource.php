@@ -294,37 +294,43 @@ class K8sResource implements Arrayable, Jsonable
 
     /**
      * Get the instance as an array.
+     * Optionally, you can specify the Kind attribute to replace.
      *
+     * @param  string|null  $kind
      * @return array
      */
-    public function toArray()
+    public function toArray(string $kind = null)
     {
         return array_merge($this->attributes, [
-            'kind' => static::$kind,
+            'kind' => $kind ?: static::$kind,
             'apiVersion' => $this->getApiVersion(),
         ]);
     }
 
     /**
      * Convert the object to its JSON representation.
+     * Optionally, you can specify the Kind attribute to replace.
      *
      * @param  int  $options
+     * @param  string|null  $kind
      * @return string
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0, string $kind = null)
     {
-        return json_encode($this->toArray(), $options);
+        return json_encode($this->toArray($kind), $options);
     }
 
     /**
      * Convert the object to its JSON representation, but
-     * escaping [] for {}.
+     * escaping [] for {}. Optionally, you can specify
+     * the Kind attribute to replace.
      *
+     * @param  string|null  $kind
      * @return string
      */
-    public function toJsonPayload()
+    public function toJsonPayload(string $kind = null)
     {
-        $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES, $kind);
 
         $attributes = str_replace(': []', ': {}', $attributes);
 
@@ -430,12 +436,12 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
     {
-        // $this->setAttribute('preconditions', [
-        //     'resourceVersion' => $this->getResourceVersion(),
-        //     'uid' => $this->getResourceUid(),
-        //     'propagationPolicy' => $propagationPolicy,
-        //     'gracePeriodSeconds' => $gracePeriod,
-        // ]);
+        $this->setAttribute('preconditions', [
+            'resourceVersion' => $this->getResourceVersion(),
+            'uid' => $this->getResourceUid(),
+            'propagationPolicy' => $propagationPolicy,
+            'gracePeriodSeconds' => $gracePeriod,
+        ]);
 
         $this
             ->cluster
@@ -443,11 +449,9 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::DELETE_OP,
                 $this->resourcePath(),
-                $this->toJsonPayload(),
+                $this->toJsonPayload('DeleteOptions'),
                 $query
             );
-
-        $this->syncWith([]);
 
         $this->synced = false;
 

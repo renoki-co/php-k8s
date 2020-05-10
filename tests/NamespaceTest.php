@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -77,13 +78,6 @@ class NamespaceTest extends TestCase
         $this->assertTrue($ns->isSynced());
     }
 
-    public function test_namespace_delete()
-    {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
-    }
-
     public function test_namespace_watch_all()
     {
         $watch = K8s::namespace()
@@ -107,5 +101,24 @@ class NamespaceTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function test_namespace_delete()
+    {
+        $ns = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->whereName('production')
+            ->get();
+
+        $this->assertTrue($ns->delete());
+
+        sleep(10);
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $ns = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->whereName('production')
+            ->get();
     }
 }
