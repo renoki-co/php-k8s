@@ -145,7 +145,23 @@ $ns->update();
 
 ### Deletion
 
-Currently, the deletion is WIP.
+You will have to simply call `->delete()` on the resource, after you retrieve it.
+
+```php
+$cm = K8s::configmap($cluster)
+    ->whereName('settings')
+    ->get();
+
+$cm->delete(); // true
+```
+
+Additionally, you can pass query parameters, grace period and the propagation policy.
+
+The defaults are:
+
+```php
+delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'
+```
 
 ## Live Tracking
 
