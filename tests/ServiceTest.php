@@ -28,7 +28,18 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_create()
+    public function test_service_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $svc = K8s::service()
             ->onCluster($this->cluster)
@@ -56,7 +67,7 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_all()
+    public function runGetAllTests()
     {
         $services = K8s::service()
             ->onCluster($this->cluster)
@@ -71,7 +82,7 @@ class ServiceTest extends TestCase
         }
     }
 
-    public function test_service_get()
+    public function runGetTests()
     {
         $svc = K8s::service()
             ->onCluster($this->cluster)
@@ -91,7 +102,7 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_update()
+    public function runUpdateTests()
     {
         $svc = K8s::service()
             ->onCluster($this->cluster)
@@ -115,32 +126,7 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_watch_all()
-    {
-        $watch = K8s::service()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $service) {
-                if ($service->getName() === 'nginx') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_service_watch_resource()
-    {
-        $watch = K8s::service()
-            ->onCluster($this->cluster)
-            ->whereName('nginx')
-            ->watch(function ($type, $service) {
-                return $service->getName() === 'nginx';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_service_delete()
+    public function runDeletionTests()
     {
         $service = K8s::service()
             ->onCluster($this->cluster)
@@ -155,5 +141,30 @@ class ServiceTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('nginx')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::service()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $service) {
+                if ($service->getName() === 'nginx') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::service()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->watch(function ($type, $service) {
+                return $service->getName() === 'nginx';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

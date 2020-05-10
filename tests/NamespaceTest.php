@@ -18,7 +18,18 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $ns->getName());
     }
 
-    public function test_namespace_all()
+    public function test_namespace_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runGetAllTests()
     {
         $namespaces = K8s::namespace()
             ->onCluster($this->cluster)
@@ -33,21 +44,21 @@ class NamespaceTest extends TestCase
         }
     }
 
-    public function test_namespace_get()
+    public function runGetTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
-            ->whereName('kube-system')
+            ->whereName('production')
             ->get();
 
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
         $this->assertTrue($ns->isSynced());
 
-        $this->assertEquals('kube-system', $ns->getName());
+        $this->assertEquals('production', $ns->getName());
     }
 
-    public function test_namespace_create()
+    public function runCreationTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
@@ -64,11 +75,11 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $ns->getName());
     }
 
-    public function test_namespace_update()
+    public function runUpdateTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
-            ->whereName('staging')
+            ->whereName('production')
             ->get();
 
         $this->assertTrue($ns->isSynced());
@@ -78,32 +89,7 @@ class NamespaceTest extends TestCase
         $this->assertTrue($ns->isSynced());
     }
 
-    public function test_namespace_watch_all()
-    {
-        $watch = K8s::namespace()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $namespace) {
-                if ($namespace->getName() === 'production') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_namespace_watch_resource()
-    {
-        $watch = K8s::namespace()
-            ->onCluster($this->cluster)
-            ->whereName('production')
-            ->watch(function ($type, $namespace) {
-                return $namespace->getName() === 'production';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_namespace_delete()
+    public function runDeletionTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
@@ -120,5 +106,30 @@ class NamespaceTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('production')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $namespace) {
+                if ($namespace->getName() === 'production') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->whereName('production')
+            ->watch(function ($type, $namespace) {
+                return $namespace->getName() === 'production';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

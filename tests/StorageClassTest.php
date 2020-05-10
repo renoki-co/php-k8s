@@ -24,7 +24,18 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_create()
+    public function test_storage_class_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -48,7 +59,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_all()
+    public function runGetAllTests()
     {
         $storageClasses = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -63,7 +74,7 @@ class StorageClassTest extends TestCase
         }
     }
 
-    public function test_storage_class_get()
+    public function runGetTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -81,7 +92,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_update()
+    public function runUpdateTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -103,32 +114,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_watch_all()
-    {
-        $watch = K8s::storageClass()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $sc) {
-                if ($sc->getName() === 'io1') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_storage_class_watch_resource()
-    {
-        $watch = K8s::storageClass()
-            ->onCluster($this->cluster)
-            ->whereName('io1')
-            ->watch(function ($type, $sc) {
-                return $sc->getName() === 'io1';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_storage_class_delete()
+    public function runDeletionTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -143,5 +129,30 @@ class StorageClassTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('io1')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $sc) {
+                if ($sc->getName() === 'io1') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->whereName('io1')
+            ->watch(function ($type, $sc) {
+                return $sc->getName() === 'io1';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

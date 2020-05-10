@@ -49,7 +49,18 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_create()
+    public function test_ingress_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $ing = K8s::ingress()
             ->onCluster($this->cluster)
@@ -71,7 +82,7 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_all()
+    public function runGetAllTests()
     {
         $ingresss = K8s::ingress()
             ->onCluster($this->cluster)
@@ -86,7 +97,7 @@ class IngressTest extends TestCase
         }
     }
 
-    public function test_ingress_get()
+    public function runGetTests()
     {
         $ing = K8s::ingress()
             ->onCluster($this->cluster)
@@ -103,7 +114,7 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_update()
+    public function runUpdateTests()
     {
         $ing = K8s::ingress()
             ->onCluster($this->cluster)
@@ -124,32 +135,7 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_watch_all()
-    {
-        $watch = K8s::ingress()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $ingress) {
-                if ($ingress->getName() === 'nginx') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_ingress_watch_resource()
-    {
-        $watch = K8s::ingress()
-            ->onCluster($this->cluster)
-            ->whereName('nginx')
-            ->watch(function ($type, $ingress) {
-                return $ingress->getName() === 'nginx';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_ingress_delete()
+    public function runDeletionTests()
     {
         $ingress = K8s::ingress()
             ->onCluster($this->cluster)
@@ -164,5 +150,30 @@ class IngressTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('nginx')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $ingress) {
+                if ($ingress->getName() === 'nginx') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->watch(function ($type, $ingress) {
+                return $ingress->getName() === 'nginx';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

@@ -34,7 +34,18 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_create()
+    public function test_persistent_volume_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $sc = K8s::storageClass()
             ->setName('sc1')
@@ -68,7 +79,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_all()
+    public function runGetAllTests()
     {
         $pvs = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -83,7 +94,7 @@ class PersistentVolumeTest extends TestCase
         }
     }
 
-    public function test_persistent_volume_get()
+    public function runGetTests()
     {
         $pv = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -103,7 +114,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_update()
+    public function runUpdateTests()
     {
         $pv = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -127,32 +138,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_watch_all()
-    {
-        $watch = K8s::persistentVolume()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $pv) {
-                if ($pv->getName() === 'app') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_persistent_volume_watch_resource()
-    {
-        $watch = K8s::persistentVolume()
-            ->onCluster($this->cluster)
-            ->whereName('app')
-            ->watch(function ($type, $pv) {
-                return $pv->getName() === 'app';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_persistent_volume_delete()
+    public function runDeletionTests()
     {
         $pv = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -167,5 +153,30 @@ class PersistentVolumeTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('app')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $pv) {
+                if ($pv->getName() === 'app') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->whereName('app')
+            ->watch(function ($type, $pv) {
+                return $pv->getName() === 'app';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

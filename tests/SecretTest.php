@@ -23,7 +23,18 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
-    public function test_secret_create()
+    public function test_secret_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -46,7 +57,7 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
-    public function test_secret_all()
+    public function runGetAllTests()
     {
         $secrets = K8s::secret()
             ->onCluster($this->cluster)
@@ -61,7 +72,7 @@ class SecretTest extends TestCase
         }
     }
 
-    public function test_secret_get()
+    public function runGetTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -78,7 +89,7 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
-    public function test_secret_update()
+    public function runUpdateTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -101,32 +112,7 @@ class SecretTest extends TestCase
         $this->assertEquals(['root' => 'secret'], $secret->getData(true));
     }
 
-    public function test_secret_watch_all()
-    {
-        $watch = K8s::secret()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $secret) {
-                if ($secret->getName() === 'passwords') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_secret_watch_resource()
-    {
-        $watch = K8s::secret()
-            ->onCluster($this->cluster)
-            ->whereName('passwords')
-            ->watch(function ($type, $secret) {
-                return $secret->getName() === 'passwords';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_secret_delete()
+    public function runDeletionTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -141,5 +127,30 @@ class SecretTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('passwords')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::secret()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $secret) {
+                if ($secret->getName() === 'passwords') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('passwords')
+            ->watch(function ($type, $secret) {
+                return $secret->getName() === 'passwords';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

@@ -22,7 +22,18 @@ class ConfigMapTest extends TestCase
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
     }
 
-    public function test_config_map_create()
+    public function test_config_map_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -45,7 +56,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('val2', $cm->getData('key2'));
     }
 
-    public function test_config_map_all()
+    public function runGetAllTests()
     {
         $configmaps = K8s::configmap()
             ->onCluster($this->cluster)
@@ -60,7 +71,7 @@ class ConfigMapTest extends TestCase
         }
     }
 
-    public function test_config_map_get()
+    public function runGetTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -77,7 +88,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('val2', $cm->getData('key2'));
     }
 
-    public function test_config_map_update()
+    public function runUpdateTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -100,32 +111,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('newval', $cm->getData('newkey'));
     }
 
-    public function test_config_map_watch_all()
-    {
-        $watch = K8s::configmap()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $configmap) {
-                if ($configmap->getName() === 'settings') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_config_map_watch_resource()
-    {
-        $watch = K8s::configmap()
-            ->onCluster($this->cluster)
-            ->whereName('settings')
-            ->watch(function ($type, $configmap) {
-                return $configmap->getName() === 'settings';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_config_map_delete()
+    public function runDeletionTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -140,5 +126,30 @@ class ConfigMapTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('settings')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $configmap) {
+                if ($configmap->getName() === 'settings') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->watch(function ($type, $configmap) {
+                return $configmap->getName() === 'settings';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }

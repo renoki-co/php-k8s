@@ -40,7 +40,18 @@ class PodTest extends TestCase
         $this->assertEquals([$mysql->toArray()], $pod->getContainers([]));
     }
 
-    public function test_pod_create()
+    public function test_pod_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $mysql = K8s::container()
             ->setName('mysql')
@@ -78,7 +89,7 @@ class PodTest extends TestCase
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
     }
 
-    public function test_pod_all()
+    public function runGetAllTests()
     {
         $pods = K8s::pod()
             ->onCluster($this->cluster)
@@ -93,7 +104,7 @@ class PodTest extends TestCase
         }
     }
 
-    public function test_pod_get()
+    public function runGetTests()
     {
         $pod = K8s::pod()
             ->onCluster($this->cluster)
@@ -110,7 +121,7 @@ class PodTest extends TestCase
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
     }
 
-    public function test_pod_update()
+    public function runUpdateTests()
     {
         $pod = K8s::pod()
             ->onCluster($this->cluster)
@@ -132,32 +143,7 @@ class PodTest extends TestCase
         $this->assertEquals([], $pod->getAnnotations());
     }
 
-    public function test_pod_watch_all()
-    {
-        $watch = K8s::pod()
-            ->onCluster($this->cluster)
-            ->watchAll(function ($type, $pod) {
-                if ($pod->getName() === 'mysql') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_pod_watch_resource()
-    {
-        $watch = K8s::pod()
-            ->onCluster($this->cluster)
-            ->whereName('mysql')
-            ->watch(function ($type, $pod) {
-                return $pod->getName() === 'mysql';
-            }, ['timeoutSeconds' => 10]);
-
-        $this->assertTrue($watch);
-    }
-
-    public function test_pod_delete()
+    public function runDeletionTests()
     {
         $pod = K8s::pod()
             ->onCluster($this->cluster)
@@ -174,5 +160,30 @@ class PodTest extends TestCase
             ->onCluster($this->cluster)
             ->whereName('mysql')
             ->get();
+    }
+
+    public function runWatchAllTests()
+    {
+        $watch = K8s::pod()
+            ->onCluster($this->cluster)
+            ->watchAll(function ($type, $pod) {
+                if ($pod->getName() === 'mysql') {
+                    return true;
+                }
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
+    }
+
+    public function runWatchTests()
+    {
+        $watch = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->watch(function ($type, $pod) {
+                return $pod->getName() === 'mysql';
+            }, ['timeoutSeconds' => 10]);
+
+        $this->assertTrue($watch);
     }
 }
