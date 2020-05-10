@@ -67,8 +67,8 @@ class NamespaceTest extends TestCase
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
-            ->setName('staging')
-            ->create();
+            ->whereName('staging')
+            ->get();
 
         $this->assertTrue($ns->isSynced());
 
