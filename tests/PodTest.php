@@ -93,6 +93,9 @@ class PodTest extends TestCase
         $this->assertEquals('mysql', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+
+        // Wait for the pod to create entirely.
+        sleep(15);
     }
 
     public function runGetAllTests()
