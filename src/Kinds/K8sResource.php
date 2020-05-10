@@ -411,6 +411,8 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
+        $this->refresh();
+
         $instance = $this
             ->cluster
             ->setResourceClass(get_class($this))
@@ -436,12 +438,18 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
     {
+        if (! $this->isSynced()) {
+            return true;
+        }
+
         $this->setAttribute('preconditions', [
             'resourceVersion' => $this->getResourceVersion(),
             'uid' => $this->getResourceUid(),
             'propagationPolicy' => $propagationPolicy,
             'gracePeriodSeconds' => $gracePeriod,
         ]);
+
+        $this->refresh();
 
         $this
             ->cluster
@@ -456,6 +464,24 @@ class K8sResource implements Arrayable, Jsonable
         $this->synced = false;
 
         return true;
+    }
+
+    /**
+     * Make a call to the cluster to retrieve the
+     * resource version & uid of the resource.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refresh(array $query = ['pretty' => 1])
+    {
+        $instance = $this->get($query);
+
+        $this->setAttribute('metadata.resourceVersion', $instance->getResourceVersion());
+
+        $this->setAttribute('metadata.uid', $instance->getResourceUid());
+
+        return $this;
     }
 
     /**
