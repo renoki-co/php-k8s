@@ -147,6 +147,8 @@ class PersistentVolumeTest extends TestCase
 
         $this->assertTrue($pv->delete());
 
+        sleep(3);
+
         $this->expectException(KubernetesAPIException::class);
 
         $pv = K8s::persistentVolume()
