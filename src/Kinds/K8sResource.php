@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
 use RenokiCo\PhpK8s\KubernetesCluster;
@@ -531,6 +532,60 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
                 $this->resourceWatchPath(),
+                $callback,
+                $query
+            );
+    }
+
+    /**
+     * Get a specific resource.
+     *
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     */
+    public function logs(array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Loggable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support logs.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::LOG_OP,
+                $this->resourceLogPath(),
+                $this->toJsonPayload(),
+                $query
+            );
+    }
+
+    /**
+     * Watch the specific resource until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watchLogs(Closure $callback, array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Loggable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support logs.'
+            );
+        }
+
+        // Ensure the ?follow=1 query exists to trigger the watch.
+        $query = array_merge($query, ['follow' => 1]);
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_LOGS_OP,
+                $this->resourceLogPath(),
                 $callback,
                 $query
             );

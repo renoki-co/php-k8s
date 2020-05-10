@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
@@ -46,6 +47,8 @@ class PodTest extends TestCase
     public function test_pod_api_interaction()
     {
         $this->runCreationTests();
+        $this->runWatchLogsTests();
+        $this->runGetLogsTests();
         $this->runGetAllTests();
         $this->runGetTests();
         $this->runUpdateTests();
@@ -194,5 +197,33 @@ class PodTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runWatchLogsTests()
+    {
+        K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->watchLogs(function ($data) {
+                // Debugging data to CI. :D
+                dump($data);
+
+                if (Str::contains($data, 'InnoDB')) {
+                    return true;
+                }
+            });
+    }
+
+    public function runGetLogsTests()
+    {
+        $logs = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->logs();
+
+        // Debugging data to CI. :D
+        dump($logs);
+
+        $this->assertTrue(strlen($logs) > 0);
     }
 }
