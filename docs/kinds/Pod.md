@@ -51,38 +51,38 @@ $pod->setLabels([
 While the Pod kind has `spec`, you can avoid writing this:
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->setAttribute('spec.nodeSelector', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->setSpec('nodeSelector', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->whereName('mysql')
     ->get();
 
-$containers = $svc->getContainers();
+$containers = $pod->getContainers();
 ```
 
 Retrieving the spec attributes can be done like the `setSpec()` method:
 
 ```php
-$svc->getSpec('containers', []);
+$pod->getSpec('containers', []);
 ```
 
 The second value for the `getSpec()` method is the default value, in case the found path is not existent.
@@ -90,5 +90,5 @@ The second value for the `getSpec()` method is the default value, in case the fo
 Dot notation is supported:
 
 ```php
-$svc->getSpec('some.nested.path', []);
+$pod->getSpec('some.nested.path', []);
 ```
