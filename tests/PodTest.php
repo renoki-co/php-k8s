@@ -14,11 +14,14 @@ class PodTest extends TestCase
         $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
-            ->setCommand(['mysqld'])
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
-            ->addPort(3307, 'TCP', 'mysql-alt');
+            ->addPort(3307, 'TCP', 'mysql-alt')
+            ->setEnv([[
+                'name' => 'MYSQL_ROOT_PASSWORD',
+                'value' => 'test',
+            ]]);
 
         $busybox = K8s::container()
             ->setName('busybox')
@@ -56,11 +59,14 @@ class PodTest extends TestCase
         $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
-            ->setCommand(['mysqld'])
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
-            ->addPort(3307, 'TCP', 'mysql-alt');
+            ->addPort(3307, 'TCP', 'mysql-alt')
+            ->setEnv([[
+                'name' => 'MYSQL_ROOT_PASSWORD',
+                'value' => 'test',
+            ]]);
 
         $busybox = K8s::container()
             ->setName('busybox')
