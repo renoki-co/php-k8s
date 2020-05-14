@@ -92,3 +92,30 @@ Dot notation is supported:
 ```php
 $pod->getSpec('some.nested.path', []);
 ```
+
+## Pod Logs
+
+Pods can contain logs, and PHP K8s is good at it. Before checking how it works, please see the [Live Tracking](../../README.md#live-tracking) section from README to see how the closures really work at interpreting the real-time data in Kubernetes.
+
+Retrieve a single string with all logs until the point of call:
+
+```php
+// Simple logging, no watcher
+// Returns a long string with the logs
+
+$logs = $pod->logs();
+```
+
+Open up a websocket connection and watch for changes, line-by-line:
+
+```php
+// Runs indefinitely until true/false
+// us returned in the closure.
+
+$pod->watchLogs(function ($line) {
+
+    // Process the logic here
+    // with the given line.
+
+});
+```

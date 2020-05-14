@@ -165,6 +165,8 @@ delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationP
 
 ## Live Tracking
 
+**The ability to live track the Pods logs is also available and can be seen in the [Pod Documentation](docs/kinds/Pod.md#pod-logs)**
+
 PHP K8s comes with a PHP-native way to be able to track the changes via the Kubernetes cluster's WATCH API.
 
 You can watch the resource directly from the Resource class, and check & process your logic inside a closure. See more on [Kubernetes Documentation](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) about the live detection of resources.
