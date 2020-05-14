@@ -47,13 +47,13 @@ class PodTest extends TestCase
     public function test_pod_api_interaction()
     {
         $this->runCreationTests();
-        $this->runWatchLogsTests();
-        $this->runGetLogsTests();
         $this->runGetAllTests();
         $this->runGetTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+        $this->runWatchLogsTests();
+        $this->runGetLogsTests();
         $this->runDeletionTests();
     }
 
@@ -98,7 +98,7 @@ class PodTest extends TestCase
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
 
         // Wait for the pod to create entirely.
-        sleep(15);
+        sleep(30);
     }
 
     public function runGetAllTests()
