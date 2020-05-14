@@ -243,15 +243,13 @@ class KubernetesCluster
             );
 
             if (! is_null($call)) {
+                fclose($sock);
+
+                unset($data);
+
                 return $call;
             }
         }
-
-        fclose($sock);
-
-        unset($data);
-
-        return false;
     }
 
     /**
@@ -274,15 +272,13 @@ class KubernetesCluster
             $call = call_user_func($closure, $data);
 
             if (! is_null($call)) {
+                fclose($sock);
+
+                unset($data);
+
                 return $call;
             }
         }
-
-        fclose($sock);
-
-        unset($data);
-
-        return false;
     }
 
     /**
