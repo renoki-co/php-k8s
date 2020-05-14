@@ -98,7 +98,7 @@ class PodTest extends TestCase
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
 
         // Wait for the pod to create entirely.
-        sleep(30);
+        sleep(60);
     }
 
     public function runGetAllTests()
@@ -164,7 +164,7 @@ class PodTest extends TestCase
 
         $this->assertTrue($pod->delete());
 
-        sleep(30);
+        sleep(60);
 
         $this->expectException(KubernetesAPIException::class);
 
