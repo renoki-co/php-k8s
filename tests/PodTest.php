@@ -164,7 +164,7 @@ class PodTest extends TestCase
 
         $this->assertTrue($pod->delete());
 
-        sleep(15);
+        sleep(30);
 
         $this->expectException(KubernetesAPIException::class);
 
