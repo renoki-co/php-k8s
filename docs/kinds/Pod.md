@@ -51,38 +51,38 @@ $pod->setLabels([
 While the Pod kind has `spec`, you can avoid writing this:
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->setAttribute('spec.nodeSelector', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->setSpec('nodeSelector', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$svc = K8s::pod($cluster)
+$pod = K8s::pod($cluster)
     ->whereName('mysql')
     ->get();
 
-$containers = $svc->getContainers();
+$containers = $pod->getContainers();
 ```
 
 Retrieving the spec attributes can be done like the `setSpec()` method:
 
 ```php
-$svc->getSpec('containers', []);
+$pod->getSpec('containers', []);
 ```
 
 The second value for the `getSpec()` method is the default value, in case the found path is not existent.
@@ -90,5 +90,32 @@ The second value for the `getSpec()` method is the default value, in case the fo
 Dot notation is supported:
 
 ```php
-$svc->getSpec('some.nested.path', []);
+$pod->getSpec('some.nested.path', []);
+```
+
+## Pod Logs
+
+Pods can contain logs, and PHP K8s is good at it. Before checking how it works, please see the [Live Tracking](../../README.md#live-tracking) section from README to see how the closures really work at interpreting the real-time data in Kubernetes.
+
+Retrieve a single string with all logs until the point of call:
+
+```php
+// Simple logging, no watcher
+// Returns a long string with the logs
+
+$logs = $pod->logs();
+```
+
+Open up a websocket connection and watch for changes, line-by-line:
+
+```php
+// Runs indefinitely until true/false
+// us returned in the closure.
+
+$pod->watchLogs(function ($line) {
+
+    // Process the logic here
+    // with the given line.
+
+});
 ```

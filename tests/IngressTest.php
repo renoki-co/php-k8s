@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sIngress;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -48,7 +49,18 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_create()
+    public function test_ingress_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $ing = K8s::ingress()
             ->onCluster($this->cluster)
@@ -70,7 +82,7 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_all()
+    public function runGetAllTests()
     {
         $ingresss = K8s::ingress()
             ->onCluster($this->cluster)
@@ -85,7 +97,7 @@ class IngressTest extends TestCase
         }
     }
 
-    public function test_ingress_get()
+    public function runGetTests()
     {
         $ing = K8s::ingress()
             ->onCluster($this->cluster)
@@ -102,7 +114,7 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_update()
+    public function runUpdateTests()
     {
         $ing = K8s::ingress()
             ->onCluster($this->cluster)
@@ -123,14 +135,24 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $ingress = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
+
+        $this->assertTrue($ingress->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $ingress = K8s::ingress()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
     }
 
-    public function test_ingress_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::ingress()
             ->onCluster($this->cluster)
@@ -143,7 +165,7 @@ class IngressTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_ingress_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::ingress()
             ->onCluster($this->cluster)

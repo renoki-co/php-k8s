@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -33,7 +34,18 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_create()
+    public function test_persistent_volume_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $sc = K8s::storageClass()
             ->setName('sc1')
@@ -67,7 +79,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_all()
+    public function runGetAllTests()
     {
         $pvs = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -82,7 +94,7 @@ class PersistentVolumeTest extends TestCase
         }
     }
 
-    public function test_persistent_volume_get()
+    public function runGetTests()
     {
         $pv = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -102,7 +114,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_update()
+    public function runUpdateTests()
     {
         $pv = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -126,14 +138,26 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
-    public function test_persistent_volume_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $pv = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->whereName('app')
+            ->get();
+
+        $this->assertTrue($pv->delete());
+
+        sleep(3);
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $pv = K8s::persistentVolume()
+            ->onCluster($this->cluster)
+            ->whereName('app')
+            ->get();
     }
 
-    public function test_persistent_volume_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::persistentVolume()
             ->onCluster($this->cluster)
@@ -146,7 +170,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_persistent_volume_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::persistentVolume()
             ->onCluster($this->cluster)

@@ -2,6 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use Illuminate\Support\Str;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -13,11 +15,14 @@ class PodTest extends TestCase
         $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
-            ->setCommand(['mysqld'])
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
-            ->addPort(3307, 'TCP', 'mysql-alt');
+            ->addPort(3307, 'TCP', 'mysql-alt')
+            ->setEnv([[
+                'name' => 'MYSQL_ROOT_PASSWORD',
+                'value' => 'test',
+            ]]);
 
         $busybox = K8s::container()
             ->setName('busybox')
@@ -39,16 +44,32 @@ class PodTest extends TestCase
         $this->assertEquals([$mysql->toArray()], $pod->getContainers([]));
     }
 
-    public function test_pod_create()
+    public function test_pod_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runWatchLogsTests();
+        $this->runGetLogsTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
-            ->setCommand(['mysqld'])
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
-            ->addPort(3307, 'TCP', 'mysql-alt');
+            ->addPort(3307, 'TCP', 'mysql-alt')
+            ->setEnv([[
+                'name' => 'MYSQL_ROOT_PASSWORD',
+                'value' => 'test',
+            ]]);
 
         $busybox = K8s::container()
             ->setName('busybox')
@@ -75,9 +96,12 @@ class PodTest extends TestCase
         $this->assertEquals('mysql', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+
+        // Wait for the pod to create entirely.
+        sleep(60);
     }
 
-    public function test_pod_all()
+    public function runGetAllTests()
     {
         $pods = K8s::pod()
             ->onCluster($this->cluster)
@@ -92,7 +116,7 @@ class PodTest extends TestCase
         }
     }
 
-    public function test_pod_get()
+    public function runGetTests()
     {
         $pod = K8s::pod()
             ->onCluster($this->cluster)
@@ -109,7 +133,7 @@ class PodTest extends TestCase
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
     }
 
-    public function test_pod_update()
+    public function runUpdateTests()
     {
         $pod = K8s::pod()
             ->onCluster($this->cluster)
@@ -131,14 +155,26 @@ class PodTest extends TestCase
         $this->assertEquals([], $pod->getAnnotations());
     }
 
-    public function test_storage_class_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $pod = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->get();
+
+        $this->assertTrue($pod->delete());
+
+        sleep(60);
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $pod = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->get();
     }
 
-    public function test_pod_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::pod()
             ->onCluster($this->cluster)
@@ -151,7 +187,7 @@ class PodTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_pod_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::pod()
             ->onCluster($this->cluster)
@@ -161,5 +197,33 @@ class PodTest extends TestCase
             }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runWatchLogsTests()
+    {
+        K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->watchLogs(function ($data) {
+                // Debugging data to CI. :D
+                dump($data);
+
+                if (Str::contains($data, 'InnoDB')) {
+                    return true;
+                }
+            });
+    }
+
+    public function runGetLogsTests()
+    {
+        $logs = K8s::pod()
+            ->onCluster($this->cluster)
+            ->whereName('mysql')
+            ->logs();
+
+        // Debugging data to CI. :D
+        dump($logs);
+
+        $this->assertTrue(strlen($logs) > 0);
     }
 }

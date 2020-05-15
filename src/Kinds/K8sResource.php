@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
 use RenokiCo\PhpK8s\KubernetesCluster;
@@ -294,37 +295,43 @@ class K8sResource implements Arrayable, Jsonable
 
     /**
      * Get the instance as an array.
+     * Optionally, you can specify the Kind attribute to replace.
      *
+     * @param  string|null  $kind
      * @return array
      */
-    public function toArray()
+    public function toArray(string $kind = null)
     {
         return array_merge($this->attributes, [
-            'kind' => static::$kind,
+            'kind' => $kind ?: static::$kind,
             'apiVersion' => $this->getApiVersion(),
         ]);
     }
 
     /**
      * Convert the object to its JSON representation.
+     * Optionally, you can specify the Kind attribute to replace.
      *
      * @param  int  $options
+     * @param  string|null  $kind
      * @return string
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0, string $kind = null)
     {
-        return json_encode($this->toArray(), $options);
+        return json_encode($this->toArray($kind), $options);
     }
 
     /**
      * Convert the object to its JSON representation, but
-     * escaping [] for {}.
+     * escaping [] for {}. Optionally, you can specify
+     * the Kind attribute to replace.
      *
+     * @param  string|null  $kind
      * @return string
      */
-    public function toJsonPayload()
+    public function toJsonPayload(string $kind = null)
     {
-        $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES, $kind);
 
         $attributes = str_replace(': []', ': {}', $attributes);
 
@@ -405,6 +412,8 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
+        $this->refresh();
+
         $instance = $this
             ->cluster
             ->setResourceClass(get_class($this))
@@ -430,12 +439,18 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
     {
-        // $this->setAttribute('preconditions', [
-        //     'resourceVersion' => $this->getResourceVersion(),
-        //     'uid' => $this->getResourceUid(),
-        //     'propagationPolicy' => $propagationPolicy,
-        //     'gracePeriodSeconds' => $gracePeriod,
-        // ]);
+        if (! $this->isSynced()) {
+            return true;
+        }
+
+        $this->setAttribute('preconditions', [
+            'resourceVersion' => $this->getResourceVersion(),
+            'uid' => $this->getResourceUid(),
+            'propagationPolicy' => $propagationPolicy,
+            'gracePeriodSeconds' => $gracePeriod,
+        ]);
+
+        $this->refresh();
 
         $this
             ->cluster
@@ -443,15 +458,31 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::DELETE_OP,
                 $this->resourcePath(),
-                $this->toJsonPayload(),
+                $this->toJsonPayload('DeleteOptions'),
                 $query
             );
-
-        $this->syncWith([]);
 
         $this->synced = false;
 
         return true;
+    }
+
+    /**
+     * Make a call to the cluster to retrieve the
+     * resource version & uid of the resource.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refresh(array $query = ['pretty' => 1])
+    {
+        $instance = $this->get($query);
+
+        $this->setAttribute('metadata.resourceVersion', $instance->getResourceVersion());
+
+        $this->setAttribute('metadata.uid', $instance->getResourceUid());
+
+        return $this;
     }
 
     /**
@@ -501,6 +532,60 @@ class K8sResource implements Arrayable, Jsonable
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
                 $this->resourceWatchPath(),
+                $callback,
+                $query
+            );
+    }
+
+    /**
+     * Get a specific resource.
+     *
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     */
+    public function logs(array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Loggable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support logs.'
+            );
+        }
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::LOG_OP,
+                $this->resourceLogPath(),
+                $this->toJsonPayload(),
+                $query
+            );
+    }
+
+    /**
+     * Watch the specific resource until the closure returns true or false.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watchLogs(Closure $callback, array $query = ['pretty' => 1])
+    {
+        if (! $this instanceof Loggable) {
+            throw new KubernetesWatchException(
+                'The resource '.get_class($this).' does not support logs.'
+            );
+        }
+
+        // Ensure the ?follow=1 query exists to trigger the watch.
+        $query = array_merge($query, ['follow' => 1]);
+
+        return $this
+            ->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::WATCH_LOGS_OP,
+                $this->resourceLogPath(),
                 $callback,
                 $query
             );

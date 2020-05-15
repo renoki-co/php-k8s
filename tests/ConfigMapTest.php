@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -21,7 +22,18 @@ class ConfigMapTest extends TestCase
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
     }
 
-    public function test_config_map_create()
+    public function test_config_map_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -44,7 +56,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('val2', $cm->getData('key2'));
     }
 
-    public function test_config_map_all()
+    public function runGetAllTests()
     {
         $configmaps = K8s::configmap()
             ->onCluster($this->cluster)
@@ -59,7 +71,7 @@ class ConfigMapTest extends TestCase
         }
     }
 
-    public function test_config_map_get()
+    public function runGetTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -76,7 +88,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('val2', $cm->getData('key2'));
     }
 
-    public function test_config_map_update()
+    public function runUpdateTests()
     {
         $cm = K8s::configmap()
             ->onCluster($this->cluster)
@@ -99,14 +111,24 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('newval', $cm->getData('newkey'));
     }
 
-    public function test_config_map_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $cm = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->get();
+
+        $this->assertTrue($cm->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $cm = K8s::configmap()
+            ->onCluster($this->cluster)
+            ->whereName('settings')
+            ->get();
     }
 
-    public function test_config_map_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::configmap()
             ->onCluster($this->cluster)
@@ -119,7 +141,7 @@ class ConfigMapTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_config_map_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::configmap()
             ->onCluster($this->cluster)

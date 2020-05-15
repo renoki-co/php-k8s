@@ -51,7 +51,9 @@ class KubernetesCluster
         self::CREATE_OP => 'POST',
         self::REPLACE_OP => 'PUT',
         self::DELETE_OP => 'DELETE',
+        self::LOG_OP => 'GET',
         self::WATCH_OP => 'GET',
+        self::WATCH_LOGS_OP => 'GET',
     ];
 
     const GET_OP = 'get';
@@ -62,7 +64,11 @@ class KubernetesCluster
 
     const DELETE_OP = 'delete';
 
+    const LOG_OP = 'logs';
+
     const WATCH_OP = 'watch';
+
+    const WATCH_LOGS_OP = 'watch_logs';
 
     /**
      * Create a new class instance.
@@ -135,6 +141,15 @@ class KubernetesCluster
             return false;
         }
 
+        // Calling a WATCH LOGS operation should trigger a SOCKET connection.
+        if ($operation === static::WATCH_LOGS_OP) {
+            if ($this->watchLogsPath($path, $payload, $query)) {
+                return true;
+            }
+
+            return false;
+        }
+
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
 
         return $this->makeRequest($method, $path, $payload, $query);
@@ -171,6 +186,14 @@ class KubernetesCluster
         }
 
         $json = @json_decode($response->getBody(), true);
+
+        // If the output is not JSONable, return the response itself.
+        // This can be encountered in case of a pod log request, for example,
+        // where the data returned are just console logs.
+
+        if (! $json) {
+            return (string) $response->getBody();
+        }
 
         // If the kind is a list, transform into a ResourcesList
         // collection of instances for the same class.
@@ -220,15 +243,42 @@ class KubernetesCluster
             );
 
             if (! is_null($call)) {
+                fclose($sock);
+
+                unset($data);
+
                 return $call;
             }
         }
+    }
 
-        fclose($sock);
+    /**
+     * Watch for the logs for the resource.
+     *
+     * @param  string   $path
+     * @param  Closure  $closure
+     * @param  array  $query
+     * @return bool
+     */
+    protected function watchLogsPath(string $path, Closure $closure, array $query = ['pretty' => 1])
+    {
+        $resourceClass = $this->resourceClass;
 
-        unset($data);
+        $sock = fopen($this->getCallableUrl($path, $query), 'r');
 
-        return false;
+        $data = null;
+
+        while (($data = fgets($sock)) == true) {
+            $call = call_user_func($closure, $data);
+
+            if (! is_null($call)) {
+                fclose($sock);
+
+                unset($data);
+
+                return $call;
+            }
+        }
     }
 
     /**

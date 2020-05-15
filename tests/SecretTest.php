@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sSecret;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -22,7 +23,18 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
-    public function test_secret_create()
+    public function test_secret_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -45,7 +57,7 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
-    public function test_secret_all()
+    public function runGetAllTests()
     {
         $secrets = K8s::secret()
             ->onCluster($this->cluster)
@@ -60,7 +72,7 @@ class SecretTest extends TestCase
         }
     }
 
-    public function test_secret_get()
+    public function runGetTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -77,7 +89,7 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
-    public function test_secret_update()
+    public function runUpdateTests()
     {
         $secret = K8s::secret()
             ->onCluster($this->cluster)
@@ -100,14 +112,24 @@ class SecretTest extends TestCase
         $this->assertEquals(['root' => 'secret'], $secret->getData(true));
     }
 
-    public function test_secret_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $secret = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('passwords')
+            ->get();
+
+        $this->assertTrue($secret->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $secret = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('passwords')
+            ->get();
     }
 
-    public function test_secret_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::secret()
             ->onCluster($this->cluster)
@@ -120,7 +142,7 @@ class SecretTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_secret_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::secret()
             ->onCluster($this->cluster)

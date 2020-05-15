@@ -3,13 +3,14 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
-class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable
+class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, Loggable
 {
     use HasAnnotations, HasLabels, HasSpec;
 
@@ -137,5 +138,15 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable
     public function resourceWatchPath(): string
     {
         return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to log.
+     *
+     * @return string
+     */
+    public function resourceLogPath(): string
+    {
+        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}/log";
     }
 }

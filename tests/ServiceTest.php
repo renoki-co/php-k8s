@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sService;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -27,7 +28,18 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_create()
+    public function test_service_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $svc = K8s::service()
             ->onCluster($this->cluster)
@@ -55,7 +67,7 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_all()
+    public function runGetAllTests()
     {
         $services = K8s::service()
             ->onCluster($this->cluster)
@@ -70,7 +82,7 @@ class ServiceTest extends TestCase
         }
     }
 
-    public function test_service_get()
+    public function runGetTests()
     {
         $svc = K8s::service()
             ->onCluster($this->cluster)
@@ -90,7 +102,7 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_update()
+    public function runUpdateTests()
     {
         $svc = K8s::service()
             ->onCluster($this->cluster)
@@ -114,14 +126,24 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
-    public function test_service_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $service = K8s::service()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
+
+        $this->assertTrue($service->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $service = K8s::secret()
+            ->onCluster($this->cluster)
+            ->whereName('nginx')
+            ->get();
     }
 
-    public function test_service_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::service()
             ->onCluster($this->cluster)
@@ -134,7 +156,7 @@ class ServiceTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_service_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::service()
             ->onCluster($this->cluster)

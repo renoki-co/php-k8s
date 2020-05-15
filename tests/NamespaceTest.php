@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -17,7 +18,18 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $ns->getName());
     }
 
-    public function test_namespace_all()
+    public function test_namespace_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runGetAllTests()
     {
         $namespaces = K8s::namespace()
             ->onCluster($this->cluster)
@@ -32,21 +44,21 @@ class NamespaceTest extends TestCase
         }
     }
 
-    public function test_namespace_get()
+    public function runGetTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
-            ->whereName('kube-system')
+            ->whereName('production')
             ->get();
 
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
         $this->assertTrue($ns->isSynced());
 
-        $this->assertEquals('kube-system', $ns->getName());
+        $this->assertEquals('production', $ns->getName());
     }
 
-    public function test_namespace_create()
+    public function runCreationTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
@@ -63,12 +75,12 @@ class NamespaceTest extends TestCase
         $this->assertEquals('production', $ns->getName());
     }
 
-    public function test_namespace_update()
+    public function runUpdateTests()
     {
         $ns = K8s::namespace()
             ->onCluster($this->cluster)
-            ->setName('staging')
-            ->create();
+            ->whereName('production')
+            ->get();
 
         $this->assertTrue($ns->isSynced());
 
@@ -77,14 +89,26 @@ class NamespaceTest extends TestCase
         $this->assertTrue($ns->isSynced());
     }
 
-    public function test_namespace_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $ns = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->whereName('production')
+            ->get();
+
+        $this->assertTrue($ns->delete());
+
+        sleep(10);
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $ns = K8s::namespace()
+            ->onCluster($this->cluster)
+            ->whereName('production')
+            ->get();
     }
 
-    public function test_namespace_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::namespace()
             ->onCluster($this->cluster)
@@ -97,7 +121,7 @@ class NamespaceTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_namespace_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::namespace()
             ->onCluster($this->cluster)

@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -23,7 +24,18 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_create()
+    public function test_storage_class_api_interaction()
+    {
+        $this->runCreationTests();
+        $this->runGetAllTests();
+        $this->runGetTests();
+        $this->runUpdateTests();
+        $this->runWatchAllTests();
+        $this->runWatchTests();
+        $this->runDeletionTests();
+    }
+
+    public function runCreationTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -47,7 +59,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_all()
+    public function runGetAllTests()
     {
         $storageClasses = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -62,7 +74,7 @@ class StorageClassTest extends TestCase
         }
     }
 
-    public function test_storage_class_get()
+    public function runGetTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -80,7 +92,7 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_update()
+    public function runUpdateTests()
     {
         $sc = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -102,14 +114,24 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
-    public function test_storage_class_delete()
+    public function runDeletionTests()
     {
-        $this->markTestIncomplete(
-            'The namespace deletion does not work properly.'
-        );
+        $sc = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->whereName('io1')
+            ->get();
+
+        $this->assertTrue($sc->delete());
+
+        $this->expectException(KubernetesAPIException::class);
+
+        $sc = K8s::storageClass()
+            ->onCluster($this->cluster)
+            ->whereName('io1')
+            ->get();
     }
 
-    public function test_storage_class_watch_all()
+    public function runWatchAllTests()
     {
         $watch = K8s::storageClass()
             ->onCluster($this->cluster)
@@ -122,7 +144,7 @@ class StorageClassTest extends TestCase
         $this->assertTrue($watch);
     }
 
-    public function test_storage_class_watch_resource()
+    public function runWatchTests()
     {
         $watch = K8s::storageClass()
             ->onCluster($this->cluster)
