@@ -13,6 +13,7 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Service](kinds/Service.md)
 - [Ingress](kinds/Ingress.md)
 - [Pod](kinds/Pod.md)
+- [Statefulsets](kinds/StatefulSet.md)
 
 # Work in Progress
 
@@ -21,7 +22,6 @@ The following list of resources are work in progress and they will be available 
 - daemonsets
 - deployments
 - replicasets
-- statefulsets
 - horizontalpodautoscalers
 - cronjobs
 - jobs
