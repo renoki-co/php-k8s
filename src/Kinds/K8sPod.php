@@ -66,21 +66,39 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     /**
      * Get the Pod containers.
      *
+     * @param  bool  $asInstance
      * @return array
      */
-    public function getContainers(): array
+    public function getContainers(bool $asInstance = true): array
     {
-        return $this->getSpec('containers', []);
+        $containers = $this->getSpec('containers', []);
+
+        if ($asInstance) {
+            foreach ($containers as &$container) {
+                $container = new Container($container);
+            }
+        }
+
+        return $containers;
     }
 
     /**
      * Get the Pod init containers.
      *
+     * @param  bool  $asInstance
      * @return array
      */
-    public function getInitContainers(): array
+    public function getInitContainers(bool $asInstance = true): array
     {
-        return $this->getSpec('initContainers', []);
+        $containers = $this->getSpec('initContainers', []);
+
+        if ($asInstance) {
+            foreach ($containers as &$container) {
+                $container = new Container($container);
+            }
+        }
+
+        return $containers;
     }
 
     /**

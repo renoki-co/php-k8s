@@ -93,6 +93,28 @@ Dot notation is supported:
 $pod->getSpec('some.nested.path', []);
 ```
 
+### Container Retrieval
+
+Retrieving the containers and init containers can be retrieved as an array of `\RenokiCo\PhpK8s\Instances\Container` classes or as an array.
+
+```php
+$containers = $pod->getContainers();
+
+foreach ($containers as $container) {
+    $container->getImage(); // mysql:5.7
+}
+```
+
+To retrieve the containers and init containers as an array, pass `false` to the retrieval method:
+
+```php
+$containers = $pod->getContainers(false);
+
+foreach ($containers as $container) {
+    $container['image'] // mysql:5.7
+}
+```
+
 ## Pod Logs
 
 Pods can contain logs, and PHP K8s is good at it. Before checking how it works, please see the [Live Tracking](../../README.md#live-tracking) section from README to see how the closures really work at interpreting the real-time data in Kubernetes.
