@@ -54,6 +54,11 @@ class K8s
         return new Kinds\K8sStatefulSet($cluster, $attributes);
     }
 
+    public static function deployment($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sDeployment($cluster, $attributes);
+    }
+
     public static function container(array $attributes = [])
     {
         return new Instances\Container($attributes);
