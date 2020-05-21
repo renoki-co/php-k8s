@@ -103,7 +103,7 @@ Dot notation is supported:
 $sts->getSpec('some.nested.path', []);
 ```
 
-### Pod Retrieval
+### Statefulset's Pod Template Retrieval
 
 Statefulsets rely on pods, so you can get the pod template as `K8sPod` class:
 
