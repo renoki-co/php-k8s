@@ -2,12 +2,10 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
-use RenokiCo\PhpK8s\Kinds\K8sService;
 use RenokiCo\PhpK8s\Kinds\K8sStatefulSet;
 use RenokiCo\PhpK8s\ResourcesList;
 
