@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -40,8 +41,16 @@ class PodTest extends TestCase
         $this->assertEquals('mysql', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
-        $this->assertEquals([$busybox->toArray()], $pod->getInitContainers([]));
-        $this->assertEquals([$mysql->toArray()], $pod->getContainers([]));
+        $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
+        $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
+
+        foreach ($pod->getInitContainers() as $container) {
+            $this->assertInstanceOf(Container::class, $container);
+        }
+
+        foreach ($pod->getContainers() as $container) {
+            $this->assertInstanceOf(Container::class, $container);
+        }
     }
 
     public function test_pod_api_interaction()
