@@ -11,6 +11,12 @@ PHP K8s
 
 PHP K8s is a PHP handler for the Kubernetes Cluster API, helping you handling the individual Kubernetes resources directly from PHP, like viewing, creating, updating or deleting resources.
 
+## 🤝 Supporting
+
+Renoki Co. on GitHub aims on brining a lot of open source, MIT-licensed projects and helpful projects to the world. Developing and maintaining projects everyday is a harsh work and tho, we love it.
+
+If you are using your application in your day-to-day job, on presentation demos, hobby projects or even school projects, spread some kind words about our work or sponsor our work. Kind words will touch our chakras and vibe, while the sponsorships will keep the open source projects alive.
+
 ## ⏰ Work in Progress
 
 This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources Waitlist](RESOURCES.md) documentation and the [PR List](../../pulls) to know what's up for development.
