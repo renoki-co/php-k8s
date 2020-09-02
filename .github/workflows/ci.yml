@@ -37,7 +37,7 @@ jobs:
         kubectl proxy --port=8080 &
     - name: Install dependencies
       run: |
-        composer install --no-interaction --prefer-stable
+        composer install --no-interaction --prefer-source
     - name: Run tests
       run: |
         phpunit --coverage-text --coverage-clover=coverage.xml
