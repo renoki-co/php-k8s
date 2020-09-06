@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.0",
-        "guzzlehttp/guzzle": "^6.5",
+        "guzzlehttp/guzzle": "^6.5|^7.0",
         "illuminate/support": "^6.0|^7.0|^8.0",
         "vierbergenlars/php-semver": "dev-master"
     },
@@ -31,8 +31,7 @@
         "test": "vendor/bin/phpunit"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0",
-        "orchestra/database": "^6.0"
+        "orchestra/testbench": "^4.0|^5.0|^6.0"
     },
     "config": {
         "sort-packages": true
