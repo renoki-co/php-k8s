@@ -18,8 +18,8 @@ jobs:
 
     strategy:
       matrix:
-        php: ['7.0', '7.1', '7.2', '7.3', '7.4']
-        kubernetes: ['1.14.10', '1.15.11', '1.16.9', '1.17.5', '1.18.2']
+        php: ['7.2', '7.3', '7.4']
+        kubernetes: ['1.14.10', '1.15.12', '1.16.15', '1.17.11', '1.18.8', '1.19.1']
 
     name: PHP ${{ matrix.php }} with Kubernetes v${{ matrix.kubernetes }}
     steps:
@@ -34,7 +34,7 @@ jobs:
     - uses: manusa/actions-setup-minikube@v1.0.2
       name: Setup Minikube
       with:
-        minikube version: v1.10.0-beta.2
+        minikube version: v1.13.0
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
