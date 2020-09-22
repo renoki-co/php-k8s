@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "guzzlehttp/guzzle": "^6.5|^7.0",
+        "guzzlehttp/guzzle": "^6.5.x-dev",
         "illuminate/support": "^6.0|^7.0|^8.0",
         "vierbergenlars/php-semver": "dev-master"
     },
