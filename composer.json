@@ -2,7 +2,7 @@
     "name": "renoki-co/php-k8s",
     "description": "Build resources in PHP for any Kubernetes cluster.",
     "keywords": ["laravel", "php"],
-    "license": "MIT",
+    "license": "Apache-2.0",
     "homepage": "https://github.com/renoki-co/php-k8s",
     "authors": [
         {
