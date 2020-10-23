@@ -23,6 +23,16 @@ class SecretTest extends TestCase
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
 
+    public function test_secret_from_yaml()
+    {
+        $secret = $this->cluster->fromYamlFile(__DIR__.'/yaml/secret.yaml');
+
+        $this->assertEquals('v1', $secret->getApiVersion());
+        $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
+        $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
+    }
+
     public function test_secret_api_interaction()
     {
         $this->runCreationTests();

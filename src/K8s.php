@@ -146,4 +146,45 @@ class K8s
     {
         return new Instances\Container($attributes);
     }
+
+    /**
+     * Load Kind configuration from an YAML text.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  string  $yaml
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
+     */
+    public static function fromYaml($cluster = null, string $yaml)
+    {
+        $docs = explode('---', $yaml);
+
+        $instances = collect($docs)->reduce(function ($classes, $doc) use ($cluster) {
+            $yaml = yaml_parse($doc);
+
+            $version = $yaml['apiVersion'];
+            $kind = $yaml['kind'];
+
+            unset($yaml['apiVersion'], $yaml['kind']);
+
+            $classes[] = static::{$kind}($cluster, $yaml);
+
+            return $classes;
+        }, []);
+
+        return count($instances) === 1
+            ? $instances[0]
+            : $instances;
+    }
+
+    /**
+     * Load Kind configuration from an YAML file.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\KubernetesCluster  $cluster
+     * @param  string  $path
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
+     */
+    public static function fromYamlFile($cluster = null, string $path)
+    {
+        return static::fromYaml($cluster, file_get_contents($path));
+    }
 }

@@ -58,6 +58,46 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
     }
 
+    public function test_stateful_set_from_yaml()
+    {
+        $mysql = K8s::container()
+            ->setName('mysql')
+            ->setImage('mysql', '5.7')
+            ->setPorts([
+                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+            ]);
+
+        $pod = $this->cluster->pod()
+            ->setName('mysql')
+            ->setContainers([$mysql]);
+
+        $svc = $this->cluster->service()
+            ->setName('mysql')
+            ->setPorts([
+                ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
+            ]);
+
+        $pvc = $this->cluster->persistentVolumeClaim()
+            ->setName('mysql-pvc')
+            ->setCapacity(1, 'Gi')
+            ->setAccessModes(['ReadWriteOnce'])
+            ->setStorageClass('gp2');
+
+        $sts = $this->cluster->fromYamlFile(__DIR__.'/yaml/statefulset.yaml');
+
+        $this->assertEquals('apps/v1', $sts->getApiVersion());
+        $this->assertEquals('mysql', $sts->getName());
+        $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
+        $this->assertEquals(['mysql/annotation' => 'yes'], $sts->getAnnotations());
+        $this->assertEquals(3, $sts->getReplicas());
+        $this->assertEquals($svc->getName(), $sts->getService());
+        $this->assertEquals($pod->getName(), $sts->getTemplate()->getName());
+        $this->assertEquals($pvc->getName(), $sts->getVolumeClaims()[0]->getName());
+
+        $this->assertInstanceOf(K8sPod::class, $sts->getTemplate());
+        $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
+    }
+
     public function test_stateful_set_api_interaction()
     {
         $this->runCreationTests();

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    tier: backend
+  annotations:
+    mysql/annotation: "yes"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          ports:
+            - name: mysql
+              protocol: TCP
+              containerPort: 3306
+    kind: Pod
+    apiVersion: v1

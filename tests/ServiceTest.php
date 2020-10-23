@@ -28,6 +28,19 @@ class ServiceTest extends TestCase
         ]], $svc->getPorts());
     }
 
+    public function test_service_from_yaml()
+    {
+        $svc = $this->cluster->fromYamlFile(__DIR__.'/yaml/service.yaml');
+
+        $this->assertEquals('v1', $svc->getApiVersion());
+        $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
+        $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
+        $this->assertEquals([[
+            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
+        ]], $svc->getPorts());
+    }
+
     public function test_service_api_interaction()
     {
         $this->runCreationTests();

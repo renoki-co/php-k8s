@@ -30,6 +30,17 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals('gp2', $pvc->getStorageClass());
     }
 
+    public function test_persistent_volume_claim_from_yaml()
+    {
+        $pvc = $this->cluster->fromYamlFile(__DIR__.'/yaml/persistentvolumeclaim.yaml');
+
+        $this->assertEquals('v1', $pvc->getApiVersion());
+        $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals('1Gi', $pvc->getCapacity());
+        $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
+        $this->assertEquals('gp2', $pvc->getStorageClass());
+    }
+
     public function test_persistent_volume_claim_api_interaction()
     {
         $this->runCreationTests();

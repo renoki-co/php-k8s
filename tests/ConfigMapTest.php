@@ -22,6 +22,15 @@ class ConfigMapTest extends TestCase
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
     }
 
+    public function test_config_map_from_yaml()
+    {
+        $cm = $this->cluster->fromYamlFile(__DIR__.'/yaml/configmap.yaml');
+
+        $this->assertEquals('v1', $cm->getApiVersion());
+        $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['key2' => 'val2'], $cm->getData());
+    }
+
     public function test_config_map_api_interaction()
     {
         $this->runCreationTests();

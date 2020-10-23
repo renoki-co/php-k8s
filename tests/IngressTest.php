@@ -49,6 +49,34 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
+    public function test_ingress_from_yaml_pre_1_18_0()
+    {
+        if ($this->cluster->newerThan('1.18.0')) {
+            $this->markTestSkipped('The current tested version is newer than 1.18.0');
+        }
+
+        $ing = $this->cluster->fromYamlFile(__DIR__.'/yaml/ingress_pre_1.18.0.yaml');
+
+        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
+        $this->assertEquals(self::$rules, $ing->getRules());
+    }
+
+    public function test_ingress_from_yaml_post_1_18_0()
+    {
+        if ($this->cluster->olderThan('1.18.0')) {
+            $this->markTestSkipped('The current tested version is older than 1.18.0');
+        }
+
+        $ing = $this->cluster->fromYamlFile(__DIR__.'/yaml/ingress_post_1.18.0.yaml');
+
+        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
+        $this->assertEquals(self::$rules, $ing->getRules());
+    }
+
     public function test_ingress_api_interaction()
     {
         $this->runCreationTests();

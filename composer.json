@@ -17,6 +17,9 @@
         "illuminate/support": "^6.0|^7.0|^8.0",
         "vierbergenlars/php-semver": "dev-master"
     },
+    "suggest": {
+        "ext-yaml": "YAML extension is used to read or generate YAML from PHP K8s internal classes."
+    },
     "autoload": {
         "psr-4": {
             "RenokiCo\\PhpK8s\\": "src/"

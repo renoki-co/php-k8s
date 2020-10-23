@@ -24,6 +24,17 @@ class StorageClassTest extends TestCase
         $this->assertEquals(['debug'], $sc->getMountOptions());
     }
 
+    public function test_storage_class_from_yaml()
+    {
+        $sc = $this->cluster->fromYamlFile(__DIR__.'/yaml/storageclass.yaml');
+
+        $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
+        $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
+        $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
+        $this->assertEquals(['debug'], $sc->getMountOptions());
+    }
+
     public function test_storage_class_api_interaction()
     {
         $this->runCreationTests();

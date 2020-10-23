@@ -34,6 +34,19 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
     }
 
+    public function test_persistent_volume_from_yaml()
+    {
+        $pv = $this->cluster->fromYamlFile(__DIR__.'/yaml/persistentvolume.yaml');
+
+        $this->assertEquals('v1', $pv->getApiVersion());
+        $this->assertEquals('app', $pv->getName());
+        $this->assertEquals(['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'], $pv->getSpec('awsElasticBlockStore'));
+        $this->assertEquals('1Gi', $pv->getCapacity());
+        $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
+        $this->assertEquals(['debug'], $pv->getMountOptions());
+        $this->assertEquals('sc1', $pv->getStorageClass());
+    }
+
     public function test_persistent_volume_api_interaction()
     {
         $this->runCreationTests();

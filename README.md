@@ -167,6 +167,18 @@ The defaults are:
 delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'
 ```
 
+## Importing
+
+If you already have YAML files or YAML as a string, you can import them into PHP K8s in a simple way:
+
+```php
+$cluster->fromYaml($yamlAsString); // import using YAML as string
+
+$cluster->fromYamlFile($yamlPath); // import using a path to the YAML file
+```
+
+**For the imports to work, you will need the `ext-yaml` extension.**
+
 ## Live Tracking
 
 **The ability to live track the Pods logs is also available and can be seen in the [Pod Documentation](docs/kinds/Pod.md#pod-logs)**
