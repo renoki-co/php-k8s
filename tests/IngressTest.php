@@ -38,7 +38,7 @@ class IngressTest extends TestCase
 
     public function test_ingress_build()
     {
-        $ing = $cluster->ingress()
+        $ing = $this->cluster->ingress()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setRules(self::$rules);

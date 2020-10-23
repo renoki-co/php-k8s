@@ -11,13 +11,13 @@ class PersistentVolumeClaimTest extends TestCase
 {
     public function test_persistent_volume_claim_build()
     {
-        $gp2 = $cluster->storageClass()
+        $gp2 = $this->cluster->storageClass()
             ->setName('gp2')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'gp2'])
             ->setMountOptions(['debug']);
 
-        $pvc = $cluster->persistentVolumeClaim()
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('app-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
@@ -43,7 +43,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runCreationTests()
     {
-        $gp2 = $cluster->storageClass()
+        $gp2 = $this->cluster->storageClass()
             ->setName('gp2')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'gp2']);

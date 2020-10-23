@@ -11,7 +11,7 @@ class ConfigMapTest extends TestCase
 {
     public function test_config_map_build()
     {
-        $cm = $cluster->configmap()
+        $cm = $this->cluster->configmap()
             ->setName('settings')
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')

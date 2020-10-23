@@ -12,18 +12,18 @@ class DeploymentTest extends TestCase
 {
     public function test_deployment_build()
     {
-        $mysql = $cluster->container()
+        $mysql = $this->cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ]);
 
-        $pod = $cluster->pod()
+        $pod = $this->cluster->pod()
             ->setName('mysql')
             ->setContainers([$mysql]);
 
-        $dep = $cluster->deployment()
+        $dep = $this->cluster->deployment()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -53,7 +53,7 @@ class DeploymentTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = $cluster->container()
+        $mysql = $this->cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([

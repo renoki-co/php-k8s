@@ -11,7 +11,7 @@ class NamespaceTest extends TestCase
 {
     public function test_namespace_build()
     {
-        $ns = $cluster->namespace()
+        $ns = $this->cluster->namespace()
             ->setName('production');
 
         $this->assertEquals('v1', $ns->getApiVersion());

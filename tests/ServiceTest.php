@@ -11,7 +11,7 @@ class ServiceTest extends TestCase
 {
     public function test_service_build()
     {
-        $svc = $cluster->service()
+        $svc = $this->cluster->service()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])

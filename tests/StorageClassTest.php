@@ -11,7 +11,7 @@ class StorageClassTest extends TestCase
 {
     public function test_storage_class_build()
     {
-        $sc = $cluster->storageClass()
+        $sc = $this->cluster->storageClass()
             ->setName('io1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => 10])

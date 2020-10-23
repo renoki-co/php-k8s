@@ -13,7 +13,7 @@ class PodTest extends TestCase
 {
     public function test_pod_build()
     {
-        $mysql = $cluster->container()
+        $mysql = $this->cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -25,12 +25,12 @@ class PodTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $busybox = $cluster->container()
+        $busybox = $this->cluster->container()
             ->setName('busybox')
             ->setImage('busybox')
             ->setCommand(['/bin/sh']);
 
-        $pod = $cluster->pod()
+        $pod = $this->cluster->pod()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -68,7 +68,7 @@ class PodTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = $cluster->container()
+        $mysql = $this->cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -80,7 +80,7 @@ class PodTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $busybox = $cluster->container()
+        $busybox = $this->cluster->container()
             ->setName('busybox')
             ->setImage('busybox')
             ->setCommand(['/bin/sh']);

@@ -13,30 +13,30 @@ class StatefulSetTest extends TestCase
 {
     public function test_stateful_set_build()
     {
-        $mysql = $cluster->container()
+        $mysql = $this->cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ]);
 
-        $pod = $cluster->pod()
+        $pod = $this->cluster->pod()
             ->setName('mysql')
             ->setContainers([$mysql]);
 
-        $svc = $cluster->service()
+        $svc = $this->cluster->service()
             ->setName('mysql')
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ]);
 
-        $pvc = $cluster->persistentVolumeClaim()
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass('gp2');
 
-        $sts = $cluster->statefulSet()
+        $sts = $this->cluster->statefulSet()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -71,7 +71,7 @@ class StatefulSetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = $cluster->container()
+        $mysql = $this->cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -96,7 +96,7 @@ class StatefulSetTest extends TestCase
             ])
             ->create();
 
-        $pvc = $cluster->persistentVolumeClaim()
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])

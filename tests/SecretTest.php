@@ -11,7 +11,7 @@ class SecretTest extends TestCase
 {
     public function test_secret_build()
     {
-        $secret = $cluster->secret()
+        $secret = $this->cluster->secret()
             ->setName('passwords')
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')

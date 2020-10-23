@@ -11,13 +11,13 @@ class PersistentVolumeTest extends TestCase
 {
     public function test_persistent_volume_build()
     {
-        $sc = $cluster->storageClass()
+        $sc = $this->cluster->storageClass()
             ->setName('sc1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'sc1'])
             ->setMountOptions(['debug']);
 
-        $pv = $cluster->persistentVolume()
+        $pv = $this->cluster->persistentVolume()
             ->setName('app')
             ->setSource('awsElasticBlockStore', ['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'])
             ->setCapacity(1, 'Gi')
@@ -47,7 +47,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runCreationTests()
     {
-        $sc = $cluster->storageClass()
+        $sc = $this->cluster->storageClass()
             ->setName('sc1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'sc1'])
