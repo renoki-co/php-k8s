@@ -2,8 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\K8s;
-
 class YamlTest extends TestCase
 {
     public function test_yaml_import_multiple_kinds_in_same_file()

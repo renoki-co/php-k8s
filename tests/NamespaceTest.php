@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 use RenokiCo\PhpK8s\ResourcesList;
 
