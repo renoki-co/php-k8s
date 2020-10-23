@@ -13,7 +13,7 @@ class PodTest extends TestCase
 {
     public function test_pod_build()
     {
-        $mysql = $this->cluster->container()
+        $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -25,7 +25,7 @@ class PodTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $busybox = $this->cluster->container()
+        $busybox = K8s::container()
             ->setName('busybox')
             ->setImage('busybox')
             ->setCommand(['/bin/sh']);
@@ -68,7 +68,7 @@ class PodTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = $this->cluster->container()
+        $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -80,7 +80,7 @@ class PodTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $busybox = $this->cluster->container()
+        $busybox = K8s::container()
             ->setName('busybox')
             ->setImage('busybox')
             ->setCommand(['/bin/sh']);

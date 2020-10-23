@@ -13,7 +13,7 @@ class StatefulSetTest extends TestCase
 {
     public function test_stateful_set_build()
     {
-        $mysql = $this->cluster->container()
+        $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -71,7 +71,7 @@ class StatefulSetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = $this->cluster->container()
+        $mysql = K8s::container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([

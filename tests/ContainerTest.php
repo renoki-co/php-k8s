@@ -8,7 +8,7 @@ class ContainerTest extends TestCase
 {
     public function test_container_build()
     {
-        $container = $this->cluster->container();
+        $container = K8s::container();
 
         $container->setImage('nginx', '1.4')
             ->setEnv(['key' => 'value'])

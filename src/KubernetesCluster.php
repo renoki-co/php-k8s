@@ -342,8 +342,6 @@ class KubernetesCluster
      */
     public function __call($method, $parameters)
     {
-        $parameters = array_merge([$this], $parameters);
-
-        return K8s::{$method}(...$parameters);
+        return K8s::{$method}($this, ...$parameters);
     }
 }
