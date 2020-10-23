@@ -12,18 +12,18 @@ class DeploymentTest extends TestCase
 {
     public function test_deployment_build()
     {
-        $mysql = K8s::container()
+        $mysql = $cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ]);
 
-        $pod = K8s::pod()
+        $pod = $cluster->pod()
             ->setName('mysql')
             ->setContainers([$mysql]);
 
-        $dep = K8s::deployment()
+        $dep = $cluster->deployment()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -53,7 +53,7 @@ class DeploymentTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
+        $mysql = $cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -65,15 +65,13 @@ class DeploymentTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
             ->setContainers([$mysql]);
 
-        $dep = K8s::deployment()
-            ->onCluster($this->cluster)
+        $dep = $this->cluster->deployment()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -104,8 +102,7 @@ class DeploymentTest extends TestCase
 
     public function runGetAllTests()
     {
-        $deployments = K8s::deployment()
-            ->onCluster($this->cluster)
+        $deployments = $this->cluster->deployment()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $deployments);
@@ -119,8 +116,7 @@ class DeploymentTest extends TestCase
 
     public function runGetTests()
     {
-        $dep = K8s::deployment()
-            ->onCluster($this->cluster)
+        $dep = $this->cluster->deployment()
             ->whereName('mysql')
             ->get();
 
@@ -139,8 +135,7 @@ class DeploymentTest extends TestCase
 
     public function runUpdateTests()
     {
-        $dep = K8s::deployment()
-            ->onCluster($this->cluster)
+        $dep = $this->cluster->deployment()
             ->whereName('mysql')
             ->get();
 
@@ -163,8 +158,7 @@ class DeploymentTest extends TestCase
 
     public function runDeletionTests()
     {
-        $dep = K8s::deployment()
-            ->onCluster($this->cluster)
+        $dep = $this->cluster->deployment()
             ->whereName('mysql')
             ->get();
 
@@ -174,16 +168,14 @@ class DeploymentTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = K8s::deployment()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->deployment()
             ->whereName('mysql')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::deployment()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->deployment()
             ->watchAll(function ($type, $dep) {
                 if ($dep->getName() === 'mysql') {
                     return true;
@@ -195,8 +187,7 @@ class DeploymentTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::deployment()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->deployment()
             ->whereName('mysql')
             ->watch(function ($type, $dep) {
                 return $dep->getName() === 'mysql';

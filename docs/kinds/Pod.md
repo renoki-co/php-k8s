@@ -9,7 +9,7 @@
 The Container case lets you define the settings per-container in an easy manner:
 
 ```php
-$container = K8s::container();
+$container = $cluster->container();
 
 $container
     ->setName('mysql')
@@ -26,7 +26,7 @@ $container
 Later on, you can attach the `Container` classes directly to the `K8sPod` instance:
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->setName('mysql')
     ->setSelectors(['app' => 'db'])
     ->setContainers([$mysql])
@@ -51,28 +51,28 @@ $pod->setLabels([
 While the Pod kind has `spec`, you can avoid writing this:
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->setAttribute('spec.nodeSelector', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->setSpec('nodeSelector', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->whereName('mysql')
     ->get();
 

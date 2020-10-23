@@ -11,7 +11,7 @@ class SecretTest extends TestCase
 {
     public function test_secret_build()
     {
-        $secret = K8s::secret()
+        $secret = $cluster->secret()
             ->setName('passwords')
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
@@ -36,8 +36,7 @@ class SecretTest extends TestCase
 
     public function runCreationTests()
     {
-        $secret = K8s::secret()
-            ->onCluster($this->cluster)
+        $secret = $this->cluster->secret()
             ->setName('passwords')
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
@@ -59,8 +58,7 @@ class SecretTest extends TestCase
 
     public function runGetAllTests()
     {
-        $secrets = K8s::secret()
-            ->onCluster($this->cluster)
+        $secrets = $this->cluster->secret()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $secrets);
@@ -74,8 +72,7 @@ class SecretTest extends TestCase
 
     public function runGetTests()
     {
-        $secret = K8s::secret()
-            ->onCluster($this->cluster)
+        $secret = $this->cluster->secret()
             ->whereName('passwords')
             ->get();
 
@@ -91,8 +88,7 @@ class SecretTest extends TestCase
 
     public function runUpdateTests()
     {
-        $secret = K8s::secret()
-            ->onCluster($this->cluster)
+        $secret = $this->cluster->secret()
             ->whereName('passwords')
             ->get();
 
@@ -114,8 +110,7 @@ class SecretTest extends TestCase
 
     public function runDeletionTests()
     {
-        $secret = K8s::secret()
-            ->onCluster($this->cluster)
+        $secret = $this->cluster->secret()
             ->whereName('passwords')
             ->get();
 
@@ -123,16 +118,14 @@ class SecretTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $secret = K8s::secret()
-            ->onCluster($this->cluster)
+        $secret = $this->cluster->secret()
             ->whereName('passwords')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::secret()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->secret()
             ->watchAll(function ($type, $secret) {
                 if ($secret->getName() === 'passwords') {
                     return true;
@@ -144,8 +137,7 @@ class SecretTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::secret()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->secret()
             ->whereName('passwords')
             ->watch(function ($type, $secret) {
                 return $secret->getName() === 'passwords';

@@ -38,7 +38,7 @@ class IngressTest extends TestCase
 
     public function test_ingress_build()
     {
-        $ing = K8s::ingress()
+        $ing = $cluster->ingress()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setRules(self::$rules);
@@ -62,8 +62,7 @@ class IngressTest extends TestCase
 
     public function runCreationTests()
     {
-        $ing = K8s::ingress()
-            ->onCluster($this->cluster)
+        $ing = $this->cluster->ingress()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setRules(self::$rules);
@@ -84,8 +83,7 @@ class IngressTest extends TestCase
 
     public function runGetAllTests()
     {
-        $ingresss = K8s::ingress()
-            ->onCluster($this->cluster)
+        $ingresss = $this->cluster->ingress()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $ingresss);
@@ -99,8 +97,7 @@ class IngressTest extends TestCase
 
     public function runGetTests()
     {
-        $ing = K8s::ingress()
-            ->onCluster($this->cluster)
+        $ing = $this->cluster->ingress()
             ->whereName('nginx')
             ->get();
 
@@ -116,8 +113,7 @@ class IngressTest extends TestCase
 
     public function runUpdateTests()
     {
-        $ing = K8s::ingress()
-            ->onCluster($this->cluster)
+        $ing = $this->cluster->ingress()
             ->whereName('nginx')
             ->get();
 
@@ -137,8 +133,7 @@ class IngressTest extends TestCase
 
     public function runDeletionTests()
     {
-        $ingress = K8s::ingress()
-            ->onCluster($this->cluster)
+        $ingress = $this->cluster->ingress()
             ->whereName('nginx')
             ->get();
 
@@ -146,16 +141,14 @@ class IngressTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $ingress = K8s::ingress()
-            ->onCluster($this->cluster)
+        $ingress = $this->cluster->ingress()
             ->whereName('nginx')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::ingress()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->ingress()
             ->watchAll(function ($type, $ingress) {
                 if ($ingress->getName() === 'nginx') {
                     return true;
@@ -167,8 +160,7 @@ class IngressTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::ingress()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->ingress()
             ->whereName('nginx')
             ->watch(function ($type, $ingress) {
                 return $ingress->getName() === 'nginx';

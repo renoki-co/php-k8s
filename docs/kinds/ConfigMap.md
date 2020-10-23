@@ -7,7 +7,7 @@
 ### Config Map creation
 
 ```php
-$cm = K8s::configmap($cluster)
+$cm = $cluster->configmap()
     ->setName('certificates')
     ->setData([
         'key.pem' => '...',
@@ -23,7 +23,7 @@ $
 ### Data Retrieval
 
 ```php
-$cm = K8s::configmap($cluster)
+$cm = $cluster->configmap()
     ->whereName('certificates')
     ->get();
 
@@ -35,7 +35,7 @@ $key = $data['key.pem'];
 ### Removing an attribute from data
 
 ```php
-$cm = K8s::configmap($cluster)
+$cm = $cluster->configmap()
     ->whereName('certificates')
     ->get();
 

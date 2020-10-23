@@ -7,7 +7,7 @@
 ### PV Creation
 
 ```php
-$pv = K8s::persistentVolume($cluster)
+$pv = $cluster->persistentVolume()
     ->setName('disk-1')
     ->setSelectors(['matchLabels' => ['app' => 'bigdata'])
     ->setSource('awsElasticBlockStore', [
@@ -23,7 +23,7 @@ $pv = K8s::persistentVolume($cluster)
 You can pass the storage class as a `RenokiCo\PhpK8s\Kinds\K8sStorageClass` instance:
 
 ```php
-$sc = K8s::storageClass()
+$sc = $cluster->storageClass()
     ->setName('sc1')
     ->setProvisioner('csi.aws.amazon.com')
     ->setParameters(['type' => 'sc1'])
@@ -35,28 +35,28 @@ $pv->setStorageClass($sc);
 While the PersistentVolume kind has `spec`, you can avoid writing this:
 
 ```php
-$pv = K8s::persistentVolume($cluster)
+$pv = $cluster->persistentVolume()
     ->setAttribute('spec.capacity.storage', '10Gi');
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$pv = K8s::persistentVolume($cluster)
+$pv = $cluster->persistentVolume()
     ->setSpec('capacity.storage', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$pv = K8s::persistentVolume($cluster)
+$pv = $cluster->persistentVolume()
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$pv = K8s::persistentVolume($cluster)
+$pv = $cluster->persistentVolume()
     ->whereName('disk-1')
     ->get();
 

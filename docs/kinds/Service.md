@@ -7,7 +7,7 @@
 ### Service Creation
 
 ```php
-$svc = K8s::service($cluster)
+$svc = $cluster->service()
     ->setName('nginx')
     ->setSelectors(['app' => 'frontend'])
     ->setPorts([
@@ -26,28 +26,28 @@ $svc->setAnnotations([
 While the Service kind has `spec`, you can avoid writing this:
 
 ```php
-$svc = K8s::service($cluster)
+$svc = $cluster->service()
     ->setAttribute('spec.ports', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$svc = K8s::service($cluster)
+$svc = $cluster->service()
     ->setSpec('ports', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$svc = K8s::service($cluster)
+$svc = $cluster->service()
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$svc = K8s::service($cluster)
+$svc = $cluster->service()
     ->whereName('nginx')
     ->get();
 

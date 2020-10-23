@@ -7,7 +7,7 @@
 ### Namespace creation
 
 ```php
-$ns = K8s::namespace($cluster)
+$ns = $cluster->namespace()
     ->setName('staging')
     ->create();
 ```
@@ -15,7 +15,7 @@ $ns = K8s::namespace($cluster)
 ### Namespace retrieval
 
 ```php
-$ns = K8s::namespace($cluster)
+$ns = $cluster->namespace()
     ->whereName('staging')
     ->get();
 ```

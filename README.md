@@ -58,7 +58,7 @@ use RenokiCo\PhpK8s\KubernetesCluster;
 $cluster = new KubernetesCluster('http://127.0.0.1', 8080);
 
 // Create a new NGINX service.
-$svc = K8s::service($cluster)
+$svc = $cluster->service()
     ->setName('nginx')
     ->setNamespace('frontend')
     ->setSelectors(['app' => 'frontend'])
@@ -78,12 +78,10 @@ Each existent resource has its own documentation, filled with examples.
 
 Each kind has its own class from which you can build it and then create, update, replace or delete them.
 
-In order to sync it with the cluster, you have to call the `->onCluster(...)` method, passing the instance of KubernetesCluster as the connection.
-
 Alternatively, you can pass the cluster connection as the first parameter to the `K8s` class:
 
 ```php
-$ns = K8s::namespace($cluster)
+$ns = $cluster->namespace()
     ->setName('staging');
 ```
 
@@ -92,7 +90,7 @@ $ns = K8s::namespace($cluster)
 Getting all resources can be done by calling `->all()`:
 
 ```php
-$namespaces = K8s::namespace($cluster)->all();
+$namespaces = $cluster->namespace()->all();
 ```
 
 The result is an `RenokiCo\PhpK8s\ResourcesList` instance.
@@ -102,7 +100,7 @@ The class is extending the default `\Illuminate\Support\Collection`, on which yo
 Getting resources can be filtered if needed:
 
 ```php
-$stagingServices = K8s::service($cluster)
+$stagingServices = $cluster->service()
     ->whereNamespace('staging')
     ->all();
 ```
@@ -111,7 +109,7 @@ Getting only one resource is done by calling `->get()`:
 
 ```php
 $stagingNginxService =
-    K8s::service($cluster)
+    $cluster->service()
         ->whereNamespace('staging')
         ->whereName('nginx')
         ->get();
@@ -126,7 +124,7 @@ By default, the namespace is `default` and can be missed from the filters.
 Calling the `->create()` method after building your Kind will sync it to the Cluster:
 
 ```php
-$ns = K8s::namespace()
+$ns = $cluster->namespace()
     ->setName('staging')
     ->create();
 
@@ -140,7 +138,7 @@ to update your resource since you have to retrieve it first (thus getting a sync
 triggering the update.
 
 ```php
-$ns = K8s::configmap($cluster)
+$ns = $cluster->configmap()
     ->whereName('env')
     ->get();
 
@@ -154,7 +152,7 @@ $ns->update();
 You will have to simply call `->delete()` on the resource, after you retrieve it.
 
 ```php
-$cm = K8s::configmap($cluster)
+$cm = $cluster->configmap()
     ->whereName('settings')
     ->get();
 
@@ -182,7 +180,7 @@ You can watch the resource directly from the Resource class, and check & process
 ### Tracking one resource
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->whereName('mysql')
     ->get();
 
@@ -196,7 +194,7 @@ $pod->watch(function ($type, $pod) {
 Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
 
 ```php
-$pod = K8s::pod($cluster)
+$pod = $cluster->pod()
     ->whereName('mysql')
     ->get();
 
@@ -215,7 +213,7 @@ This time, you do not need to call any filter or retrieval, because there is not
 
 ```php
 // Create just a new K8sPod instance.
-$pods = K8s::pod($cluster);
+$pods = $cluster->pod();
 
 $success = $pods->watchAll(function ($type, $pod) {
     if ($pod->getName() === 'nginx') {

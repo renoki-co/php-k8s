@@ -13,7 +13,7 @@ class PodTest extends TestCase
 {
     public function test_pod_build()
     {
-        $mysql = K8s::container()
+        $mysql = $cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -25,12 +25,12 @@ class PodTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $busybox = K8s::container()
+        $busybox = $cluster->container()
             ->setName('busybox')
             ->setImage('busybox')
             ->setCommand(['/bin/sh']);
 
-        $pod = K8s::pod()
+        $pod = $cluster->pod()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -68,7 +68,7 @@ class PodTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
+        $mysql = $cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -80,13 +80,12 @@ class PodTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $busybox = K8s::container()
+        $busybox = $cluster->container()
             ->setName('busybox')
             ->setImage('busybox')
             ->setCommand(['/bin/sh']);
 
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -112,8 +111,7 @@ class PodTest extends TestCase
 
     public function runGetAllTests()
     {
-        $pods = K8s::pod()
-            ->onCluster($this->cluster)
+        $pods = $this->cluster->pod()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $pods);
@@ -127,8 +125,7 @@ class PodTest extends TestCase
 
     public function runGetTests()
     {
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->whereName('mysql')
             ->get();
 
@@ -144,8 +141,7 @@ class PodTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->whereName('mysql')
             ->get();
 
@@ -166,8 +162,7 @@ class PodTest extends TestCase
 
     public function runDeletionTests()
     {
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->whereName('mysql')
             ->get();
 
@@ -177,16 +172,14 @@ class PodTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->whereName('mysql')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::pod()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->pod()
             ->watchAll(function ($type, $pod) {
                 if ($pod->getName() === 'mysql') {
                     return true;
@@ -198,8 +191,7 @@ class PodTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::pod()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->pod()
             ->whereName('mysql')
             ->watch(function ($type, $pod) {
                 return $pod->getName() === 'mysql';
@@ -210,8 +202,7 @@ class PodTest extends TestCase
 
     public function runWatchLogsTests()
     {
-        K8s::pod()
-            ->onCluster($this->cluster)
+        $this->cluster->pod()
             ->whereName('mysql')
             ->watchLogs(function ($data) {
                 // Debugging data to CI. :D
@@ -225,8 +216,7 @@ class PodTest extends TestCase
 
     public function runGetLogsTests()
     {
-        $logs = K8s::pod()
-            ->onCluster($this->cluster)
+        $logs = $this->cluster->pod()
             ->whereName('mysql')
             ->logs();
 

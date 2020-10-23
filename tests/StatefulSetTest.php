@@ -13,30 +13,30 @@ class StatefulSetTest extends TestCase
 {
     public function test_stateful_set_build()
     {
-        $mysql = K8s::container()
+        $mysql = $cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ]);
 
-        $pod = K8s::pod()
+        $pod = $cluster->pod()
             ->setName('mysql')
             ->setContainers([$mysql]);
 
-        $svc = K8s::service()
+        $svc = $cluster->service()
             ->setName('mysql')
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ]);
 
-        $pvc = K8s::persistentVolumeClaim()
+        $pvc = $cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass('gp2');
 
-        $sts = K8s::statefulSet()
+        $sts = $cluster->statefulSet()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -71,7 +71,7 @@ class StatefulSetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
+        $mysql = $cluster->container()
             ->setName('mysql')
             ->setImage('mysql', '5.7')
             ->setPorts([
@@ -83,29 +83,26 @@ class StatefulSetTest extends TestCase
                 'value' => 'test',
             ]]);
 
-        $pod = K8s::pod()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->pod()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
             ->setContainers([$mysql]);
 
-        $svc = K8s::service()
-            ->onCluster($this->cluster)
+        $svc = $this->cluster->service()
             ->setName('mysql')
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ])
             ->create();
 
-        $pvc = K8s::persistentVolumeClaim()
+        $pvc = $cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass('gp2');
 
-        $sts = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $sts = $this->cluster->statefulSet()
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
@@ -141,8 +138,7 @@ class StatefulSetTest extends TestCase
 
     public function runGetAllTests()
     {
-        $statefulsets = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $statefulsets = $this->cluster->statefulSet()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $statefulsets);
@@ -156,8 +152,7 @@ class StatefulSetTest extends TestCase
 
     public function runGetTests()
     {
-        $sts = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $sts = $this->cluster->statefulSet()
             ->whereName('mysql')
             ->get();
 
@@ -177,8 +172,7 @@ class StatefulSetTest extends TestCase
 
     public function runUpdateTests()
     {
-        $sts = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $sts = $this->cluster->statefulSet()
             ->whereName('mysql')
             ->get();
 
@@ -202,8 +196,7 @@ class StatefulSetTest extends TestCase
 
     public function runDeletionTests()
     {
-        $sts = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $sts = $this->cluster->statefulSet()
             ->whereName('mysql')
             ->get();
 
@@ -213,16 +206,14 @@ class StatefulSetTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $pod = $this->cluster->statefulSet()
             ->whereName('mysql')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->statefulSet()
             ->watchAll(function ($type, $sts) {
                 if ($sts->getName() === 'mysql') {
                     return true;
@@ -234,8 +225,7 @@ class StatefulSetTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::statefulSet()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->statefulSet()
             ->whereName('mysql')
             ->watch(function ($type, $sts) {
                 return $sts->getName() === 'mysql';

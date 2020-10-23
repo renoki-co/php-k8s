@@ -332,4 +332,18 @@ class KubernetesCluster
             $this->kubernetesVersion, $kubernetesVersion
         );
     }
+
+    /**
+     * Proxy the custom method to the K8s class.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        $parameters = array_merge([$this], $parameters);
+
+        return K8s::{$method}(...$parameters);
+    }
 }

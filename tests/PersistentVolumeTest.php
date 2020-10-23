@@ -11,13 +11,13 @@ class PersistentVolumeTest extends TestCase
 {
     public function test_persistent_volume_build()
     {
-        $sc = K8s::storageClass()
+        $sc = $cluster->storageClass()
             ->setName('sc1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'sc1'])
             ->setMountOptions(['debug']);
 
-        $pv = K8s::persistentVolume()
+        $pv = $cluster->persistentVolume()
             ->setName('app')
             ->setSource('awsElasticBlockStore', ['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'])
             ->setCapacity(1, 'Gi')
@@ -47,14 +47,13 @@ class PersistentVolumeTest extends TestCase
 
     public function runCreationTests()
     {
-        $sc = K8s::storageClass()
+        $sc = $cluster->storageClass()
             ->setName('sc1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'sc1'])
             ->setMountOptions(['debug']);
 
-        $pv = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $pv = $this->cluster->persistentVolume()
             ->setName('app')
             ->setSource('awsElasticBlockStore', ['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'])
             ->setCapacity(1, 'Gi')
@@ -81,8 +80,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runGetAllTests()
     {
-        $pvs = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $pvs = $this->cluster->persistentVolume()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $pvs);
@@ -96,8 +94,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runGetTests()
     {
-        $pv = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $pv = $this->cluster->persistentVolume()
             ->whereName('app')
             ->get();
 
@@ -116,8 +113,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pv = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $pv = $this->cluster->persistentVolume()
             ->whereName('app')
             ->get();
 
@@ -140,8 +136,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runDeletionTests()
     {
-        $pv = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $pv = $this->cluster->persistentVolume()
             ->whereName('app')
             ->get();
 
@@ -151,16 +146,14 @@ class PersistentVolumeTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pv = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $pv = $this->cluster->persistentVolume()
             ->whereName('app')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->persistentVolume()
             ->watchAll(function ($type, $pv) {
                 if ($pv->getName() === 'app') {
                     return true;
@@ -172,8 +165,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::persistentVolume()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->persistentVolume()
             ->whereName('app')
             ->watch(function ($type, $pv) {
                 return $pv->getName() === 'app';

@@ -9,7 +9,7 @@
 Passing `->setData()` without a second parameter will automatically encode each field for you:
 
 ```php
-$secret = K8s::secret($cluster)
+$secret = $cluster->secret()
     ->setName('certificates')
     ->setData([
         'key.pem' => '...',
@@ -31,7 +31,7 @@ $secret->setData([
 Data retrieval by default returns base64-encoded data:
 
 ```php
-$secret = K8s::secret($cluster)
+$secret = $cluster->secret()
     ->whereName('certificates')
     ->get();
 
@@ -51,7 +51,7 @@ $key = $data['key.pem'] // '...'
 ### Removing an attribute from data
 
 ```php
-$secret = K8s::secret($cluster)
+$secret = $cluster->secret()
     ->whereName('certificates')
     ->get();
 

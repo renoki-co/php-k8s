@@ -7,7 +7,7 @@
 ### Service Creation
 
 ```php
-$ingress = K8s::ingress($cluster)
+$ingress = $cluster->ingress()
     ->setName('nginx')
     ->setSelectors(['app' => 'frontend'])
     ->setRules([
@@ -34,21 +34,21 @@ $ingress->setAnnotations([
 While the Ingress kind has `spec`, you can avoid writing this:
 
 ```php
-$ingress = K8s::ingress($cluster)
+$ingress = $cluster->ingress()
     ->setAttribute('spec.rules', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$ingress = K8s::ingress($cluster)
+$ingress = $cluster->ingress()
     ->setSpec('rules', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$ingress = K8s::ingress($cluster)
+$ingress = $cluster->ingress()
     ->setSpec('some.nested.path', [...]);
 ```
 
@@ -56,7 +56,7 @@ $ingress = K8s::ingress($cluster)
 ### Retrieval
 
 ```php
-$ingress = K8s::ingress($cluster)
+$ingress = $cluster->ingress()
     ->whereName('nginx')
     ->get();
 

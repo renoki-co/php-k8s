@@ -11,7 +11,7 @@ class ServiceTest extends TestCase
 {
     public function test_service_build()
     {
-        $svc = K8s::service()
+        $svc = $cluster->service()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])
@@ -41,8 +41,7 @@ class ServiceTest extends TestCase
 
     public function runCreationTests()
     {
-        $svc = K8s::service()
-            ->onCluster($this->cluster)
+        $svc = $this->cluster->service()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])
@@ -69,8 +68,7 @@ class ServiceTest extends TestCase
 
     public function runGetAllTests()
     {
-        $services = K8s::service()
-            ->onCluster($this->cluster)
+        $services = $this->cluster->service()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $services);
@@ -84,8 +82,7 @@ class ServiceTest extends TestCase
 
     public function runGetTests()
     {
-        $svc = K8s::service()
-            ->onCluster($this->cluster)
+        $svc = $this->cluster->service()
             ->whereName('nginx')
             ->get();
 
@@ -104,8 +101,7 @@ class ServiceTest extends TestCase
 
     public function runUpdateTests()
     {
-        $svc = K8s::service()
-            ->onCluster($this->cluster)
+        $svc = $this->cluster->service()
             ->whereName('nginx')
             ->get();
 
@@ -128,8 +124,7 @@ class ServiceTest extends TestCase
 
     public function runDeletionTests()
     {
-        $service = K8s::service()
-            ->onCluster($this->cluster)
+        $service = $this->cluster->service()
             ->whereName('nginx')
             ->get();
 
@@ -137,16 +132,14 @@ class ServiceTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $service = K8s::secret()
-            ->onCluster($this->cluster)
+        $service = $this->cluster->secret()
             ->whereName('nginx')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::service()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->service()
             ->watchAll(function ($type, $service) {
                 if ($service->getName() === 'nginx') {
                     return true;
@@ -158,8 +151,7 @@ class ServiceTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::service()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->service()
             ->whereName('nginx')
             ->watch(function ($type, $service) {
                 return $service->getName() === 'nginx';

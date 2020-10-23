@@ -11,13 +11,13 @@ class PersistentVolumeClaimTest extends TestCase
 {
     public function test_persistent_volume_claim_build()
     {
-        $gp2 = K8s::storageClass()
+        $gp2 = $cluster->storageClass()
             ->setName('gp2')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'gp2'])
             ->setMountOptions(['debug']);
 
-        $pvc = K8s::persistentVolumeClaim()
+        $pvc = $cluster->persistentVolumeClaim()
             ->setName('app-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
@@ -43,13 +43,12 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runCreationTests()
     {
-        $gp2 = K8s::storageClass()
+        $gp2 = $cluster->storageClass()
             ->setName('gp2')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'gp2']);
 
-        $pvc = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('app-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
@@ -72,8 +71,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runGetAllTests()
     {
-        $pvcs = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $pvcs = $this->cluster->persistentVolumeClaim()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $pvcs);
@@ -87,8 +85,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runGetTests()
     {
-        $pvc = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->whereName('app-pvc')
             ->get();
 
@@ -105,8 +102,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pvc = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->whereName('app-pvc')
             ->get();
 
@@ -125,8 +121,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runDeletionTests()
     {
-        $pvc = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->whereName('app-pvc')
             ->get();
 
@@ -136,16 +131,14 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pvc = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $pvc = $this->cluster->persistentVolumeClaim()
             ->whereName('app-pvc')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->persistentVolumeClaim()
             ->watchAll(function ($type, $pvc) {
                 if ($pvc->getName() === 'app-pvc') {
                     return true;
@@ -157,8 +150,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::persistentVolumeClaim()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->persistentVolumeClaim()
             ->whereName('app-pvc')
             ->watch(function ($type, $pvc) {
                 return $pvc->getName() === 'app-pvc';

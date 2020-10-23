@@ -11,7 +11,7 @@ class StorageClassTest extends TestCase
 {
     public function test_storage_class_build()
     {
-        $sc = K8s::storageClass()
+        $sc = $cluster->storageClass()
             ->setName('io1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => 10])
@@ -37,8 +37,7 @@ class StorageClassTest extends TestCase
 
     public function runCreationTests()
     {
-        $sc = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $sc = $this->cluster->storageClass()
             ->setName('io1')
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => '10'])
@@ -61,8 +60,7 @@ class StorageClassTest extends TestCase
 
     public function runGetAllTests()
     {
-        $storageClasses = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $storageClasses = $this->cluster->storageClass()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $storageClasses);
@@ -76,8 +74,7 @@ class StorageClassTest extends TestCase
 
     public function runGetTests()
     {
-        $sc = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $sc = $this->cluster->storageClass()
             ->whereName('io1')
             ->get();
 
@@ -94,8 +91,7 @@ class StorageClassTest extends TestCase
 
     public function runUpdateTests()
     {
-        $sc = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $sc = $this->cluster->storageClass()
             ->whereName('io1')
             ->get();
 
@@ -116,8 +112,7 @@ class StorageClassTest extends TestCase
 
     public function runDeletionTests()
     {
-        $sc = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $sc = $this->cluster->storageClass()
             ->whereName('io1')
             ->get();
 
@@ -125,16 +120,14 @@ class StorageClassTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $sc = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $sc = $this->cluster->storageClass()
             ->whereName('io1')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->storageClass()
             ->watchAll(function ($type, $sc) {
                 if ($sc->getName() === 'io1') {
                     return true;
@@ -146,8 +139,7 @@ class StorageClassTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::storageClass()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->storageClass()
             ->whereName('io1')
             ->watch(function ($type, $sc) {
                 return $sc->getName() === 'io1';

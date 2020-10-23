@@ -11,7 +11,7 @@ class ConfigMapTest extends TestCase
 {
     public function test_config_map_build()
     {
-        $cm = K8s::configmap()
+        $cm = $cluster->configmap()
             ->setName('settings')
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
@@ -35,8 +35,7 @@ class ConfigMapTest extends TestCase
 
     public function runCreationTests()
     {
-        $cm = K8s::configmap()
-            ->onCluster($this->cluster)
+        $cm = $this->cluster->configmap()
             ->setName('settings')
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
@@ -58,8 +57,7 @@ class ConfigMapTest extends TestCase
 
     public function runGetAllTests()
     {
-        $configmaps = K8s::configmap()
-            ->onCluster($this->cluster)
+        $configmaps = $this->cluster->configmap()
             ->all();
 
         $this->assertInstanceOf(ResourcesList::class, $configmaps);
@@ -73,8 +71,7 @@ class ConfigMapTest extends TestCase
 
     public function runGetTests()
     {
-        $cm = K8s::configmap()
-            ->onCluster($this->cluster)
+        $cm = $this->cluster->configmap()
             ->whereName('settings')
             ->get();
 
@@ -90,8 +87,7 @@ class ConfigMapTest extends TestCase
 
     public function runUpdateTests()
     {
-        $cm = K8s::configmap()
-            ->onCluster($this->cluster)
+        $cm = $this->cluster->configmap()
             ->whereName('settings')
             ->get();
 
@@ -113,8 +109,7 @@ class ConfigMapTest extends TestCase
 
     public function runDeletionTests()
     {
-        $cm = K8s::configmap()
-            ->onCluster($this->cluster)
+        $cm = $this->cluster->configmap()
             ->whereName('settings')
             ->get();
 
@@ -122,16 +117,14 @@ class ConfigMapTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $cm = K8s::configmap()
-            ->onCluster($this->cluster)
+        $cm = $this->cluster->configmap()
             ->whereName('settings')
             ->get();
     }
 
     public function runWatchAllTests()
     {
-        $watch = K8s::configmap()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->configmap()
             ->watchAll(function ($type, $configmap) {
                 if ($configmap->getName() === 'settings') {
                     return true;
@@ -143,8 +136,7 @@ class ConfigMapTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = K8s::configmap()
-            ->onCluster($this->cluster)
+        $watch = $this->cluster->configmap()
             ->whereName('settings')
             ->watch(function ($type, $configmap) {
                 return $configmap->getName() === 'settings';

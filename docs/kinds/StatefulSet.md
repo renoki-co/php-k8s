@@ -9,7 +9,7 @@
 Statefulsets are just configurations that relies on a Pod. So before diving in, make sure you read the [Pod Documentation](Pod.md)
 
 ```php
-$container = K8s::container();
+$container = $cluster->container();
 
 $container
     ->setName('mysql')
@@ -18,24 +18,23 @@ $container
         ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
     ]);
 
-$pod = K8s::pod()
+$pod = $cluster->pod()
     ->setName('mysql')
     ->setLabels(['tier' => 'backend'])
     ->setContainers([$mysql]);
 
-$svc = K8s::service()
+$svc = $cluster->service()
     ->setName('mysql')
     ->setPorts([
         ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
     ]);
 
-$pvc = K8s::persistentVolumeClaim()
+$pvc = $cluster->persistentVolumeClaim()
     ->setName('mysql-pvc')
     ->setCapacity(1, 'Gi')
     ->setAccessModes(['ReadWriteOnce']);
 
-$sts = K8s::statefulSet()
-    ->onCluster($this->cluster)
+$sts = $cluster->statefulSet()
     ->setName('mysql')
     ->setSelectors(['matchLabels' => ['tier' => 'backend']])
     ->setReplicas(1)
@@ -61,28 +60,28 @@ $sts->setLabels([
 While the Statefulset kind has `spec`, you can avoid writing this:
 
 ```php
-$sts = K8s::statefulSet($cluster)
+$sts = $cluster->statefulSet()
     ->setAttribute('spec.template', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$sts = K8s::statefulSet($cluster)
+$sts = $cluster->statefulSet()
     ->setSpec('template', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$sts = K8s::statefulSet($cluster)
+$sts = $cluster->statefulSet()
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$sts = K8s::statefulSet($cluster)
+$sts = $cluster->statefulSet()
     ->whereName('mysql')
     ->get();
 

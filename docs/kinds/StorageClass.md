@@ -7,7 +7,7 @@
 ### Storage Class creation
 
 ```php
-$sc = K8s::storageClass($cluster)
+$sc = $cluster->storageClass()
     ->setName('gp2')
     ->setProvisioner('csi.aws.amazon.com')
     ->setParameters(['type' => 'gp2'])
@@ -18,7 +18,7 @@ $sc = K8s::storageClass($cluster)
 Adding custom parameters with `->setAttribute()`:
 
 ```php
-$sc = K8s::storageClass($cluster)
+$sc = $cluster->storageClass()
     ->whereName('gp2')
     ->get();
 
@@ -28,7 +28,7 @@ $sc->setAttribute('allowedTopologies', []);
 ### Retrieval
 
 ```php
-$sc = K8s::storageClass($cluster)
+$sc = $cluster->storageClass()
     ->whereName('gp2')
     ->get();
 

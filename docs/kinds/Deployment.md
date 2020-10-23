@@ -9,7 +9,7 @@
 Deployments are just configurations that relies on a Pod. So before diving in, make sure you read the [Pod Documentation](Pod.md)
 
 ```php
-$container = K8s::container();
+$container = $cluster->container();
 
 $container
     ->setName('mysql')
@@ -18,13 +18,12 @@ $container
         ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
     ]);
 
-$pod = K8s::pod()
+$pod = $cluster->pod()
     ->setName('mysql')
     ->setLabels(['tier' => 'backend'])
     ->setContainers([$mysql]);
 
-$dep = K8s::deployment()
-    ->onCluster($this->cluster)
+$dep = $cluster->deployment()
     ->setName('mysql')
     ->setSelectors(['matchLabels' => ['tier' => 'backend']])
     ->setReplicas(1)
@@ -48,28 +47,28 @@ $dep->setLabels([
 While the Deployment kind has `spec`, you can avoid writing this:
 
 ```php
-$dep = K8s::deployment($cluster)
+$dep = $cluster->deployment()
     ->setAttribute('spec.template', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$dep = K8s::deployment($cluster)
+$dep = $cluster->deployment()
     ->setSpec('template', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$dep = K8s::deployment($cluster)
+$dep = $cluster->deployment()
     ->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$dep = K8s::deployment($cluster)
+$dep = $cluster->deployment()
     ->whereName('mysql')
     ->get();
 
