@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -16,6 +15,17 @@ class StorageClassTest extends TestCase
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => 10])
             ->setMountOptions(['debug']);
+
+        $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
+        $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
+        $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
+        $this->assertEquals(['debug'], $sc->getMountOptions());
+    }
+
+    public function test_storage_class_from_yaml()
+    {
+        $sc = $this->cluster->fromYamlFile(__DIR__.'/yaml/storageclass.yaml');
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());

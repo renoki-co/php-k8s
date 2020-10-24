@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -24,6 +23,19 @@ class PersistentVolumeTest extends TestCase
             ->setAccessModes(['ReadWriteOnce'])
             ->setMountOptions(['debug'])
             ->setStorageClass($sc);
+
+        $this->assertEquals('v1', $pv->getApiVersion());
+        $this->assertEquals('app', $pv->getName());
+        $this->assertEquals(['fsType' => 'ext4', 'volumeID' => 'vol-xxxxx'], $pv->getSpec('awsElasticBlockStore'));
+        $this->assertEquals('1Gi', $pv->getCapacity());
+        $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
+        $this->assertEquals(['debug'], $pv->getMountOptions());
+        $this->assertEquals('sc1', $pv->getStorageClass());
+    }
+
+    public function test_persistent_volume_from_yaml()
+    {
+        $pv = $this->cluster->fromYamlFile(__DIR__.'/yaml/persistentvolume.yaml');
 
         $this->assertEquals('v1', $pv->getApiVersion());
         $this->assertEquals('app', $pv->getName());

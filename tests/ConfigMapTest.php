@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -16,6 +15,15 @@ class ConfigMapTest extends TestCase
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
             ->removeData('somekey');
+
+        $this->assertEquals('v1', $cm->getApiVersion());
+        $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['key2' => 'val2'], $cm->getData());
+    }
+
+    public function test_config_map_from_yaml()
+    {
+        $cm = $this->cluster->fromYamlFile(__DIR__.'/yaml/configmap.yaml');
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());

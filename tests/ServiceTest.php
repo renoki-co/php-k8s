@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sService;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -18,6 +17,19 @@ class ServiceTest extends TestCase
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
             ]);
+
+        $this->assertEquals('v1', $svc->getApiVersion());
+        $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
+        $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
+        $this->assertEquals([[
+            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
+        ]], $svc->getPorts());
+    }
+
+    public function test_service_from_yaml()
+    {
+        $svc = $this->cluster->fromYamlFile(__DIR__.'/yaml/service.yaml');
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());

@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -22,6 +21,17 @@ class PersistentVolumeClaimTest extends TestCase
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass($gp2);
+
+        $this->assertEquals('v1', $pvc->getApiVersion());
+        $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals('1Gi', $pvc->getCapacity());
+        $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
+        $this->assertEquals('gp2', $pvc->getStorageClass());
+    }
+
+    public function test_persistent_volume_claim_from_yaml()
+    {
+        $pvc = $this->cluster->fromYamlFile(__DIR__.'/yaml/persistentvolumeclaim.yaml');
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());

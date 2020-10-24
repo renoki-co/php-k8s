@@ -40,6 +40,31 @@ class DeploymentTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
     }
 
+    public function test_deployment_from_yaml()
+    {
+        $mysql = K8s::container()
+            ->setName('mysql')
+            ->setImage('mysql', '5.7')
+            ->setPorts([
+                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+            ]);
+
+        $pod = $this->cluster->pod()
+            ->setName('mysql')
+            ->setContainers([$mysql]);
+
+        $dep = $this->cluster->fromYamlFile(__DIR__.'/yaml/deployment.yaml');
+
+        $this->assertEquals('apps/v1', $dep->getApiVersion());
+        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
+        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(3, $dep->getReplicas());
+        $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
+
+        $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
+    }
+
     public function test_deployment_api_interaction()
     {
         $this->runCreationTests();

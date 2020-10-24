@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: io1
+provisioner: csi.aws.amazon.com
+parameters:
+  type: io1
+  iopsPerGB: "10"
+mountOptions:
+  - debug

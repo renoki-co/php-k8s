@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -13,6 +12,14 @@ class NamespaceTest extends TestCase
     {
         $ns = $this->cluster->namespace()
             ->setName('production');
+
+        $this->assertEquals('v1', $ns->getApiVersion());
+        $this->assertEquals('production', $ns->getName());
+    }
+
+    public function test_namespace_from_yaml()
+    {
+        $ns = $this->cluster->fromYamlFile(__DIR__.'/yaml/namespace.yaml');
 
         $this->assertEquals('v1', $ns->getApiVersion());
         $this->assertEquals('production', $ns->getName());

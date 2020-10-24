@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         php: ['7.2', '7.3', '7.4']
-        kubernetes: ['1.14.10', '1.15.12', '1.16.15', '1.17.13', '1.18.10', '1.19.3']
+        kubernetes: ['1.14.10', '1.15.12', '1.16.15', '1.17.11', '1.18.8', '1.19.1']
 
     name: PHP ${{ matrix.php }} with Kubernetes v${{ matrix.kubernetes }}
     steps:

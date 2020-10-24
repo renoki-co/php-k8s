@@ -53,6 +53,43 @@ class PodTest extends TestCase
         }
     }
 
+    public function test_pod_from_yaml()
+    {
+        $mysql = K8s::container()
+            ->setName('mysql')
+            ->setImage('mysql', '5.7')
+            ->setPorts([
+                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+            ])
+            ->addPort(3307, 'TCP', 'mysql-alt')
+            ->setEnv([[
+                'name' => 'MYSQL_ROOT_PASSWORD',
+                'value' => 'test',
+            ]]);
+
+        $busybox = K8s::container()
+            ->setName('busybox')
+            ->setImage('busybox')
+            ->setCommand(['/bin/sh']);
+
+        $pod = $this->cluster->fromYamlFile(__DIR__.'/yaml/pod.yaml');
+
+        $this->assertEquals('v1', $pod->getApiVersion());
+        $this->assertEquals('mysql', $pod->getName());
+        $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
+        $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+        $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
+        $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
+
+        foreach ($pod->getInitContainers() as $container) {
+            $this->assertInstanceOf(Container::class, $container);
+        }
+
+        foreach ($pod->getContainers() as $container) {
+            $this->assertInstanceOf(Container::class, $container);
+        }
+    }
+
     public function test_pod_api_interaction()
     {
         $this->runCreationTests();

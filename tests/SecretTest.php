@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sSecret;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -16,6 +15,16 @@ class SecretTest extends TestCase
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
             ->removeData('root');
+
+        $this->assertEquals('v1', $secret->getApiVersion());
+        $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
+        $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
+    }
+
+    public function test_secret_from_yaml()
+    {
+        $secret = $this->cluster->fromYamlFile(__DIR__.'/yaml/secret.yaml');
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
