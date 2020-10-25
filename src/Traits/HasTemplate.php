@@ -4,7 +4,7 @@ namespace RenokiCo\PhpK8s\Traits;
 
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 
-class HasTemplate
+trait HasTemplate
 {
     /**
      * Set the template pod.
