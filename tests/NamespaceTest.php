@@ -38,7 +38,7 @@ class NamespaceTest extends TestCase
 
     public function runGetAllTests()
     {
-        $namespaces = $this->cluster->namespace()->all();
+        $namespaces = $this->cluster->getAllNamespaces();
 
         $this->assertInstanceOf(ResourcesList::class, $namespaces);
 

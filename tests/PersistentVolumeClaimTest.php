@@ -81,7 +81,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runGetAllTests()
     {
-        $pvcs = $this->cluster->persistentVolumeClaim()->all();
+        $pvcs = $this->cluster->getAllPersistentVolumeClaims();
 
         $this->assertInstanceOf(ResourcesList::class, $pvcs);
 

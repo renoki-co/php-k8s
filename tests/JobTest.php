@@ -117,7 +117,7 @@ class JobTest extends TestCase
 
     public function runGetAllTests()
     {
-        $jobs = $this->cluster->job()->all();
+        $jobs = $this->cluster->getAllJobs();
 
         $this->assertInstanceOf(ResourcesList::class, $jobs);
 

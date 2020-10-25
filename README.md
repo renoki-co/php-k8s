@@ -94,6 +94,18 @@ Getting all resources can be done by calling `->all()`:
 $namespaces = $cluster->namespace()->all();
 ```
 
+Or you can use a specific method to call it at once:
+
+```php
+$namespaces = $cluster->getAllNamespaces();
+```
+
+For namespaced resources, you may pass the namespace:
+
+```php
+$stagingServices = $cluster->getAllServices('staging');
+```
+
 The result is an `RenokiCo\PhpK8s\ResourcesList` instance.
 
 The class is extending the default `\Illuminate\Support\Collection`, on which you can chain various methods as described here: https://laravel.com/docs/master/collections

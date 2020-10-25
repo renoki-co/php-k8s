@@ -70,7 +70,7 @@ class StorageClassTest extends TestCase
 
     public function runGetAllTests()
     {
-        $storageClasses = $this->cluster->storageClass()->all();
+        $storageClasses = $this->cluster->getAllStorageClasses();
 
         $this->assertInstanceOf(ResourcesList::class, $storageClasses);
 

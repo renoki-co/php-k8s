@@ -67,7 +67,7 @@ class ConfigMapTest extends TestCase
 
     public function runGetAllTests()
     {
-        $configmaps = $this->cluster->configmap()->all();
+        $configmaps = $this->cluster->getAllConfigmaps();
 
         $this->assertInstanceOf(ResourcesList::class, $configmaps);
 

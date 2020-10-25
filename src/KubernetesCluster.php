@@ -6,6 +6,7 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
 use vierbergenlars\SemVer\version;
@@ -354,6 +355,20 @@ class KubernetesCluster
                 return $this->{$resource}()
                     ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
                     ->getByName($parameters[0]);
+            }
+        }
+
+        // Proxy the ->getAll[Resources]($namespace = 'default')
+        // For example, ->getAllServices('staging')
+        if (preg_match('/getAll(.+)/', $method, $matches)) {
+            [$method, $resourcePlural] = $matches;
+
+            if (method_exists(K8s::class, $resource)) {
+                $resource = Str::singular($resourcePlural);
+
+                return $this->{$resource}()
+                    ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
+                    ->all();
             }
         }
 

@@ -148,7 +148,7 @@ class PodTest extends TestCase
 
     public function runGetAllTests()
     {
-        $pods = $this->cluster->pod()->all();
+        $pods = $this->cluster->getAllPods();
 
         $this->assertInstanceOf(ResourcesList::class, $pods);
 

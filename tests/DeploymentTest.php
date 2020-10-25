@@ -127,7 +127,7 @@ class DeploymentTest extends TestCase
 
     public function runGetAllTests()
     {
-        $deployments = $this->cluster->deployment()->all();
+        $deployments = $this->cluster->getAllDeployments();
 
         $this->assertInstanceOf(ResourcesList::class, $deployments);
 

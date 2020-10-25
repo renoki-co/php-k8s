@@ -110,7 +110,7 @@ class IngressTest extends TestCase
 
     public function runGetAllTests()
     {
-        $ingresss = $this->cluster->ingress()->all();
+        $ingresss = $this->cluster->getAllIngresses();
 
         $this->assertInstanceOf(ResourcesList::class, $ingresss);
 
