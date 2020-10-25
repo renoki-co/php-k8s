@@ -205,7 +205,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getNamespace()
     {
-        return $this->getAttribute('metadata.namespace', 'default');
+        return $this->getAttribute('metadata.namespace', static::$defaultNamespace);
     }
 
     /**
