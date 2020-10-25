@@ -363,9 +363,9 @@ class KubernetesCluster
         if (preg_match('/getAll(.+)/', $method, $matches)) {
             [$method, $resourcePlural] = $matches;
 
-            if (method_exists(K8s::class, $resource)) {
-                $resource = Str::singular($resourcePlural);
+            $resource = Str::singular($resourcePlural);
 
+            if (method_exists(K8s::class, $resource)) {
                 return $this->{$resource}()
                     ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
                     ->all();
