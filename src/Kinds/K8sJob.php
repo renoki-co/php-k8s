@@ -36,6 +36,17 @@ class K8sJob extends K8sResource implements InteractsWithK8sCluster, Watchable
     protected static $namespaceable = true;
 
     /**
+     * Set the TTL for the job availability.
+     *
+     * @param  int  $ttl
+     * @return $this
+     */
+    public function setTTL(int $ttl = 100)
+    {
+        return $this->setSpec('ttlSecondsAfterFinished', $ttl);
+    }
+
+    /**
      * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string

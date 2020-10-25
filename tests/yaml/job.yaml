@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+  labels:
+    tier: backend
+  annotations:
+    perl/annotation: "yes"
+spec:
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      name: perl
+    spec:
+      containers:
+        - name: pi
+          image: perl:latest
+          command:
+            - perl
+            - Mbignum=bpi
+            - -wle
+            - print bpi(2000)
+    kind: Pod
+    apiVersion: v1

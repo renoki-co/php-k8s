@@ -102,6 +102,37 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     }
 
     /**
+     * Specify the pod to be restarted on failure
+     * for Job kinds only.
+     *
+     * @return $this
+     */
+    public function restartOnFailure()
+    {
+        return $this->setSpec('restartPolicy', 'OnFailure');
+    }
+
+    /**
+     * Specify the pod to never be restarted for Job kinds only.
+     *
+     * @return $this
+     */
+    public function neverRestart()
+    {
+        return $this->setSpec('restartPolicy', 'Never');
+    }
+
+    /**
+     * Get the restart policy for this pod, for Job kinds only.
+     *
+     * @return string
+     */
+    public function getRestartPolicy()
+    {
+        return $this->getSpec('restartPolicy', 'Always');
+    }
+
+    /**
      * Transform any Container instance to an array.
      *
      * @param  array  $containers
