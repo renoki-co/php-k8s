@@ -25,7 +25,9 @@ abstract class TestCase extends Orchestra
 
         $this->cluster = new KubernetesCluster('http://127.0.0.1');
 
-        $this->cluster->withoutSslChecks();
+        $kubeConfigPath = getenv('KUBECONFIG_PATH') ?: env('KUBECONFIG_PATH');
+
+        $this->cluster->fromKubeConfig($kubeConfigPath, 'minikube');
     }
 
     /**

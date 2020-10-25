@@ -38,9 +38,14 @@ jobs:
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: Run Kubernetes Proxy
+    - name: Enable Ingress on Minikube
       run: |
-        kubectl proxy --port=8080 &
+        minikube addons enable ingress
+        sleep 10
+
+    - name: Print ~/.kube/config contents
+      run: |
+        cat ~/.kube/config contents
 
     - name: Install dependencies
       run: |
@@ -49,6 +54,8 @@ jobs:
     - name: Run tests
       run: |
         phpunit --coverage-text --coverage-clover=coverage.xml
+      env:
+        KUBECONFIG_PATH: "~/.kube/config"
 
     - uses: codecov/codecov-action@v1
       with:
