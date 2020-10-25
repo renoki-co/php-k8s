@@ -40,7 +40,7 @@ jobs:
 
     - name: Print ~/.kube/config contents
       run: |
-        cat ~/.kube/config contents
+        cat ~/.kube/config
 
     - name: Install dependencies
       run: |
