@@ -111,10 +111,19 @@ Getting only one resource is done by calling `->get()`:
 ```php
 $stagingNginxService = $cluster->service()
     ->whereNamespace('staging')
+    ->whereName('nginx')
+    ->get();
+```
+
+You can also shorten it like:
+
+```php
+$stagingNginxService = $cluster->service()
+    ->whereNamespace('staging')
     ->getByName('nginx');
 ```
 
-Or you can use a specific method:
+Or you can use a specific method to call it in at once:
 
 ```php
 $stagingNginxService = $cluster->getServiceByName('nginx', 'staging');
