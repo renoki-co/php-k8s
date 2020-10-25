@@ -95,9 +95,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runGetTests()
     {
-        $pvc = $this->cluster->persistentVolumeClaim()
-            ->whereName('app-pvc')
-            ->get();
+        $pvc = $this->cluster->persistentVolumeClaim()->getByName('app-pvc');
 
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $pvc);
 
@@ -112,9 +110,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pvc = $this->cluster->persistentVolumeClaim()
-            ->whereName('app-pvc')
-            ->get();
+        $pvc = $this->cluster->persistentVolumeClaim()->getByName('app-pvc');
 
         $this->assertTrue($pvc->isSynced());
 
@@ -131,9 +127,7 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runDeletionTests()
     {
-        $pvc = $this->cluster->persistentVolumeClaim()
-            ->whereName('app-pvc')
-            ->get();
+        $pvc = $this->cluster->persistentVolumeClaim()->getByName('app-pvc');
 
         $this->assertTrue($pvc->delete());
 
@@ -141,9 +135,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pvc = $this->cluster->persistentVolumeClaim()
-            ->whereName('app-pvc')
-            ->get();
+        $pvc = $this->cluster->persistentVolumeClaim()->getByName('app-pvc');
     }
 
     public function runWatchAllTests()

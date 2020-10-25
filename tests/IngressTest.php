@@ -124,9 +124,7 @@ class IngressTest extends TestCase
 
     public function runGetTests()
     {
-        $ing = $this->cluster->ingress()
-            ->whereName('nginx')
-            ->get();
+        $ing = $this->cluster->ingress()->getByName('nginx');
 
         $this->assertInstanceOf(K8sIngress::class, $ing);
 
@@ -140,9 +138,7 @@ class IngressTest extends TestCase
 
     public function runUpdateTests()
     {
-        $ing = $this->cluster->ingress()
-            ->whereName('nginx')
-            ->get();
+        $ing = $this->cluster->ingress()->getByName('nginx');
 
         $this->assertTrue($ing->isSynced());
 
@@ -160,17 +156,13 @@ class IngressTest extends TestCase
 
     public function runDeletionTests()
     {
-        $ingress = $this->cluster->ingress()
-            ->whereName('nginx')
-            ->get();
+        $ingress = $this->cluster->ingress()->getByName('nginx');
 
         $this->assertTrue($ingress->delete());
 
         $this->expectException(KubernetesAPIException::class);
 
-        $ingress = $this->cluster->ingress()
-            ->whereName('nginx')
-            ->get();
+        $ingress = $this->cluster->ingress()->getByName('nginx');
     }
 
     public function runWatchAllTests()

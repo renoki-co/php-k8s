@@ -192,9 +192,7 @@ class StatefulSetTest extends TestCase
 
     public function runGetTests()
     {
-        $sts = $this->cluster->statefulSet()
-            ->whereName('mysql')
-            ->get();
+        $sts = $this->cluster->statefulSet()->getByName('mysql');
 
         $this->assertInstanceOf(K8sStatefulSet::class, $sts);
 
@@ -212,9 +210,7 @@ class StatefulSetTest extends TestCase
 
     public function runUpdateTests()
     {
-        $sts = $this->cluster->statefulSet()
-            ->whereName('mysql')
-            ->get();
+        $sts = $this->cluster->statefulSet()->getByName('mysql');
 
         $this->assertTrue($sts->isSynced());
 
@@ -236,9 +232,7 @@ class StatefulSetTest extends TestCase
 
     public function runDeletionTests()
     {
-        $sts = $this->cluster->statefulSet()
-            ->whereName('mysql')
-            ->get();
+        $sts = $this->cluster->statefulSet()->getByName('mysql');
 
         $this->assertTrue($sts->delete());
 
@@ -246,9 +240,7 @@ class StatefulSetTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->statefulSet()
-            ->whereName('mysql')
-            ->get();
+        $pod = $this->cluster->statefulSet()->getByName('mysql');
     }
 
     public function runWatchAllTests()

@@ -94,9 +94,7 @@ class ServiceTest extends TestCase
 
     public function runGetTests()
     {
-        $svc = $this->cluster->service()
-            ->whereName('nginx')
-            ->get();
+        $svc = $this->cluster->service()->getByName('nginx');
 
         $this->assertInstanceOf(K8sService::class, $svc);
 
@@ -113,9 +111,7 @@ class ServiceTest extends TestCase
 
     public function runUpdateTests()
     {
-        $svc = $this->cluster->service()
-            ->whereName('nginx')
-            ->get();
+        $svc = $this->cluster->service()->getByName('nginx');
 
         $this->assertTrue($svc->isSynced());
 
@@ -136,17 +132,13 @@ class ServiceTest extends TestCase
 
     public function runDeletionTests()
     {
-        $service = $this->cluster->service()
-            ->whereName('nginx')
-            ->get();
+        $service = $this->cluster->service()->getByName('nginx');
 
         $this->assertTrue($service->delete());
 
         $this->expectException(KubernetesAPIException::class);
 
-        $service = $this->cluster->secret()
-            ->whereName('nginx')
-            ->get();
+        $service = $this->cluster->secret()->getByName('nginx');
     }
 
     public function runWatchAllTests()

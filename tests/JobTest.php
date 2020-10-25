@@ -130,9 +130,7 @@ class JobTest extends TestCase
 
     public function runGetTests()
     {
-        $job = $this->cluster->job()
-            ->whereName('pi')
-            ->get();
+        $job = $this->cluster->job()->getByName('pi');
 
         $this->assertInstanceOf(K8sJob::class, $job);
 
@@ -148,9 +146,7 @@ class JobTest extends TestCase
 
     public function runUpdateTests()
     {
-        $job = $this->cluster->job()
-            ->whereName('pi')
-            ->get();
+        $job = $this->cluster->job()->getByName('pi');
 
         $this->assertTrue($job->isSynced());
 
@@ -170,9 +166,7 @@ class JobTest extends TestCase
 
     public function runDeletionTests()
     {
-        $job = $this->cluster->job()
-            ->whereName('pi')
-            ->get();
+        $job = $this->cluster->job()->getByName('pi');
 
         $this->assertTrue($job->delete());
 
@@ -180,9 +174,7 @@ class JobTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->job()
-            ->whereName('pi')
-            ->get();
+        $pod = $this->cluster->job()->getByName('pi');
     }
 
     public function runWatchAllTests()

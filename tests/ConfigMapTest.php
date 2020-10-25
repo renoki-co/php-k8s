@@ -65,8 +65,7 @@ class ConfigMapTest extends TestCase
 
     public function runGetAllTests()
     {
-        $configmaps = $this->cluster->configmap()
-            ->all();
+        $configmaps = $this->cluster->configmap()->all();
 
         $this->assertInstanceOf(ResourcesList::class, $configmaps);
 
@@ -79,9 +78,7 @@ class ConfigMapTest extends TestCase
 
     public function runGetTests()
     {
-        $cm = $this->cluster->configmap()
-            ->whereName('settings')
-            ->get();
+        $cm = $this->cluster->configmap()->getByName('settings');
 
         $this->assertInstanceOf(K8sConfigMap::class, $cm);
 
@@ -95,9 +92,7 @@ class ConfigMapTest extends TestCase
 
     public function runUpdateTests()
     {
-        $cm = $this->cluster->configmap()
-            ->whereName('settings')
-            ->get();
+        $cm = $this->cluster->configmap()->getByName('settings');
 
         $this->assertTrue($cm->isSynced());
 
@@ -117,17 +112,13 @@ class ConfigMapTest extends TestCase
 
     public function runDeletionTests()
     {
-        $cm = $this->cluster->configmap()
-            ->whereName('settings')
-            ->get();
+        $cm = $this->cluster->configmap()->getByName('settings');
 
         $this->assertTrue($cm->delete());
 
         $this->expectException(KubernetesAPIException::class);
 
-        $cm = $this->cluster->configmap()
-            ->whereName('settings')
-            ->get();
+        $cm = $this->cluster->configmap()->getByName('settings');
     }
 
     public function runWatchAllTests()

@@ -52,9 +52,7 @@ class NamespaceTest extends TestCase
 
     public function runGetTests()
     {
-        $ns = $this->cluster->namespace()
-            ->whereName('production')
-            ->get();
+        $ns = $this->cluster->namespace()->getByName('production');
 
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
@@ -81,9 +79,7 @@ class NamespaceTest extends TestCase
 
     public function runUpdateTests()
     {
-        $ns = $this->cluster->namespace()
-            ->whereName('production')
-            ->get();
+        $ns = $this->cluster->namespace()->getByName('production');
 
         $this->assertTrue($ns->isSynced());
 
@@ -94,9 +90,7 @@ class NamespaceTest extends TestCase
 
     public function runDeletionTests()
     {
-        $ns = $this->cluster->namespace()
-            ->whereName('production')
-            ->get();
+        $ns = $this->cluster->namespace()->getByName('production');
 
         $this->assertTrue($ns->delete());
 
@@ -104,9 +98,7 @@ class NamespaceTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $ns = $this->cluster->namespace()
-            ->whereName('production')
-            ->get();
+        $ns = $this->cluster->namespace()->getByName('production');
     }
 
     public function runWatchAllTests()

@@ -84,9 +84,7 @@ class StorageClassTest extends TestCase
 
     public function runGetTests()
     {
-        $sc = $this->cluster->storageClass()
-            ->whereName('io1')
-            ->get();
+        $sc = $this->cluster->storageClass()->getByName('io1');
 
         $this->assertInstanceOf(K8sStorageClass::class, $sc);
 
@@ -101,9 +99,7 @@ class StorageClassTest extends TestCase
 
     public function runUpdateTests()
     {
-        $sc = $this->cluster->storageClass()
-            ->whereName('io1')
-            ->get();
+        $sc = $this->cluster->storageClass()->getByName('io1');
 
         $this->assertTrue($sc->isSynced());
 
@@ -122,17 +118,13 @@ class StorageClassTest extends TestCase
 
     public function runDeletionTests()
     {
-        $sc = $this->cluster->storageClass()
-            ->whereName('io1')
-            ->get();
+        $sc = $this->cluster->storageClass()->getByName('io1');
 
         $this->assertTrue($sc->delete());
 
         $this->expectException(KubernetesAPIException::class);
 
-        $sc = $this->cluster->storageClass()
-            ->whereName('io1')
-            ->get();
+        $sc = $this->cluster->storageClass()->getByName('io1');
     }
 
     public function runWatchAllTests()
