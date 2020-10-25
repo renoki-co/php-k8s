@@ -27,7 +27,8 @@ abstract class TestCase extends Orchestra
 
         $kubeConfigPath = getenv('KUBECONFIG_PATH') ?: env('KUBECONFIG_PATH');
 
-        $this->cluster->fromKubeConfig($kubeConfigPath, 'minikube');
+        $this->cluster->fromKubeConfig($kubeConfigPath, 'minikube')
+            ->withoutSslChecks();
     }
 
     /**

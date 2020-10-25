@@ -38,11 +38,6 @@ jobs:
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: Enable Ingress on Minikube
-      run: |
-        minikube addons enable ingress
-        sleep 10
-
     - name: Print ~/.kube/config contents
       run: |
         cat ~/.kube/config contents

@@ -508,11 +508,7 @@ class KubernetesCluster
                 RequestOptions::BODY => $payload,
             ]);
         } catch (ClientException $e) {
-            $error = @json_decode(
-                (string) $e->getResponse()->getBody(), true
-            );
-
-            throw new KubernetesAPIException($error['message']);
+            throw new KubernetesAPIException($e->getMessage());
         }
 
         $json = @json_decode($response->getBody(), true);
