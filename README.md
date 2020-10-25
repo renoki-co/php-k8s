@@ -51,7 +51,6 @@ spec:
 Can be written like this:
 
 ``` php
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 // Create a new instance of KubernetesCluster
@@ -68,13 +67,26 @@ $svc = $cluster->service()
     ->create();
 ```
 
-## Documentation
+## Supported Resources
 
 Each existent resource has its own documentation, filled with examples.
 
-[Go to documentation](docs/RESOURCES.md)
+- [Namespace](kinds/Namespace.md)
+- [Config Map](kinds/ConfigMap.md)
+- [Secret](kinds/Secret.md)
+- [Storage Class](kinds/StorageClass.md)
+- [Persistent Volumes](kinds/PersistentVolume.md)
+- [Persistent Volume Claims](kinds/PersistentVolumeClaim.md)
+- [Service](kinds/Service.md)
+- [Ingress](kinds/Ingress.md)
+- [Pod](kinds/Pod.md)
+- [Statefulset](kinds/StatefulSet.md)
+- [Deployment](kinds/Deployment.md)
+- [Jobs](kinds/Job.md)
 
-## Methods
+For other resources, you can check the [WIP resources](docs/RESOURCES.md)
+
+## Accessing the API
 
 Each kind has its own class from which you can build it and then create, update, replace or delete them.
 
@@ -86,7 +98,58 @@ $ns = $cluster->namespace()
     ->create();
 ```
 
-### Retrieval
+## Cluster Authentication
+
+The most important part is the authentication itself. In the showcase, you have been shown how to initialize a Kubernetes Cluster instance. This time, you might want to modify it in order to attach additional info:
+
+You can initialize a Kubernetes Cluster class by doing so:
+
+```php
+use RenokiCo\PhpK8s\KubernetesCluster;
+
+$cluster = new KubernetesCluster('http://127.0.0.1', 8080);
+```
+
+### Attaching Bearer Token
+
+```php
+$cluster->withToken($token);
+```
+
+You can also attach a token from a file path:
+
+```php
+$cluster->loadTokenFromFile($path);
+```
+
+### Attaching HTTP authentication header
+
+```php
+$cluster->httpAuthentication($user, $password);
+```
+
+## Cluster SSL
+
+Additionally to the Authentication, you might want to pass SSL data for the API requests:
+
+```php
+$cluster->withCertificate($pathToCert)
+    ->withPrivateKey($pathToKey);
+```
+
+If you have a CA certificate, you might also want to pass it:
+
+```php
+$cluster->withCaCertificate($pathToCA);
+```
+
+For testing purposes or local checkups, you can disable SSL checks:
+
+```php
+$cluster->withoutSslChecks();
+```
+
+## Retrieving all resources
 
 Getting all resources can be done by calling `->all()`:
 
@@ -118,6 +181,8 @@ $stagingServices = $cluster->service()
     ->all();
 ```
 
+## Retrieving a specific resource
+
 Getting only one resource is done by calling `->get()`:
 
 ```php
@@ -145,7 +210,7 @@ Filters can vary, depending if the resources are namespaceable or not.
 
 By default, the namespace is `default` and can be missed from the filters.
 
-### Creation
+## Creating resources
 
 Calling the `->create()` method after building your Kind will sync it to the Cluster:
 
@@ -157,7 +222,7 @@ $ns = $cluster->namespace()
 $ns->isSynced(); // true
 ```
 
-### Updating Resources
+## Updating resources
 
 While Kubernetes has the ability to PATCH a resource or REPLACE it entirely, PHP K8s relies on REPLACE
 to update your resource since you have to retrieve it first (thus getting a synced class), edit it, then
@@ -171,7 +236,7 @@ $cm->addData('API_KEY', '123')
 $cm->update();
 ```
 
-### Deletion
+### Deleting resources
 
 You will have to simply call `->delete()` on the resource, after you retrieve it.
 
@@ -189,7 +254,7 @@ The defaults are:
 delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'
 ```
 
-## Importing
+## Importing from YAML
 
 If you already have YAML files or YAML as a string, you can import them into PHP K8s in a simple way:
 
@@ -197,6 +262,22 @@ If you already have YAML files or YAML as a string, you can import them into PHP
 $cluster->fromYaml($yamlAsString); // import using YAML as string
 
 $cluster->fromYamlFile($yamlPath); // import using a path to the YAML file
+```
+
+The result would be a `\RenokiCo\PhpK8s\Kinds\K8sResource` instance you can call methods on.
+
+If there are more resources in the same YAML file, you will be given an array of them, representing the each kind, in order.
+
+Please keep in mind - the resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->sync()`:
+
+```php
+$storageClasses = $cluster->fromYaml($awsStorageClassesYamlPath);
+
+foreach ($storageClasses as $sc) {
+    $sc->sync();
+
+    echo "{$sc->getName()} storage class got synced!";
+}
 ```
 
 **For the imports to work, you will need the `ext-yaml` extension.**

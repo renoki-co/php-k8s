@@ -9,7 +9,7 @@ use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
-use vierbergenlars\SemVer\version;
+use vierbergenlars\SemVer\version as Semver;
 
 class KubernetesCluster
 {
@@ -40,6 +40,46 @@ class KubernetesCluster
      * @var \vierbergenlars\SemVer\version
      */
     protected $kubernetesVersion;
+
+    /**
+     * The Bearer Token used for authentication.
+     *
+     * @var string|null
+     */
+    private $token;
+
+    /**
+     * The key pair of username & password used
+     * for HTTP authentication.
+     *
+     * @var array
+     */
+    private $auth = [];
+
+    /**
+     * The path to the Client certificate (if any)
+     * used for SSL connections.
+     *
+     * @var string|null
+     */
+    private $cert;
+
+    /**
+     * The path to the Client Key (if any)
+     * used for SSL connections.
+     *
+     * @var string|null
+     */
+    private $sslKey;
+
+    /**
+     * Wether SSL should be verified. Defaults to true,
+     * if set to false will ignore checks. If set as string,
+     * it should be the path to the CA certificate.
+     *
+     * @var string|null|bool
+     */
+    private $verify;
 
     /**
      * List all named operations with
@@ -158,68 +198,6 @@ class KubernetesCluster
     }
 
     /**
-     * Call the API with the specified method and path.
-     *
-     * @param  string  $method
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
-     * @return void
-     */
-    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
-    {
-        $resourceClass = $this->resourceClass;
-
-        try {
-            $client = new Client;
-
-            $response = $client->request($method, $this->getCallableUrl($path, $query), [
-                RequestOptions::BODY => $payload,
-                RequestOptions::HEADERS => [
-                    'Content-Type' => 'application/json',
-                ],
-            ]);
-        } catch (ClientException $e) {
-            $error = @json_decode(
-                (string) $e->getResponse()->getBody(), true
-            );
-
-            throw new KubernetesAPIException($error['message']);
-        }
-
-        $json = @json_decode($response->getBody(), true);
-
-        // If the output is not JSONable, return the response itself.
-        // This can be encountered in case of a pod log request, for example,
-        // where the data returned are just console logs.
-
-        if (! $json) {
-            return (string) $response->getBody();
-        }
-
-        // If the kind is a list, transform into a ResourcesList
-        // collection of instances for the same class.
-
-        if (isset($json['items'])) {
-            $results = [];
-
-            foreach ($json['items'] as $item) {
-                $results[] = (new $resourceClass($this, $item))
-                    ->synced();
-            }
-
-            return new ResourcesList($results);
-        }
-
-        // If the items does not exist, it means the Kind
-        // is the same as the current class, so pass it
-        // for the payload.
-
-        return (new $resourceClass($this, $json))
-            ->synced();
-    }
-
-    /**
      * Watch for the current resource or a resource list.
      *
      * @param  string   $path
@@ -295,16 +273,14 @@ class KubernetesCluster
         $callableUrl = "{$apiUrl}/version";
 
         try {
-            $client = new Client;
-
-            $response = $client->request('GET', $callableUrl);
+            $response = $this->getClient()->request('GET', $callableUrl);
         } catch (ClientException $e) {
             //
         }
 
         $json = @json_decode($response->getBody(), true);
 
-        $this->kubernetesVersion = new version($json['gitVersion']);
+        $this->kubernetesVersion = new Semver($json['gitVersion']);
     }
 
     /**
@@ -316,7 +292,7 @@ class KubernetesCluster
      */
     public function newerThan(string $kubernetesVersion): bool
     {
-        return version::gte(
+        return Semver::gte(
             $this->kubernetesVersion, $kubernetesVersion
         );
     }
@@ -330,9 +306,192 @@ class KubernetesCluster
      */
     public function olderThan(string $kubernetesVersion): bool
     {
-        return version::lt(
+        return Semver::lt(
             $this->kubernetesVersion, $kubernetesVersion
         );
+    }
+
+    /**
+     * Pass a Bearer Token for authentication.
+     *
+     * @param  string  $token
+     * @return $this
+     */
+    public function withToken(string $token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Load a Bearer Token from file.
+     *
+     * @param  string  $path
+     * @return $this
+     */
+    public function loadTokenFromFile(string $path)
+    {
+        return $this->withToken(file_get_contents($path));
+    }
+
+    /**
+     * Pass the username and password used for HTTP authentication.
+     *
+     * @param  string  $username
+     * @param  string  $password
+     * @return $this
+     */
+    public function httpAuthentication(string $username, string $password)
+    {
+        $this->auth = [$username, $password];
+
+        return $this;
+    }
+
+    /**
+     * Set the path to the certificate used for SSL.
+     *
+     * @param  string  $path
+     * @return $this
+     */
+    public function withCertificate(string $path)
+    {
+        $this->cert = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the path to the private key used for SSL.
+     *
+     * @param  string  $path
+     * @return $this
+     */
+    public function withPrivateKey(string $path)
+    {
+        $this->sslKey = $path;
+
+        return $this;
+    }
+
+    /**
+     * Set the CA certificate used for validation.
+     *
+     * @param  string  $path
+     * @return $this
+     */
+    public function withCaCertificate(string $path)
+    {
+        $this->verify = $path;
+
+        return $this;
+    }
+
+    /**
+     * Disable SSL checks.
+     *
+     * @return $this
+     */
+    public function withoutSslChecks()
+    {
+        $this->verify = false;
+
+        return $this;
+    }
+
+    /**
+     * Call the API with the specified method and path.
+     *
+     * @param  string  $method
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
+     * @return void
+     */
+    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    {
+        $resourceClass = $this->resourceClass;
+
+        try {
+            $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), [
+                RequestOptions::BODY => $payload,
+            ]);
+        } catch (ClientException $e) {
+            $error = @json_decode(
+                (string) $e->getResponse()->getBody(), true
+            );
+
+            throw new KubernetesAPIException($error['message']);
+        }
+
+        $json = @json_decode($response->getBody(), true);
+
+        // If the output is not JSONable, return the response itself.
+        // This can be encountered in case of a pod log request, for example,
+        // where the data returned are just console logs.
+
+        if (! $json) {
+            return (string) $response->getBody();
+        }
+
+        // If the kind is a list, transform into a ResourcesList
+        // collection of instances for the same class.
+
+        if (isset($json['items'])) {
+            $results = [];
+
+            foreach ($json['items'] as $item) {
+                $results[] = (new $resourceClass($this, $item))
+                    ->synced();
+            }
+
+            return new ResourcesList($results);
+        }
+
+        // If the items does not exist, it means the Kind
+        // is the same as the current class, so pass it
+        // for the payload.
+
+        return (new $resourceClass($this, $json))
+            ->synced();
+    }
+
+    /**
+     * Get the Guzzle Client to perform requests on.
+     *
+     * @return \GuzzleHttp\Client
+     */
+    protected function getClient()
+    {
+        $options = [
+            RequestOptions::HEADERS => [
+                'Content-Type' => 'application/json',
+            ],
+            RequestOptions::VERIFY => true,
+        ];
+
+        if (is_bool($this->verify) || is_string($this->verify)) {
+            $options[RequestOptions::VERIFY] = $this->verify;
+        }
+
+        if ($this->token) {
+            $options[RequestOptions::HEADERS]['authorization'] = "Bearer {$this->token}";
+        }
+
+        if ($this->auth) {
+			$options[RequestOptions::AUTH] = $this->auth;
+        }
+
+        if ($this->cert) {
+			$options[RequestOptions::CERT] = $this->cert;
+        }
+
+		if ($this->sslKey) {
+			$options[RequestOptions::SSL_KEY] = $this->sslKey;
+        }
+
+        return new Client($options);
     }
 
     /**

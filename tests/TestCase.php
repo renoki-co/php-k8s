@@ -23,7 +23,9 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->cluster = (new KubernetesCluster('http://127.0.0.1'));
+        $this->cluster = new KubernetesCluster('http://127.0.0.1');
+
+        $this->cluster->withoutSslChecks();
     }
 
     /**
@@ -35,7 +37,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            //
+            \RenokiCo\PhpK8s\PhpK8sServiceProvider::class,
         ];
     }
 
