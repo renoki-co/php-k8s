@@ -502,6 +502,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return void
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchAll(Closure $callback, array $query = ['pretty' => 1])
     {
@@ -528,6 +529,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return void
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watch(Closure $callback, array $query = ['pretty' => 1])
     {
@@ -565,6 +567,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function logs(array $query = ['pretty' => 1])
     {
@@ -603,6 +606,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return void
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchLogs(Closure $callback, array $query = ['pretty' => 1])
     {
