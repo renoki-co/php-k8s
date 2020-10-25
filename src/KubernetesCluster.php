@@ -480,15 +480,15 @@ class KubernetesCluster
         }
 
         if ($this->auth) {
-			$options[RequestOptions::AUTH] = $this->auth;
+            $options[RequestOptions::AUTH] = $this->auth;
         }
 
         if ($this->cert) {
-			$options[RequestOptions::CERT] = $this->cert;
+            $options[RequestOptions::CERT] = $this->cert;
         }
 
-		if ($this->sslKey) {
-			$options[RequestOptions::SSL_KEY] = $this->sslKey;
+        if ($this->sslKey) {
+            $options[RequestOptions::SSL_KEY] = $this->sslKey;
         }
 
         return new Client($options);
