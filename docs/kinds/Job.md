@@ -64,7 +64,7 @@ $job->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$job = $cluster->job()->getByName('mysql');
+$job = $cluster->getJobByName('mysql');
 
 $template = $job->getTemplate();
 ```

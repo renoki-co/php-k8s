@@ -127,7 +127,7 @@ class DeploymentTest extends TestCase
 
     public function runGetAllTests()
     {
-        $deployments = $this->cluster->deployment()->all();
+        $deployments = $this->cluster->getAllDeployments();
 
         $this->assertInstanceOf(ResourcesList::class, $deployments);
 
@@ -140,7 +140,7 @@ class DeploymentTest extends TestCase
 
     public function runGetTests()
     {
-        $dep = $this->cluster->deployment()->getByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mysql');
 
         $this->assertInstanceOf(K8sDeployment::class, $dep);
 
@@ -157,7 +157,7 @@ class DeploymentTest extends TestCase
 
     public function runUpdateTests()
     {
-        $dep = $this->cluster->deployment()->getByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mysql');
 
         $this->assertTrue($dep->isSynced());
 
@@ -178,7 +178,7 @@ class DeploymentTest extends TestCase
 
     public function runDeletionTests()
     {
-        $dep = $this->cluster->deployment()->getByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mysql');
 
         $this->assertTrue($dep->delete());
 
@@ -186,7 +186,7 @@ class DeploymentTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->deployment()->getByName('mysql');
+        $pod = $this->cluster->getDeploymentByName('mysql');
     }
 
     public function runWatchAllTests()

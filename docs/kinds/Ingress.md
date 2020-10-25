@@ -52,7 +52,7 @@ $ingress->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$ingress = $cluster->ingress()->getByName('nginx');
+$ingress = $cluster->getIngressByName('nginx');
 
 $rules = $ingress->getRules();
 ```

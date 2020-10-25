@@ -34,7 +34,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected static $defaultNamespace = 'default';
+    public static $defaultNamespace = 'default';
 
     /**
      * The default version for the resource.

@@ -67,7 +67,7 @@ class SecretTest extends TestCase
 
     public function runGetAllTests()
     {
-        $secrets = $this->cluster->secret()->all();
+        $secrets = $this->cluster->getAllSecrets();
 
         $this->assertInstanceOf(ResourcesList::class, $secrets);
 
@@ -80,7 +80,7 @@ class SecretTest extends TestCase
 
     public function runGetTests()
     {
-        $secret = $this->cluster->secret()->getByName('passwords');
+        $secret = $this->cluster->getSecretByName('passwords');
 
         $this->assertInstanceOf(K8sSecret::class, $secret);
 
@@ -94,7 +94,7 @@ class SecretTest extends TestCase
 
     public function runUpdateTests()
     {
-        $secret = $this->cluster->secret()->getByName('passwords');
+        $secret = $this->cluster->getSecretByName('passwords');
 
         $this->assertTrue($secret->isSynced());
 
@@ -114,13 +114,13 @@ class SecretTest extends TestCase
 
     public function runDeletionTests()
     {
-        $secret = $this->cluster->secret()->getByName('passwords');
+        $secret = $this->cluster->getSecretByName('passwords');
 
         $this->assertTrue($secret->delete());
 
         $this->expectException(KubernetesAPIException::class);
 
-        $secret = $this->cluster->secret()->getByName('passwords');
+        $secret = $this->cluster->getSecretByName('passwords');
     }
 
     public function runWatchAllTests()

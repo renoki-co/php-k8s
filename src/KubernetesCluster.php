@@ -6,7 +6,9 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
+use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\Kinds\K8sResource;
 use vierbergenlars\SemVer\version;
 
 class KubernetesCluster
@@ -342,6 +344,34 @@ class KubernetesCluster
      */
     public function __call($method, $parameters)
     {
+        // Proxy the ->get[Resource]ByName($name, $namespace = 'default')
+        // For example, ->getConfigMapByName('settings')
+        if (preg_match('/get(.+)ByName/', $method, $matches)) {
+            [$method, $resource] = $matches;
+
+            // Check the method from the proxied K8s::class exists.
+            // For example, the method ->configmap() should exist.
+            if (method_exists(K8s::class, $resource)) {
+                return $this->{$resource}()
+                    ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
+                    ->getByName($parameters[0]);
+            }
+        }
+
+        // Proxy the ->getAll[Resources]($namespace = 'default')
+        // For example, ->getAllServices('staging')
+        if (preg_match('/getAll(.+)/', $method, $matches)) {
+            [$method, $resourcePlural] = $matches;
+
+            $resource = Str::singular($resourcePlural);
+
+            if (method_exists(K8s::class, $resource)) {
+                return $this->{$resource}()
+                    ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
+                    ->all();
+            }
+        }
+
         return K8s::{$method}($this, ...$parameters);
     }
 }

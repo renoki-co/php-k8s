@@ -56,7 +56,7 @@ $pvc->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$pvc = $cluster->persistentVolumeClaim()->getByName('pvc-1');
+$pvc = $cluster->getPersistentVolumeClaimByName('pvc-1');
 
 $capacity = $pvc->getCapacity(); // "10Gi"
 ```

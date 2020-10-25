@@ -82,7 +82,8 @@ Alternatively, you can pass the cluster connection as the first parameter to the
 
 ```php
 $ns = $cluster->namespace()
-    ->setName('staging');
+    ->setName('staging')
+    ->create();
 ```
 
 ### Retrieval
@@ -91,6 +92,18 @@ Getting all resources can be done by calling `->all()`:
 
 ```php
 $namespaces = $cluster->namespace()->all();
+```
+
+Or you can use a specific method to call it at once:
+
+```php
+$namespaces = $cluster->getAllNamespaces();
+```
+
+For namespaced resources, you may pass the namespace:
+
+```php
+$stagingServices = $cluster->getAllServices('staging');
 ```
 
 The result is an `RenokiCo\PhpK8s\ResourcesList` instance.
@@ -108,11 +121,24 @@ $stagingServices = $cluster->service()
 Getting only one resource is done by calling `->get()`:
 
 ```php
-$stagingNginxService =
-    $cluster->service()
-        ->whereNamespace('staging')
-        ->whereName('nginx')
-        ->get();
+$stagingNginxService = $cluster->service()
+    ->whereNamespace('staging')
+    ->whereName('nginx')
+    ->get();
+```
+
+You can also shorten it like:
+
+```php
+$stagingNginxService = $cluster->service()
+    ->whereNamespace('staging')
+    ->getByName('nginx');
+```
+
+Or you can use a specific method to call it in at once:
+
+```php
+$stagingNginxService = $cluster->getServiceByName('nginx', 'staging');
 ```
 
 Filters can vary, depending if the resources are namespaceable or not.
@@ -138,11 +164,11 @@ to update your resource since you have to retrieve it first (thus getting a sync
 triggering the update.
 
 ```php
-$ns = $cluster->configmap()->getByName('env');
+$cm = $cluster->getConfigmapByName('env');
 
-$ns->addData('API_KEY', '123')
+$cm->addData('API_KEY', '123')
 
-$ns->update();
+$cm->update();
 ```
 
 ### Deletion
@@ -150,7 +176,7 @@ $ns->update();
 You will have to simply call `->delete()` on the resource, after you retrieve it.
 
 ```php
-$cm = $cluster->configmap()->getByName('settings');
+$cm = $cluster->getConfigmapByName('settings');
 
 $cm->delete(); // true
 ```
@@ -188,7 +214,7 @@ You can watch the resource directly from the Resource class, and check & process
 ### Tracking one resource
 
 ```php
-$pod = $cluster->pod()->getByName('mysql');
+$pod = $cluster->getPodByName('mysql');
 
 $pod->watch(function ($type, $pod) {
     $resourceVersion = $pod->getResourceVersion();
@@ -200,7 +226,7 @@ $pod->watch(function ($type, $pod) {
 Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
 
 ```php
-$pod = $cluster->pod()->getByName('mysql');
+$pod = $cluster->getPodByName('mysql');
 
 $pod->watch(function ($type, $pod) {
 

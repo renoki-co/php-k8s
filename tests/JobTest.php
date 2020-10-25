@@ -117,7 +117,7 @@ class JobTest extends TestCase
 
     public function runGetAllTests()
     {
-        $jobs = $this->cluster->job()->all();
+        $jobs = $this->cluster->getAllJobs();
 
         $this->assertInstanceOf(ResourcesList::class, $jobs);
 
@@ -130,7 +130,7 @@ class JobTest extends TestCase
 
     public function runGetTests()
     {
-        $job = $this->cluster->job()->getByName('pi');
+        $job = $this->cluster->getJobByName('pi');
 
         $this->assertInstanceOf(K8sJob::class, $job);
 
@@ -146,7 +146,7 @@ class JobTest extends TestCase
 
     public function runUpdateTests()
     {
-        $job = $this->cluster->job()->getByName('pi');
+        $job = $this->cluster->getJobByName('pi');
 
         $this->assertTrue($job->isSynced());
 
@@ -166,7 +166,7 @@ class JobTest extends TestCase
 
     public function runDeletionTests()
     {
-        $job = $this->cluster->job()->getByName('pi');
+        $job = $this->cluster->getJobByName('pi');
 
         $this->assertTrue($job->delete());
 
@@ -174,7 +174,7 @@ class JobTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->job()->getByName('pi');
+        $pod = $this->cluster->getJobByName('pi');
     }
 
     public function runWatchAllTests()
@@ -190,11 +190,9 @@ class JobTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->job()
-            ->whereName('pi')
-            ->watch(function ($type, $job) {
-                return $job->getName() === 'pi';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->job()->watchByName('pi', function ($type, $job) {
+            return $job->getName() === 'pi';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

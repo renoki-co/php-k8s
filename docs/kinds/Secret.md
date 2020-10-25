@@ -30,7 +30,7 @@ $secret->setData([
 Data retrieval by default returns base64-encoded data:
 
 ```php
-$secret = $cluster->secret()->getByName('certificates');
+$secret = $cluster->getSecretByName('certificates');
 
 $data = $secret->getData();
 
@@ -48,7 +48,7 @@ $key = $data['key.pem'] // '...'
 ### Removing an attribute from data
 
 ```php
-$secret = $cluster->secret()->getByName('certificates');
+$secret = $cluster->getSecretByName('certificates');
 
 // ['key.pem' => '...', 'ca.pem' => '...']
 
