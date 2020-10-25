@@ -80,7 +80,7 @@ $sts->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$sts = $cluster->statefulSet()->getByName('mysql');
+$sts = $cluster->getStatefulSetByName('mysql');
 
 $template = $sts->getTemplate();
 ```

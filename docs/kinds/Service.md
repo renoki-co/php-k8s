@@ -44,7 +44,7 @@ $svc->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$svc = $cluster->service()->getByName('nginx');
+$svc = $cluster->getServiceByName('nginx');
 
 $ports = $svc->getPorts();
 ```

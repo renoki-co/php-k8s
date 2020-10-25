@@ -18,7 +18,7 @@ $cm = $cluster->configmap()
 ### Data Retrieval
 
 ```php
-$cm = $cluster->configmap()->getByName('certificates');
+$cm = $cluster->getConfigmapByName('certificates');
 
 $data = $cm->getData();
 
@@ -28,7 +28,7 @@ $key = $data['key.pem'];
 ### Removing an attribute from data
 
 ```php
-$cm = $cluster->configmap()->getByName('certificates');
+$cm = $cluster->getConfigmapByName('certificates');
 
 // ['key.pem' => '...', 'ca.pem' => '...']
 

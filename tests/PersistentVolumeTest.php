@@ -105,7 +105,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runGetTests()
     {
-        $pv = $this->cluster->persistentVolume()->getByName('app');
+        $pv = $this->cluster->getPersistentVolumeByName('app');
 
         $this->assertInstanceOf(K8sPersistentVolume::class, $pv);
 
@@ -122,7 +122,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pv = $this->cluster->persistentVolume()->getByName('app');
+        $pv = $this->cluster->getPersistentVolumeByName('app');
 
         $this->assertTrue($pv->isSynced());
 
@@ -143,7 +143,7 @@ class PersistentVolumeTest extends TestCase
 
     public function runDeletionTests()
     {
-        $pv = $this->cluster->persistentVolume()->getByName('app');
+        $pv = $this->cluster->getPersistentVolumeByName('app');
 
         $this->assertTrue($pv->delete());
 
@@ -151,7 +151,7 @@ class PersistentVolumeTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pv = $this->cluster->persistentVolume()->getByName('app');
+        $pv = $this->cluster->getPersistentVolumeByName('app');
     }
 
     public function runWatchAllTests()

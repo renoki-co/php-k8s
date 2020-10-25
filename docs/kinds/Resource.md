@@ -35,7 +35,7 @@ $service->setNamespace('staging');
 The namespace also accepts a `K8sNamespace` class:
 
 ```php
-$ns = $cluster->namespace()->getByName('staging');
+$ns = $cluster->getNamespaceByName('staging');
 
 $service->setNamespace($ns);
 ```

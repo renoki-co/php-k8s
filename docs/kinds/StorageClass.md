@@ -18,7 +18,7 @@ $sc = $cluster->storageClass()
 Adding custom parameters with `->setAttribute()`:
 
 ```php
-$sc = $cluster->storageClass()->getByName('gp2');
+$sc = $cluster->getStorageClassByName('gp2');
 
 $sc->setAttribute('allowedTopologies', []);
 ```
@@ -26,7 +26,7 @@ $sc->setAttribute('allowedTopologies', []);
 ### Retrieval
 
 ```php
-$sc = $cluster->storageClass()->getByName('gp2');
+$sc = $cluster->getStorageClassByName('gp2');
 
 $provisioner = $sc->getProvisioner();
 ```

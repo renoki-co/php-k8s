@@ -19,6 +19,8 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
+
+        dd($this->cluster->getConfigMapByName('settings'));
     }
 
     public function test_config_map_from_yaml()
@@ -78,7 +80,7 @@ class ConfigMapTest extends TestCase
 
     public function runGetTests()
     {
-        $cm = $this->cluster->configmap()->getByName('settings');
+        $cm = $this->cluster->getConfigmapByName('settings');
 
         $this->assertInstanceOf(K8sConfigMap::class, $cm);
 
@@ -92,7 +94,7 @@ class ConfigMapTest extends TestCase
 
     public function runUpdateTests()
     {
-        $cm = $this->cluster->configmap()->getByName('settings');
+        $cm = $this->cluster->getConfigmapByName('settings');
 
         $this->assertTrue($cm->isSynced());
 
@@ -112,13 +114,13 @@ class ConfigMapTest extends TestCase
 
     public function runDeletionTests()
     {
-        $cm = $this->cluster->configmap()->getByName('settings');
+        $cm = $this->cluster->getConfigmapByName('settings');
 
         $this->assertTrue($cm->delete());
 
         $this->expectException(KubernetesAPIException::class);
 
-        $cm = $this->cluster->configmap()->getByName('settings');
+        $cm = $this->cluster->getConfigmapByName('settings');
     }
 
     public function runWatchAllTests()

@@ -70,7 +70,7 @@ $pod->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$pod = $cluster->pod()->getByName('mysql');
+$pod = $cluster->getPodByName('mysql');
 
 $containers = $pod->getContainers();
 ```

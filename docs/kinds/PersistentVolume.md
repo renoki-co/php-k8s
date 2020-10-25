@@ -67,7 +67,7 @@ $pv->setSpec('some.nested.path', [...]);
 ### Retrieval
 
 ```php
-$pv = $cluster->persistentVolume()->getByName('disk-1');
+$pv = $cluster->getPersistentVolumeByName('disk-1');
 
 $capacity = $pv->getCapacity(); // "10Gi"
 ```

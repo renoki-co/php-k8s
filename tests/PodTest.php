@@ -161,7 +161,7 @@ class PodTest extends TestCase
 
     public function runGetTests()
     {
-        $pod = $this->cluster->pod()->getByName('mysql');
+        $pod = $this->cluster->getPodByName('mysql');
 
         $this->assertInstanceOf(K8sPod::class, $pod);
 
@@ -175,7 +175,7 @@ class PodTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pod = $this->cluster->pod()->getByName('mysql');
+        $pod = $this->cluster->getPodByName('mysql');
 
         $this->assertTrue($pod->isSynced());
 
@@ -194,7 +194,7 @@ class PodTest extends TestCase
 
     public function runDeletionTests()
     {
-        $pod = $this->cluster->pod()->getByName('mysql');
+        $pod = $this->cluster->getPodByName('mysql');
 
         $this->assertTrue($pod->delete());
 
@@ -202,7 +202,7 @@ class PodTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->pod()->getByName('mysql');
+        $pod = $this->cluster->getPodByName('mysql');
     }
 
     public function runWatchAllTests()
