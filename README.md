@@ -164,11 +164,11 @@ to update your resource since you have to retrieve it first (thus getting a sync
 triggering the update.
 
 ```php
-$ns = $cluster->getConfigmapByName('env');
+$cm = $cluster->getConfigmapByName('env');
 
-$ns->addData('API_KEY', '123')
+$cm->addData('API_KEY', '123')
 
-$ns->update();
+$cm->update();
 ```
 
 ### Deletion
