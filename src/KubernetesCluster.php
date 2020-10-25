@@ -343,7 +343,7 @@ class KubernetesCluster
      */
     public function __call($method, $parameters)
     {
-        // Proxy the ->get[Resource]ByName($name, $namespace = 'default)
+        // Proxy the ->get[Resource]ByName($name, $namespace = 'default')
         // For example, ->getConfigMapByName('settings')
         if (preg_match('/get(.+)ByName/', $method, $matches)) {
             [$method, $resource] = $matches;
