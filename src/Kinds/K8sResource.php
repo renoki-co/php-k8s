@@ -549,7 +549,19 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Get a specific resource.
+     * Watch the specific resource by name.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watchByName(string $name, Closure $callback, array $query = ['pretty' => 1])
+    {
+        return $this->whereName($name)->watch($callback, $query);
+    }
+
+    /**
+     * Get a specific resource's logs.
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
@@ -574,7 +586,19 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Watch the specific resource until the closure returns true or false.
+     * Watch the specific resource by name.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function logsByName(array $query = ['pretty' => 1])
+    {
+        return $this->whereName($name)->logs($query);
+    }
+
+    /**
+     * Watch the specific resource's logs until the closure returns true or false.
      *
      * @param  Closure  $callback
      * @param  array  $query
@@ -600,5 +624,17 @@ class K8sResource implements Arrayable, Jsonable
                 $callback,
                 $query
             );
+    }
+
+    /**
+     * Watch the specific resource's logs by name.
+     *
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return void
+     */
+    public function watchLogsByName(string $name, Closure $callback, array $query = ['pretty' => 1])
+    {
+        return $this->whereName($name)->watchLogs($callback, $query);
     }
 }

@@ -139,23 +139,20 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->persistentVolumeClaim()
-            ->watchAll(function ($type, $pvc) {
-                if ($pvc->getName() === 'app-pvc') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->persistentVolumeClaim()->watchAll(function ($type, $pvc) {
+            if ($pvc->getName() === 'app-pvc') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->persistentVolumeClaim()
-            ->whereName('app-pvc')
-            ->watch(function ($type, $pvc) {
-                return $pvc->getName() === 'app-pvc';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->persistentVolumeClaim()->watchByName('app-pvc', function ($type, $pvc) {
+            return $pvc->getName() === 'app-pvc';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

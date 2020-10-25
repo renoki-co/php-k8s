@@ -125,23 +125,20 @@ class SecretTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->secret()
-            ->watchAll(function ($type, $secret) {
-                if ($secret->getName() === 'passwords') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->secret()->watchAll(function ($type, $secret) {
+            if ($secret->getName() === 'passwords') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->secret()
-            ->whereName('passwords')
-            ->watch(function ($type, $secret) {
-                return $secret->getName() === 'passwords';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->secret()->watchByName('passwords', function ($type, $secret) {
+            return $secret->getName() === 'passwords';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

@@ -244,23 +244,20 @@ class StatefulSetTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->statefulSet()
-            ->watchAll(function ($type, $sts) {
-                if ($sts->getName() === 'mysql') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->statefulSet()->watchAll(function ($type, $sts) {
+            if ($sts->getName() === 'mysql') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->statefulSet()
-            ->whereName('mysql')
-            ->watch(function ($type, $sts) {
-                return $sts->getName() === 'mysql';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->statefulSet()->watchByName('mysql', function ($type, $sts) {
+            return $sts->getName() === 'mysql';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

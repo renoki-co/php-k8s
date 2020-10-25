@@ -128,23 +128,20 @@ class StorageClassTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->storageClass()
-            ->watchAll(function ($type, $sc) {
-                if ($sc->getName() === 'io1') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->storageClass()->watchAll(function ($type, $sc) {
+            if ($sc->getName() === 'io1') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->storageClass()
-            ->whereName('io1')
-            ->watch(function ($type, $sc) {
-                return $sc->getName() === 'io1';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->storageClass()->watchByName('io1', function ($type, $sc) {
+            return $sc->getName() === 'io1';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

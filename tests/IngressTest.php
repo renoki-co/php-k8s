@@ -166,23 +166,20 @@ class IngressTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->ingress()
-            ->watchAll(function ($type, $ingress) {
-                if ($ingress->getName() === 'nginx') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->ingress()->watchAll(function ($type, $ingress) {
+            if ($ingress->getName() === 'nginx') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->ingress()
-            ->whereName('nginx')
-            ->watch(function ($type, $ingress) {
-                return $ingress->getName() === 'nginx';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->ingress()->watchByName('nginx', function ($type, $ingress) {
+            return $ingress->getName() === 'nginx';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

@@ -207,46 +207,39 @@ class PodTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->pod()
-            ->watchAll(function ($type, $pod) {
-                if ($pod->getName() === 'mysql') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->pod()->watchAll(function ($type, $pod) {
+            if ($pod->getName() === 'mysql') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->pod()
-            ->whereName('mysql')
-            ->watch(function ($type, $pod) {
-                return $pod->getName() === 'mysql';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->pod()->watchByName('mysql', function ($type, $pod) {
+            return $pod->getName() === 'mysql';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchLogsTests()
     {
-        $this->cluster->pod()
-            ->whereName('mysql')
-            ->watchLogs(function ($data) {
-                // Debugging data to CI. :D
-                dump($data);
+        $this->cluster->pod()->watchLogsByName('mysql', function ($data) {
+            // Debugging data to CI. :D
+            dump($data);
 
-                if (Str::contains($data, 'InnoDB')) {
-                    return true;
-                }
-            });
+            if (Str::contains($data, 'InnoDB')) {
+                return true;
+            }
+        });
     }
 
     public function runGetLogsTests()
     {
-        $logs = $this->cluster->pod()
-            ->whereName('mysql')
-            ->logs();
+        $logs = $this->cluster->pod()->getLogsByName('mysql');
 
         // Debugging data to CI. :D
         dump($logs);

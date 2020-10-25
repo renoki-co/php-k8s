@@ -142,23 +142,20 @@ class ServiceTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->service()
-            ->watchAll(function ($type, $service) {
-                if ($service->getName() === 'nginx') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->service()->watchAll(function ($type, $service) {
+            if ($service->getName() === 'nginx') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->service()
-            ->whereName('nginx')
-            ->watch(function ($type, $service) {
-                return $service->getName() === 'nginx';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->service()->watchByName('nginx', function ($type, $service) {
+            return $service->getName() === 'nginx';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

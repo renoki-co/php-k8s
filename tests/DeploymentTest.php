@@ -191,23 +191,20 @@ class DeploymentTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->deployment()
-            ->watchAll(function ($type, $dep) {
-                if ($dep->getName() === 'mysql') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->deployment()->watchAll(function ($type, $dep) {
+            if ($dep->getName() === 'mysql') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->deployment()
-            ->whereName('mysql')
-            ->watch(function ($type, $dep) {
-                return $dep->getName() === 'mysql';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->deployment()->watchByName('mysql', function ($type, $dep) {
+            return $dep->getName() === 'mysql';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

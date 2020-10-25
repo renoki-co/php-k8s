@@ -123,23 +123,20 @@ class ConfigMapTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->configmap()
-            ->watchAll(function ($type, $configmap) {
-                if ($configmap->getName() === 'settings') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->configmap()->watchAll(function ($type, $configmap) {
+            if ($configmap->getName() === 'settings') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->configmap()
-            ->whereName('settings')
-            ->watch(function ($type, $configmap) {
-                return $configmap->getName() === 'settings';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->configmap()->watchByName('settings', function ($type, $configmap) {
+            return $configmap->getName() === 'settings';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }

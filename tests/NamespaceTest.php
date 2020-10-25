@@ -102,23 +102,20 @@ class NamespaceTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->namespace()
-            ->watchAll(function ($type, $namespace) {
-                if ($namespace->getName() === 'production') {
-                    return true;
-                }
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->namespace()->watchAll(function ($type, $namespace) {
+            if ($namespace->getName() === 'production') {
+                return true;
+            }
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->namespace()
-            ->whereName('production')
-            ->watch(function ($type, $namespace) {
-                return $namespace->getName() === 'production';
-            }, ['timeoutSeconds' => 10]);
+        $watch = $this->cluster->namespace()->watchByName('production', function ($type, $namespace) {
+            return $namespace->getName() === 'production';
+        }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
     }
