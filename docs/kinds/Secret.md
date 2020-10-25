@@ -14,8 +14,7 @@ $secret = $cluster->secret()
     ->setData([
         'key.pem' => '...',
         'ca.pem' => '...',
-    ])
-    ->create();
+    ])->create();
 ```
 
 If you already encoded the fields, you can pass `false` to the second parameter:
@@ -31,9 +30,7 @@ $secret->setData([
 Data retrieval by default returns base64-encoded data:
 
 ```php
-$secret = $cluster->secret()
-    ->whereName('certificates')
-    ->get();
+$secret = $cluster->secret()->getByName('certificates');
 
 $data = $secret->getData();
 
@@ -51,15 +48,11 @@ $key = $data['key.pem'] // '...'
 ### Removing an attribute from data
 
 ```php
-$secret = $cluster->secret()
-    ->whereName('certificates')
-    ->get();
+$secret = $cluster->secret()->getByName('certificates');
 
 // ['key.pem' => '...', 'ca.pem' => '...']
 
-$secret
-    ->removeData('ca.pem')
-    ->update();
+$secret->removeData('ca.pem')->update();
 
 $data = $secret->getData(); // ['key.pem' => '...']
 ```

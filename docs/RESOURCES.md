@@ -15,6 +15,7 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Pod](kinds/Pod.md)
 - [Statefulset](kinds/StatefulSet.md)
 - [Deployment](kinds/Deployment.md)
+- [Jobs](kinds/Job.md)
 
 # Work in Progress
 
@@ -24,7 +25,6 @@ The following list of resources are work in progress and they will be available 
 - replicasets
 - horizontalpodautoscalers
 - cronjobs
-- jobs
 
 # Discussable
 

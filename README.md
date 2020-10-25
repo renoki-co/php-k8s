@@ -138,9 +138,7 @@ to update your resource since you have to retrieve it first (thus getting a sync
 triggering the update.
 
 ```php
-$ns = $cluster->configmap()
-    ->whereName('env')
-    ->get();
+$ns = $cluster->configmap()->getByName('env');
 
 $ns->addData('API_KEY', '123')
 
@@ -152,9 +150,7 @@ $ns->update();
 You will have to simply call `->delete()` on the resource, after you retrieve it.
 
 ```php
-$cm = $cluster->configmap()
-    ->whereName('settings')
-    ->get();
+$cm = $cluster->configmap()->getByName('settings');
 
 $cm->delete(); // true
 ```
@@ -192,9 +188,7 @@ You can watch the resource directly from the Resource class, and check & process
 ### Tracking one resource
 
 ```php
-$pod = $cluster->pod()
-    ->whereName('mysql')
-    ->get();
+$pod = $cluster->pod()->getByName('mysql');
 
 $pod->watch(function ($type, $pod) {
     $resourceVersion = $pod->getResourceVersion();
@@ -206,9 +200,7 @@ $pod->watch(function ($type, $pod) {
 Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
 
 ```php
-$pod = $cluster->pod()
-    ->whereName('mysql')
-    ->get();
+$pod = $cluster->pod()->getByName('mysql');
 
 $pod->watch(function ($type, $pod) {
 

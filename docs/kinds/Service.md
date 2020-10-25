@@ -12,7 +12,7 @@ $svc = $cluster->service()
     ->setSelectors(['app' => 'frontend'])
     ->setPorts([
         ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
-    ]);
+    ])->create();
 ```
 
 Services support annotations:
@@ -26,30 +26,25 @@ $svc->setAnnotations([
 While the Service kind has `spec`, you can avoid writing this:
 
 ```php
-$svc = $cluster->service()
-    ->setAttribute('spec.ports', [...]);
+$svc->setAttribute('spec.ports', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$svc = $cluster->service()
-    ->setSpec('ports', [...]);
+$svc->setSpec('ports', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$svc = $cluster->service()
-    ->setSpec('some.nested.path', [...]);
+$svc->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$svc = $cluster->service()
-    ->whereName('nginx')
-    ->get();
+$svc = $cluster->service()->getByName('nginx');
 
 $ports = $svc->getPorts();
 ```

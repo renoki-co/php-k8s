@@ -240,7 +240,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getByName(string $name)
     {
-        return $this->setName($name)->get();
+        return $this->whereName($name)->get();
     }
 
     /**

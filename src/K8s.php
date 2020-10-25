@@ -137,6 +137,18 @@ class K8s
     }
 
     /**
+     * Create a new DaemonSet kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sDaemonSet
+     */
+    public static function daemonSet($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sDaemonSet($cluster, $attributes);
+    }
+
+    /**
      * Create a new Job kind.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster

@@ -12,7 +12,8 @@ $pvc = $cluster->persistentVolumeClaim()
     ->setSelectors(['matchLabels' => ['app' => 'bigdata'])
     ->setCapacity(10, 'Gi')
     ->setAccessModes(['ReadWriteOnce'])
-    ->setStorageClass('gp2');
+    ->setStorageClass('gp2')
+    ->create();
 ```
 
 You can pass the storage class as a `RenokiCo\PhpK8s\Kinds\K8sStorageClass` instance:
@@ -21,38 +22,41 @@ You can pass the storage class as a `RenokiCo\PhpK8s\Kinds\K8sStorageClass` inst
 $sc = $cluster->storageClass()
     ->setName('sc1')
     ->setProvisioner('csi.aws.amazon.com')
-    ->setParameters(['type' => 'sc1']);
+    ->setParameters(['type' => 'sc1'])
+    ->create();
 
-$pvc->setStorageClass($sc);
+$pvc = $cluster->persistentVolumeClaim()
+    ->setName('pvc-1')
+    ->setSelectors(['matchLabels' => ['app' => 'bigdata'])
+    ->setCapacity(10, 'Gi')
+    ->setAccessModes(['ReadWriteOnce'])
+    ->setStorageClass('gp2')
+
+$pvc->setStorageClass($sc)->create();
 ```
 
 While the PersistentVolumeClaim kind has `spec`, you can avoid writing this:
 
 ```php
-$pvc = $cluster->persistentVolumeClaim()
-    ->setAttribute('spec.volumeMode', 'Block');
+$pvc->setAttribute('spec.volumeMode', 'Block');
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$pvc = $cluster->persistentVolumeClaim()
-    ->setSpec('volumeMode', 'Block');
+$pvc->setSpec('volumeMode', 'Block');
 ```
 
 Dot notation is supported:
 
 ```php
-$pvc = $cluster->persistentVolumeClaim()
-    ->setSpec('some.nested.path', [...]);
+$pvc->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$pvc = $cluster->persistentVolumeClaim()
-    ->whereName('pvc-1')
-    ->get();
+$pvc = $cluster->persistentVolumeClaim()->getByName('pvc-1');
 
 $capacity = $pvc->getCapacity(); // "10Gi"
 ```

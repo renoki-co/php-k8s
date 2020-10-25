@@ -20,7 +20,7 @@ $ingress = $cluster->ingress()
                 ],
             ]],
         ]],
-    ]);
+    ])->create();
 ```
 
 Ingresses support annotations:
@@ -34,31 +34,25 @@ $ingress->setAnnotations([
 While the Ingress kind has `spec`, you can avoid writing this:
 
 ```php
-$ingress = $cluster->ingress()
-    ->setAttribute('spec.rules', [...]);
+$ingress->setAttribute('spec.rules', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$ingress = $cluster->ingress()
-    ->setSpec('rules', [...]);
+$ingress->setSpec('rules', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$ingress = $cluster->ingress()
-    ->setSpec('some.nested.path', [...]);
+$ingress->setSpec('some.nested.path', [...]);
 ```
-
 
 ### Retrieval
 
 ```php
-$ingress = $cluster->ingress()
-    ->whereName('nginx')
-    ->get();
+$ingress = $cluster->ingress()->getByName('nginx');
 
 $rules = $ingress->getRules();
 ```

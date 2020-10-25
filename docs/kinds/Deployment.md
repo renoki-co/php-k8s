@@ -9,16 +9,16 @@
 Deployments are just configurations that relies on a Pod. So before diving in, make sure you read the [Pod Documentation](Pod.md)
 
 ```php
-$container = $cluster->container();
+use RenokiCo\PhpK8s\K8s;
 
-$container
+$container = K8s::container()
     ->setName('mysql')
     ->setImage('mysql', '5.7')
     ->setPorts([
         ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
     ]);
 
-$pod = $cluster->pod()
+$pod = K8s::pod()
     ->setName('mysql')
     ->setLabels(['tier' => 'backend'])
     ->setContainers([$mysql]);
@@ -27,7 +27,8 @@ $dep = $cluster->deployment()
     ->setName('mysql')
     ->setSelectors(['matchLabels' => ['tier' => 'backend']])
     ->setReplicas(1)
-    ->setTemplate($pod);
+    ->setTemplate($pod)
+    ->create();
 ```
 
 Deployments support annotations, as well as labels:
@@ -47,32 +48,25 @@ $dep->setLabels([
 While the Deployment kind has `spec`, you can avoid writing this:
 
 ```php
-$dep = $cluster->deployment()
-    ->setAttribute('spec.template', [...]);
+$dep->setAttribute('spec.template', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$dep = $cluster->deployment()
-    ->setSpec('template', [...]);
+$dep->setSpec('template', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$dep = $cluster->deployment()
-    ->setSpec('some.nested.path', [...]);
+$dep->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$dep = $cluster->deployment()
-    ->whereName('mysql')
-    ->get();
-
-$template = $dep->getTemplate();
+$dep->getTemplate();
 ```
 
 Retrieving the spec attributes can be done like the `setSpec()` method:

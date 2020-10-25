@@ -9,16 +9,16 @@
 Statefulsets are just configurations that relies on a Pod. So before diving in, make sure you read the [Pod Documentation](Pod.md)
 
 ```php
-$container = $cluster->container();
+use RenokiCo\PhpK8s\K8s;
 
-$container
+$container = K8s::container()
     ->setName('mysql')
     ->setImage('mysql', '5.7')
     ->setPorts([
         ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
     ]);
 
-$pod = $cluster->pod()
+$pod = K8s::pod()
     ->setName('mysql')
     ->setLabels(['tier' => 'backend'])
     ->setContainers([$mysql]);
@@ -27,12 +27,13 @@ $svc = $cluster->service()
     ->setName('mysql')
     ->setPorts([
         ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
-    ]);
+    ])->create();
 
 $pvc = $cluster->persistentVolumeClaim()
     ->setName('mysql-pvc')
     ->setCapacity(1, 'Gi')
-    ->setAccessModes(['ReadWriteOnce']);
+    ->setAccessModes(['ReadWriteOnce'])
+    ->create();
 
 $sts = $cluster->statefulSet()
     ->setName('mysql')
@@ -40,7 +41,8 @@ $sts = $cluster->statefulSet()
     ->setReplicas(1)
     ->setService($svc)
     ->setTemplate($pod)
-    ->setVolumeClaims([$pvc]);
+    ->setVolumeClaims([$pvc])
+    ->create();
 ```
 
 Statefulsets support annotations, as well as labels:
@@ -60,30 +62,25 @@ $sts->setLabels([
 While the Statefulset kind has `spec`, you can avoid writing this:
 
 ```php
-$sts = $cluster->statefulSet()
-    ->setAttribute('spec.template', [...]);
+$sts->setAttribute('spec.template', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$sts = $cluster->statefulSet()
-    ->setSpec('template', [...]);
+$sts->setSpec('template', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$sts = $cluster->statefulSet()
-    ->setSpec('some.nested.path', [...]);
+$sts->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$sts = $cluster->statefulSet()
-    ->whereName('mysql')
-    ->get();
+$sts = $cluster->statefulSet()->getByName('mysql');
 
 $template = $sts->getTemplate();
 ```

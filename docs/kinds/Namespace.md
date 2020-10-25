@@ -15,7 +15,5 @@ $ns = $cluster->namespace()
 ### Namespace retrieval
 
 ```php
-$ns = $cluster->namespace()
-    ->whereName('staging')
-    ->get();
+$ns = $cluster->namespace()->getByName('staging');
 ```

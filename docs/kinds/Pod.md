@@ -9,9 +9,9 @@
 The Container case lets you define the settings per-container in an easy manner:
 
 ```php
-$container = $cluster->container();
+use RenokiCo\PhpK8s\K8s;
 
-$container
+$container = K8s::container()
     ->setName('mysql')
     ->setImage('mysql', '5.7')
     ->setPorts([
@@ -30,6 +30,7 @@ $pod = $cluster->pod()
     ->setName('mysql')
     ->setSelectors(['app' => 'db'])
     ->setContainers([$mysql])
+    ->create();
 ```
 
 **Please keep in mind that Containers does not have predefined functions, so you can extend the class or you can use [Custom Callers](Resource.md#custom-callers), which applies to any Instance or Resource.**
@@ -51,30 +52,25 @@ $pod->setLabels([
 While the Pod kind has `spec`, you can avoid writing this:
 
 ```php
-$pod = $cluster->pod()
-    ->setAttribute('spec.nodeSelector', [...]);
+$pod->setAttribute('spec.nodeSelector', [...]);
 ```
 
 And use the `setSpec()` method:
 
 ```php
-$pod = $cluster->pod()
-    ->setSpec('nodeSelector', [...]);
+$pod->setSpec('nodeSelector', [...]);
 ```
 
 Dot notation is supported:
 
 ```php
-$pod = $cluster->pod()
-    ->setSpec('some.nested.path', [...]);
+$pod->setSpec('some.nested.path', [...]);
 ```
 
 ### Retrieval
 
 ```php
-$pod = $cluster->pod()
-    ->whereName('mysql')
-    ->get();
+$pod = $cluster->pod()->getByName('mysql');
 
 $containers = $pod->getContainers();
 ```
@@ -82,7 +78,7 @@ $containers = $pod->getContainers();
 Retrieving the spec attributes can be done like the `setSpec()` method:
 
 ```php
-$pod->getSpec('containers', []);
+$containers = $pod->getSpec('containers', []);
 ```
 
 The second value for the `getSpec()` method is the default value, in case the found path is not existent.
@@ -135,9 +131,7 @@ Open up a websocket connection and watch for changes, line-by-line:
 // us returned in the closure.
 
 $pod->watchLogs(function ($line) {
-
     // Process the logic here
     // with the given line.
-
 });
 ```
