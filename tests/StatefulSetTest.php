@@ -178,8 +178,7 @@ class StatefulSetTest extends TestCase
 
     public function runGetAllTests()
     {
-        $statefulsets = $this->cluster->statefulSet()
-            ->all();
+        $statefulsets = $this->cluster->statefulSet()->all();
 
         $this->assertInstanceOf(ResourcesList::class, $statefulsets);
 

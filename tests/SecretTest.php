@@ -67,8 +67,7 @@ class SecretTest extends TestCase
 
     public function runGetAllTests()
     {
-        $secrets = $this->cluster->secret()
-            ->all();
+        $secrets = $this->cluster->secret()->all();
 
         $this->assertInstanceOf(ResourcesList::class, $secrets);
 

@@ -80,8 +80,7 @@ class ServiceTest extends TestCase
 
     public function runGetAllTests()
     {
-        $services = $this->cluster->service()
-            ->all();
+        $services = $this->cluster->service()->all();
 
         $this->assertInstanceOf(ResourcesList::class, $services);
 
