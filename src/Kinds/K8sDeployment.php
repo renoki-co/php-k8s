@@ -8,10 +8,11 @@ use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\HasTemplate;
 
 class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAnnotations, HasLabels, HasSelector, HasSpec;
+    use HasAnnotations, HasLabels, HasSelector, HasSpec, HasTemplate;
 
     /**
      * The resource Kind parameter.
@@ -53,38 +54,6 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Watc
     public function getReplicas(): int
     {
         return $this->getSpec('replicas', 1);
-    }
-
-    /**
-     * Set the template pod.
-     *
-     * @param  array|\RenokiCo\PhpK8s\Kinds\K8sPod  $pod
-     * @return $this
-     */
-    public function setTemplate($pod)
-    {
-        if ($pod instanceof K8sPod) {
-            $pod = $pod->toArray();
-        }
-
-        return $this->setSpec('template', $pod);
-    }
-
-    /**
-     * Get the template pod.
-     *
-     * @param  bool  $asInstance
-     * @return array|\RenokiCo\PhpK8s\Kinds\K8sPod
-     */
-    public function getTemplate(bool $asInstance = true)
-    {
-        $template = $this->getSpec('template', []);
-
-        if ($asInstance) {
-            $template = new K8sPod($this->cluster, $template);
-        }
-
-        return $template;
     }
 
     /**
