@@ -21,6 +21,5 @@
     </filter>
     <php>
         <server name="APP_ENV" value="testing" />
-        <server name="KUBECONFIG_PATH" value="" />
     </php>
 </phpunit>
