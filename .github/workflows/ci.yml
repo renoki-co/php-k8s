@@ -38,6 +38,10 @@ jobs:
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
+    - name: Run Kubernetes Proxy
+      run: |
+        kubectl proxy --port=8080 &
+
     - name: Install dependencies
       run: |
         composer install --no-interaction --prefer-source
