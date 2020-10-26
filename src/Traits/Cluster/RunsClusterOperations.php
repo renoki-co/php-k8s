@@ -54,7 +54,7 @@ trait RunsClusterOperations
      *
      * @return \GuzzleHttp\Client
      */
-    protected function getClient()
+    public function getClient()
     {
         $options = [
             RequestOptions::HEADERS => [

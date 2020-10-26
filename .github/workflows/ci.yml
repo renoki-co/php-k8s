@@ -45,8 +45,6 @@ jobs:
     - name: Run tests
       run: |
         phpunit --coverage-text --coverage-clover=coverage.xml
-      env:
-        KUBECONFIG_PATH: ${{ env.MINIKUBE_HOME }}/.minikube/config
 
     - uses: codecov/codecov-action@v1
       with:

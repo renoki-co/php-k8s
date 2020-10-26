@@ -10,31 +10,23 @@ use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
 trait LoadsFromKubeConfig
 {
     /**
-     * Load configuration from a Kube Config context as JSON.
+     * The absolute path to the temporary folder
+     * used to write base64-encoded SSL certs and keys
+     * to be able to load them in Guzzle
      *
-     * @param  string  $yaml
-     * @param  string  $context
-     * @return $this
+     * @var null|string
      */
-    public function fromKubeConfigJson(string $json, string $context)
-    {
-        $kubeconfig = json_decode($json, true);
-
-        $this->loadKubeConfigFromArray($kubeconfig, $context);
-
-        return $this;
-    }
+    protected static $tempFolder;
 
     /**
-     * Load configuration from a Kube Config file context as JSON.
+     * Set the temporary folder for the writings.
      *
-     * @param  string  $path
-     * @param  string  $context
-     * @return $this
+     * @param  string  $tempFolder
+     * @return void
      */
-    public function fromKubeConfigJsonFile(string $path = '/.kube/config', string $context = 'minikube')
+    public static function setTempFolder(string $tempFolder)
     {
-        return $this->fromKubeConfigJson(file_get_contents($path), $context);
+        static::$tempFolder = $tempFolder;
     }
 
     /**
@@ -141,7 +133,9 @@ trait LoadsFromKubeConfig
      */
     protected function writeTempFileForContext(string $context, string $fileName, string $contents)
 	{
-        $tempFilePath = sys_get_temp_dir().DIRECTORY_SEPARATOR."ctx-{$context}-{$fileName}";
+        $tempFolder = static::$tempFolder ?: sys_get_temp_dir();
+
+        $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR."ctx-{$context}-{$fileName}";
 
         if (file_exists($tempFilePath)) {
             return $tempFilePath;
