@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\ResourcesList;
 
 trait RunsClusterOperations
 {
