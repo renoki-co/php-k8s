@@ -38,13 +38,15 @@ jobs:
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: Print the MINIKUBE_HOME directory contents
+    - name: Print the MINIKUBE_HOME/.minikube directory contents
       run: |
-        ls -al $MINIKUBE_HOME
+        ls -al $MINIKUBE_HOME/.minikube/
 
     - name: Install dependencies
       run: |
         composer install --no-interaction --prefer-source
+      env:
+        KUBECONFIG_PATH: $MINIKUBE_HOME/.minikube/config
 
     - name: Run tests
       run: |
