@@ -38,9 +38,9 @@ jobs:
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
-    - name: Print ~/.kube/config contents
+    - name: Print the MINIKUBE_HOME directory contents
       run: |
-        cat $MINIKUBE_HOME/config
+        ls -al $MINIKUBE_HOME
 
     - name: Install dependencies
       run: |
@@ -49,6 +49,8 @@ jobs:
     - name: Run tests
       run: |
         phpunit --coverage-text --coverage-clover=coverage.xml
+      env:
+        KUBECONFIG_PATH: $MINIKUBE_HOME
 
     - uses: codecov/codecov-action@v1
       with:
