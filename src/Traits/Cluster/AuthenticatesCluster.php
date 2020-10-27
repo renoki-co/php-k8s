@@ -47,10 +47,10 @@ trait AuthenticatesCluster
     /**
      * Pass a Bearer Token for authentication.
      *
-     * @param  string  $token
+     * @param  string|null  $token
      * @return $this
      */
-    public function withToken(string $token)
+    public function withToken(string $token = null)
     {
         $this->token = $token;
 
@@ -60,10 +60,10 @@ trait AuthenticatesCluster
     /**
      * Load a Bearer Token from file.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return $this
      */
-    public function loadTokenFromFile(string $path)
+    public function loadTokenFromFile(string $path = null)
     {
         return $this->withToken(file_get_contents($path));
     }
@@ -71,13 +71,15 @@ trait AuthenticatesCluster
     /**
      * Pass the username and password used for HTTP authentication.
      *
-     * @param  string  $username
-     * @param  string  $password
+     * @param  string|null  $username
+     * @param  string|null  $password
      * @return $this
      */
-    public function httpAuthentication(string $username, string $password)
+    public function httpAuthentication(string $username = null, string $password = null)
     {
-        $this->auth = [$username, $password];
+        if (! is_null($username) || ! is_null($password)) {
+            $this->auth = [$username, $password];
+        }
 
         return $this;
     }
@@ -85,10 +87,10 @@ trait AuthenticatesCluster
     /**
      * Set the path to the certificate used for SSL.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return $this
      */
-    public function withCertificate(string $path)
+    public function withCertificate(string $path = null)
     {
         $this->cert = $path;
 
@@ -98,10 +100,10 @@ trait AuthenticatesCluster
     /**
      * Set the path to the private key used for SSL.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return $this
      */
-    public function withPrivateKey(string $path)
+    public function withPrivateKey(string $path = null)
     {
         $this->sslKey = $path;
 
@@ -111,10 +113,10 @@ trait AuthenticatesCluster
     /**
      * Set the CA certificate used for validation.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return $this
      */
-    public function withCaCertificate(string $path)
+    public function withCaCertificate(string $path = null)
     {
         $this->verify = $path;
 
