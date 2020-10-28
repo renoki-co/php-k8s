@@ -12,7 +12,7 @@ trait LoadsFromKubeConfig
     /**
      * The absolute path to the temporary folder
      * used to write base64-encoded SSL certs and keys
-     * to be able to load them in Guzzle
+     * to be able to load them in Guzzle.
      *
      * @var null|string
      */
@@ -132,7 +132,7 @@ trait LoadsFromKubeConfig
      * @return string
      */
     protected function writeTempFileForContext(string $context, string $fileName, string $contents)
-	{
+    {
         $tempFolder = static::$tempFolder ?: sys_get_temp_dir();
 
         $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR."ctx-{$context}-{$fileName}";
@@ -141,10 +141,10 @@ trait LoadsFromKubeConfig
             return $tempFilePath;
         }
 
-		if (file_put_contents($tempFilePath, base64_decode($contents, true)) === false) {
-			throw new Exception("Failed to write content to temp file: {$tempFilePath}");
-		}
+        if (file_put_contents($tempFilePath, base64_decode($contents, true)) === false) {
+            throw new Exception("Failed to write content to temp file: {$tempFilePath}");
+        }
 
-		return $tempFilePath;
-	}
+        return $tempFilePath;
+    }
 }

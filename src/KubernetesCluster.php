@@ -2,8 +2,8 @@
 
 namespace RenokiCo\PhpK8s;
 
-use RenokiCo\PhpK8s\Kinds\K8sResource;
 use Illuminate\Support\Str;
+use RenokiCo\PhpK8s\Kinds\K8sResource;
 
 class KubernetesCluster
 {
