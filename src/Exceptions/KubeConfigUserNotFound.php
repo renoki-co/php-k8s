@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Exceptions;
 
-use Exception;
-
-class KubeConfigUserNotFound extends Exception
+class KubeConfigUserNotFound extends PhpK8sException
 {
     //
 }

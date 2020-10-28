@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Exceptions;
 
-use Exception;
-
-class KubernetesWatchException extends Exception
+class KubernetesWatchException extends PhpK8sException
 {
     //
 }

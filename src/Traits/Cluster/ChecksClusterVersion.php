@@ -34,7 +34,13 @@ trait ChecksClusterVersion
         try {
             $response = $this->getClient()->request('GET', $callableUrl);
         } catch (ClientException $e) {
-            throw new KubernetesAPIException($e->getMessage());
+            $payload = json_decode((string) $e->getResponse()->getBody(), true);
+
+            throw new KubernetesAPIException(
+                $e->getMessage(),
+                $payload['code'] ?? 0,
+                $payload
+            );
         }
 
         $json = @json_decode($response->getBody(), true);
