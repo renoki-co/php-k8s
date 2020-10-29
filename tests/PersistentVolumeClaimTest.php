@@ -67,7 +67,7 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertFalse($pvc->isSynced());
         $this->assertFalse($pvc->exists());
 
-        $pvc = $pvc->create();
+        $pvc = $pvc->syncWithCluster();
 
         $this->assertTrue($pvc->isSynced());
         $this->assertTrue($pvc->exists());

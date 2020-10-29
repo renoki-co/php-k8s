@@ -64,7 +64,7 @@ class ServiceTest extends TestCase
         $this->assertFalse($svc->isSynced());
         $this->assertFalse($svc->exists());
 
-        $svc = $svc->create();
+        $svc = $svc->syncWithCluster();
 
         $this->assertTrue($svc->isSynced());
         $this->assertTrue($svc->exists());

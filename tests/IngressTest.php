@@ -97,7 +97,7 @@ class IngressTest extends TestCase
         $this->assertFalse($ing->isSynced());
         $this->assertFalse($ing->exists());
 
-        $ing = $ing->create();
+        $ing = $ing->syncWithCluster();
 
         $this->assertTrue($ing->isSynced());
         $this->assertTrue($ing->exists());

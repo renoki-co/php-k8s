@@ -125,6 +125,22 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Create or update the resource according
+     * to the cluster availability.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function syncWithCluster(array $query = ['pretty' => 1])
+    {
+        try {
+            return $this->get($query);
+        } catch (KubernetesAPIException $e) {
+            return $this->create($query);
+        }
+    }
+
+    /**
      * Check if the resource changed from
      * its initial state.
      *

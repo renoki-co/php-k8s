@@ -54,7 +54,7 @@ class SecretTest extends TestCase
         $this->assertFalse($secret->isSynced());
         $this->assertFalse($secret->exists());
 
-        $secret = $secret->create();
+        $secret = $secret->syncWithCluster();
 
         $this->assertTrue($secret->isSynced());
         $this->assertTrue($secret->exists());
