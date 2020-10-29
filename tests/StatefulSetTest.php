@@ -153,10 +153,12 @@ class StatefulSetTest extends TestCase
             ->setVolumeClaims([$pvc]);
 
         $this->assertFalse($sts->isSynced());
+        $this->assertFalse($sts->exists());
 
         $sts = $sts->create();
 
         $this->assertTrue($sts->isSynced());
+        $this->assertTrue($sts->exists());
 
         $this->assertInstanceOf(K8sStatefulSet::class, $sts);
 

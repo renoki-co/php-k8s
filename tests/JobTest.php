@@ -96,10 +96,12 @@ class JobTest extends TestCase
             ->setTemplate($pod);
 
         $this->assertFalse($job->isSynced());
+        $this->assertFalse($job->exists());
 
         $job = $job->create();
 
         $this->assertTrue($job->isSynced());
+        $this->assertTrue($job->exists());
 
         $this->assertInstanceOf(K8sJob::class, $job);
 

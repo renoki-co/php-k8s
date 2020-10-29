@@ -105,10 +105,12 @@ class DeploymentTest extends TestCase
             ->setTemplate($pod);
 
         $this->assertFalse($dep->isSynced());
+        $this->assertFalse($dep->exists());
 
         $dep = $dep->create();
 
         $this->assertTrue($dep->isSynced());
+        $this->assertTrue($dep->exists());
 
         $this->assertInstanceOf(K8sDeployment::class, $dep);
 

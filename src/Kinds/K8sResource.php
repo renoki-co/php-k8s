@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
@@ -136,6 +137,23 @@ class K8sResource implements Arrayable, Jsonable
         }
 
         return $this->attributes !== $this->original;
+    }
+
+    /**
+     * Check if the current resource exists.
+     *
+     * @param  array  $query
+     * @return bool
+     */
+    public function exists(array $query = ['pretty' => 1]): bool
+    {
+        try {
+            $this->get($query);
+        } catch (KubernetesAPIException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

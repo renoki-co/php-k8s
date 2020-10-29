@@ -50,10 +50,12 @@ class ConfigMapTest extends TestCase
             ->removeData('somekey');
 
         $this->assertFalse($cm->isSynced());
+        $this->assertFalse($cm->exists());
 
         $cm = $cm->create();
 
         $this->assertTrue($cm->isSynced());
+        $this->assertTrue($cm->exists());
 
         $this->assertInstanceOf(K8sConfigMap::class, $cm);
 

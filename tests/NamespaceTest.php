@@ -66,10 +66,12 @@ class NamespaceTest extends TestCase
             ->setName('production');
 
         $this->assertFalse($ns->isSynced());
+        $this->assertFalse($ns->exists());
 
         $ns = $ns->create();
 
         $this->assertTrue($ns->isSynced());
+        $this->assertTrue($ns->exists());
 
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 

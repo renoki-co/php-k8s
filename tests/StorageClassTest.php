@@ -54,10 +54,12 @@ class StorageClassTest extends TestCase
             ->setMountOptions(['debug']);
 
         $this->assertFalse($sc->isSynced());
+        $this->assertFalse($sc->exists());
 
         $sc = $sc->create();
 
         $this->assertTrue($sc->isSynced());
+        $this->assertTrue($sc->exists());
 
         $this->assertInstanceOf(K8sStorageClass::class, $sc);
 

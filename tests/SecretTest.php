@@ -52,10 +52,12 @@ class SecretTest extends TestCase
             ->removeData('root');
 
         $this->assertFalse($secret->isSynced());
+        $this->assertFalse($secret->exists());
 
         $secret = $secret->create();
 
         $this->assertTrue($secret->isSynced());
+        $this->assertTrue($secret->exists());
 
         $this->assertInstanceOf(K8sSecret::class, $secret);
 

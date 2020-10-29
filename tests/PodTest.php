@@ -130,10 +130,12 @@ class PodTest extends TestCase
             ->setContainers([$mysql]);
 
         $this->assertFalse($pod->isSynced());
+        $this->assertFalse($pod->exists());
 
         $pod = $pod->create();
 
         $this->assertTrue($pod->isSynced());
+        $this->assertTrue($pod->exists());
 
         $this->assertInstanceOf(K8sPod::class, $pod);
 
