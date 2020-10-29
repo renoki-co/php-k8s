@@ -395,8 +395,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function all(array $query = ['pretty' => 1])
     {
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
@@ -414,8 +413,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function get(array $query = ['pretty' => 1])
     {
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
@@ -433,8 +431,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function create(array $query = ['pretty' => 1])
     {
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::CREATE_OP,
@@ -546,8 +543,7 @@ class K8sResource implements Arrayable, Jsonable
             );
         }
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
@@ -573,8 +569,7 @@ class K8sResource implements Arrayable, Jsonable
             );
         }
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
@@ -611,8 +606,7 @@ class K8sResource implements Arrayable, Jsonable
             );
         }
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::LOG_OP,
@@ -653,8 +647,7 @@ class K8sResource implements Arrayable, Jsonable
         // Ensure the ?follow=1 query exists to trigger the watch.
         $query = array_merge($query, ['follow' => 1]);
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::WATCH_LOGS_OP,

@@ -98,8 +98,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertTrue($cm->isSynced());
 
-        $cm
-            ->removeData('key2')
+        $cm->removeData('key2')
             ->addData('newkey', 'newval');
 
         $this->assertTrue($cm->update());
