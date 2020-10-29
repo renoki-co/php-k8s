@@ -19,7 +19,24 @@ If you are using your application in your day-to-day job, on presentation demos,
 
 ## ⏰ Work in Progress
 
-This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources Waitlist](RESOURCES.md) documentation and the [PR List](../../pulls) to know what's up for development.
+This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources Waitlist](docs/RESOURCES.md) documentation and the [PR List](../../pulls) to know what's up for development.
+
+Each existent resource has its own documentation, filled with examples.
+
+- [Namespace](docs/kinds/Namespace.md)
+- [Config Map](docs/kinds/ConfigMap.md)
+- [Secret](docs/kinds/Secret.md)
+- [Storage Class](docs/kinds/StorageClass.md)
+- [Persistent Volumes](docs/kinds/PersistentVolume.md)
+- [Persistent Volume Claims](docs/kinds/PersistentVolumeClaim.md)
+- [Service](docs/kinds/Service.md)
+- [Ingress](docs/kinds/Ingress.md)
+- [Pod](docs/kinds/Pod.md)
+- [Statefulset](docs/kinds/StatefulSet.md)
+- [Deployment](docs/kinds/Deployment.md)
+- [Jobs](docs/kinds/Job.md)
+
+For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 
 ## 🚀 Installation
 
@@ -66,25 +83,6 @@ $svc = $cluster->service()
     ])
     ->create();
 ```
-
-## Supported Resources
-
-Each existent resource has its own documentation, filled with examples.
-
-- [Namespace](docs/kinds/Namespace.md)
-- [Config Map](docs/kinds/ConfigMap.md)
-- [Secret](docs/kinds/Secret.md)
-- [Storage Class](docs/kinds/StorageClass.md)
-- [Persistent Volumes](docs/kinds/PersistentVolume.md)
-- [Persistent Volume Claims](docs/kinds/PersistentVolumeClaim.md)
-- [Service](docs/kinds/Service.md)
-- [Ingress](docs/kinds/Ingress.md)
-- [Pod](docs/kinds/Pod.md)
-- [Statefulset](docs/kinds/StatefulSet.md)
-- [Deployment](docs/kinds/Deployment.md)
-- [Jobs](docs/kinds/Job.md)
-
-For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 
 ## Accessing the API
 
