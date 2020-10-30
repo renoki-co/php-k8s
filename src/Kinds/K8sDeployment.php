@@ -125,7 +125,7 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
      *
      * @return int
      */
-    public function getAvailableReplicas(): int
+    public function getAvailableReplicasCount(): int
     {
         return $this->getAttribute('status.replicas', 0);
     }
@@ -135,7 +135,7 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
      *
      * @return int
      */
-    public function getReadyReplicas(): int
+    public function getReadyReplicasCount(): int
     {
         return $this->getAttribute('status.readyReplicas', 0);
     }
@@ -145,7 +145,7 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
      *
      * @return int
      */
-    public function getDesiredReplicas(): int
+    public function getDesiredReplicasCount(): int
     {
         return $this->getAttribute('status.replicas', 0);
     }
@@ -155,7 +155,7 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
      *
      * @return int
      */
-    public function getUnavailableReplicas(): int
+    public function getUnavailableReplicasCount(): int
     {
         return $this->getAttribute('status.unavailableReplicas', 0);
     }

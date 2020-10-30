@@ -144,10 +144,10 @@ class DeploymentTest extends TestCase
             $dep->refresh();
         }
 
-        $this->assertEquals(1, $dep->getAvailableReplicas());
-        $this->assertEquals(1, $dep->getReadyReplicas());
-        $this->assertEquals(1, $dep->getDesiredReplicas());
-        $this->assertEquals(0, $dep->getUnavailableReplicas());
+        $this->assertEquals(1, $dep->getAvailableReplicasCount());
+        $this->assertEquals(1, $dep->getReadyReplicasCount());
+        $this->assertEquals(1, $dep->getDesiredReplicasCount());
+        $this->assertEquals(0, $dep->getUnavailableReplicasCount());
     }
 
     public function runGetAllTests()
