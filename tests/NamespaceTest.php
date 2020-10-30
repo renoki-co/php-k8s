@@ -76,6 +76,10 @@ class NamespaceTest extends TestCase
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
         $this->assertEquals('production', $ns->getName());
+
+        $ns->refresh();
+
+        $this->assertTrue($ns->isActive());
     }
 
     public function runUpdateTests()
@@ -95,7 +99,10 @@ class NamespaceTest extends TestCase
 
         $this->assertTrue($ns->delete());
 
-        sleep(10);
+        while ($ns->exists()) {
+            dump("Awaiting for namespace {$ns->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 

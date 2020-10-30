@@ -53,4 +53,34 @@ class K8sNamespace extends K8sResource implements InteractsWithK8sCluster, Watch
     {
         return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getIdentifier()}";
     }
+
+    /**
+     * Get the status phase for the namespace.
+     *
+     * @return string|null
+     */
+    public function getPhase()
+    {
+        return $this->getAttribute('status.phase', null);
+    }
+
+    /**
+     * Check if the namespace is active.
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->getPhase() === 'Active';
+    }
+
+    /**
+     * Check if the namespace is pending termination.
+     *
+     * @return bool
+     */
+    public function isTerminating(): bool
+    {
+        return $this->getPhase() === 'Terminating';
+    }
 }
