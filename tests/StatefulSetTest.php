@@ -125,7 +125,7 @@ class StatefulSetTest extends TestCase
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'backend', 'statefulset-name' => 'mysql'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
             ->setContainers([$mysql]);
 
@@ -173,6 +173,14 @@ class StatefulSetTest extends TestCase
 
         $this->assertInstanceOf(K8sPod::class, $sts->getTemplate());
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
+
+        $pods = $sts->getPods();
+
+        $this->assertTrue($pods->count() > 0);
+
+        foreach ($pods as $pod) {
+            $this->assertInstanceOf(K8sPod::class, $pod);
+        }
 
         // Wait for the pod to create entirely.
         sleep(60);

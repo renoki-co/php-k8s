@@ -125,3 +125,13 @@ $pod = $job->getTemplate(false);
 
 $podName = $template['name'];
 ```
+
+### Job's Pods
+
+You can retrieve the pods as resources controlled by the Job by issuing `->getPods()`:
+
+```php
+foreach ($job->getPods() as $pod) {
+    // $pod->logs()
+}
+```

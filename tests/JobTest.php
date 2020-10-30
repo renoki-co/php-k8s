@@ -113,6 +113,14 @@ class JobTest extends TestCase
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
 
+        $pods = $job->getPods();
+
+        $this->assertTrue($pods->count() > 0);
+
+        foreach ($pods as $pod) {
+            $this->assertInstanceOf(K8sPod::class, $pod);
+        }
+
         // Wait for the pod to create entirely.
         sleep(20);
     }

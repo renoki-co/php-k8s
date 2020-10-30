@@ -116,3 +116,13 @@ $pod = $sts->getTemplate(false);
 
 $podName = $template['name'];
 ```
+
+### StatefulSet's Pods
+
+You can retrieve the pods as resources controlled by the Statefulset by issuing `->getPods()`:
+
+```php
+foreach ($sts->getPods() as $pod) {
+    // $pod->logs()
+}
+```
