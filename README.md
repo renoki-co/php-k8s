@@ -266,13 +266,13 @@ The result would be a `\RenokiCo\PhpK8s\Kinds\K8sResource` instance you can call
 
 If there are more resources in the same YAML file, you will be given an array of them, representing the each kind, in order.
 
-Please keep in mind - the resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->sync()`:
+Please keep in mind - the resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->syncWithCluster()`:
 
 ```php
 $storageClasses = $cluster->fromYaml($awsStorageClassesYamlPath);
 
 foreach ($storageClasses as $sc) {
-    $sc->sync();
+    $sc->syncWithCluster();
 
     echo "{$sc->getName()} storage class got synced!";
 }
