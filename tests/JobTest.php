@@ -203,10 +203,9 @@ class JobTest extends TestCase
             sleep(1);
         }
 
-
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getJobByName('pi');
+        $this->cluster->getJobByName('pi');
     }
 
     public function runWatchAllTests()

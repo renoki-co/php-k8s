@@ -139,7 +139,7 @@ class ServiceTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $service = $this->cluster->getSecretByName('nginx');
+        $this->cluster->getSecretByName('nginx');
     }
 
     public function runWatchAllTests()

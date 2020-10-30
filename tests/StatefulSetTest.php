@@ -272,7 +272,7 @@ class StatefulSetTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getStatefulSetByName('mysql');
+        $this->cluster->getStatefulSetByName('mysql');
     }
 
     public function runWatchAllTests()

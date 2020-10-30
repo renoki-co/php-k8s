@@ -165,7 +165,7 @@ class PersistentVolumeTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pv = $this->cluster->getPersistentVolumeByName('app');
+        $this->cluster->getPersistentVolumeByName('app');
     }
 
     public function runWatchAllTests()

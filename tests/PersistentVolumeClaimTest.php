@@ -141,7 +141,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pvc = $this->cluster->getPersistentVolumeClaimByName('app-pvc');
+        $this->cluster->getPersistentVolumeClaimByName('app-pvc');
     }
 
     public function runWatchAllTests()

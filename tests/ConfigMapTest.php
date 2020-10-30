@@ -119,7 +119,7 @@ class ConfigMapTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $cm = $this->cluster->getConfigmapByName('settings');
+        $this->cluster->getConfigmapByName('settings');
     }
 
     public function runWatchAllTests()

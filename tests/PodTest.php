@@ -218,7 +218,7 @@ class PodTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getPodByName('mysql');
+        $this->cluster->getPodByName('mysql');
     }
 
     public function runWatchAllTests()

@@ -106,7 +106,7 @@ class NamespaceTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $ns = $this->cluster->getNamespaceByName('production');
+        $this->cluster->getNamespaceByName('production');
     }
 
     public function runWatchAllTests()

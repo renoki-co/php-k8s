@@ -214,7 +214,7 @@ class DeploymentTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getDeploymentByName('mysql');
+        $this->cluster->getDeploymentByName('mysql');
     }
 
     public function runWatchAllTests()
