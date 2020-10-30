@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
@@ -124,6 +125,22 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Create or update the resource according
+     * to the cluster availability.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function syncWithCluster(array $query = ['pretty' => 1])
+    {
+        try {
+            return $this->get($query);
+        } catch (KubernetesAPIException $e) {
+            return $this->create($query);
+        }
+    }
+
+    /**
      * Check if the resource changed from
      * its initial state.
      *
@@ -136,6 +153,23 @@ class K8sResource implements Arrayable, Jsonable
         }
 
         return $this->attributes !== $this->original;
+    }
+
+    /**
+     * Check if the current resource exists.
+     *
+     * @param  array  $query
+     * @return bool
+     */
+    public function exists(array $query = ['pretty' => 1]): bool
+    {
+        try {
+            $this->get($query);
+        } catch (KubernetesAPIException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -361,8 +395,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function all(array $query = ['pretty' => 1])
     {
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
@@ -380,8 +413,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function get(array $query = ['pretty' => 1])
     {
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
@@ -399,8 +431,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function create(array $query = ['pretty' => 1])
     {
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::CREATE_OP,
@@ -512,8 +543,7 @@ class K8sResource implements Arrayable, Jsonable
             );
         }
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
@@ -539,8 +569,7 @@ class K8sResource implements Arrayable, Jsonable
             );
         }
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::WATCH_OP,
@@ -577,8 +606,7 @@ class K8sResource implements Arrayable, Jsonable
             );
         }
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::LOG_OP,
@@ -619,8 +647,7 @@ class K8sResource implements Arrayable, Jsonable
         // Ensure the ?follow=1 query exists to trigger the watch.
         $query = array_merge($query, ['follow' => 1]);
 
-        return $this
-            ->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::WATCH_LOGS_OP,

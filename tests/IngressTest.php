@@ -95,10 +95,12 @@ class IngressTest extends TestCase
             ->setRules(self::$rules);
 
         $this->assertFalse($ing->isSynced());
+        $this->assertFalse($ing->exists());
 
-        $ing = $ing->create();
+        $ing = $ing->syncWithCluster();
 
         $this->assertTrue($ing->isSynced());
+        $this->assertTrue($ing->exists());
 
         $this->assertInstanceOf(K8sIngress::class, $ing);
 

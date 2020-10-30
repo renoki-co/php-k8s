@@ -65,10 +65,12 @@ class PersistentVolumeClaimTest extends TestCase
             ->setStorageClass($gp2);
 
         $this->assertFalse($pvc->isSynced());
+        $this->assertFalse($pvc->exists());
 
-        $pvc = $pvc->create();
+        $pvc = $pvc->syncWithCluster();
 
         $this->assertTrue($pvc->isSynced());
+        $this->assertTrue($pvc->exists());
 
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $pvc);
 

@@ -134,7 +134,7 @@ class StatefulSetTest extends TestCase
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ])
-            ->create();
+            ->syncWithCluster();
 
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
@@ -153,10 +153,12 @@ class StatefulSetTest extends TestCase
             ->setVolumeClaims([$pvc]);
 
         $this->assertFalse($sts->isSynced());
+        $this->assertFalse($sts->exists());
 
-        $sts = $sts->create();
+        $sts = $sts->syncWithCluster();
 
         $this->assertTrue($sts->isSynced());
+        $this->assertTrue($sts->exists());
 
         $this->assertInstanceOf(K8sStatefulSet::class, $sts);
 
