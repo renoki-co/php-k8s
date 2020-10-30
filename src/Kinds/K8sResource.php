@@ -455,10 +455,6 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
-        if (! $this->exists()) {
-            return false;
-        }
-
         $this->refreshVersions();
 
         $instance = $this->cluster
@@ -487,10 +483,6 @@ class K8sResource implements Arrayable, Jsonable
     {
         if (! $this->isSynced()) {
             return true;
-        }
-
-        if ($this->exists()) {
-            return false;
         }
 
         $this->setAttribute('preconditions', [
