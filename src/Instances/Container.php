@@ -54,6 +54,16 @@ class Container implements Arrayable
     }
 
     /**
+     * Check if the container is ready.
+     *
+     * @return bool
+     */
+    public function isReady(): bool
+    {
+        return $this->getAttribute('ready', false);
+    }
+
+    /**
      * Get the instance as an array.
      *
      * @return array

@@ -26,6 +26,7 @@ class ContainerTest extends TestCase
 
         $container->removeEnv();
 
+        $this->assertFalse($container->isReady());
         $this->assertEquals('nginx:1.4', $container->getImage());
         $this->assertEquals([], $container->getEnv([]));
         $this->assertEquals(['--test'], $container->getArgs());

@@ -144,8 +144,19 @@ class PodTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
 
-        // Wait for the pod to create entirely.
-        sleep(60);
+        while (! $pod->isRunning()) {
+            dump("Waiting for pod {$pod->getName()} to be up and running...");
+            sleep(1);
+            $pod->refresh();
+        }
+
+        $pod->refresh();
+
+        $this->assertEquals('busybox:latest', $pod->getInitContainer('busybox')->getImage());
+        $this->assertEquals('mysql:5.7', $pod->getContainer('mysql')->getImage());
+
+        $this->assertTrue($pod->containersAreReady());
+        $this->assertTrue($pod->initContainersAreReady());
     }
 
     public function runGetAllTests()
@@ -200,7 +211,10 @@ class PodTest extends TestCase
 
         $this->assertTrue($pod->delete());
 
-        sleep(60);
+        while ($pod->exists()) {
+            dump("Awaiting for pod {$pod->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 
