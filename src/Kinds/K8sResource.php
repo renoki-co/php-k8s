@@ -455,7 +455,7 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
-        $this->refresh();
+        $this->refreshVersions();
 
         $instance = $this
             ->cluster
@@ -493,7 +493,7 @@ class K8sResource implements Arrayable, Jsonable
             'gracePeriodSeconds' => $gracePeriod,
         ]);
 
-        $this->refresh();
+        $this->refreshVersions();
 
         $this
             ->cluster
@@ -517,7 +517,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $query
      * @return $this
      */
-    public function refresh(array $query = ['pretty' => 1])
+    public function refreshVersions(array $query = ['pretty' => 1])
     {
         $instance = $this->get($query);
 
@@ -526,6 +526,17 @@ class K8sResource implements Arrayable, Jsonable
         $this->setAttribute('metadata.uid', $instance->getResourceUid());
 
         return $this;
+    }
+
+    /**
+     * Make a call to the cluster to get a fresh instance.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refresh(array $query = ['pretty' => 1])
+    {
+        return $this->syncWith($this->get($query)->toArray());
     }
 
     /**
