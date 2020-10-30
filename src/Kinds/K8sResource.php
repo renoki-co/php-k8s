@@ -455,10 +455,13 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
+        if (! $this->exists()) {
+            return false;
+        }
+
         $this->refreshVersions();
 
-        $instance = $this
-            ->cluster
+        $instance = $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::REPLACE_OP,
@@ -486,6 +489,10 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
+        if ($this->exists()) {
+            return false;
+        }
+
         $this->setAttribute('preconditions', [
             'resourceVersion' => $this->getResourceVersion(),
             'uid' => $this->getResourceUid(),
@@ -495,8 +502,7 @@ class K8sResource implements Arrayable, Jsonable
 
         $this->refreshVersions();
 
-        $this
-            ->cluster
+        $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::DELETE_OP,
