@@ -135,3 +135,36 @@ foreach ($job->getPods() as $pod) {
     // $pod->logs()
 }
 ```
+
+### Job Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$job->refresh();
+
+$job->getActivePodsCount();
+$job->getFailedPodsCount();
+$job->getSuccededPodsCount();
+```
+
+You can check if the job completed:
+
+```php
+if ($job->hasCompleted()) {
+    //
+}
+```
+
+You can retrieve the `null`/`\DateTime` instance for start and end times for the job:
+
+```php
+$start = $job->getStartTime();
+$end = $job->getCompletionTime();
+```
+
+You can also retrieve the amount of time the job ran for:
+
+```php
+$seconds = $job->getDurationInSeconds();
+```
