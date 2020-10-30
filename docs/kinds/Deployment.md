@@ -100,3 +100,13 @@ $pod = $dep->getTemplate(false);
 
 $podName = $template['name'];
 ```
+
+### Deployment's Pods
+
+You can retrieve the pods as resources controlled by the Deployment by issuing `->getPods()`:
+
+```php
+foreach ($dep->getPods() as $pod) {
+    // $pod->logs()
+}
+```

@@ -92,7 +92,7 @@ class DeploymentTest extends TestCase
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'backend', 'deployment-name' => 'mysql'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
             ->setContainers([$mysql]);
 
@@ -122,6 +122,16 @@ class DeploymentTest extends TestCase
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
+
+        sleep(10);
+
+        $pods = $dep->getPods();
+
+        $this->assertTrue($pods->count() > 0);
+
+        foreach ($pods as $pod) {
+            $this->assertInstanceOf(K8sPod::class, $pod);
+        }
 
         // Wait for the pod to create entirely.
         sleep(60);

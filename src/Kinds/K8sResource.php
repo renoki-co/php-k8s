@@ -270,11 +270,12 @@ class K8sResource implements Arrayable, Jsonable
      * Get a resource by name.
      *
      * @param  string  $name
+     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
-    public function getByName(string $name)
+    public function getByName(string $name, array $query = ['pretty' => 1])
     {
-        return $this->whereName($name)->get();
+        return $this->whereName($name)->get($query);
     }
 
     /**

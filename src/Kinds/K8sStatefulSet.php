@@ -3,16 +3,18 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
+use RenokiCo\PhpK8s\Traits\HasPods;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
-class K8sStatefulSet extends K8sResource implements InteractsWithK8sCluster, Watchable
+class K8sStatefulSet extends K8sResource implements InteractsWithK8sCluster, Podable, Watchable
 {
-    use HasAnnotations, HasLabels, HasSelector, HasSpec, HasTemplate;
+    use HasAnnotations, HasLabels, HasPods, HasSelector, HasSpec, HasTemplate;
 
     /**
      * The resource Kind parameter.
@@ -155,5 +157,17 @@ class K8sStatefulSet extends K8sResource implements InteractsWithK8sCluster, Wat
     public function resourceWatchPath(): string
     {
         return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/statefulsets/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the selector for the pods that are owned by this resource.
+     *
+     * @return array
+     */
+    public function podsSelector(): array
+    {
+        return [
+            'statefulset-name' => $this->getName(),
+        ];
     }
 }

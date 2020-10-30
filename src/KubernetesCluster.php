@@ -86,11 +86,11 @@ class KubernetesCluster
             if (method_exists(K8s::class, $resource)) {
                 return $this->{$resource}()
                     ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
-                    ->getByName($parameters[0]);
+                    ->getByName($parameters[0], $parameters[3] ?? ['pretty' => 1]);
             }
         }
 
-        // Proxy the ->getAll[Resources]($namespace = 'default')
+        // Proxy the ->getAll[Resources]($namespace = 'default', $query = [...])
         // For example, ->getAllServices('staging')
         if (preg_match('/getAll(.+)/', $method, $matches)) {
             [$method, $resourcePlural] = $matches;
@@ -100,7 +100,7 @@ class KubernetesCluster
             if (method_exists(K8s::class, $resource)) {
                 return $this->{$resource}()
                     ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
-                    ->all();
+                    ->all($parameters[2] ?? ['pretty' => 1]);
             }
         }
 
