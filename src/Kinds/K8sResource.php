@@ -216,7 +216,7 @@ class K8sResource implements Arrayable, Jsonable
             return $this;
         }
 
-        $this->setAttribute('metadata.namespace', static::$defaultNamespace);
+        $this->setAttribute('metadata.namespace', $namespace);
 
         return $this;
     }
