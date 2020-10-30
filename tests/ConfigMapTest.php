@@ -117,6 +117,10 @@ class ConfigMapTest extends TestCase
 
         $this->assertTrue($cm->delete());
 
+        while ($cm->exists()) {
+            sleep(1);
+        }
+
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getConfigmapByName('settings');
