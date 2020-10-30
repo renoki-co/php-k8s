@@ -123,6 +123,8 @@ class DeploymentTest extends TestCase
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
 
+        sleep(10);
+
         $pods = $dep->getPods();
 
         $this->assertTrue($pods->count() > 0);

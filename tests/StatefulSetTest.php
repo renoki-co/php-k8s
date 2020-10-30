@@ -174,6 +174,8 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $sts->getTemplate());
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
 
+        sleep(10);
+
         $pods = $sts->getPods();
 
         $this->assertTrue($pods->count() > 0);
