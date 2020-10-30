@@ -127,7 +127,7 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
      */
     public function getAvailableReplicasCount(): int
     {
-        return $this->getAttribute('status.replicas', 0);
+        return $this->getAttribute('status.availableReplicas', 0);
     }
 
     /**

@@ -138,7 +138,7 @@ class DeploymentTest extends TestCase
 
         $dep->refresh();
 
-        while ($dep->getReadyReplicas() === 0) {
+        while ($dep->getReadyReplicasCount() === 0) {
             dump("Waiting for pods of {$dep->getName()} to have ready replicas...");
             sleep(1);
             $dep->refresh();
