@@ -10,23 +10,19 @@ class PersistentVolumeClaimTest extends TestCase
 {
     public function test_persistent_volume_claim_build()
     {
-        $gp2 = $this->cluster->storageClass()
-            ->setName('gp2')
-            ->setProvisioner('csi.aws.amazon.com')
-            ->setParameters(['type' => 'gp2'])
-            ->setMountOptions(['debug']);
+        $standard = $this->cluster->getStorageClassByName('standard');
 
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('app-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
-            ->setStorageClass($gp2);
+            ->setStorageClass($standard);
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
-        $this->assertEquals('gp2', $pvc->getStorageClass());
+        $this->assertEquals('standard', $pvc->getStorageClass());
     }
 
     public function test_persistent_volume_claim_from_yaml()
@@ -37,7 +33,7 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals('app-pvc', $pvc->getName());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
-        $this->assertEquals('gp2', $pvc->getStorageClass());
+        $this->assertEquals('standard', $pvc->getStorageClass());
     }
 
     public function test_persistent_volume_claim_api_interaction()
@@ -53,16 +49,13 @@ class PersistentVolumeClaimTest extends TestCase
 
     public function runCreationTests()
     {
-        $gp2 = $this->cluster->storageClass()
-            ->setName('gp2')
-            ->setProvisioner('csi.aws.amazon.com')
-            ->setParameters(['type' => 'gp2']);
+        $standard = $this->cluster->getStorageClassByName('standard');
 
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('app-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
-            ->setStorageClass($gp2);
+            ->setStorageClass($standard);
 
         $this->assertFalse($pvc->isSynced());
         $this->assertFalse($pvc->exists());
@@ -78,7 +71,16 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals('app-pvc', $pvc->getName());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
-        $this->assertEquals('gp2', $pvc->getStorageClass());
+        $this->assertEquals('standard', $pvc->getStorageClass());
+
+        while (! $pvc->isBound()) {
+            dump("Waiting for PVC {$pvc->getName()} to be bound...");
+            sleep(1);
+            $pvc->refresh();
+        }
+
+        $this->assertFalse($pvc->isAvailable());
+        $this->assertTrue($pvc->isBound());
     }
 
     public function runGetAllTests()
@@ -106,7 +108,7 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals('app-pvc', $pvc->getName());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
-        $this->assertEquals('gp2', $pvc->getStorageClass());
+        $this->assertEquals('standard', $pvc->getStorageClass());
     }
 
     public function runUpdateTests()
@@ -123,7 +125,7 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals('app-pvc', $pvc->getName());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
-        $this->assertEquals('gp2', $pvc->getStorageClass());
+        $this->assertEquals('standard', $pvc->getStorageClass());
     }
 
     public function runDeletionTests()
@@ -132,7 +134,10 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->assertTrue($pvc->delete());
 
-        sleep(3);
+        while ($pvc->exists()) {
+            dump("Awaiting for PVC {$pvc->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 

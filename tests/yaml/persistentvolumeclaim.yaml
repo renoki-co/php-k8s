@@ -8,4 +8,4 @@ spec:
       storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: gp2
+  storageClassName: standard
