@@ -26,9 +26,6 @@ abstract class TestCase extends Orchestra
         $this->cluster = new KubernetesCluster('http://127.0.0.1');
 
         $this->cluster->withoutSslChecks();
-
-        // Wait 5 seconds between tests.
-        sleep(5);
     }
 
     /**
