@@ -492,7 +492,7 @@ class K8sResource implements Arrayable, Jsonable
             'gracePeriodSeconds' => $gracePeriod,
         ]);
 
-        $this->refreshVersions();
+        $this->refresh();
 
         $this->cluster
             ->setResourceClass(get_class($this))

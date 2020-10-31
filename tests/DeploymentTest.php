@@ -205,11 +205,7 @@ class DeploymentTest extends TestCase
     {
         $dep = $this->cluster->getDeploymentByName('mysql');
 
-        try {
-            $this->assertTrue($dep->delete());
-        } catch (\Exception $e) {
-            dd($e->getPayload());
-        }
+        $this->assertTrue($dep->delete());
 
         while ($dep->exists()) {
             dump("Awaiting for deployment {$dep->getName()} to be deleted...");
