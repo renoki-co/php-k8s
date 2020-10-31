@@ -116,8 +116,22 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function syncWith(array $attributes = [])
     {
-        $this->original = $attributes;
         $this->attributes = $attributes;
+
+        $this->syncOriginalWith($attributes);
+
+        return $this;
+    }
+
+    /**
+     * Hydrate the current original details with a payload.
+     *
+     * @param  array  $instance
+     * @return $this
+     */
+    public function syncOriginalWith(array $attributes = [])
+    {
+        $this->original = $attributes;
 
         $this->synced();
 
@@ -455,7 +469,7 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
-        $this->refreshVersions();
+        $this->refreshOriginal();
 
         $instance = $this->cluster
             ->setResourceClass(get_class($this))
@@ -535,6 +549,17 @@ class K8sResource implements Arrayable, Jsonable
     public function refresh(array $query = ['pretty' => 1])
     {
         return $this->syncWith($this->get($query)->toArray());
+    }
+
+    /**
+     * Make a call to teh cluster to get fresh original values.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refreshOriginal(array $query = ['pretty' => 1])
+    {
+        return $this->syncOriginalWith($this->get($query)->toArray());
     }
 
     /**
