@@ -94,7 +94,7 @@ trait RunsClusterOperations
      * @param  string  $path
      * @param  string  $payload
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])

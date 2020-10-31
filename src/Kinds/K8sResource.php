@@ -249,7 +249,7 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get the namespace for the resource.
      *
-     * @return void
+     * @return string
      */
     public function getNamespace()
     {
@@ -567,7 +567,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchAll(Closure $callback, array $query = ['pretty' => 1])
@@ -593,7 +593,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watch(Closure $callback, array $query = ['pretty' => 1])
@@ -619,7 +619,8 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchByName(string $name, Closure $callback, array $query = ['pretty' => 1])
     {
@@ -630,7 +631,7 @@ class K8sResource implements Arrayable, Jsonable
      * Get a specific resource's logs.
      *
      * @param  array  $query
-     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     * @return string
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function logs(array $query = ['pretty' => 1])
@@ -652,15 +653,45 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Get logs for a specific container.
+     *
+     * @param  string  $container
+     * @param  array  $query
+     * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     */
+    public function containerLogs(string $container, array $query = ['pretty' => 1])
+    {
+        return $this->logs(array_merge($query, ['container' => $container]));
+    }
+
+    /**
      * Watch the specific resource by name.
      *
+     * @param  string  $name
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
-    public function logsByName(array $query = ['pretty' => 1])
+    public function logsByName(string $name, array $query = ['pretty' => 1])
     {
         return $this->whereName($name)->logs($query);
+    }
+
+    /**
+     * Watch the specific resource by name.
+     *
+     * @param  string  $name
+     * @param  string  $container
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     */
+    public function containerLogsByName(string $name, string $container, array $query = ['pretty' => 1])
+    {
+        return $this->logsByName($name, array_merge($query, ['container' => $container]));
     }
 
     /**
@@ -668,7 +699,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchLogs(Closure $callback, array $query = ['pretty' => 1])
@@ -693,14 +724,44 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Watch the specific resource's container logs until the closure returns true or false.
+     *
+     * @param  string  $container
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     */
+    public function watchContainerLogs(string $container, Closure $callback, array $query = ['pretty' => 1])
+    {
+        return $this->watchLogs($callback, array_merge($query, ['container' => $container]));
+    }
+
+    /**
      * Watch the specific resource's logs by name.
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchLogsByName(string $name, Closure $callback, array $query = ['pretty' => 1])
     {
         return $this->whereName($name)->watchLogs($callback, $query);
+    }
+
+    /**
+     * Watch the specific resource's container logs by names.
+     *
+     * @param  string  $name
+     * @param  string  $container
+     * @param  Closure  $callback
+     * @param  array  $query
+     * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     */
+    public function watchContainerLogsByName(string $name, string $container, Closure $callback, array $query = ['pretty' => 1])
+    {
+        return $this->watchLogsByName($name, $callback, array_merge($query, ['container' => $container]));
     }
 }

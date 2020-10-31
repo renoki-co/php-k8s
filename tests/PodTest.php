@@ -243,7 +243,7 @@ class PodTest extends TestCase
 
     public function runWatchLogsTests()
     {
-        $this->cluster->pod()->watchLogsByName('mysql', function ($data) {
+        $this->cluster->pod()->watchContainerLogsByName('mysql', 'mysql', function ($data) {
             // Debugging data to CI. :D
             dump($data);
 
@@ -255,7 +255,7 @@ class PodTest extends TestCase
 
     public function runGetLogsTests()
     {
-        $logs = $this->cluster->pod()->getLogsByName('mysql');
+        $logs = $this->cluster->pod()->containerLogsByName('mysql', 'mysql');
 
         // Debugging data to CI. :D
         dump($logs);
