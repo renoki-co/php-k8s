@@ -655,11 +655,13 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource by name.
      *
+     * @param  string  $name
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
-    public function logsByName(array $query = ['pretty' => 1])
+    public function logsByName(string $name, array $query = ['pretty' => 1])
     {
         return $this->whereName($name)->logs($query);
     }

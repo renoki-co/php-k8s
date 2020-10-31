@@ -255,7 +255,7 @@ class PodTest extends TestCase
 
     public function runGetLogsTests()
     {
-        $logs = $this->cluster->pod()->getLogsByName('mysql');
+        $logs = $this->cluster->pod()->logsByName('mysql');
 
         // Debugging data to CI. :D
         dump($logs);
