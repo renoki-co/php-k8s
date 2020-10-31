@@ -249,7 +249,7 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get the namespace for the resource.
      *
-     * @return void
+     * @return string
      */
     public function getNamespace()
     {
@@ -567,7 +567,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchAll(Closure $callback, array $query = ['pretty' => 1])
@@ -593,7 +593,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watch(Closure $callback, array $query = ['pretty' => 1])
@@ -619,7 +619,8 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchByName(string $name, Closure $callback, array $query = ['pretty' => 1])
     {
@@ -630,7 +631,7 @@ class K8sResource implements Arrayable, Jsonable
      * Get a specific resource's logs.
      *
      * @param  array  $query
-     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     * @return string
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function logs(array $query = ['pretty' => 1])
@@ -668,7 +669,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchLogs(Closure $callback, array $query = ['pretty' => 1])
@@ -697,7 +698,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  Closure  $callback
      * @param  array  $query
-     * @return void
+     * @return mixed
      */
     public function watchLogsByName(string $name, Closure $callback, array $query = ['pretty' => 1])
     {
