@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\K8s;
+use RenokiCo\PhpK8s\Instances\Probe;
 
 class ContainerTest extends TestCase
 {
@@ -15,6 +16,36 @@ class ContainerTest extends TestCase
             ->setArgs(['--test'])
             ->addPort(80, 'TCP', 'http')
             ->addPort(443, 'TCP', 'https');
+
+        $container->minMemory(1, 'Gi')->maxMemory(2, 'Gi')
+            ->minCpu('500m')->maxCpu(1);
+
+        $container->setLivenessProbe(
+            K8s::probe()->command(['sh', 'test.sh'])
+                ->initialDelaySeconds(10)
+                ->periodSeconds(60)
+                ->timeout(10)
+                ->failureThreshold(3)
+                ->successThrehshold(2)
+        );
+
+        $container->setStartupProbe(
+            K8s::probe()->http('/health', 80, ['X-CSRF-TOKEN' => 'some-token'])
+                ->initialDelaySeconds(10)
+                ->periodSeconds(60)
+                ->timeout(10)
+                ->failureThreshold(3)
+                ->successThrehshold(2)
+        );
+
+        $container->setReadinessProbe(
+            K8s::probe()->tcp(3306, '10.0.0.0')
+                ->initialDelaySeconds(10)
+                ->periodSeconds(60)
+                ->timeout(10)
+                ->failureThreshold(3)
+                ->successThrehshold(2)
+        );
 
         $this->assertEquals('nginx:1.4', $container->getImage());
         $this->assertEquals(['key' => 'value'], $container->getEnv());
@@ -34,5 +65,15 @@ class ContainerTest extends TestCase
             ['name' => 'http', 'protocol' => 'TCP', 'containerPort' => 80],
             ['name' => 'https', 'protocol' => 'TCP', 'containerPort' => 443],
         ], $container->getPorts());
+        $this->assertEquals('1Gi', $container->getMinMemory());
+        $this->assertEquals('2Gi', $container->getMaxMemory());
+        $this->assertEquals('500m', $container->getMinCpu());
+        $this->assertEquals(1, $container->getMaxCpu());
+
+        $this->assertEquals(['sh', 'test.sh'], $container->getLivenessProbe()->getCommand());
+
+        $this->assertInstanceOf(Probe::class, $container->getLivenessProbe());
+        $this->assertInstanceOf(Probe::class, $container->getStartupProbe());
+        $this->assertInstanceOf(Probe::class, $container->getReadinessProbe());
     }
 }

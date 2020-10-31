@@ -160,6 +160,17 @@ class K8s
     }
 
     /**
+     * Create a new probe instance.
+     *
+     * @param  array  $attributes
+     * @return $this
+     */
+    public static function probe(array $attributes = [])
+    {
+        return new Instances\Probe($attributes);
+    }
+
+    /**
      * Load Kind configuration from an YAML text.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster

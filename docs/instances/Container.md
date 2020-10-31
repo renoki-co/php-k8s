@@ -1,0 +1,87 @@
+# Containers
+
+## Example
+
+### Creating a container
+
+```php
+$container = K8s::container()
+    ->setName('mysql')
+    ->setImage('mysql', '5.7')
+    ->setPorts([
+        ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+    ])
+    ->addPort(3307, 'TCP', 'mysql-alt')
+    ->setCommand(['mysqld'])
+    ->setArgs(['--test'])
+    ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+```
+
+### Setting probes
+
+You might want to set probes for your containers:
+
+Command probes:
+
+```php
+$probe = K8s::probe()->command(['sh', 'test.sh']);
+```
+
+HTTP probes:
+
+```php
+$probe = K8s::probe()->http('/health', 80, ['X-CSRF-TOKEN' => 'some-token'])
+```
+
+TCP probes:
+
+```php
+$probe = K8s::probe()->tcp(3306);
+```
+
+### Attaching probes
+
+You might attach the probes to the container:
+
+```php
+$container->setLivenessProbe(
+    K8s::probe()->command(['sh', 'test.sh'])
+        ->initialDelaySeconds(10)
+        ->periodSeconds(60)
+        ->timeout(10)
+        ->failureThreshold(3)
+        ->successThrehshold(2)
+);
+
+$container->setStartupProbe(
+    K8s::probe()->http('/health', 80, ['X-CSRF-TOKEN' => 'some-token'])
+        ->initialDelaySeconds(10)
+        ->periodSeconds(60)
+        ->timeout(10)
+        ->failureThreshold(3)
+        ->successThrehshold(2)
+);
+
+$container->setReadinessProbe(
+    K8s::probe()->tcp(3306, '10.0.0.0')
+        ->initialDelaySeconds(10)
+        ->periodSeconds(60)
+        ->timeout(10)
+        ->failureThreshold(3)
+        ->successThrehshold(2)
+);
+```
+
+### Setting resources
+
+```php
+$container->minMemory(512, 'Mi')->maxMemory(2, 'Gi');
+
+$container->minCpu('500m')->maxCpu(1);
+```
+
+### Setting custom fields
+
+If you wish to set custom fields for containers or probes, you can use the `setAttribute('...', $value)` directly onto the instance.
+
+Please check the [Resource](../kinds/Resource) documentation for methods that does not exist in the current instance.
