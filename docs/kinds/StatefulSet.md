@@ -127,6 +127,24 @@ foreach ($sts->getPods() as $pod) {
 }
 ```
 
+### Scaling
+
+The Scaling API is available via a `K8sScale` resource:
+
+```php
+$scaler = $sts->scaler();
+
+$scaler->setReplicas(3)->update(); // autoscale the StatefulSet to 3 replicas
+```
+
+Shorthand, you can use `scale()` directly from the StatefulSet
+
+```php
+$scaler = $sts->scale(3);
+
+$pods = $sts->getPods(); // Expecting 3 pods
+```
+
 ### StatefulSet Status
 
 The Status API is available to be accessed for fresh instances:
