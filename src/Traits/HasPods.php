@@ -22,7 +22,7 @@ trait HasPods
             ->all(array_merge(['labelSelector' => $labelSelector], $query));
     }
 
-     /**
+    /**
      * Check if all scheduled pods are running.
      *
      * @return bool
