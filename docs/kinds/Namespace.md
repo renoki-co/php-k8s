@@ -17,3 +17,23 @@ $ns = $cluster->namespace()
 ```php
 $ns = $cluster->getNamespaceByName('staging');
 ```
+
+### Namespace Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$ns->refresh();
+
+if ($ns->isActive()) {
+    //
+}
+```
+
+You can also check if the namespace is terminating:
+
+```php
+if ($ns->isTerminating()) {
+    //
+}
+```

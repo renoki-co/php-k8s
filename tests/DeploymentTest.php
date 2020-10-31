@@ -123,7 +123,10 @@ class DeploymentTest extends TestCase
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
 
-        sleep(10);
+        while (! $dep->allPodsAreRunning()) {
+            dump("Waiting for pods of {$dep->getName()} to be up and running...");
+            sleep(1);
+        }
 
         $pods = $dep->getPods();
 
@@ -133,8 +136,18 @@ class DeploymentTest extends TestCase
             $this->assertInstanceOf(K8sPod::class, $pod);
         }
 
-        // Wait for the pod to create entirely.
-        sleep(60);
+        $dep->refresh();
+
+        while ($dep->getReadyReplicasCount() === 0) {
+            dump("Waiting for pods of {$dep->getName()} to have ready replicas...");
+            sleep(1);
+            $dep->refresh();
+        }
+
+        $this->assertEquals(1, $dep->getAvailableReplicasCount());
+        $this->assertEquals(1, $dep->getReadyReplicasCount());
+        $this->assertEquals(1, $dep->getDesiredReplicasCount());
+        $this->assertEquals(0, $dep->getUnavailableReplicasCount());
     }
 
     public function runGetAllTests()
@@ -194,11 +207,14 @@ class DeploymentTest extends TestCase
 
         $this->assertTrue($dep->delete());
 
-        sleep(60);
+        while ($dep->exists()) {
+            dump("Awaiting for deployment {$dep->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getDeploymentByName('mysql');
+        $this->cluster->getDeploymentByName('mysql');
     }
 
     public function runWatchAllTests()

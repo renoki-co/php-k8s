@@ -94,4 +94,34 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     {
         return "/api/{$this->getApiVersion()}/watch/persistentvolumes/{$this->getIdentifier()}";
     }
+
+    /**
+     * Get the status phase for the persistent volume.
+     *
+     * @return string|null
+     */
+    public function getPhase()
+    {
+        return $this->getAttribute('status.phase', null);
+    }
+
+    /**
+     * Check if the PV is available to be used.
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        return $this->getPhase() === 'Available';
+    }
+
+    /**
+     * Check if the PV is bound.
+     *
+     * @return bool
+     */
+    public function isBound(): bool
+    {
+        return $this->getPhase() === 'Bound';
+    }
 }

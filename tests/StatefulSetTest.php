@@ -30,11 +30,13 @@ class StatefulSetTest extends TestCase
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ]);
 
+        $standard = $this->cluster->getStorageClassByName('standard');
+
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
-            ->setStorageClass('gp2');
+            ->setStorageClass($standard);
 
         $sts = $this->cluster->statefulSet()
             ->setName('mysql')
@@ -77,11 +79,13 @@ class StatefulSetTest extends TestCase
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ]);
 
+        $standard = $this->cluster->getStorageClassByName('standard');
+
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
-            ->setStorageClass('gp2');
+            ->setStorageClass($standard);
 
         $sts = $this->cluster->fromYamlFile(__DIR__.'/yaml/statefulset.yaml');
 
@@ -136,11 +140,13 @@ class StatefulSetTest extends TestCase
             ])
             ->syncWithCluster();
 
+        $standard = $this->cluster->getStorageClassByName('standard');
+
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('mysql-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
-            ->setStorageClass('gp2');
+            ->setStorageClass($standard);
 
         $sts = $this->cluster->statefulSet()
             ->setName('mysql')
@@ -174,7 +180,10 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $sts->getTemplate());
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
 
-        sleep(10);
+        while (! $sts->allPodsAreRunning()) {
+            dump("Waiting for pods of {$sts->getName()} to be up and running...");
+            sleep(1);
+        }
 
         $pods = $sts->getPods();
 
@@ -184,8 +193,17 @@ class StatefulSetTest extends TestCase
             $this->assertInstanceOf(K8sPod::class, $pod);
         }
 
-        // Wait for the pod to create entirely.
-        sleep(60);
+        $sts->refresh();
+
+        while ($sts->getReadyReplicasCount() === 0) {
+            dump("Waiting for pods of {$sts->getName()} to have ready replicas...");
+            sleep(1);
+            $sts->refresh();
+        }
+
+        $this->assertEquals(1, $sts->getCurrentReplicasCount());
+        $this->assertEquals(1, $sts->getReadyReplicasCount());
+        $this->assertEquals(1, $sts->getDesiredReplicasCount());
     }
 
     public function runGetAllTests()
@@ -247,11 +265,14 @@ class StatefulSetTest extends TestCase
 
         $this->assertTrue($sts->delete());
 
-        sleep(60);
+        while ($sts->exists()) {
+            dump("Awaiting for statefulset {$sts->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getStatefulSetByName('mysql');
+        $this->cluster->getStatefulSetByName('mysql');
     }
 
     public function runWatchAllTests()

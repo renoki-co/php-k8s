@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use Carbon\Carbon;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
@@ -98,5 +99,94 @@ class K8sJob extends K8sResource implements InteractsWithK8sCluster, Podable, Wa
         return [
             'job-name' => $this->getName(),
         ];
+    }
+
+    /**
+     * Get the job conditions.
+     *
+     * @return array
+     */
+    public function getConditions(): array
+    {
+        return $this->getAttribute('status.conditions', []);
+    }
+
+    /**
+     * Get the amount of active pods.
+     *
+     * @return int
+     */
+    public function getActivePodsCount(): int
+    {
+        return $this->getAttribute('status.active', 0);
+    }
+
+    /**
+     * Get the amount of failed pods.
+     *
+     * @return int
+     */
+    public function getFailedPodsCount(): int
+    {
+        return $this->getAttribute('status.failed', 0);
+    }
+
+    /**
+     * Get the amount of succeded pods.
+     *
+     * @return int
+     */
+    public function getSuccededPodsCount(): int
+    {
+        return $this->getAttribute('status.succeeded', 0);
+    }
+
+    /**
+     * Get the start time.
+     *
+     * @return \DateTime|null
+     */
+    public function getStartTime()
+    {
+        $time = $this->getAttribute('status.startTime', null);
+
+        return $time ? Carbon::parse($time) : null;
+    }
+
+    /**
+     * Get the completion time.
+     *
+     * @return \DateTime|null
+     */
+    public function getCompletionTime()
+    {
+        $time = $this->getAttribute('status.completionTime', null);
+
+        return $time ? Carbon::parse($time) : null;
+    }
+
+    /**
+     * Get the total run time, in seconds.
+     *
+     * @return int
+     */
+    public function getDurationInSeconds(): int
+    {
+        $startTime = $this->getStartTime();
+        $completionTime = $this->getCompletionTime();
+
+        return $startTime && $completionTime
+            ? $startTime->diffInSeconds($completionTime)
+            : 0;
+    }
+
+    /**
+     * Check if the job has completed.
+     *
+     * @return bool
+     */
+    public function hasCompleted(): bool
+    {
+        return $this->getActivePodsCount() === 0;
     }
 }

@@ -122,7 +122,7 @@ class SecretTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $secret = $this->cluster->getSecretByName('passwords');
+        $this->cluster->getSecretByName('passwords');
     }
 
     public function runWatchAllTests()

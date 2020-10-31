@@ -135,3 +135,67 @@ $pod->watchLogs(function ($line) {
     // with the given line.
 });
 ```
+
+### Pod Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$pod->refresh();
+
+$pod->getPodIps();
+$pod->getHostIp();
+$pod->getQos();
+```
+
+You can also check if the pod is running
+
+```php
+if ($pod->isRunning()) {
+    //
+}
+```
+
+For [Job](Job.md) support, you may also check if the pod ran successfully:
+
+```php
+foreach ($job->getPods() as $pod) {
+    if ($pod->isSuccessful()) {
+        //
+    }
+}
+```
+
+You can check the container statuses:
+
+```php
+foreach ($pod->getContainerStatuses() as $container) {
+    // $container->getName();
+}
+
+foreach ($pod->getInitContainerStatuses() as $container) {
+    // $container->getName();
+}
+```
+
+You may also get a container by its name:
+
+```php
+$mysql = $pod->getContainer('mysql');
+$busybox = $pod->getInitContainer('busybox');
+
+// $mysql->getName();
+// $busybox->getName();
+```
+
+Check if the containers are ready:
+
+```php
+if ($pod->containersAreReady()) {
+    //
+}
+
+if ($pod->initContainersAreReady()) {
+    //
+}
+```

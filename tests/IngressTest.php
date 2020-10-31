@@ -163,7 +163,7 @@ class IngressTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $ingress = $this->cluster->getIngressByName('nginx');
+        $this->cluster->getIngressByName('nginx');
     }
 
     public function runWatchAllTests()

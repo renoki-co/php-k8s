@@ -109,4 +109,68 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
             'deployment-name' => $this->getName(),
         ];
     }
+
+    /**
+     * Get the deployment conditions.
+     *
+     * @return array
+     */
+    public function getConditions(): array
+    {
+        return $this->getAttribute('status.conditions', []);
+    }
+
+    /**
+     * Get the available replicas.
+     *
+     * @return int
+     */
+    public function getAvailableReplicasCount(): int
+    {
+        return $this->getAttribute('status.availableReplicas', 0);
+    }
+
+    /**
+     * Get the ready replicas.
+     *
+     * @return int
+     */
+    public function getReadyReplicasCount(): int
+    {
+        return $this->getAttribute('status.readyReplicas', 0);
+    }
+
+    /**
+     * Get the total desired replicas.
+     *
+     * @return int
+     */
+    public function getDesiredReplicasCount(): int
+    {
+        return $this->getAttribute('status.replicas', 0);
+    }
+
+    /**
+     * Get the total unavailable replicas.
+     *
+     * @return int
+     */
+    public function getUnavailableReplicasCount(): int
+    {
+        return $this->getAttribute('status.unavailableReplicas', 0);
+    }
+
+    /**
+     * Check if all scheduled pods are running.
+     *
+     * @return bool
+     */
+    public function allPodsAreRunning(): bool
+    {
+        $pods = $this->getPods();
+
+        return $pods->count() > 0 && $pods->reject(function ($pod) {
+            return $pod->isReady();
+        })->isEmpty();
+    }
 }

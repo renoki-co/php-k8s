@@ -90,6 +90,15 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals(['ReadWriteOnce'], $pv->getAccessModes());
         $this->assertEquals(['debug'], $pv->getMountOptions());
         $this->assertEquals('sc1', $pv->getStorageClass());
+
+        while (! $pv->isAvailable()) {
+            dump("Waiting for PV {$pv->getName()} to be available...");
+            sleep(1);
+            $pv->refresh();
+        }
+
+        $this->assertTrue($pv->isAvailable());
+        $this->assertFalse($pv->isBound());
     }
 
     public function runGetAllTests()
@@ -149,11 +158,14 @@ class PersistentVolumeTest extends TestCase
 
         $this->assertTrue($pv->delete());
 
-        sleep(3);
+        while ($pv->exists()) {
+            dump("Awaiting for PV {$pv->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pv = $this->cluster->getPersistentVolumeByName('app');
+        $this->cluster->getPersistentVolumeByName('app');
     }
 
     public function runWatchAllTests()

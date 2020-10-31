@@ -110,3 +110,23 @@ foreach ($dep->getPods() as $pod) {
     // $pod->logs()
 }
 ```
+
+### Deployment Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$dep->refresh();
+
+$dep->getReadyReplicasCount();
+$dep->getDesiredReplicasCount();
+$dep->getUnavailableReplicasCount();
+```
+
+You can check if all the pods within the Deployment are running:
+
+```php
+if ($dep->allPodsAreRunning()) {
+    //
+}
+```

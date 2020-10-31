@@ -74,3 +74,23 @@ Dot notation is supported:
 ```php
 $pvc->getSpec('some.nested.path', []);
 ```
+
+### Persistent Volume Claim Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$pvc->refresh();
+
+if ($pvc->isAvailable()) {
+    //
+}
+```
+
+You can also check if the PVC is bound:
+
+```php
+if ($pvc->isBound()) {
+    //
+}
+```

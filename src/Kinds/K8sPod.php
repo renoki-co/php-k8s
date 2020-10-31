@@ -6,6 +6,7 @@ use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Instances\Container;
+use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
@@ -197,5 +198,173 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     public function resourceLogPath(): string
     {
         return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}/log";
+    }
+
+    /**
+     * Get the status phase for the pod.
+     *
+     * @return string|null
+     */
+    public function getPhase()
+    {
+        return $this->getAttribute('status.phase', null);
+    }
+
+    /**
+     * Get status conditions for the pod.
+     *
+     * @return array
+     */
+    public function getConditions(): array
+    {
+        return $this->getAttribute('status.conditions', []);
+    }
+
+    /**
+     * Get the assigned pod IPs.
+     *
+     * @return array
+     */
+    public function getPodIps(): array
+    {
+        return $this->getAttribute('status.podIPs', []);
+    }
+
+    /**
+     * Get the pod host IP.
+     *
+     * @return string\null
+     */
+    public function getHostIp()
+    {
+        return $this->getAttribute('status.hostIP', null);
+    }
+
+    /**
+     * Get the statuses for each container.
+     *
+     * @param  bool  $asInstance
+     * @return array
+     */
+    public function getContainerStatuses(bool $asInstance = true): array
+    {
+        $containers = $this->getAttribute('status.containerStatuses', []);
+
+        if ($asInstance) {
+            foreach ($containers as &$container) {
+                $container = K8s::container($container);
+            }
+        }
+
+        return $containers;
+    }
+
+    /**
+     * Get the statuses for each init container.
+     *
+     * @param  bool  $asInstance
+     * @return array
+     */
+    public function getInitContainerStatuses(bool $asInstance = true): array
+    {
+        $containers = $this->getAttribute('status.initContainerStatuses', []);
+
+        if ($asInstance) {
+            foreach ($containers as &$container) {
+                $container = K8s::container($container);
+            }
+        }
+
+        return $containers;
+    }
+
+    /**
+     * Get the container status for a specific container.
+     *
+     * @param  string  $containerName
+     * @param  bool  $asInstance
+     * @return array|null
+     */
+    public function getContainer(string $containerName, bool $asInstance = true)
+    {
+        return collect($this->getContainerStatuses($asInstance))->filter(function ($container) use ($containerName) {
+            $name = $container instanceof Container
+                ? $container->getName()
+                : $container['name'];
+
+            return $name === $containerName;
+        })->first();
+    }
+
+    /**
+     * Get the container status for a specific init container.
+     *
+     * @param  string  $containerName
+     * @param  bool  $asInstance
+     * @return \RenokiCo\PhpK8s\Instances\Container|array|null
+     */
+    public function getInitContainer(string $containerName, bool $asInstance = true)
+    {
+        return collect($this->getInitContainerStatuses($asInstance))->filter(function ($container) use ($containerName) {
+            $name = $container instanceof Container
+                ? $container->getName()
+                : $container['name'];
+
+            return $name === $containerName;
+        })->first();
+    }
+
+    /**
+     * Check if all containers are ready.
+     *
+     * @return bool
+     */
+    public function containersAreReady(): bool
+    {
+        return collect($this->getContainerStatuses())->reject(function ($container) {
+            return $container->isReady();
+        })->isEmpty();
+    }
+
+    /**
+     * Check if all init containers are ready.
+     *
+     * @return bool
+     */
+    public function initContainersAreReady(): bool
+    {
+        return collect($this->getIniContainerStatuses())->reject(function ($container) {
+            return $container->isReady();
+        })->isEmpty();
+    }
+
+    /**
+     * Get the QOS class for the resource.
+     *
+     * @return string
+     */
+    public function getQos(): string
+    {
+        return $this->getAttribute('status.qosClass', 'BestEffort');
+    }
+
+    /**
+     * Check if the pod is running.
+     *
+     * @return bool
+     */
+    public function isRunning(): bool
+    {
+        return $this->getPhase() === 'Running';
+    }
+
+    /**
+     * Check if the pod completed successfully.
+     *
+     * @return bool
+     */
+    public function isSuccessful(): bool
+    {
+        return $this->getPhase() === 'Succeeded';
     }
 }

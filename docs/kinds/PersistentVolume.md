@@ -85,3 +85,23 @@ Dot notation is supported:
 ```php
 $pv->getSpec('some.nested.path', []);
 ```
+
+### Persistent Volume Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$pv->refresh();
+
+if ($pv->isAvailable()) {
+    //
+}
+```
+
+You can also check if the PV is bound:
+
+```php
+if ($pv->isBound()) {
+    //
+}
+```

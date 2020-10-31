@@ -116,8 +116,22 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function syncWith(array $attributes = [])
     {
-        $this->original = $attributes;
         $this->attributes = $attributes;
+
+        $this->syncOriginalWith($attributes);
+
+        return $this;
+    }
+
+    /**
+     * Hydrate the current original details with a payload.
+     *
+     * @param  array  $instance
+     * @return $this
+     */
+    public function syncOriginalWith(array $attributes = [])
+    {
+        $this->original = $attributes;
 
         $this->synced();
 
@@ -455,10 +469,9 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
-        $this->refresh();
+        $this->refreshOriginal();
 
-        $instance = $this
-            ->cluster
+        $instance = $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::REPLACE_OP,
@@ -495,8 +508,7 @@ class K8sResource implements Arrayable, Jsonable
 
         $this->refresh();
 
-        $this
-            ->cluster
+        $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::DELETE_OP,
@@ -517,7 +529,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $query
      * @return $this
      */
-    public function refresh(array $query = ['pretty' => 1])
+    public function refreshVersions(array $query = ['pretty' => 1])
     {
         $instance = $this->get($query);
 
@@ -526,6 +538,28 @@ class K8sResource implements Arrayable, Jsonable
         $this->setAttribute('metadata.uid', $instance->getResourceUid());
 
         return $this;
+    }
+
+    /**
+     * Make a call to the cluster to get a fresh instance.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refresh(array $query = ['pretty' => 1])
+    {
+        return $this->syncWith($this->get($query)->toArray());
+    }
+
+    /**
+     * Make a call to teh cluster to get fresh original values.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refreshOriginal(array $query = ['pretty' => 1])
+    {
+        return $this->syncOriginalWith($this->get($query)->toArray());
     }
 
     /**

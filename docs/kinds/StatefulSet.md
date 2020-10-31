@@ -126,3 +126,23 @@ foreach ($sts->getPods() as $pod) {
     // $pod->logs()
 }
 ```
+
+### StatefulSet Status
+
+The Status API is available to be accessed for fresh instances:
+
+```php
+$sts->refresh();
+
+$sts->getCurrentReplicasCount();
+$sts->getReadyReplicasCount();
+$sts->getDesiredReplicasCount();
+```
+
+You can check if all the pods within the StatefulSet are running:
+
+```php
+if ($sts->allPodsAreRunning()) {
+    //
+}
+```

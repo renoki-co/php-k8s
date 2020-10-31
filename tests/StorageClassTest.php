@@ -125,7 +125,7 @@ class StorageClassTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $sc = $this->cluster->getStorageClassByName('io1');
+        $this->cluster->getStorageClassByName('io1');
     }
 
     public function runWatchAllTests()

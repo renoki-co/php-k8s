@@ -113,7 +113,13 @@ class JobTest extends TestCase
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
 
-        sleep(10);
+        $job->refresh();
+
+        while (! $job->hasCompleted()) {
+            dump("Waiting for pods of {$job->getName()} to finish executing...");
+            sleep(1);
+            $job->refresh();
+        }
 
         $pods = $job->getPods();
 
@@ -123,8 +129,18 @@ class JobTest extends TestCase
             $this->assertInstanceOf(K8sPod::class, $pod);
         }
 
-        // Wait for the pod to create entirely.
-        sleep(20);
+        $job->refresh();
+
+        while (! $completionTime = $job->getCompletionTime()) {
+            dump("Waiting for the competion time report of {$job->getName()}...");
+            sleep(1);
+            $job->refresh();
+        }
+
+        $this->assertTrue($job->getDurationInSeconds() > 0);
+        $this->assertEquals(0, $job->getActivePodsCount());
+        $this->assertEquals(0, $job->getFailedPodsCount());
+        $this->assertEquals(1, $job->getSuccededPodsCount());
     }
 
     public function runGetAllTests()
@@ -182,11 +198,14 @@ class JobTest extends TestCase
 
         $this->assertTrue($job->delete());
 
-        sleep(20);
+        while ($job->exists()) {
+            dump("Awaiting for job {$job->getName()} to be deleted...");
+            sleep(1);
+        }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $pod = $this->cluster->getJobByName('pi');
+        $this->cluster->getJobByName('pi');
     }
 
     public function runWatchAllTests()
