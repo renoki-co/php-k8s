@@ -655,12 +655,20 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
     public function watchLogs(Closure $callback, array $query = ['pretty' => 1])
     {
         if (! $this instanceof Loggable) {
             throw new KubernetesWatchException(
                 'The resource '.get_class($this).' does not support logs.'
+            );
+        }
+
+        if (! $this instanceof Watchable) {
+            throw new KubernetesLogsException(
+                'The resource '.get_class($this).' does not support watch actions.'
             );
         }
 
@@ -685,6 +693,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $query
      * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
     public function watchContainerLogs(string $container, Closure $callback, array $query = ['pretty' => 1])
     {
@@ -713,6 +722,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $query
      * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
     public function watchContainerLogsByName(string $name, string $container, Closure $callback, array $query = ['pretty' => 1])
     {
