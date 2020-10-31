@@ -73,6 +73,7 @@ class DeploymentTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+        $this->runScalingTests();
         $this->runDeletionTests();
     }
 
@@ -235,5 +236,23 @@ class DeploymentTest extends TestCase
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runScalingTests()
+    {
+        $dep = $this->cluster->getDeploymentByName('mysql');
+
+        $scaler = $dep->scale(2);
+
+        while ($dep->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
+            dump("Awaiting for deployment {$dep->getName()} to scale to 2 replicas...");
+            $scaler->refresh();
+            $dep->refresh();
+            sleep(1);
+        }
+
+        $this->assertEquals(2, $dep->getReadyReplicasCount());
+        $this->assertEquals(2, $scaler->getReplicas());
+        $this->assertCount(2, $dep->getPods());
     }
 }

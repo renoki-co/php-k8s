@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use RenokiCo\PhpK8s\Contracts\Loggable;
+use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
@@ -727,5 +728,32 @@ class K8sResource implements Arrayable, Jsonable
     public function watchContainerLogsByName(string $name, string $container, Closure $callback, array $query = ['pretty' => 1])
     {
         return $this->whereName($name)->watchContainerLogs($container, $callback, $query);
+    }
+
+    /**
+     * Get a specific resource scaling data.
+     *
+     * @return \RenokiCo\PhpK8s\Kinds\K8sScale
+     */
+    public function scaler(): K8sScale
+    {
+        if (! $this instanceof Scalable) {
+            throw new KubernetesScalingException(
+                'The resource '.get_class($this).' does not support scaling.'
+            );
+        }
+
+        $scaler = $this->cluster
+            ->setResourceClass(K8sScale::class)
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->resourceScalePath(),
+                $this->toJsonPayload(),
+                ['pretty' => 1]
+            );
+
+        $scaler->setScalableResource($this);
+
+        return $scaler;
     }
 }

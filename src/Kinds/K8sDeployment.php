@@ -4,7 +4,9 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Podable;
+use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Traits\CanScale;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasPods;
@@ -12,9 +14,9 @@ use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
-class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Podable, Watchable
+class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Podable, Scalable, Watchable
 {
-    use HasAnnotations, HasLabels, HasPods, HasSelector, HasSpec, HasTemplate;
+    use CanScale, HasAnnotations, HasLabels, HasPods, HasSelector, HasSpec, HasTemplate;
 
     /**
      * The resource Kind parameter.
@@ -96,6 +98,16 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
     public function resourceWatchPath(): string
     {
         return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/deployments/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource scale.
+     *
+     * @return string
+     */
+    public function resourceScalePath(): string
+    {
+        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/deployments/{$this->getIdentifier()}/scale";
     }
 
     /**
