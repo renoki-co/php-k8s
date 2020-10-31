@@ -110,6 +110,7 @@ class StatefulSetTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+        $this->runScalingTests();
         $this->runDeletionTests();
     }
 
@@ -293,5 +294,23 @@ class StatefulSetTest extends TestCase
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runScalingTests()
+    {
+        $sts = $this->cluster->getStatefulSetByName('mysql');
+
+        $scaler = $sts->scale(2);
+
+        while ($sts->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
+            dump("Awaiting for statefulset {$sts->getName()} to scale to 2 replicas...");
+            $scaler->refresh();
+            $sts->refresh();
+            sleep(1);
+        }
+
+        $this->assertEquals(2, $sts->getReadyReplicasCount());
+        $this->assertEquals(2, $scaler->getReplicas());
+        $this->assertCount(2, $sts->getPods());
     }
 }

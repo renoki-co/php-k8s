@@ -111,6 +111,24 @@ foreach ($dep->getPods() as $pod) {
 }
 ```
 
+### Scaling
+
+The Scaling API is available via a `K8sScale` resource:
+
+```php
+$scaler = $dep->scaler();
+
+$scaler->setReplicas(3)->update(); // autoscale the Deployment to 3 replicas
+```
+
+Shorthand, you can use `scale()` directly from the Deployment
+
+```php
+$scaler = $dep->scale(3);
+
+$pods = $dep->getPods(); // Expecting 3 pods
+```
+
 ### Deployment Status
 
 The Status API is available to be accessed for fresh instances:
