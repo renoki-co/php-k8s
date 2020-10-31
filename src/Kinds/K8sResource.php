@@ -701,6 +701,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchLogsByName(string $name, Closure $callback, array $query = ['pretty' => 1])
     {
