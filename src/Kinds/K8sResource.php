@@ -380,6 +380,28 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Make a call to the cluster to get a fresh instance.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refresh(array $query = ['pretty' => 1])
+    {
+        return $this->syncWith($this->get($query)->toArray());
+    }
+
+    /**
+     * Make a call to teh cluster to get fresh original values.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refreshOriginal(array $query = ['pretty' => 1])
+    {
+        return $this->syncOriginalWith($this->get($query)->toArray());
+    }
+
+    /**
      * Get a list with all resources.
      *
      * @param  array  $query
@@ -497,28 +519,6 @@ class K8sResource implements Arrayable, Jsonable
         $this->synced = false;
 
         return true;
-    }
-
-    /**
-     * Make a call to the cluster to get a fresh instance.
-     *
-     * @param  array  $query
-     * @return $this
-     */
-    public function refresh(array $query = ['pretty' => 1])
-    {
-        return $this->syncWith($this->get($query)->toArray());
-    }
-
-    /**
-     * Make a call to teh cluster to get fresh original values.
-     *
-     * @param  array  $query
-     * @return $this
-     */
-    public function refreshOriginal(array $query = ['pretty' => 1])
-    {
-        return $this->syncOriginalWith($this->get($query)->toArray());
     }
 
     /**
