@@ -20,13 +20,6 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster, Watchab
     protected static $kind = 'Service';
 
     /**
-     * The default version for the resource.
-     *
-     * @var string
-     */
-    protected static $stableVersion = 'v1';
-
-    /**
      * Wether the resource has a namespace.
      *
      * @var bool

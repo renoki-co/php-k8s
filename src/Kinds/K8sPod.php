@@ -23,13 +23,6 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     protected static $kind = 'Pod';
 
     /**
-     * The default version for the resource.
-     *
-     * @var string
-     */
-    protected static $stableVersion = 'v1';
-
-    /**
      * Wether the resource has a namespace.
      *
      * @var bool
