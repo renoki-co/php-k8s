@@ -122,6 +122,8 @@ Retrieve a single string with all logs until the point of call:
 // Returns a long string with the logs
 
 $logs = $pod->logs();
+
+$mysqlLogs = $pod->containerLogs('mysql');
 ```
 
 Open up a websocket connection and watch for changes, line-by-line:
@@ -134,6 +136,11 @@ $pod->watchLogs(function ($line) {
     // Process the logic here
     // with the given line.
 });
+
+$pod->watchContainerLogs('mysql', function ($line) {
+    // Process the logic here
+    // with the given line for the mysql container.
+})
 ```
 
 ### Pod Status
