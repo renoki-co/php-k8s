@@ -162,11 +162,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function hasChanged(): bool
     {
-        if (! $this->isSynced()) {
-            return true;
-        }
-
-        return $this->attributes !== $this->original;
+        return $this->isSynced() && $this->attributes !== $this->original;
     }
 
     /**
@@ -196,17 +192,6 @@ class K8sResource implements Arrayable, Jsonable
     public function getApiVersion(): string
     {
         return $this->getAttribute('apiVersion', static::$stableVersion);
-    }
-
-    /**
-     * Set the API version.
-     *
-     * @param  string  $apiVersion
-     * @return $this
-     */
-    public function setApiVersion(string $apiVersion)
-    {
-        return $this->setAttribute('apiVersion', $apiVersion);
     }
 
     /**
@@ -319,10 +304,6 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getResourceVersion()
     {
-        if (! $this->isSynced()) {
-            return;
-        }
-
         return $this->getAttribute('metadata.resourceVersion', null);
     }
 
@@ -333,10 +314,6 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getResourceUid()
     {
-        if (! $this->isSynced()) {
-            return;
-        }
-
         return $this->getAttribute('metadata.uid', null);
     }
 
@@ -523,24 +500,6 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Make a call to the cluster to retrieve the
-     * resource version & uid of the resource.
-     *
-     * @param  array  $query
-     * @return $this
-     */
-    public function refreshVersions(array $query = ['pretty' => 1])
-    {
-        $instance = $this->get($query);
-
-        $this->setAttribute('metadata.resourceVersion', $instance->getResourceVersion());
-
-        $this->setAttribute('metadata.uid', $instance->getResourceUid());
-
-        return $this;
-    }
-
-    /**
      * Make a call to the cluster to get a fresh instance.
      *
      * @param  array  $query
@@ -691,7 +650,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function containerLogsByName(string $name, string $container, array $query = ['pretty' => 1])
     {
-        return $this->logsByName($name, array_merge($query, ['container' => $container]));
+        return $this->whereName($name)->containerLogs($container, $query);
     }
 
     /**
@@ -762,6 +721,6 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function watchContainerLogsByName(string $name, string $container, Closure $callback, array $query = ['pretty' => 1])
     {
-        return $this->watchLogsByName($name, $callback, array_merge($query, ['container' => $container]));
+        return $this->whereName($name)->watchContainerLogs($container, $callback, $query);
     }
 }

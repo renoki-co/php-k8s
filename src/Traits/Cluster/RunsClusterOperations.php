@@ -152,27 +152,19 @@ trait RunsClusterOperations
      * @param  string  $path
      * @param  string|Closure  $payload
      * @param  array  $query
-     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\ResourcesList
+     * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         // Calling a WATCH operation will trigger a SOCKET connection.
         if ($operation === static::WATCH_OP) {
-            if ($this->watchPath($path, $payload, $query)) {
-                return true;
-            }
-
-            return false;
+            return $this->watchPath($path, $payload, $query);
         }
 
         // Calling a WATCH LOGS operation should trigger a SOCKET connection.
         if ($operation === static::WATCH_LOGS_OP) {
-            if ($this->watchLogsPath($path, $payload, $query)) {
-                return true;
-            }
-
-            return false;
+            return $this->watchLogsPath($path, $payload, $query);
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];

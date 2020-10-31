@@ -21,4 +21,18 @@ trait HasPods
             ->setNamespace($this->getNamespace())
             ->all(array_merge(['labelSelector' => $labelSelector], $query));
     }
+
+     /**
+     * Check if all scheduled pods are running.
+     *
+     * @return bool
+     */
+    public function allPodsAreRunning(): bool
+    {
+        $pods = $this->getPods();
+
+        return $pods->count() > 0 && $pods->reject(function ($pod) {
+            return $pod->isReady();
+        })->isEmpty();
+    }
 }

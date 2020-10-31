@@ -210,18 +210,4 @@ class K8sStatefulSet extends K8sResource implements InteractsWithK8sCluster, Pod
     {
         return $this->getAttribute('status.replicas', 0);
     }
-
-    /**
-     * Check if all scheduled pods are running.
-     *
-     * @return bool
-     */
-    public function allPodsAreRunning(): bool
-    {
-        $pods = $this->getPods();
-
-        return $pods->count() > 0 && $pods->reject(function ($pod) {
-            return $pod->isReady();
-        })->isEmpty();
-    }
 }

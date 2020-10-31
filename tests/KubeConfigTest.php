@@ -69,4 +69,22 @@ class KubeConfigTest extends TestCase
 
         $this->cluster->fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'inexistent-context');
     }
+
+    public function test_http_authentication()
+    {
+        $this->cluster->httpAuthentication('some-user', 'some-password');
+
+        ['auth' => $auth] = $this->cluster->getClient()->getConfig();
+
+        $this->assertEquals(['some-user', 'some-password'], $auth);
+    }
+
+    public function test_bearer_token_authentication()
+    {
+        $this->cluster->withToken('some-token');
+
+        ['headers' => ['authorization' => $token]] = $this->cluster->getClient()->getConfig();
+
+        $this->assertEquals('Bearer some-token', $token);
+    }
 }

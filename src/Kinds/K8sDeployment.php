@@ -159,18 +159,4 @@ class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Poda
     {
         return $this->getAttribute('status.unavailableReplicas', 0);
     }
-
-    /**
-     * Check if all scheduled pods are running.
-     *
-     * @return bool
-     */
-    public function allPodsAreRunning(): bool
-    {
-        $pods = $this->getPods();
-
-        return $pods->count() > 0 && $pods->reject(function ($pod) {
-            return $pod->isReady();
-        })->isEmpty();
-    }
 }
