@@ -139,7 +139,6 @@ class Container implements Arrayable
         return $this->getAttribute('resources.limits.cpu', null);
     }
 
-
     /**
      * Set the readiness probe for the container.
      *
