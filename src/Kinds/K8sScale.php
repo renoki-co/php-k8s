@@ -3,10 +3,12 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
+use RenokiCo\PhpK8s\Traits\HasReplicas;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
 class K8sScale extends K8sResource implements InteractsWithK8sCluster
 {
+    use HasReplicas;
     use HasSpec;
 
     /**
@@ -55,27 +57,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     public function resourcePath(): string
     {
         return $this->resource->resourceScalePath();
-    }
-
-    /**
-     * Set the desired replicas for the scale.
-     *
-     * @param  int  $replicas
-     * @return $this
-     */
-    public function setReplicas(int $replicas)
-    {
-        return $this->setSpec('replicas', $replicas);
-    }
-
-    /**
-     * Get the defined replicas for the scale.
-     *
-     * @return int
-     */
-    public function getReplicas(): int
-    {
-        return $this->getSpec('replicas', 0);
     }
 
     /**

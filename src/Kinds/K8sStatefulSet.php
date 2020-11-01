@@ -10,8 +10,11 @@ use RenokiCo\PhpK8s\Traits\CanScale;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasPods;
+use RenokiCo\PhpK8s\Traits\HasReplicas;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
 class K8sStatefulSet extends K8sResource implements
@@ -24,8 +27,11 @@ class K8sStatefulSet extends K8sResource implements
     use HasAnnotations;
     use HasLabels;
     use HasPods;
+    use HasReplicas;
     use HasSelector;
     use HasSpec;
+    use HasStatus;
+    use HasStatusConditions;
     use HasTemplate;
 
     /**
@@ -48,27 +54,6 @@ class K8sStatefulSet extends K8sResource implements
      * @var bool
      */
     protected static $namespaceable = true;
-
-    /**
-     * Set the pod replicas.
-     *
-     * @param  int  $replicas
-     * @return $this
-     */
-    public function setReplicas(int $replicas = 1)
-    {
-        return $this->setSpec('replicas', $replicas);
-    }
-
-    /**
-     * Get pod replicas.
-     *
-     * @return int
-     */
-    public function getReplicas(): int
-    {
-        return $this->getSpec('replicas', 1);
-    }
 
     /**
      * Set the statefulset service.
@@ -194,23 +179,13 @@ class K8sStatefulSet extends K8sResource implements
     }
 
     /**
-     * Get the deployment conditions.
-     *
-     * @return array
-     */
-    public function getConditions(): array
-    {
-        return $this->getAttribute('status.conditions', []);
-    }
-
-    /**
      * Get the current replicas.
      *
      * @return int
      */
     public function getCurrentReplicasCount(): int
     {
-        return $this->getAttribute('status.currentReplicas', 0);
+        return $this->getStatus('currentReplicas', 0);
     }
 
     /**
@@ -220,7 +195,7 @@ class K8sStatefulSet extends K8sResource implements
      */
     public function getReadyReplicasCount(): int
     {
-        return $this->getAttribute('status.readyReplicas', 0);
+        return $this->getStatus('readyReplicas', 0);
     }
 
     /**
@@ -230,6 +205,6 @@ class K8sStatefulSet extends K8sResource implements
      */
     public function getDesiredReplicasCount(): int
     {
-        return $this->getAttribute('status.replicas', 0);
+        return $this->getStatus('replicas', 0);
     }
 }

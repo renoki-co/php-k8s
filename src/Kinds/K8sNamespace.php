@@ -4,9 +4,14 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\HasStatusPhase;
 
 class K8sNamespace extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
+    use HasStatus;
+    use HasStatusPhase;
+
     /**
      * The resource Kind parameter.
      *
@@ -52,16 +57,6 @@ class K8sNamespace extends K8sResource implements InteractsWithK8sCluster, Watch
     public function resourceWatchPath(): string
     {
         return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the status phase for the namespace.
-     *
-     * @return string|null
-     */
-    public function getPhase()
-    {
-        return $this->getAttribute('status.phase', null);
     }
 
     /**

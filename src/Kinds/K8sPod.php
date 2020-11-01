@@ -10,12 +10,18 @@ use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\HasStatusConditions;
+use RenokiCo\PhpK8s\Traits\HasStatusPhase;
 
 class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, Loggable
 {
     use HasAnnotations;
     use HasLabels;
     use HasSpec;
+    use HasStatus;
+    use HasStatusConditions;
+    use HasStatusPhase;
 
     /**
      * The resource Kind parameter.
@@ -196,33 +202,13 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     }
 
     /**
-     * Get the status phase for the pod.
-     *
-     * @return string|null
-     */
-    public function getPhase()
-    {
-        return $this->getAttribute('status.phase', null);
-    }
-
-    /**
-     * Get status conditions for the pod.
-     *
-     * @return array
-     */
-    public function getConditions(): array
-    {
-        return $this->getAttribute('status.conditions', []);
-    }
-
-    /**
      * Get the assigned pod IPs.
      *
      * @return array
      */
     public function getPodIps(): array
     {
-        return $this->getAttribute('status.podIPs', []);
+        return $this->getStatus('podIPs', []);
     }
 
     /**
@@ -232,7 +218,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function getHostIp()
     {
-        return $this->getAttribute('status.hostIP', null);
+        return $this->getStatus('hostIP', null);
     }
 
     /**
@@ -243,7 +229,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function getContainerStatuses(bool $asInstance = true): array
     {
-        $containers = $this->getAttribute('status.containerStatuses', []);
+        $containers = $this->getStatus('containerStatuses', []);
 
         if ($asInstance) {
             foreach ($containers as &$container) {
@@ -262,7 +248,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function getInitContainerStatuses(bool $asInstance = true): array
     {
-        $containers = $this->getAttribute('status.initContainerStatuses', []);
+        $containers = $this->getStatus('initContainerStatuses', []);
 
         if ($asInstance) {
             foreach ($containers as &$container) {
@@ -340,7 +326,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function getQos(): string
     {
-        return $this->getAttribute('status.qosClass', 'BestEffort');
+        return $this->getStatus('qosClass', 'BestEffort');
     }
 
     /**

@@ -8,6 +8,8 @@ use RenokiCo\PhpK8s\Traits\HasAccessModes;
 use RenokiCo\PhpK8s\Traits\HasMountOptions;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\HasStatusPhase;
 use RenokiCo\PhpK8s\Traits\HasStorageClass;
 
 class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster, Watchable
@@ -16,6 +18,8 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     use HasMountOptions;
     use HasSelector;
     use HasSpec;
+    use HasStatus;
+    use HasStatusPhase;
     use HasStorageClass;
 
     /**
@@ -97,16 +101,6 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     public function resourceWatchPath(): string
     {
         return "/api/{$this->getApiVersion()}/watch/persistentvolumes/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the status phase for the persistent volume.
-     *
-     * @return string|null
-     */
-    public function getPhase()
-    {
-        return $this->getAttribute('status.phase', null);
     }
 
     /**

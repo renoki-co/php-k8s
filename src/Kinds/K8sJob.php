@@ -11,6 +11,8 @@ use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasPods;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
 class K8sJob extends K8sResource implements
@@ -23,6 +25,8 @@ class K8sJob extends K8sResource implements
     use HasPods;
     use HasSelector;
     use HasSpec;
+    use HasStatus;
+    use HasStatusConditions;
     use HasTemplate;
 
     /**
@@ -109,15 +113,6 @@ class K8sJob extends K8sResource implements
         ];
     }
 
-    /**
-     * Get the job conditions.
-     *
-     * @return array
-     */
-    public function getConditions(): array
-    {
-        return $this->getAttribute('status.conditions', []);
-    }
 
     /**
      * Get the amount of active pods.
@@ -126,7 +121,7 @@ class K8sJob extends K8sResource implements
      */
     public function getActivePodsCount(): int
     {
-        return $this->getAttribute('status.active', 0);
+        return $this->getStatus('active', 0);
     }
 
     /**
@@ -136,7 +131,7 @@ class K8sJob extends K8sResource implements
      */
     public function getFailedPodsCount(): int
     {
-        return $this->getAttribute('status.failed', 0);
+        return $this->getStatus('failed', 0);
     }
 
     /**
@@ -146,7 +141,7 @@ class K8sJob extends K8sResource implements
      */
     public function getSuccededPodsCount(): int
     {
-        return $this->getAttribute('status.succeeded', 0);
+        return $this->getStatus('succeeded', 0);
     }
 
     /**
@@ -156,7 +151,7 @@ class K8sJob extends K8sResource implements
      */
     public function getStartTime()
     {
-        $time = $this->getAttribute('status.startTime', null);
+        $time = $this->getStatus('startTime', null);
 
         return $time ? Carbon::parse($time) : null;
     }
@@ -168,7 +163,7 @@ class K8sJob extends K8sResource implements
      */
     public function getCompletionTime()
     {
-        $time = $this->getAttribute('status.completionTime', null);
+        $time = $this->getStatus('completionTime', null);
 
         return $time ? Carbon::parse($time) : null;
     }

@@ -9,9 +9,13 @@ use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\CanScale;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
+use RenokiCo\PhpK8s\Traits\HasMinimumSurge;
 use RenokiCo\PhpK8s\Traits\HasPods;
+use RenokiCo\PhpK8s\Traits\HasReplicas;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
 class K8sDeployment extends K8sResource implements
@@ -23,9 +27,13 @@ class K8sDeployment extends K8sResource implements
     use CanScale;
     use HasAnnotations;
     use HasLabels;
+    use HasMinimumSurge;
     use HasPods;
+    use HasReplicas;
     use HasSelector;
     use HasSpec;
+    use HasStatus;
+    use HasStatusConditions;
     use HasTemplate;
 
     /**
@@ -48,27 +56,6 @@ class K8sDeployment extends K8sResource implements
      * @var bool
      */
     protected static $namespaceable = true;
-
-    /**
-     * Set the pod replicas.
-     *
-     * @param  int  $replicas
-     * @return $this
-     */
-    public function setReplicas(int $replicas = 1)
-    {
-        return $this->setSpec('replicas', $replicas);
-    }
-
-    /**
-     * Get pod replicas.
-     *
-     * @return int
-     */
-    public function getReplicas(): int
-    {
-        return $this->getSpec('replicas', 1);
-    }
 
     /**
      * Get the path, prefixed by '/', that points to the resources list.
@@ -133,23 +120,13 @@ class K8sDeployment extends K8sResource implements
     }
 
     /**
-     * Get the deployment conditions.
-     *
-     * @return array
-     */
-    public function getConditions(): array
-    {
-        return $this->getAttribute('status.conditions', []);
-    }
-
-    /**
      * Get the available replicas.
      *
      * @return int
      */
     public function getAvailableReplicasCount(): int
     {
-        return $this->getAttribute('status.availableReplicas', 0);
+        return $this->getStatus('availableReplicas', 0);
     }
 
     /**
@@ -159,7 +136,7 @@ class K8sDeployment extends K8sResource implements
      */
     public function getReadyReplicasCount(): int
     {
-        return $this->getAttribute('status.readyReplicas', 0);
+        return $this->getStatus('readyReplicas', 0);
     }
 
     /**
@@ -169,7 +146,7 @@ class K8sDeployment extends K8sResource implements
      */
     public function getDesiredReplicasCount(): int
     {
-        return $this->getAttribute('status.replicas', 0);
+        return $this->getStatus('replicas', 0);
     }
 
     /**
@@ -179,6 +156,6 @@ class K8sDeployment extends K8sResource implements
      */
     public function getUnavailableReplicasCount(): int
     {
-        return $this->getAttribute('status.unavailableReplicas', 0);
+        return $this->getStatus('unavailableReplicas', 0);
     }
 }
