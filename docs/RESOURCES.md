@@ -9,6 +9,7 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 
 # Supported Resources
 
+- [General Resources](kinds/Resource.md)
 - [Namespace](kinds/Namespace.md)
 - [Config Map](kinds/ConfigMap.md)
 - [Secret](kinds/Secret.md)
