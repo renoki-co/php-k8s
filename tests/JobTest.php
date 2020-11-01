@@ -203,11 +203,6 @@ class JobTest extends TestCase
             sleep(1);
         }
 
-        while ($job->getPods()->count() > 0) {
-            dump("Awaiting for job {$job->getName()}'s pods to be deleted...");
-            sleep(1);
-        }
-
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getJobByName('pi');
