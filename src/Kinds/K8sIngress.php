@@ -9,7 +9,8 @@ use RenokiCo\PhpK8s\Traits\HasSpec;
 
 class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAnnotations, HasSpec;
+    use HasAnnotations;
+    use HasSpec;
 
     /**
      * The resource Kind parameter.

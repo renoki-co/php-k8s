@@ -12,7 +12,11 @@ use RenokiCo\PhpK8s\Traits\HasStorageClass;
 
 class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAccessModes, HasMountOptions, HasSelector, HasSpec, HasStorageClass;
+    use HasAccessModes;
+    use HasMountOptions;
+    use HasSelector;
+    use HasSpec;
+    use HasStorageClass;
 
     /**
      * The resource Kind parameter.

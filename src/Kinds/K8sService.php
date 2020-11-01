@@ -10,7 +10,9 @@ use RenokiCo\PhpK8s\Traits\HasSpec;
 
 class K8sService extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAnnotations, HasSelector, HasSpec;
+    use HasAnnotations;
+    use HasSelector;
+    use HasSpec;
 
     /**
      * The resource Kind parameter.

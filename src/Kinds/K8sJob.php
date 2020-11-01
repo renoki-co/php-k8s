@@ -13,9 +13,17 @@ use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
-class K8sJob extends K8sResource implements InteractsWithK8sCluster, Podable, Watchable
+class K8sJob extends K8sResource implements
+    InteractsWithK8sCluster,
+    Podable,
+    Watchable
 {
-    use HasAnnotations, HasLabels, HasPods, HasSelector, HasSpec, HasTemplate;
+    use HasAnnotations;
+    use HasLabels;
+    use HasPods;
+    use HasSelector;
+    use HasSpec;
+    use HasTemplate;
 
     /**
      * The resource Kind parameter.

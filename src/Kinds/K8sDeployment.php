@@ -14,9 +14,19 @@ use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasTemplate;
 
-class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Podable, Scalable, Watchable
+class K8sDeployment extends K8sResource implements
+    InteractsWithK8sCluster,
+    Podable,
+    Scalable,
+    Watchable
 {
-    use CanScale, HasAnnotations, HasLabels, HasPods, HasSelector, HasSpec, HasTemplate;
+    use CanScale;
+    use HasAnnotations;
+    use HasLabels;
+    use HasPods;
+    use HasSelector;
+    use HasSpec;
+    use HasTemplate;
 
     /**
      * The resource Kind parameter.

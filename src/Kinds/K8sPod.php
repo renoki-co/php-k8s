@@ -13,7 +13,9 @@ use RenokiCo\PhpK8s\Traits\HasSpec;
 
 class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, Loggable
 {
-    use HasAnnotations, HasLabels, HasSpec;
+    use HasAnnotations;
+    use HasLabels;
+    use HasSpec;
 
     /**
      * The resource Kind parameter.
