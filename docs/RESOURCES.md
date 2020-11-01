@@ -30,19 +30,25 @@ The following list of resources are work in progress and they will be available 
 - daemonsets
 - horizontalpodautoscalers
 - cronjobs
+- serviceaccounts
+- clusterrolebindings
+- clusterroles
+- rolebindings
+- roles
+- bindings
+- networkpolicies
+- poddisruptionbudgets
 
 # Discussable
 
 The following list of resources might not be useful for the basic needs, so they will be gladly accepted via PR in case there is a need of the resources or they might get discussed and implemented after further reasearch on the structure of the resource.
 
-- bindings
 - componentstatuses
 - endpoints
 - limitranges
 - podtemplates
 - replicationcontrollers
 - resourcequotas
-- serviceaccounts
 - mutatingwebhookconfigurations
 - validatingwebhookconfigurations
 - customresourcedefinitions
@@ -56,13 +62,7 @@ The following list of resources might not be useful for the basic needs, so they
 - certificatesigningrequests
 - leases
 - events
-- networkpolicies
-- poddisruptionbudgets
 - podsecuritypolicies
-- clusterrolebindings
-- clusterroles
-- rolebindings
-- roles
 - priorityclasses
 - csidrivers
 - csinodes
