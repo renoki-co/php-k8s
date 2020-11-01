@@ -56,6 +56,22 @@ class K8sStatefulSet extends K8sResource implements
     protected static $namespaceable = true;
 
     /**
+     * Set the updating strategy for the set.
+     *
+     * @param  string  $strategy
+     * @param  int  $partition
+     * @return $this
+     */
+    public function setUpdateStrategy(string $strategy, int $partition = 0)
+    {
+        if ($strategy === 'RollingUpdate') {
+            $this->setSpec('updateStrategy.rollingUpdate.partition', $partition);
+        }
+
+        return $this->setSpec('updateStrategy.type', $strategy);
+    }
+
+    /**
      * Set the statefulset service.
      *
      * @param  string|\RenokiCo\PhpK8s\Kinds\K8sService  $service

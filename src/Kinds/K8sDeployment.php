@@ -58,6 +58,24 @@ class K8sDeployment extends K8sResource implements
     protected static $namespaceable = true;
 
     /**
+     * Set the updating strategy for the deployment.
+     *
+     * @param  string  $strategy
+     * @param  int|string  $maxUnavailable
+     * @param  int|string  $maxSurge
+     * @return $this
+     */
+    public function setUpdateStrategy(string $strategy, $maxUnavailable = '25%', $maxSurge = '25%')
+    {
+        if ($strategy === 'RollingUpdate') {
+            $this->setSpec('updateStrategy.rollingUpdate.maxUnavailable', $maxUnavailable);
+            $this->setSpec('updateStrategy.rollingUpdate.maxSurge', $maxSurge);
+        }
+
+        return $this->setSpec('updateStrategy.type', $strategy);
+    }
+
+    /**
      * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string

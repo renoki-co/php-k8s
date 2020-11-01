@@ -103,6 +103,8 @@ class DeploymentTest extends TestCase
             ->setAnnotations(['mysql/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['tier' => 'backend']])
             ->setReplicas(1)
+            ->setUpdateStrategy('RollingUpdate')
+            ->setMinReadySeconds(0)
             ->setTemplate($pod);
 
         $this->assertFalse($dep->isSynced());

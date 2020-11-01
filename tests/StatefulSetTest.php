@@ -45,6 +45,7 @@ class StatefulSetTest extends TestCase
             ->setReplicas(3)
             ->setService($svc)
             ->setTemplate($pod)
+            ->setUpdateStrategy('RollingUpdate')
             ->setVolumeClaims([$pvc]);
 
         $this->assertEquals('apps/v1', $sts->getApiVersion());
