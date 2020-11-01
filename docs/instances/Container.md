@@ -1,6 +1,6 @@
 # Containers
 
-## Example
+## Examples
 
 ### Creating a container
 
@@ -17,29 +17,9 @@ $container = K8s::container()
     ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
 ```
 
-### Setting probes
-
-You might want to set probes for your containers:
-
-Command probes:
-
-```php
-$probe = K8s::probe()->command(['sh', 'test.sh']);
-```
-
-HTTP probes:
-
-```php
-$probe = K8s::probe()->http('/health', 80, ['X-CSRF-TOKEN' => 'some-token'])
-```
-
-TCP probes:
-
-```php
-$probe = K8s::probe()->tcp(3306);
-```
-
 ### Attaching probes
+
+Check docs on [Probes](Probes.md) for more details.
 
 You might attach the probes to the container:
 
