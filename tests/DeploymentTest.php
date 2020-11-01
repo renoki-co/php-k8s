@@ -215,6 +215,11 @@ class DeploymentTest extends TestCase
             sleep(1);
         }
 
+        while ($dep->getPods()->count() > 0) {
+            dump("Awaiting for deployment {$dep->getName()}'s pods to be deleted...");
+            sleep(1);
+        }
+
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getDeploymentByName('mysql');

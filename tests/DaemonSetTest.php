@@ -207,6 +207,11 @@ class DaemonSetTest extends TestCase
             sleep(1);
         }
 
+        while ($ds->getPods()->count() > 0) {
+            dump("Awaiting for daemonset {$ds->getName()}'s pods to be deleted...");
+            sleep(1);
+        }
+
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getDaemonSetByName('mysql');

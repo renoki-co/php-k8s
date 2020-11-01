@@ -272,6 +272,11 @@ class StatefulSetTest extends TestCase
             sleep(1);
         }
 
+        while ($sts->getPods()->count() > 0) {
+            dump("Awaiting for statefulset {$sts->getName()}'s pods to be deleted...");
+            sleep(1);
+        }
+
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getStatefulSetByName('mysql');
