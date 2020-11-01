@@ -2,6 +2,11 @@
 
 Before diving in the resource docs, please check [All Resources docs](kinds/Resource.md), which contains helpful methods that are available everywhere and helps customize your Kind classes, even though you won't find the methods you need in every single kind.
 
+# Supported Instances
+
+- [Container](instances/Container.md)
+- [Container Probes](instances/Probes.md)
+
 # Supported Resources
 
 - [Namespace](kinds/Namespace.md)
