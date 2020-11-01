@@ -113,7 +113,6 @@ class K8sJob extends K8sResource implements
         ];
     }
 
-
     /**
      * Get the amount of active pods.
      *
