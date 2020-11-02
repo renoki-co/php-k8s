@@ -10,8 +10,9 @@
 $ingress = $cluster->ingress()
     ->setName('nginx')
     ->setSelectors(['app' => 'frontend'])
-    ->setRules([
-        ['host' => 'nginx.test.com', 'http' => [
+    ->setRules([[
+        'host' => 'nginx.test.com',
+        'http' => [
             'paths' => [[
                 'path' => '/',
                 'backend' => [
@@ -19,8 +20,8 @@ $ingress = $cluster->ingress()
                     'servicePort' => 80,
                 ],
             ]],
-        ]],
-    ])->create();
+        ],
+    ]])->create();
 ```
 
 Ingresses support annotations:

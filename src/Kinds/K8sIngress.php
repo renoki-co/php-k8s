@@ -45,13 +45,43 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     }
 
     /**
+     * Add a new rule to the list.
+     *
+     * @param  array  $rule
+     * @return $this
+     */
+    public function addRule(array $rule)
+    {
+        $rules = $this->getRules();
+
+        $rules = array_merge($rules, [$rule]);
+
+        return $this->setSpec('rules', $rules);
+    }
+
+    /**
+     * Batch-add multiple rules to the list.
+     *
+     * @param  array  $rules
+     * @return $this
+     */
+    public function addRules(array $rules)
+    {
+        foreach ($rules as $rule) {
+            $this->addRule($rule);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get the spec rules.
      *
      * @return array
      */
     public function getRules(): array
     {
-        return $this->getSpec('rules');
+        return $this->getSpec('rules', []);
     }
 
     /**
