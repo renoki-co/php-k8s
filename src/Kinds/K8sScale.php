@@ -71,4 +71,30 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
 
         return $this;
     }
+
+    /**
+     * Make a call to the cluster to get a fresh instance.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refresh(array $query = ['pretty' => 1])
+    {
+        $this->resource->refresh($query);
+
+        return $this->syncWith($this->get($query)->toArray());
+    }
+
+    /**
+     * Make a call to teh cluster to get fresh original values.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function refreshOriginal(array $query = ['pretty' => 1])
+    {
+        $this->resource->refreshOriginal($query);
+
+        return $this->syncOriginalWith($this->get($query)->toArray());
+    }
 }

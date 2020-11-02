@@ -249,11 +249,7 @@ class DeploymentTest extends TestCase
     {
         $dep = $this->cluster->getDeploymentByName('mysql');
 
-        try {
-            $scaler = $dep->scale(2);
-        } catch (\Exception $e) {
-            dump($e->getPayload());
-        }
+        $scaler = $dep->scale(2);
 
         while ($dep->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
             dump("Awaiting for deployment {$dep->getName()} to scale to 2 replicas...");
