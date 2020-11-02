@@ -70,10 +70,10 @@ class DeploymentTest extends TestCase
         $this->runCreationTests();
         $this->runGetAllTests();
         $this->runGetTests();
+        $this->runScalingTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
-        $this->runScalingTests();
         $this->runDeletionTests();
     }
 
@@ -199,7 +199,7 @@ class DeploymentTest extends TestCase
         $this->assertEquals('mysql', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
         $this->assertEquals([], $dep->getAnnotations());
-        $this->assertEquals(1, $dep->getReplicas());
+        $this->assertEquals(2, $dep->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
     }
