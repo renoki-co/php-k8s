@@ -173,6 +173,18 @@ class K8s
     }
 
     /**
+     * Create a new ServiceAccount kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sServiceAccount
+     */
+    public static function serviceAccount($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sServiceAccount($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
