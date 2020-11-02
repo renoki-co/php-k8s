@@ -197,6 +197,16 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Get the resource kind.
+     *
+     * @return string|null
+     */
+    public function getKind()
+    {
+        return static::$kind;
+    }
+
+    /**
      * Set the namespace of the resource.
      *
      * @param  string|\RenokiCo\PhpK8s\Kinds\K8sNamespace  $namespace
@@ -342,7 +352,7 @@ class K8sResource implements Arrayable, Jsonable
     public function toArray(string $kind = null)
     {
         return array_merge($this->attributes, [
-            'kind' => $kind ?: static::$kind,
+            'kind' => $kind ?: $this->getKind(),
             'apiVersion' => $this->getApiVersion(),
         ]);
     }

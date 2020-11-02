@@ -70,6 +70,7 @@ class DeploymentTest extends TestCase
         $this->runCreationTests();
         $this->runGetAllTests();
         $this->runGetTests();
+        $this->attachPodAutoscaler();
         $this->runScalingTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
@@ -183,6 +184,29 @@ class DeploymentTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
     }
 
+    public function attachPodAutoscaler()
+    {
+        $dep = $this->cluster->getDeploymentByName('mysql');
+
+        $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
+
+        $hpa = $this->cluster->horizontalPodAutoscaler()
+            ->setName('deploy-mysql')
+            ->setResource($dep)
+            ->addMetrics([$cpuMetric])
+            ->min(1)
+            ->max(10)
+            ->create();
+
+        while ($hpa->getCurrentReplicasCount() < 1) {
+            $hpa->refresh();
+            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
+            sleep(1);
+        }
+
+        $this->assertEquals(1, $hpa->getCurrentReplicasCount());
+    }
+
     public function runUpdateTests()
     {
         $dep = $this->cluster->getDeploymentByName('mysql');
@@ -207,8 +231,15 @@ class DeploymentTest extends TestCase
     public function runDeletionTests()
     {
         $dep = $this->cluster->getDeploymentByName('mysql');
+        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
 
         $this->assertTrue($dep->delete());
+        $this->assertTrue($hpa->delete());
+
+        while ($hpa->exists()) {
+            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
+            sleep(1);
+        }
 
         while ($dep->exists()) {
             dump("Awaiting for deployment {$dep->getName()} to be deleted...");
@@ -223,6 +254,7 @@ class DeploymentTest extends TestCase
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getDeploymentByName('mysql');
+        $this->cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
     }
 
     public function runWatchAllTests()

@@ -23,12 +23,12 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Deployment](kinds/Deployment.md)
 - [DaemonSet](kinds/DaemonSet.md)
 - [Jobs](kinds/Job.md)
+- [Horizontal Pod Autoscaler](kinds/HorizontalPodAutoscaler.md)
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
-- horizontalpodautoscalers
 - cronjobs
 - serviceaccounts
 - clusterrolebindings
