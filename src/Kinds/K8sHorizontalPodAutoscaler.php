@@ -104,6 +104,16 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     }
 
     /**
+     * Get the min replicas amount.
+     *
+     * @return int
+     */
+    public function getMinReplicas(): int
+    {
+        return $this->getSpec('minReplicas', 1);
+    }
+
+    /**
      * Set the maximum pod count.
      *
      * @param  int  $replicas
@@ -112,6 +122,16 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     public function max(int $replicas)
     {
         return $this->setSpec('maxReplicas', $replicas);
+    }
+
+    /**
+     * Get the max replicas amount.
+     *
+     * @return int
+     */
+    public function getMaxReplicas(): int
+    {
+        return $this->getSpec('maxReplicas', 1);
     }
 
     /**

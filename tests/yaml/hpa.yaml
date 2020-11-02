@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mysql-hpa
+spec:
+  scaleTargetRef:
+    kind: Deployment
+    name: mysql
+    apiVersion: apps/v1
+  metrics:
+    - resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+      type: Resource
+  minReplicas: 1
+  maxReplicas: 10
