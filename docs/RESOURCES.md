@@ -38,6 +38,12 @@ The following list of resources are work in progress and they will be available 
 - bindings
 - networkpolicies
 - poddisruptionbudgets
+- podsecuritypolicies
+
+The following concepts are work in progress as instances:
+
+- pod affinity
+- node affinity
 
 # Discussable
 
@@ -62,7 +68,6 @@ The following list of resources might not be useful for the basic needs, so they
 - certificatesigningrequests
 - leases
 - events
-- podsecuritypolicies
 - priorityclasses
 - csidrivers
 - csinodes
