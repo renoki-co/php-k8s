@@ -97,6 +97,18 @@ class K8sStatefulSet extends K8sResource implements
     }
 
     /**
+     * Get the K8sService instance.
+     *
+     * @return null|\RenokiCo\PhpK8s\Kinds\K8sService
+     */
+    public function getServiceInstance()
+    {
+        return $this->cluster
+            ? $this->cluster->getServiceByName($this->getService())
+            : null;
+    }
+
+    /**
      * Set the volume claims templates.
      *
      * @param  array  $volumeClaims

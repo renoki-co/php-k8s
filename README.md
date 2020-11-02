@@ -36,6 +36,7 @@ Each existent resource has its own documentation, filled with examples.
 - [Deployment](docs/kinds/Deployment.md)
 - [Daemonset](docs/kinds/DaemonSet.md)
 - [Jobs](docs/kinds/Job.md)
+- [Horizontal Pod Autoscaler](docs/kinds/HorizontalPodAutoscaler.md)
 
 For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 

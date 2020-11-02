@@ -108,6 +108,7 @@ class StatefulSetTest extends TestCase
         $this->runCreationTests();
         $this->runGetAllTests();
         $this->runGetTests();
+        $this->attachPodAutoscaler();
         $this->runScalingTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
@@ -239,6 +240,34 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
     }
 
+    public function attachPodAutoscaler()
+    {
+        $sts = $this->cluster->getStatefulSetByName('mysql');
+
+        $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
+
+        $svcMetric = K8s::object()
+            ->setResource($sts->getServiceInstance())
+            ->setMetric('packets-per-second')
+            ->averageValue('1k');
+
+        $hpa = $this->cluster->horizontalPodAutoscaler()
+            ->setName('sts-mysql')
+            ->setResource($sts)
+            ->addMetrics([$cpuMetric, $svcMetric])
+            ->min(1)
+            ->max(10)
+            ->create();
+
+        while ($hpa->getCurrentReplicasCount() < 1) {
+            $hpa->refresh();
+            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
+            sleep(1);
+        }
+
+        $this->assertEquals(1, $hpa->getCurrentReplicasCount());
+    }
+
     public function runUpdateTests()
     {
         $sts = $this->cluster->getStatefulSetByName('mysql');
@@ -264,8 +293,15 @@ class StatefulSetTest extends TestCase
     public function runDeletionTests()
     {
         $sts = $this->cluster->getStatefulSetByName('mysql');
+        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('sts-mysql');
 
         $this->assertTrue($sts->delete());
+        $this->assertTrue($hpa->delete());
+
+        while ($hpa->exists()) {
+            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
+            sleep(1);
+        }
 
         while ($sts->exists()) {
             dump("Awaiting for statefulset {$sts->getName()} to be deleted...");
@@ -280,6 +316,7 @@ class StatefulSetTest extends TestCase
         $this->expectException(KubernetesAPIException::class);
 
         $this->cluster->getStatefulSetByName('mysql');
+        $this->cluster->getHorizontalPodAutoscalerByName('sts-mysql');
     }
 
     public function runWatchAllTests()

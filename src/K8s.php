@@ -161,6 +161,18 @@ class K8s
     }
 
     /**
+     * Create a new HorizontalPodAutoscaler kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler
+     */
+    public static function horizontalPodAutoscaler($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sHorizontalPodAutoscaler($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
@@ -175,11 +187,33 @@ class K8s
      * Create a new probe instance.
      *
      * @param  array  $attributes
-     * @return $this
+     * @return \RenokiCo\PhpK8s\Instances\Probe
      */
     public static function probe(array $attributes = [])
     {
         return new Instances\Probe($attributes);
+    }
+
+    /**
+     * Create a new metric instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\ResourceMetric
+     */
+    public static function metric(array $attributes = [])
+    {
+        return new Instances\ResourceMetric($attributes);
+    }
+
+    /**
+     * Create a new object instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\ResourceObject
+     */
+    public static function object(array $attributes = [])
+    {
+        return new Instances\ResourceObject($attributes);
     }
 
     /**
