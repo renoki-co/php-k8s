@@ -30,6 +30,8 @@ $pod = $cluster->pod()
     ->setName('mysql')
     ->setSelectors(['app' => 'db'])
     ->setContainers([$mysql])
+    ->setInitContainers([$busybox])
+    ->addPulledSecrets(['someSecret', 'anotherSecret'])
     ->create();
 ```
 
