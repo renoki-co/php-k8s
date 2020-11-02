@@ -34,6 +34,7 @@ Each existent resource has its own documentation, filled with examples.
 - [Pod](docs/kinds/Pod.md)
 - [Statefulset](docs/kinds/StatefulSet.md)
 - [Deployment](docs/kinds/Deployment.md)
+- [Daemonset](docs/kinds/DaemonSet.md)
 - [Jobs](docs/kinds/Job.md)
 
 For other resources, you can check the [WIP resources](docs/RESOURCES.md)

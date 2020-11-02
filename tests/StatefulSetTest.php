@@ -108,10 +108,10 @@ class StatefulSetTest extends TestCase
         $this->runCreationTests();
         $this->runGetAllTests();
         $this->runGetTests();
+        $this->runScalingTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
-        $this->runScalingTests();
         $this->runDeletionTests();
     }
 
@@ -255,7 +255,7 @@ class StatefulSetTest extends TestCase
         $this->assertEquals('mysql', $sts->getName());
         $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
         $this->assertEquals([], $sts->getAnnotations());
-        $this->assertEquals(1, $sts->getReplicas());
+        $this->assertEquals(2, $sts->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $sts->getTemplate());
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
@@ -269,6 +269,11 @@ class StatefulSetTest extends TestCase
 
         while ($sts->exists()) {
             dump("Awaiting for statefulset {$sts->getName()} to be deleted...");
+            sleep(1);
+        }
+
+        while ($sts->getPods()->count() > 0) {
+            dump("Awaiting for statefulset {$sts->getName()}'s pods to be deleted...");
             sleep(1);
         }
 

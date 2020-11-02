@@ -70,10 +70,10 @@ class DeploymentTest extends TestCase
         $this->runCreationTests();
         $this->runGetAllTests();
         $this->runGetTests();
+        $this->runScalingTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
-        $this->runScalingTests();
         $this->runDeletionTests();
     }
 
@@ -199,7 +199,7 @@ class DeploymentTest extends TestCase
         $this->assertEquals('mysql', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
         $this->assertEquals([], $dep->getAnnotations());
-        $this->assertEquals(1, $dep->getReplicas());
+        $this->assertEquals(2, $dep->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
     }
@@ -212,6 +212,11 @@ class DeploymentTest extends TestCase
 
         while ($dep->exists()) {
             dump("Awaiting for deployment {$dep->getName()} to be deleted...");
+            sleep(1);
+        }
+
+        while ($dep->getPods()->count() > 0) {
+            dump("Awaiting for deployment {$dep->getName()}'s pods to be deleted...");
             sleep(1);
         }
 
