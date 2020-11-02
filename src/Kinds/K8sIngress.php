@@ -52,11 +52,7 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
      */
     public function addRule(array $rule)
     {
-        $rules = $this->getRules();
-
-        $rules = array_merge($rules, [$rule]);
-
-        return $this->setSpec('rules', $rules);
+        return $this->addToSpec('rules', $rule);
     }
 
     /**

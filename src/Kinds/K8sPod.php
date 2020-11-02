@@ -111,13 +111,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function addPulledSecret(string $name)
     {
-        $imagePullSecrets = $this->getAttribute('imagePullSecrets', []);
-
-        $imagePullSecrets = array_merge($imagePullSecrets, [
-            ['name' => $name],
-        ]);
-
-        return $this->setAttribute('imagePullSecrets', $imagePullSecrets);
+        return $this->addToAttribute('imagePullSecrets', ['name' => $name]);
     }
 
     /**

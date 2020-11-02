@@ -33,13 +33,7 @@ class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, 
             $secret = $secret->getName();
         }
 
-        $secrets = $this->getAttribute('secrets', []);
-
-        $secrets = array_merge($secrets, [
-            ['name' => $secret],
-        ]);
-
-        return $this->setAttribute('secrets', $secrets);
+        return $this->addToAttribute('secrets', ['name' => $secret]);
     }
 
     /**
@@ -65,13 +59,7 @@ class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, 
      */
     public function addPulledSecret(string $name)
     {
-        $imagePullSecrets = $this->getAttribute('imagePullSecrets', []);
-
-        $imagePullSecrets = array_merge($imagePullSecrets, [
-            ['name' => $name],
-        ]);
-
-        return $this->setAttribute('imagePullSecrets', $imagePullSecrets);
+        return $this->addToAttribute('imagePullSecrets', ['name' => $name]);
     }
 
     /**

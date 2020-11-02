@@ -29,6 +29,24 @@ trait HasAttributes
     }
 
     /**
+     * For an array attribute, append a new element to the list.
+     *
+     * @param  string  $name
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function addToAttribute(string $name, $value)
+    {
+        $current = $this->getAttribute($name, []);
+
+        if (! is_array($current)) {
+            return $this;
+        }
+
+        return $this->setAttribute($name, array_merge($current, [$value]));
+    }
+
+    /**
      * Remove an attribute.
      *
      * @param  string  $name

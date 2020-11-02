@@ -17,6 +17,18 @@ trait HasSpec
     }
 
     /**
+     * Append a value to the spec parameter, if array.
+     *
+     * @param  string  $name
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function addToSpec(string $name, $value)
+    {
+        return $this->addToAttribute("spec.{$name}", $value);
+    }
+
+    /**
      * Get the spec parameter with default.
      *
      * @param  string  $name

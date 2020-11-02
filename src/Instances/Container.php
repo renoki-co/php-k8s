@@ -42,15 +42,11 @@ class Container implements Arrayable
      */
     public function addPort(int $containerPort, string $protocol = 'TCP', string $name = null)
     {
-        $ports = array_merge($this->getAttribute('ports', []), [
-            [
-                'name' => $name,
-                'protocol' => $protocol,
-                'containerPort' => $containerPort,
-            ],
+        return $this->addToAttribute('ports', [
+            'name' => $name,
+            'protocol' => $protocol,
+            'containerPort' => $containerPort,
         ]);
-
-        return $this->setAttribute('ports', $ports);
     }
 
     /**
