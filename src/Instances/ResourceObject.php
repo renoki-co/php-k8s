@@ -31,10 +31,10 @@ class ResourceObject extends ResourceMetric
     /**
      * Set average utilization for the metric.
      *
-     * @param  int  $utilization
+     * @param  int|string  $utilization
      * @return $this
      */
-    public function averageUtilization(int $utilization = 50)
+    public function averageUtilization($utilization = 50)
     {
         return $this->setAttribute('object.target.type', 'Utilization')
             ->setAttribute('object.target.averageUtilization', $utilization);
