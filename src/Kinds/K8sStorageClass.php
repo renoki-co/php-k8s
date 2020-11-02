@@ -22,38 +22,6 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster, Wa
     protected static $stableVersion = 'storage.k8s.io/v1';
 
     /**
-     * Set the provisioner.
-     *
-     * @param  string  $provisioner
-     * @return $this
-     */
-    public function setProvisioner(string $provisioner)
-    {
-        return $this->setAttribute('provisioner', $provisioner);
-    }
-
-    /**
-     * Get the provisioner.
-     *
-     * @return string|null
-     */
-    public function getProvisioner()
-    {
-        return $this->getAttribute('provisioner', null);
-    }
-
-    /**
-     * Set a parameters for the Storage Class.
-     *
-     * @param  array  $value
-     * @return $this
-     */
-    public function setParameters(array $value)
-    {
-        return $this->setAttribute('parameters', $value);
-    }
-
-    /**
      * Set the mount options.
      *
      * @param  array  $mountOptions

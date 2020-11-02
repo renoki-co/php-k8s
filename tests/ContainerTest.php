@@ -22,28 +22,28 @@ class ContainerTest extends TestCase
 
         $container->setLivenessProbe(
             K8s::probe()->command(['sh', 'test.sh'])
-                ->initialDelaySeconds(10)
-                ->periodSeconds(60)
-                ->timeout(10)
-                ->failureThreshold(3)
+                ->setInitialDelaySeconds(10)
+                ->setPeriodSeconds(60)
+                ->setTimeoutSeconds(10)
+                ->setFailureThreshold(3)
                 ->successThrehshold(2)
         );
 
         $container->setStartupProbe(
             K8s::probe()->http('/health', 80, ['X-CSRF-TOKEN' => 'some-token'])
-                ->initialDelaySeconds(10)
-                ->periodSeconds(60)
-                ->timeout(10)
-                ->failureThreshold(3)
+                ->setInitialDelaySeconds(10)
+                ->setPeriodSeconds(60)
+                ->setTimeoutSeconds(10)
+                ->setFailureThreshold(3)
                 ->successThrehshold(2)
         );
 
         $container->setReadinessProbe(
             K8s::probe()->tcp(3306, '10.0.0.0')
-                ->initialDelaySeconds(10)
-                ->periodSeconds(60)
-                ->timeout(10)
-                ->failureThreshold(3)
+                ->setInitialDelaySeconds(10)
+                ->setPeriodSeconds(60)
+                ->setTimeoutSeconds(10)
+                ->setFailureThreshold(3)
                 ->successThrehshold(2)
         );
 

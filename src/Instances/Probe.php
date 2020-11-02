@@ -45,61 +45,6 @@ class Probe implements Arrayable
     }
 
     /**
-     * Add the initial delay.
-     *
-     * @param  int  $seconds
-     * @return $this
-     */
-    public function initialDelaySeconds(int $seconds)
-    {
-        return $this->setAttribute('initialDelaySeconds', $seconds);
-    }
-
-    /**
-     * Add the interval between checks.
-     *
-     * @param  int  $seconds
-     * @return $this
-     */
-    public function periodSeconds(int $seconds)
-    {
-        return $this->setAttribute('periodSeconds', $seconds);
-    }
-
-    /**
-     * Set the timeout for the check.
-     *
-     * @param  int  $seconds
-     * @return $this
-     */
-    public function timeout(int $seconds)
-    {
-        return $this->setAttribute('timeoutSeconds', $seconds);
-    }
-
-    /**
-     * Set the amount of failure threshold.
-     *
-     * @param  int  $amount
-     * @return $this
-     */
-    public function failureThreshold(int $amount)
-    {
-        return $this->setAttribute('failureThreshold', 1);
-    }
-
-    /**
-     * Set the amount of success threshold.
-     *
-     * @param  int  $amount
-     * @return $this
-     */
-    public function successThreshold(int $amount)
-    {
-        return $this->setAttribute('successThreshold', 1);
-    }
-
-    /**
      * Set the HTTP checks for given path and port.
      *
      * @param  string  $path
