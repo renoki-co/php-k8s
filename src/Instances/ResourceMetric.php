@@ -62,9 +62,9 @@ class ResourceMetric implements Arrayable
     /**
      * Get the average utilization.
      *
-     * @return int
+     * @return string|int|float
      */
-    public function getAverageUtilization(): int
+    public function getAverageUtilization()
     {
         return $this->getAttribute('resource.target.averageUtilization', 0);
     }
