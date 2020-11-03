@@ -26,7 +26,7 @@ class ContainerTest extends TestCase
                 ->setPeriodSeconds(60)
                 ->setTimeoutSeconds(10)
                 ->setFailureThreshold(3)
-                ->successThrehshold(2)
+                ->setSuccessThreshold(2)
         );
 
         $container->setStartupProbe(
@@ -35,7 +35,7 @@ class ContainerTest extends TestCase
                 ->setPeriodSeconds(60)
                 ->setTimeoutSeconds(10)
                 ->setFailureThreshold(3)
-                ->successThrehshold(2)
+                ->setSuccessThreshold(2)
         );
 
         $container->setReadinessProbe(
@@ -44,7 +44,7 @@ class ContainerTest extends TestCase
                 ->setPeriodSeconds(60)
                 ->setTimeoutSeconds(10)
                 ->setFailureThreshold(3)
-                ->successThrehshold(2)
+                ->setSuccessThreshold(2)
         );
 
         $this->assertEquals('nginx:1.4', $container->getImage());

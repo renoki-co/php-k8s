@@ -60,7 +60,7 @@ class Probe implements Arrayable
             'port' => $port,
             'httpHeaders' => collect($headers)->map(function ($value, $key) {
                 return ['name' => $key, 'value' => $value];
-            })->toArray(),
+            })->values()->toArray(),
             'scheme' => $scheme,
         ]);
     }

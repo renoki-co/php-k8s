@@ -30,7 +30,7 @@ $container->setLivenessProbe(
         ->setPeriodSeconds(60)
         ->setTimeoutSeconds(10)
         ->setFailureThreshold(3)
-        ->successThrehshold(2)
+        ->setSuccessThreshold(2)
 );
 
 $container->setStartupProbe(
@@ -39,7 +39,7 @@ $container->setStartupProbe(
         ->setPeriodSeconds(60)
         ->setTimeoutSeconds(10)
         ->setFailureThreshold(3)
-        ->successThrehshold(2)
+        ->setSuccessThreshold(2)
 );
 
 $container->setReadinessProbe(
@@ -48,7 +48,7 @@ $container->setReadinessProbe(
         ->setPeriodSeconds(60)
         ->setTimeoutSeconds(10)
         ->setFailureThreshold(3)
-        ->successThrehshold(2)
+        ->setSuccessThreshold(2)
 );
 ```
 
