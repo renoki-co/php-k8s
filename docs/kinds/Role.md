@@ -28,7 +28,7 @@ For creating rules, check the [RBAC Rules documentation](../instances/Rules.md).
 You can get the rules as `RenokiCo\PhpK8s\Instances\Rule` instances:
 
 ```php
-foreach ($role->getRules() as $role) {
+foreach ($role->getRules() as $rule) {
     //
 }
 ```
