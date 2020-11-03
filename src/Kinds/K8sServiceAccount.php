@@ -52,6 +52,23 @@ class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, 
     }
 
     /**
+     * Set the secrets to the instance.
+     *
+     * @param  array  $secrets
+     * @return $this
+     */
+    public function setSecrets(array $secrets)
+    {
+        foreach ($secrets as &$secret) {
+            if ($secret instanceof K8sSecret) {
+                $secret = $secret->toArray();
+            }
+        }
+
+        return $this->setAttribute('secrets', $secrets);
+    }
+
+    /**
      * Add a new pulled secret by the image.
      *
      * @param  string  $name

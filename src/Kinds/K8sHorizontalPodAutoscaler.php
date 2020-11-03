@@ -79,6 +79,23 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     }
 
     /**
+     * Set the metrics of the resource.
+     *
+     * @param  array  $metrics
+     * @return $this
+     */
+    public function setMetrics(array $metrics)
+    {
+        foreach ($metrics as &$metric) {
+            if ($metric instanceof ResourceMetric) {
+                $metric = $metric->toArray();
+            }
+        }
+
+        return $this->setSpec('metrics', $metrics);
+    }
+
+    /**
      * Get the attached metrics.
      *
      * @return array
