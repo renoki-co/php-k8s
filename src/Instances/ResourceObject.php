@@ -41,6 +41,16 @@ class ResourceObject extends ResourceMetric
     }
 
     /**
+     * Get the average utilization.
+     *
+     * @return string|int|float
+     */
+    public function getAverageUtilization()
+    {
+        return $this->getAttribute('object.target.averageUtilization', 0);
+    }
+
+    /**
      * Set average value for the metric.
      *
      * @param  string|int|float  $value
@@ -50,6 +60,16 @@ class ResourceObject extends ResourceMetric
     {
         return $this->setAttribute('object.target.type', 'AverageValue')
             ->setAttribute('object.target.averageValue', $value);
+    }
+
+    /**
+     * Get the average value size.
+     *
+     * @return string|int|float
+     */
+    public function getAverageValue()
+    {
+        return $this->getAttribute('object.target.averageValue');
     }
 
     /**
@@ -65,6 +85,26 @@ class ResourceObject extends ResourceMetric
     }
 
     /**
+     * Get the value size.
+     *
+     * @return string|int|float
+     */
+    public function getValue()
+    {
+        return $this->getAttribute('object.target.value');
+    }
+
+    /**
+     * Get the resource target type.
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->getAttribute('object.target.type', 'Utilization');
+    }
+
+    /**
      * Set the resource metric name.
      *
      * @param  string  $name
@@ -73,5 +113,16 @@ class ResourceObject extends ResourceMetric
     public function setName(string $name)
     {
         return $this->setAttribute('object.metric.name', $name);
+    }
+
+    /**
+     * Get the resource metric name.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function getName()
+    {
+        return $this->getAttribute('object.metric.name');
     }
 }
