@@ -173,6 +173,66 @@ class K8s
     }
 
     /**
+     * Create a new ServiceAccount kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sServiceAccount
+     */
+    public static function serviceAccount($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sServiceAccount($cluster, $attributes);
+    }
+
+    /**
+     * Create a new Role kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sRole
+     */
+    public static function role($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sRole($cluster, $attributes);
+    }
+
+    /**
+     * Create a new ClusterRole kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sClusterRole
+     */
+    public static function clusterRole($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sClusterRole($cluster, $attributes);
+    }
+
+    /**
+     * Create a new RoleBinding kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sRoleBinding
+     */
+    public static function roleBinding($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sRoleBinding($cluster, $attributes);
+    }
+
+    /**
+     * Create a new ClusterRoleBinding kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding
+     */
+    public static function clusterRoleBinding($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sClusterRoleBinding($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
@@ -214,6 +274,28 @@ class K8s
     public static function object(array $attributes = [])
     {
         return new Instances\ResourceObject($attributes);
+    }
+
+    /**
+     * Create a new rule instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Rule
+     */
+    public static function rule(array $attributes = [])
+    {
+        return new Instances\Rule($attributes);
+    }
+
+    /**
+     * Create a new subject instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Rule
+     */
+    public static function subject(array $attributes = [])
+    {
+        return new Instances\Subject($attributes);
     }
 
     /**

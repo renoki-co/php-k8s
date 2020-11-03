@@ -24,17 +24,17 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [DaemonSet](kinds/DaemonSet.md)
 - [Jobs](kinds/Job.md)
 - [Horizontal Pod Autoscaler](kinds/HorizontalPodAutoscaler.md)
+- [Service Account](kinds/ServiceAccount.md)
+- [Roles](kinds/Role.md)
+- [Cluster Roles](kinds/ClusterRole.md)
+- [Role Bindings](kinds/RoleBinding.md)
+- [Cluster Role Bindings](kinds/ClusterRoleBinding.md)
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
 - cronjobs
-- serviceaccounts
-- clusterrolebindings
-- clusterroles
-- rolebindings
-- roles
 - bindings
 - networkpolicies
 - poddisruptionbudgets

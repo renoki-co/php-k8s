@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: admin
+rules:
+  - apiGroups: [""]
+    resources:
+      - pods
+      - configmaps
+    resourceNames:
+      - pod-name
+      - configmap-name
+    verbs:
+      - get
+      - list
+      - watch

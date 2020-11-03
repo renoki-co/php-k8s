@@ -40,6 +40,32 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster, Watchab
     }
 
     /**
+     * Add a new port.
+     *
+     * @param  array  $port
+     * @return $this
+     */
+    public function addPort(array $port)
+    {
+        return $this->addToSpec('ports', $port);
+    }
+
+    /**
+     * Batch-add multiple ports.
+     *
+     * @param  array  $ports
+     * @return $this
+     */
+    public function addPorts(array $ports)
+    {
+        foreach ($ports as $port) {
+            $this->addPort($port);
+        }
+
+        return $this;
+    }
+
+    /**
      * Get the binded ports.
      *
      * @return array

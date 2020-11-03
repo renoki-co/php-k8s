@@ -13,8 +13,9 @@ class IngressTest extends TestCase
      *
      * @var array
      */
-    protected static $rules = [
-        ['host' => 'nginx.test.com', 'http' => [
+    protected static $rules = [[
+        'host' => 'nginx.test.com',
+        'http' => [
             'paths' => [[
                 'path' => '/',
                 'backend' => [
@@ -22,8 +23,8 @@ class IngressTest extends TestCase
                     'servicePort' => 80,
                 ],
             ]],
-        ]],
-    ];
+        ],
+    ]];
 
     public function setUp(): void
     {

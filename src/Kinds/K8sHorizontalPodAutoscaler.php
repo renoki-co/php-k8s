@@ -60,11 +60,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
      */
     public function addMetric(ResourceMetric $metric)
     {
-        $metrics = array_merge($this->getMetrics(), [
-            $metric->toArray(),
-        ]);
-
-        return $this->setSpec('metrics', $metrics);
+        return $this->addToSpec('metrics', $metric->toArray());
     }
 
     /**
@@ -80,6 +76,23 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
         }
 
         return $this;
+    }
+
+    /**
+     * Set the metrics of the resource.
+     *
+     * @param  array  $metrics
+     * @return $this
+     */
+    public function setMetrics(array $metrics)
+    {
+        foreach ($metrics as &$metric) {
+            if ($metric instanceof ResourceMetric) {
+                $metric = $metric->toArray();
+            }
+        }
+
+        return $this->setSpec('metrics', $metrics);
     }
 
     /**
