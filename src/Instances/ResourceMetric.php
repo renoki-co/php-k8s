@@ -60,6 +60,16 @@ class ResourceMetric implements Arrayable
     }
 
     /**
+     * Get the average utilization.
+     *
+     * @return int
+     */
+    public function getAverageUtilization(): int
+    {
+        return $this->getAttribute('resource.target.averageUtilization', 0);
+    }
+
+    /**
      * Set average value for the metric.
      *
      * @param  string|int|float  $value
@@ -72,6 +82,16 @@ class ResourceMetric implements Arrayable
     }
 
     /**
+     * Get the average value size.
+     *
+     * @return string|int|float
+     */
+    public function getAverageValue()
+    {
+        return $this->getAttribute('resource.target.averageValue');
+    }
+
+    /**
      * Set the specific value for the metric.
      *
      * @param  string|int|float  $value
@@ -81,6 +101,26 @@ class ResourceMetric implements Arrayable
     {
         return $this->setAttribute('resource.target.type', 'Value')
             ->setAttribute('resource.target.value', $value);
+    }
+
+    /**
+     * Get the value size.
+     *
+     * @return string|int|float
+     */
+    public function getValue()
+    {
+        return $this->getAttribute('resource.target.value');
+    }
+
+    /**
+     * Get the resource target type.
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->getAttribute('resource.target.type', 'Utilization');
     }
 
     /**
@@ -103,6 +143,17 @@ class ResourceMetric implements Arrayable
     public function setName(string $name)
     {
         return $this->setAttribute('resource.name', $name);
+    }
+
+    /**
+     * Get the resource metric name.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function getName()
+    {
+        return $this->getAttribute('resource.name');
     }
 
     /**
