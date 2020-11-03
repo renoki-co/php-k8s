@@ -209,6 +209,18 @@ class K8s
     }
 
     /**
+     * Create a new RoleBinding kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sRoleBinding
+     */
+    public static function roleBinding($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sRoleBinding($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
@@ -261,6 +273,17 @@ class K8s
     public static function rule(array $attributes = [])
     {
         return new Instances\Rule($attributes);
+    }
+
+    /**
+     * Create a new subject instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Rule
+     */
+    public static function subject(array $attributes = [])
+    {
+        return new Instances\Subject($attributes);
     }
 
     /**

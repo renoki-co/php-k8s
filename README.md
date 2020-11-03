@@ -40,6 +40,7 @@ Each existent resource has its own documentation, filled with examples.
 - [Service Account](docs/kinds/ServiceAccount.md)
 - [Roles](docs/kinds/Role.md)
 - [Cluster Roles](docs/kinds/ClusterRole.md)
+- [Role Bindings](docs/kinds/RoleBinding.md)
 
 For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 
