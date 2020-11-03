@@ -22,3 +22,13 @@ $role = $this->cluster->role()
 ```
 
 For creating rules, check the [RBAC Rules documentation](../instances/Rules.md).
+
+### Getting Rules
+
+You can get the rules as `RenokiCo\PhpK8s\Instances\Rule` instances:
+
+```php
+foreach ($role->getRules() as $role) {
+    //
+}
+```

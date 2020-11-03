@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Traits;
 
 use RenokiCo\PhpK8s\Instances\Rule;
+use RenokiCo\PhpK8s\K8s;
 
 trait HasRules
 {
@@ -51,5 +52,24 @@ trait HasRules
         }
 
         return $this->setAttribute('rules', $rules);
+    }
+
+    /**
+     * Get the rules from the resource.
+     *
+     * @param  bool  $asInstance
+     * @return array
+     */
+    public function getRules(bool $asInstance = true): array
+    {
+        $rules = $this->getAttribute('rules', []);
+
+        if ($asInstance) {
+            foreach ($rules as &$rule) {
+                $rule = K8s::rule($rule);
+            }
+        }
+
+        return $rules;
     }
 }

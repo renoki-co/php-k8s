@@ -26,7 +26,7 @@ class ClusterRoleTest extends TestCase
         $this->assertEquals('rbac.authorization.k8s.io/v1', $cr->getApiVersion());
         $this->assertEquals('admin-cr', $cr->getName());
         $this->assertEquals(['tier' => 'backend'], $cr->getLabels());
-        $this->assertEquals([$rule->toArray()], $cr->getRules());
+        $this->assertEquals([$rule], $cr->getRules());
     }
 
     public function test_cluster_role_from_yaml()
@@ -41,7 +41,7 @@ class ClusterRoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $cr->getApiVersion());
         $this->assertEquals('admin-cr', $cr->getName());
-        $this->assertEquals([$rule->toArray()], $cr->getRules());
+        $this->assertEquals([$rule], $cr->getRules());
     }
 
     public function test_cluster_role_api_interaction()
@@ -81,7 +81,7 @@ class ClusterRoleTest extends TestCase
         $this->assertEquals('rbac.authorization.k8s.io/v1', $cr->getApiVersion());
         $this->assertEquals('admin-cr', $cr->getName());
         $this->assertEquals(['tier' => 'backend'], $cr->getLabels());
-        $this->assertEquals([$rule->toArray()], $cr->getRules());
+        $this->assertEquals([$rule], $cr->getRules());
     }
 
     public function runGetAllTests()
@@ -114,7 +114,7 @@ class ClusterRoleTest extends TestCase
         $this->assertEquals('rbac.authorization.k8s.io/v1', $cr->getApiVersion());
         $this->assertEquals('admin-cr', $cr->getName());
         $this->assertEquals(['tier' => 'backend'], $cr->getLabels());
-        $this->assertEquals([$rule->toArray()], $cr->getRules());
+        $this->assertEquals([$rule], $cr->getRules());
     }
 
     public function runUpdateTests()
@@ -138,7 +138,7 @@ class ClusterRoleTest extends TestCase
         $this->assertEquals('rbac.authorization.k8s.io/v1', $cr->getApiVersion());
         $this->assertEquals('admin-cr', $cr->getName());
         $this->assertEquals(['tier' => 'backend'], $cr->getLabels());
-        $this->assertEquals([$rule->toArray()], $cr->getRules());
+        $this->assertEquals([$rule], $cr->getRules());
     }
 
     public function runDeletionTests()

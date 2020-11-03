@@ -33,3 +33,13 @@ $cr->setLabels([
     'matchesLabel' => ['app' => 'backend'],
 ]);
 ```
+
+### Getting Rules
+
+You can get the rules as `RenokiCo\PhpK8s\Instances\Rule` instances:
+
+```php
+foreach ($role->getRules() as $role) {
+    //
+}
+```

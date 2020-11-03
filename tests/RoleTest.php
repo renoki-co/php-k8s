@@ -24,7 +24,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
-        $this->assertEquals([$rule->toArray()], $role->getRules());
+        $this->assertEquals([$rule], $role->getRules());
     }
 
     public function test_role_from_yaml()
@@ -39,7 +39,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
-        $this->assertEquals([$rule->toArray()], $role->getRules());
+        $this->assertEquals([$rule], $role->getRules());
     }
 
     public function test_role_api_interaction()
@@ -77,7 +77,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
-        $this->assertEquals([$rule->toArray()], $role->getRules());
+        $this->assertEquals([$rule], $role->getRules());
     }
 
     public function runGetAllTests()
@@ -109,7 +109,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
-        $this->assertEquals([$rule->toArray()], $role->getRules());
+        $this->assertEquals([$rule], $role->getRules());
     }
 
     public function runUpdateTests()
@@ -132,7 +132,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
-        $this->assertEquals([$rule->toArray()], $role->getRules());
+        $this->assertEquals([$rule], $role->getRules());
     }
 
     public function runDeletionTests()
