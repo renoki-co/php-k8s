@@ -1,10 +1,10 @@
-# Role
+# Role Binding
 
 - [Official Documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 
 ## Example
 
-### Role Creation
+### Role Binding Creation
 
 ```php
 use RenokiCo\PhpK8s\Kinds\K8sPod;
