@@ -28,13 +28,13 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Roles](kinds/Role.md)
 - [Cluster Roles](kinds/ClusterRole.md)
 - [Role Bindings](kinds/RoleBinding.md)
+- [Cluster Role Bindings](kinds/ClusterRoleBinding.md)
 
 # Work in Progress
 
 The following list of resources are work in progress and they will be available soon:
 
 - cronjobs
-- clusterrolebindings
 - bindings
 - networkpolicies
 - poddisruptionbudgets

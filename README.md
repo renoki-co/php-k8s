@@ -41,6 +41,7 @@ Each existent resource has its own documentation, filled with examples.
 - [Roles](docs/kinds/Role.md)
 - [Cluster Roles](docs/kinds/ClusterRole.md)
 - [Role Bindings](docs/kinds/RoleBinding.md)
+- [Cluster Role Bindings](docs/kinds/ClusterRoleBinding.md)
 
 For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 

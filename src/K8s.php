@@ -221,6 +221,18 @@ class K8s
     }
 
     /**
+     * Create a new ClusterRoleBinding kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding
+     */
+    public static function clusterRoleBinding($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sClusterRoleBinding($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
