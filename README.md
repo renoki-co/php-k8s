@@ -38,6 +38,7 @@ Each existent resource has its own documentation, filled with examples.
 - [Jobs](docs/kinds/Job.md)
 - [Horizontal Pod Autoscaler](docs/kinds/HorizontalPodAutoscaler.md)
 - [Service Account](docs/kinds/ServiceAccount.md)
+- [Roles](docs/kinds/Role.md)
 
 For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 

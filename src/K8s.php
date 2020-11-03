@@ -185,6 +185,18 @@ class K8s
     }
 
     /**
+     * Create a new Role kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sRole
+     */
+    public static function role($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sRole($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
@@ -226,6 +238,17 @@ class K8s
     public static function object(array $attributes = [])
     {
         return new Instances\ResourceObject($attributes);
+    }
+
+    /**
+     * Create a new rule instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Rule
+     */
+    public static function rule(array $attributes = [])
+    {
+        return new Instances\Rule($attributes);
     }
 
     /**

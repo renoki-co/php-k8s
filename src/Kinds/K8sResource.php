@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
@@ -85,6 +86,16 @@ class K8sResource implements Arrayable, Jsonable
         if ($cluster instanceof KubernetesCluster) {
             $this->onCluster($cluster);
         }
+    }
+
+    /**
+     * Get the plural resource name.
+     *
+     * @return string|null
+     */
+    public static function getPlural()
+    {
+        return strtolower(Str::plural(static::$kind));
     }
 
     /**
