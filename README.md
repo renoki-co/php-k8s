@@ -39,6 +39,7 @@ Each existent resource has its own documentation, filled with examples.
 - [Horizontal Pod Autoscaler](docs/kinds/HorizontalPodAutoscaler.md)
 - [Service Account](docs/kinds/ServiceAccount.md)
 - [Roles](docs/kinds/Role.md)
+- [Cluster Roles](docs/kinds/ClusterRole.md)
 
 For other resources, you can check the [WIP resources](docs/RESOURCES.md)
 

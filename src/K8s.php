@@ -197,6 +197,18 @@ class K8s
     }
 
     /**
+     * Create a new ClusterRole kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sClusterRole
+     */
+    public static function clusterRole($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sClusterRole($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes

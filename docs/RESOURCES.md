@@ -25,7 +25,8 @@ Before diving in the resource docs, please check [All Resources docs](kinds/Reso
 - [Jobs](kinds/Job.md)
 - [Horizontal Pod Autoscaler](kinds/HorizontalPodAutoscaler.md)
 - [Service Account](kinds/ServiceAccount.md)
-- [Role](kinds/Role.md)
+- [Roles](kinds/Role.md)
+- [Cluster Roles](kinds/ClusterRole.md)
 
 # Work in Progress
 
@@ -33,7 +34,6 @@ The following list of resources are work in progress and they will be available 
 
 - cronjobs
 - clusterrolebindings
-- clusterroles
 - rolebindings
 - bindings
 - networkpolicies
