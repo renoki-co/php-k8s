@@ -14,17 +14,14 @@ class ServiceTest extends TestCase
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])
-            ->setPorts([
-                ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
-            ]);
+            ->addPorts([['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80]])
+            ->setPorts([['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80]]);
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());
         $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
         $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
-        $this->assertEquals([[
-            'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
-        ]], $svc->getPorts());
+        $this->assertEquals([['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80]], $svc->getPorts());
     }
 
     public function test_service_from_yaml()
