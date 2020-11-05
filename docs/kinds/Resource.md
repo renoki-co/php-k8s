@@ -70,11 +70,41 @@ $namespace->getApiVersion();
 
 ### `getKind()`
 
-Get the resource's Kind.
+Get the resource's Kind. This method is called statically.
 
 ```php
-$kind = $namespace->getKind();
+$kind = $namespace::getKind();
 ```
+
+### `setDefaultVersion()`
+
+Set at runtime the default version that will be used for the resource.
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sDeployment;
+
+K8sDeployment::setDefaultVersion('apps/v2beta1'); // instead of default apps/v1
+```
+
+### `setDefaultNamespace()`
+
+Set at runtime the default namespace that will be used for the resource.
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sDeployment;
+
+K8sDeployment::setDefaultNamespace('staging'); // instead of "default"
+```
+
+To set the default namespace for all resources, you might want to use `K8sResource` instead:
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sResource;
+
+K8sResource::setDefaultNamespace('staging');
+```
+
+Now all resources will communicate with the `staging` namespace by default.
 
 ## Transformers
 

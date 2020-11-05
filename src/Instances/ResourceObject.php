@@ -23,7 +23,7 @@ class ResourceObject extends ResourceMetric
     {
         return $this->setAttribute('object.describedObject', [
             'apiVersion' => $resource->getApiVersion(),
-            'kind' => $resource->getKind(),
+            'kind' => $resource::getKind(),
             'name' => $resource->getName(),
         ]);
     }

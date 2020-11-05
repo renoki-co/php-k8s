@@ -46,7 +46,7 @@ class K8sStatefulSet extends K8sResource implements
      *
      * @var string
      */
-    protected static $stableVersion = 'apps/v1';
+    protected static $defaultVersion = 'apps/v1';
 
     /**
      * Wether the resource has a namespace.

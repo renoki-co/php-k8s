@@ -37,7 +37,7 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
      *
      * @var string
      */
-    protected static $stableVersion = 'autoscaling/v1';
+    protected static $defaultVersion = 'autoscaling/v1';
 
     /**
      * Get the path, prefixed by '/', that points to the resources list.
