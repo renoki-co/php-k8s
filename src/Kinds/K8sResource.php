@@ -104,7 +104,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string  $version
      * @return void
      */
-    public function setDefaultVersion(string $version)
+    public static function setDefaultVersion(string $version)
     {
         static::$defaultVersion = $version;
     }
@@ -115,7 +115,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string  $version
      * @return void
      */
-    public function setDefaultNamespace(string $namespace)
+    public static function setDefaultNamespace(string $namespace)
     {
         static::$defaultNamespace = $namespace;
     }
