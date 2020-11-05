@@ -45,7 +45,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @var string
      */
-    protected static $stableVersion = 'v1';
+    protected static $defaultVersion = 'v1';
 
     /**
      * The cluster instance that
@@ -95,7 +95,51 @@ class K8sResource implements Arrayable, Jsonable
      */
     public static function getPlural()
     {
-        return strtolower(Str::plural(static::$kind));
+        return strtolower(Str::plural(static::getKind()));
+    }
+
+    /**
+     * Overwrite, at runtime, the stable version of the resource.
+     *
+     * @param  string  $version
+     * @return void
+     */
+    public function setDefaultVersion(string $version)
+    {
+        static::$defaultVersion = $version;
+    }
+
+    /**
+     * Overwrite, at runtime, the default namespace for the resource.
+     *
+     * @param  string  $version
+     * @return void
+     */
+    public function setDefaultNamespace(string $namespace)
+    {
+        static::$defaultNamespace = $namespace;
+    }
+
+    /**
+     * Get the API version of the resource.
+     * This function can be overwritten at the resource
+     * level, depending which are the defaults.
+     *
+     * @return string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->getAttribute('apiVersion', static::$defaultVersion);
+    }
+
+    /**
+     * Get the resource kind.
+     *
+     * @return string|null
+     */
+    public static function getKind()
+    {
+        return static::$kind;
     }
 
     /**
@@ -193,28 +237,6 @@ class K8sResource implements Arrayable, Jsonable
         }
 
         return true;
-    }
-
-    /**
-     * Get the API version of the resource.
-     * This function can be overwritten at the resource
-     * level, depending which are the defaults.
-     *
-     * @return string
-     */
-    public function getApiVersion(): string
-    {
-        return $this->getAttribute('apiVersion', static::$stableVersion);
-    }
-
-    /**
-     * Get the resource kind.
-     *
-     * @return string|null
-     */
-    public function getKind()
-    {
-        return static::$kind;
     }
 
     /**
@@ -363,7 +385,7 @@ class K8sResource implements Arrayable, Jsonable
     public function toArray(string $kind = null)
     {
         return array_merge($this->attributes, [
-            'kind' => $kind ?: $this->getKind(),
+            'kind' => $kind ?: $this::getKind(),
             'apiVersion' => $this->getApiVersion(),
         ]);
     }

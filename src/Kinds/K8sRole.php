@@ -29,7 +29,7 @@ class K8sRole extends K8sResource implements InteractsWithK8sCluster, Watchable
      *
      * @var string
      */
-    protected static $stableVersion = 'rbac.authorization.k8s.io/v1';
+    protected static $defaultVersion = 'rbac.authorization.k8s.io/v1';
 
     /**
      * Get the path, prefixed by '/', that points to the resources list.

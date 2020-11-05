@@ -37,7 +37,7 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
      *
      * @var string
      */
-    protected static $stableVersion = 'apps/v1';
+    protected static $defaultVersion = 'apps/v1';
 
     /**
      * Wether the resource has a namespace.

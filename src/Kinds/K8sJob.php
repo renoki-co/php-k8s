@@ -41,7 +41,7 @@ class K8sJob extends K8sResource implements
      *
      * @var string
      */
-    protected static $stableVersion = 'batch/v1';
+    protected static $defaultVersion = 'batch/v1';
 
     /**
      * Wether the resource has a namespace.

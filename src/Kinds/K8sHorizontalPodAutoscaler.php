@@ -28,7 +28,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
      *
      * @var string
      */
-    protected static $stableVersion = 'autoscaling/v2beta2';
+    protected static $defaultVersion = 'autoscaling/v2beta2';
 
     /**
      * Wether the resource has a namespace.
@@ -47,7 +47,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     {
         return $this->setSpec('scaleTargetRef', [
             'apiVersion' => $resource->getApiVersion(),
-            'kind' => $resource->getKind(),
+            'kind' => $resource::getKind(),
             'name' => $resource->getName(),
         ]);
     }
