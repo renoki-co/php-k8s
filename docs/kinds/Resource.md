@@ -141,3 +141,14 @@ $configmap->removeAttribute('data');
 ```php
 $storageClass->removeAttribute('parameters.iopsPerGB');
 ```
+
+## `addToAttribute($name, $element)`
+
+Append an `$element` to the `$name` attribute in an instance. For example, it might be an array of `rules` like [RBAC Rules](../instances/Rules.md) instance has:
+
+```php
+$rule->addToAttribute('rules', 'some-rule')
+    ->addToAttribute('rules', 'another-rule');
+
+// rules: ['some-rule', 'another-rule']
+```
