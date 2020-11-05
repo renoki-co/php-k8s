@@ -16,7 +16,9 @@ Instances are custom classes that makes the build of containers, for example, mo
 
 ## Supported Resources
 
-Each resource inherits a default "base" class that is making the Resource build-up easier. Check the documentation for [General Resources](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.
+Each resource inherits a default "base" class that is making the Resource build-up easier.
+
+**Check the documentation for [General Resources](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.**
 
 - [Namespaces](kinds/Namespace.md)
 - [Config Maps](kinds/ConfigMap.md)
