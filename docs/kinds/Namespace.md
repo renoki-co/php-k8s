@@ -4,21 +4,13 @@
 
 ## Example
 
-### Namespace creation
-
 ```php
 $ns = $cluster->namespace()
     ->setName('staging')
     ->create();
 ```
 
-### Namespace retrieval
-
-```php
-$ns = $cluster->getNamespaceByName('staging');
-```
-
-### Namespace Status
+## Namespace Status
 
 The Status API is available to be accessed for fresh instances:
 

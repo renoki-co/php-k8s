@@ -1,10 +1,9 @@
 # Cluster Role
 
 - [Official Documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+- [PHP K8s RBAC Rule Instance Documenation](../instances/Rules.md)
 
 ## Example
-
-### Cluster Role Creation
 
 ```php
 use RenokiCo\PhpK8s\Kinds\K8sPod;
@@ -22,19 +21,7 @@ $role = $this->cluster->clusterRole()
     ->create();
 ```
 
-For creating rules, check the [RBAC Rules documentation](../instances/Rules.md).
-
-### Labels
-
-Cluster Roles support labels:
-
-```php
-$cr->setLabels([
-    'matchesLabel' => ['app' => 'backend'],
-]);
-```
-
-### Getting Rules
+## Getting Rules
 
 You can get the rules as `RenokiCo\PhpK8s\Instances\Rule` instances:
 

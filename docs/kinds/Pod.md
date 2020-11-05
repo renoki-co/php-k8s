@@ -4,10 +4,6 @@
 
 ## Example
 
-### Pod Creation
-
-The Container case lets you define the settings per-container in an easy manner:
-
 ```php
 use RenokiCo\PhpK8s\K8s;
 
@@ -35,63 +31,7 @@ $pod = $cluster->pod()
     ->create();
 ```
 
-**Please keep in mind that Containers does not have predefined functions, so you can extend the class or you can use [Custom Callers](Resource.md#custom-callers), which applies to any Instance or Resource.**
-
-Pods support annotations, as well as labels:
-
-```php
-$pod->setAnnotations([
-    'nginx.kubernetes.io/tls' => 'true',
-]);
-```
-
-```php
-$pod->setLabels([
-    'matchesLabel' => ['app' => 'backend'],
-]);
-```
-
-While the Pod kind has `spec`, you can avoid writing this:
-
-```php
-$pod->setAttribute('spec.nodeSelector', [...]);
-```
-
-And use the `setSpec()` method:
-
-```php
-$pod->setSpec('nodeSelector', [...]);
-```
-
-Dot notation is supported:
-
-```php
-$pod->setSpec('some.nested.path', [...]);
-```
-
-### Retrieval
-
-```php
-$pod = $cluster->getPodByName('mysql');
-
-$containers = $pod->getContainers();
-```
-
-Retrieving the spec attributes can be done like the `setSpec()` method:
-
-```php
-$containers = $pod->getSpec('containers', []);
-```
-
-The second value for the `getSpec()` method is the default value, in case the found path is not existent.
-
-Dot notation is supported:
-
-```php
-$pod->getSpec('some.nested.path', []);
-```
-
-### Container Retrieval
+## Container Retrieval
 
 Retrieving the containers and init containers can be retrieved as an array of `\RenokiCo\PhpK8s\Instances\Container` classes or as an array.
 
@@ -145,7 +85,7 @@ $pod->watchContainerLogs('mysql', function ($line) {
 })
 ```
 
-### Pod Status
+## Pod Status
 
 The Status API is available to be accessed for fresh instances:
 
@@ -175,6 +115,8 @@ foreach ($job->getPods() as $pod) {
 }
 ```
 
+## Containers' Statuses
+
 You can check the container statuses:
 
 ```php
@@ -186,8 +128,6 @@ foreach ($pod->getInitContainerStatuses() as $container) {
     // $container->getName();
 }
 ```
-
-You may also get a container by its name:
 
 ```php
 $mysql = $pod->getContainer('mysql');

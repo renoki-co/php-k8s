@@ -4,10 +4,6 @@
 
 ## Example
 
-### Statefulset Creation
-
-Statefulsets are just configurations that relies on a Pod. So before diving in, make sure you read the [Pod Documentation](Pod.md)
-
 ```php
 use RenokiCo\PhpK8s\K8s;
 
@@ -45,63 +41,9 @@ $sts = $cluster->statefulSet()
     ->create();
 ```
 
-Statefulsets support annotations, as well as labels:
+## Pod Template retrieval
 
-```php
-$sts->setAnnotations([
-    'nginx.kubernetes.io/tls' => 'true',
-]);
-```
-
-```php
-$sts->setLabels([
-    'matchesLabel' => ['app' => 'backend'],
-]);
-```
-
-While the Statefulset kind has `spec`, you can avoid writing this:
-
-```php
-$sts->setAttribute('spec.template', [...]);
-```
-
-And use the `setSpec()` method:
-
-```php
-$sts->setSpec('template', [...]);
-```
-
-Dot notation is supported:
-
-```php
-$sts->setSpec('some.nested.path', [...]);
-```
-
-### Retrieval
-
-```php
-$sts = $cluster->getStatefulSetByName('mysql');
-
-$template = $sts->getTemplate();
-```
-
-Retrieving the spec attributes can be done like the `setSpec()` method:
-
-```php
-$sts->getSpec('template', []);
-```
-
-The second value for the `getSpec()` method is the default value, in case the found path is not existent.
-
-Dot notation is supported:
-
-```php
-$sts->getSpec('some.nested.path', []);
-```
-
-### Statefulset's Pod Template Retrieval
-
-Statefulsets rely on pods, so you can get the pod template as `K8sPod` class:
+Stateful Sets rely on pods, so you can get the pod template as `K8sPod` class:
 
 ```php
 $template = $sts->getTemplate();
@@ -117,27 +59,27 @@ $pod = $sts->getTemplate(false);
 $podName = $template['name'];
 ```
 
-### StatefulSet's Pods
+## Getting all scheduled pods
 
-You can retrieve the pods as resources controlled by the Statefulset by issuing `->getPods()`:
+You can retrieve the pods as resources controlled by the Stateful Set by issuing `->getPods()`:
 
 ```php
-foreach ($sts->getPods() as $pod) {
+foreach ($de->getPods() as $pod) {
     // $pod->logs()
 }
 ```
 
-### Scaling
+## Scaling
 
 The Scaling API is available via a `K8sScale` resource:
 
 ```php
 $scaler = $sts->scaler();
 
-$scaler->setReplicas(3)->update(); // autoscale the StatefulSet to 3 replicas
+$scaler->setReplicas(3)->update(); // autoscale the Stateful Set to 3 replicas
 ```
 
-Shorthand, you can use `scale()` directly from the StatefulSet
+Shorthand, you can use `scale()` directly from the Stateful Set:
 
 ```php
 $scaler = $sts->scale(3);
@@ -145,7 +87,7 @@ $scaler = $sts->scale(3);
 $pods = $sts->getPods(); // Expecting 3 pods
 ```
 
-### StatefulSet Status
+## StatefulSet Status
 
 The Status API is available to be accessed for fresh instances:
 

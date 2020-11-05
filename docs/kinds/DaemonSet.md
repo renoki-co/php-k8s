@@ -1,12 +1,9 @@
-# DaemonSet
+# Daemon Set
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+- [PHP K8s Pod Kind](Pod.md)
 
 ## Example
-
-### DaemonSet Creation
-
-DaemonSets are just configurations that relies on a Pod. So before diving in, make sure you read the [Pod Documentation](Pod.md)
 
 ```php
 use RenokiCo\PhpK8s\K8s;
@@ -31,55 +28,9 @@ $ds = $this->cluster->daemonSet()
     ->setTemplate($pod);
 ```
 
-DaemonSets supports only labels:
+## Pod Template retrieval
 
-```php
-$ds->setLabels([
-    'matchesLabel' => ['app' => 'backend'],
-]);
-```
-
-While the DaemonSet kind has `spec`, you can avoid writing this:
-
-```php
-$ds->setAttribute('spec.template', [...]);
-```
-
-And use the `setSpec()` method:
-
-```php
-$ds->setSpec('template', [...]);
-```
-
-Dot notation is supported:
-
-```php
-$ds->setSpec('some.nested.path', [...]);
-```
-
-### Retrieval
-
-```php
-$ds->getTemplate();
-```
-
-Retrieving the spec attributes can be done like the `setSpec()` method:
-
-```php
-$ds->getSpec('template', []);
-```
-
-The second value for the `getSpec()` method is the default value, in case the found path is not existent.
-
-Dot notation is supported:
-
-```php
-$ds->getSpec('some.nested.path', []);
-```
-
-### DaemonSet's Pod Template Retrieval
-
-DaemonSets rely on pods, so you can get the pod template as `K8sPod` class:
+Daemon Sets rely on pods, so you can get the pod template as `K8sPod` class:
 
 ```php
 $template = $ds->getTemplate();
@@ -95,9 +46,9 @@ $pod = $ds->getTemplate(false);
 $podName = $template['name'];
 ```
 
-### DaemonSet's Pods
+## Getting all scheduled pods
 
-You can retrieve the pods as resources controlled by the DaemonSet by issuing `->getPods()`:
+You can retrieve the pods as resources controlled by the Daemon Set by issuing `->getPods()`:
 
 ```php
 foreach ($ds->getPods() as $pod) {
@@ -105,17 +56,17 @@ foreach ($ds->getPods() as $pod) {
 }
 ```
 
-### Scaling
+## Scaling
 
 The Scaling API is available via a `K8sScale` resource:
 
 ```php
 $scaler = $ds->scaler();
 
-$scaler->setReplicas(3)->update(); // autoscale the DaemonSet to 3 replicas
+$scaler->setReplicas(3)->update(); // autoscale the Daemon Set to 3 replicas
 ```
 
-Shorthand, you can use `scale()` directly from the DaemonSet
+Shorthand, you can use `scale()` directly from the Daemon Set:
 
 ```php
 $scaler = $ds->scale(3);
@@ -123,7 +74,7 @@ $scaler = $ds->scale(3);
 $pods = $ds->getPods(); // Expecting 3 pods
 ```
 
-### DaemonSet Status
+## Daemon Set Status
 
 The Status API is available to be accessed for fresh instances:
 
@@ -138,7 +89,7 @@ $ds->getReadyCount();
 $ds->getUnavailableClount();
 ```
 
-You can check if all the pods within the DaemonSet are running:
+You can check if all the pods within the Daemon Set are running:
 
 ```php
 if ($ds->allPodsAreRunning()) {

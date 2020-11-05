@@ -4,8 +4,6 @@
 
 ## Example
 
-### Service Account creation
-
 ```php
 $sa = $this->cluster->serviceAccount()
     ->setName('user1')
@@ -14,7 +12,7 @@ $sa = $this->cluster->serviceAccount()
     ->create();
 ```
 
-### Secret attachment
+## Secret attachment
 
 You can also pass the secrets as `K8sSecret` instances:
 
@@ -24,5 +22,5 @@ $secret = $this->cluster->secret()
     ->addData('postgres', 'postgres')
     ->create();
 
-$sa->addSecrets([$secret]);
+$sa->addSecrets([$secret])->update();
 ```

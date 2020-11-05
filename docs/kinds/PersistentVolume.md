@@ -4,8 +4,6 @@
 
 ## Example
 
-### PV Creation
-
 ```php
 $pv = $cluster->persistentVolume()
     ->setName('disk-1')
@@ -31,62 +29,12 @@ $sc = $cluster->storageClass()
     ->setMountOptions(['debug'])
     ->create();
 
-$pv = $cluster->persistentVolume()
-    ->setName('disk-1')
-    ->setSelectors(['matchLabels' => ['app' => 'bigdata'])
-    ->setSource('awsElasticBlockStore', [
-        'fsType' => 'ext4',
-        'volumeID' => 'vol-xxxxx',
-    ])
-    ->setCapacity(10, 'Gi')
-    ->setAccessModes(['ReadWriteOnce'])
-    ->setMountOptions(['nfsvers=4.1'])
-    ->setStorageClass('gp2');
+// Creating the $pv
 
 $pv->setStorageClass($sc)->create();
 ```
 
-While the PersistentVolume kind has `spec`, you can avoid writing this:
-
-```php
-$pv->setAttribute('spec.capacity.storage', '10Gi');
-```
-
-And use the `setSpec()` method:
-
-```php
-$pv->setSpec('capacity.storage', [...]);
-```
-
-Dot notation is supported:
-
-```php
-$pv->setSpec('some.nested.path', [...]);
-```
-
-### Retrieval
-
-```php
-$pv = $cluster->getPersistentVolumeByName('disk-1');
-
-$capacity = $pv->getCapacity(); // "10Gi"
-```
-
-Retrieving the spec attributes can be done like the `setSpec()` method:
-
-```php
-$pv->getSpec('volumeMode', 'Block');
-```
-
-The second value for the `getSpec()` method is the default value, in case the found path is not existent.
-
-Dot notation is supported:
-
-```php
-$pv->getSpec('some.nested.path', []);
-```
-
-### Persistent Volume Status
+## Persistent Volume Status
 
 The Status API is available to be accessed for fresh instances:
 

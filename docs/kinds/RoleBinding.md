@@ -1,10 +1,9 @@
 # Role Binding
 
 - [Official Documentation](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
+- [PHP K8s RBAC Rule Instance Documenation](../instances/Rules.md)
 
 ## Example
-
-### Role Binding Creation
 
 ```php
 use RenokiCo\PhpK8s\Kinds\K8sPod;
@@ -32,9 +31,7 @@ $rb = $this->cluster->roleBinding()
     ->create();
 ```
 
-For creating rules, check the [RBAC Rules documentation](../instances/Rules.md).
-
-### Getting Subjects
+## Getting Subjects
 
 You can get the subjects as `RenokiCo\PhpK8s\Instances\Subject` instances:
 

@@ -57,9 +57,3 @@ $container->minMemory(512, 'Mi')->maxMemory(2, 'Gi');
 
 $container->minCpu('500m')->maxCpu(1);
 ```
-
-### Setting custom fields
-
-If you wish to set custom fields for containers or probes, you can use the `setAttribute('...', $value)` directly onto the instance.
-
-Please check the [Resource](../kinds/Resource) documentation for methods that does not exist in the current instance.

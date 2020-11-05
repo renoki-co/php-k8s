@@ -2,21 +2,11 @@
 
 Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods, generally-available. In this documentation, we'll dive in on what the available methods are and how you can use them in order to build your own resource.
 
-## Custom Callers
+# General Methods
 
-In case none of the methods exist in the docs, you can call a method like `getSomething($default)` or a `setSomething($value)`, which will set or get only the first-level attributes (it won't retrieve, for example, values from `spec.*`), which the current resource or instance is not defined in the class.
+## Namespace
 
-This applies for any class from both `RenokiCo\PhpK8s\Kinds\*` `renokiCo\PhpK8s\Instances\*` namespaces.
-
-For example, the `K8sPod` instance associated with the Pod resource does not implement any `nodeSelector` function, but you can call it anyway:
-
-```php
-$pod->setNodeSelector(['type' => 'spot']);
-
-$pod->getNodeSelector([]); // defaults to [] if not existent
-```
-
-## `getNamespace()`
+### `getNamespace()`
 
 Get the namespace the resource is in.
 
@@ -24,7 +14,7 @@ Get the namespace the resource is in.
 $service->getNamespace();
 ```
 
-## `setNamespace($namespace)`
+### `setNamespace($namespace)`
 
 Set the namespace for the resource, if namespaceable.
 
@@ -40,13 +30,15 @@ $ns = $cluster->getNamespaceByName('staging');
 $service->setNamespace($ns);
 ```
 
-## `whereNamespace($namespace)`
+### `whereNamespace($namespace)`
 
 Alias for [setNamespace($namespace)](#setnamespacenamespace)
 
 It's just a naming convention for better filters on get.
 
-## `setName($name)`
+## Names
+
+### `setName($name)`
 
 Set the name of the resource.
 
@@ -54,7 +46,7 @@ Set the name of the resource.
 $service->setName('nginx');
 ```
 
-## `getName()`
+### `getName()`
 
 Get the name of a resource.
 
@@ -62,13 +54,13 @@ Get the name of a resource.
 $namespace->getName();
 ```
 
-## `whereName($name)`
+### `whereName($name)`
 
-Alias for [setName($name)](#setnamename)
+Alias for [setName($name)](#setnamename). It's just a naming convention for better filters on get.
 
-It's just a naming convention for better filters on get.
+## API
 
-## `getApiVersion()`
+### `getApiVersion()`
 
 Get the resource API version.
 
@@ -76,12 +68,36 @@ Get the resource API version.
 $namespace->getApiVersion();
 ```
 
-## `setApiVersion($apiVersion)`
+### `getKind()`
 
-Set a specific API Version to be used for the resource API.
+Get the resource's Kind.
 
 ```php
-$namespace->setApiVersion('v1beta1');
+$kind = $namespace->getKind();
+```
+
+## Transformers
+
+### `toArray()`
+
+Get the resource as array.
+
+```php
+$array = $namespace->toArray();
+```
+
+# Custom Callers
+
+In case none of the methods exist in the docs, you can call a method like `getSomething($default)` or a `setSomething($value)`, which will set or get only the first-level attributes (it won't retrieve, for example, values from `spec.*`), which the current resource or instance is not defined in the class.
+
+This applies for any class from both `RenokiCo\PhpK8s\Kinds\*` `renokiCo\PhpK8s\Instances\*` namespaces.
+
+For example, the `K8sPod` instance associated with the Pod resource does not implement any `nodeSelector` function, but you can call it anyway:
+
+```php
+$pod->setNodeSelector(['type' => 'spot']);
+
+$pod->getNodeSelector([]); // defaults to [] if not existent
 ```
 
 ## `getAttribute($name, $default)`
@@ -124,12 +140,4 @@ $configmap->removeAttribute('data');
 
 ```php
 $storageClass->removeAttribute('parameters.iopsPerGB');
-```
-
-## `toArray()`
-
-Get the resource as array.
-
-```php
-$namespace->toArray();
 ```

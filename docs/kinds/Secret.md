@@ -4,10 +4,6 @@
 
 ## Example
 
-### Secret creation
-
-Passing `->setData()` without a second parameter will automatically encode each field for you:
-
 ```php
 $secret = $cluster->secret()
     ->setName('certificates')
@@ -25,7 +21,7 @@ $secret->setData([
 ], false)
 ```
 
-### Data Retrieval
+## Data Retrieval
 
 Data retrieval by default returns base64-encoded data:
 
@@ -43,16 +39,4 @@ Passing `true` to the `getData()` method will decode the data for you:
 $data = $secret->getData(true);
 
 $key = $data['key.pem'] // '...'
-```
-
-### Removing an attribute from data
-
-```php
-$secret = $cluster->getSecretByName('certificates');
-
-// ['key.pem' => '...', 'ca.pem' => '...']
-
-$secret->removeData('ca.pem')->update();
-
-$data = $secret->getData(); // ['key.pem' => '...']
 ```

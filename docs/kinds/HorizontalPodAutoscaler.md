@@ -1,10 +1,9 @@
 # Horizontal Pod Autoscaler
 
 - [Official Documentation](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+- [PHP K8s Metrics Instances documentation](../instances/Metrics.md)
 
 ## Example
-
-### HPA Creation
 
 ```php
 use RenokiCo\PhpK8s\K8s;
@@ -39,51 +38,9 @@ $hpa = $this->cluster->horizontalPodAutoscaler()
     ->create();
 ```
 
-While the HPA kind has `spec`, you can avoid writing this:
+## Attaching to Resources
 
-```php
-$hpa->setAttribute('spec.rules', [...]);
-```
-
-And use the `setSpec()` method:
-
-```php
-$hpa->setSpec('rules', [...]);
-```
-
-Dot notation is supported:
-
-```php
-$hpa->setSpec('some.nested.path', [...]);
-```
-
-### Retrieval
-
-```php
-$hpa = $cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
-```
-
-Retrieving the spec attributes can be done like the `setSpec()` method:
-
-```php
-$hpa->getSpec('metrics', []);
-```
-
-The second value for the `getSpec()` method is the default value, in case the found path is not existent.
-
-Dot notation is supported:
-
-```php
-$hpa->getSpec('some.nested.path', []);
-```
-
-### Metrics
-
-For creating metrics, check the [Metrics Instances documentation](../instances/Metrics.md).
-
-### Attaching to Resources
-
-The Horizontal Pod Autoscaler class can attach to any `Scalable` instance, like StatefulSet and Deployment.
+The Horizontal Pod Autoscaler class can attach to any `Scalable` instance, like Stateful Set or Deployment.
 
 ```php
 $dep = $cluster->getDeploymentByName('mysql');
@@ -91,7 +48,7 @@ $dep = $cluster->getDeploymentByName('mysql');
 $hpa->setResource($dep);
 ```
 
-### HPA Status
+## HPA Status
 
 The Status API is available to be accessed for fresh instances:
 
