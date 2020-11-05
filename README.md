@@ -17,34 +17,6 @@ Renoki Co. on GitHub aims on bringing a lot of open source projects and helpful 
 
 If you are using your application in your day-to-day job, on presentation demos, hobby projects or even school projects, spread some kind words about our work or sponsor our work. Kind words will touch our chakras and vibe, while the sponsorships will keep the open source projects alive.
 
-## ⏰ Work in Progress
-
-This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources docs](docs/Resources.md) documentation and the [PR List](../../pulls) to know what's up for development.
-
-Each existent resource has its own documentation, filled with examples:
-
-- [Namespace](docs/kinds/Namespace.md)
-- [Config Map](docs/kinds/ConfigMap.md)
-- [Secret](docs/kinds/Secret.md)
-- [Storage Class](docs/kinds/StorageClass.md)
-- [Persistent Volumes](docs/kinds/PersistentVolume.md)
-- [Persistent Volume Claims](docs/kinds/PersistentVolumeClaim.md)
-- [Service](docs/kinds/Service.md)
-- [Ingress](docs/kinds/Ingress.md)
-- [Pod](docs/kinds/Pod.md)
-- [Statefulset](docs/kinds/StatefulSet.md)
-- [Deployment](docs/kinds/Deployment.md)
-- [Daemonset](docs/kinds/DaemonSet.md)
-- [Jobs](docs/kinds/Job.md)
-- [Horizontal Pod Autoscaler](docs/kinds/HorizontalPodAutoscaler.md)
-- [Service Account](docs/kinds/ServiceAccount.md)
-- [Roles](docs/kinds/Role.md)
-- [Cluster Roles](docs/kinds/ClusterRole.md)
-- [Role Bindings](docs/kinds/RoleBinding.md)
-- [Cluster Role Bindings](docs/kinds/ClusterRoleBinding.md)
-
-For other resources, you can check the [Resources Documentation](docs/Resources.md)
-
 ## 🚀 Installation
 
 You can install the package via composer:
@@ -90,6 +62,34 @@ $svc = $cluster->service()
     ])
     ->create();
 ```
+
+## 📄 Extensive Documentation
+
+This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources docs](docs/Resources.md) documentation and the [PR List](../../pulls) to know what's up for development.
+
+Each existent resource has its own documentation, filled with examples:
+
+- [Namespace](docs/kinds/Namespace.md)
+- [Config Map](docs/kinds/ConfigMap.md)
+- [Secret](docs/kinds/Secret.md)
+- [Storage Class](docs/kinds/StorageClass.md)
+- [Persistent Volumes](docs/kinds/PersistentVolume.md)
+- [Persistent Volume Claims](docs/kinds/PersistentVolumeClaim.md)
+- [Service](docs/kinds/Service.md)
+- [Ingress](docs/kinds/Ingress.md)
+- [Pod](docs/kinds/Pod.md)
+- [Statefulset](docs/kinds/StatefulSet.md)
+- [Deployment](docs/kinds/Deployment.md)
+- [Daemonset](docs/kinds/DaemonSet.md)
+- [Jobs](docs/kinds/Job.md)
+- [Horizontal Pod Autoscaler](docs/kinds/HorizontalPodAutoscaler.md)
+- [Service Account](docs/kinds/ServiceAccount.md)
+- [Roles](docs/kinds/Role.md)
+- [Cluster Roles](docs/kinds/ClusterRole.md)
+- [Role Bindings](docs/kinds/RoleBinding.md)
+- [Cluster Role Bindings](docs/kinds/ClusterRoleBinding.md)
+
+For other resources, you can check the [Resources Documentation](docs/Resources.md)
 
 ## 🐛 Testing
 
