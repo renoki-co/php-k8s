@@ -14,7 +14,7 @@ class SubjectTest extends TestCase
             ->setName('user-1');
 
         $this->assertEquals('rbac.authorization.k8s.io', $subject->getApiGroup());
-        $this->assertEquals('User', $subject::getKind());
+        $this->assertEquals('User', $subject->getKind());
         $this->assertEquals('user-1', $subject->getName());
     }
 }
