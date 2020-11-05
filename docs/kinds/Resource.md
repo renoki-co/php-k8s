@@ -1,6 +1,6 @@
 # K8s Resource
 
-Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods.
+Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods, generally-available. In this documentation, we'll dive in on what the available methods are and how you can use them in order to build your own resource.
 
 ## Custom Callers
 
@@ -16,7 +16,7 @@ $pod->setNodeSelector(['type' => 'spot']);
 $pod->getNodeSelector([]); // defaults to [] if not existent
 ```
 
-## getNamespace()
+## `getNamespace()`
 
 Get the namespace the resource is in.
 
@@ -24,7 +24,7 @@ Get the namespace the resource is in.
 $service->getNamespace();
 ```
 
-## setNamespace($namespace)
+## `setNamespace($namespace)`
 
 Set the namespace for the resource, if namespaceable.
 
@@ -40,13 +40,13 @@ $ns = $cluster->getNamespaceByName('staging');
 $service->setNamespace($ns);
 ```
 
-## whereNamespace($namespace)
+## `whereNamespace($namespace)`
 
 Alias for [setNamespace($namespace)](#setnamespacenamespace)
 
 It's just a naming convention for better filters on get.
 
-## setName($name)
+## `setName($name)`
 
 Set the name of the resource.
 
@@ -54,7 +54,7 @@ Set the name of the resource.
 $service->setName('nginx');
 ```
 
-## getName()
+## `getName()`
 
 Get the name of a resource.
 
@@ -62,13 +62,13 @@ Get the name of a resource.
 $namespace->getName();
 ```
 
-## whereName($name)
+## `whereName($name)`
 
 Alias for [setName($name)](#setnamename)
 
 It's just a naming convention for better filters on get.
 
-## getApiVersion()
+## `getApiVersion()`
 
 Get the resource API version.
 
@@ -76,7 +76,7 @@ Get the resource API version.
 $namespace->getApiVersion();
 ```
 
-## setApiVersion($apiVersion)
+## `setApiVersion($apiVersion)`
 
 Set a specific API Version to be used for the resource API.
 
@@ -84,7 +84,7 @@ Set a specific API Version to be used for the resource API.
 $namespace->setApiVersion('v1beta1');
 ```
 
-## getAttribute($name, $default)
+## `getAttribute($name, $default)`
 
 Get an attribute. If it does not exist, return a `$default`. Supports dot notation for nested fields.
 
@@ -96,7 +96,7 @@ $configmap->getAttribute('data', []);
 $configmap->getAttribute('data.key', '');
 ```
 
-## setAttribute($name, $value)
+## `setAttribute($name, $value)`
 
 Sets an attribute to the configuration. Supports dot notation for nested fields.
 
@@ -114,7 +114,7 @@ For the `spec.*` paths, please consider using `->setSpec()` and `->getSpec()`:
 $volume->setSpec('mountingOptions', ['debug']);
 ```
 
-## removeAttribute($name)
+## `removeAttribute($name)`
 
 Remove an attribute from the configuration. Supports dot notation for nested fields.
 
@@ -126,7 +126,7 @@ $configmap->removeAttribute('data');
 $storageClass->removeAttribute('parameters.iopsPerGB');
 ```
 
-## toArray()
+## `toArray()`
 
 Get the resource as array.
 

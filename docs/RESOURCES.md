@@ -1,36 +1,44 @@
 # Resources Docs
 
-Before diving in the resource docs, please check [All Resources docs](kinds/Resource.md), which contains helpful methods that are available everywhere and helps customize your Kind classes, even though you won't find the methods you need in every single kind.
+## Cluster Interaction
 
-# Supported Instances
+- [Methods & Usage](Usage.md)
+- [Cluster & Authentication](Cluster.md)
 
-- [Container](instances/Container.md)
-- [Container Probes](instances/Probes.md)
+## Supported Instances
 
-# Supported Resources
+Instances are custom classes that makes the build of containers, for example, more object-oriented that passing an array.
 
-- [General Resources](kinds/Resource.md)
-- [Namespace](kinds/Namespace.md)
-- [Config Map](kinds/ConfigMap.md)
-- [Secret](kinds/Secret.md)
-- [Storage Class](kinds/StorageClass.md)
+- [Container](instances/Container.md) - used for Pods & Templates
+- [Container Probes](instances/Probes.md) - used for Pods' Probes
+- [Resource Metrics](instances/Metrics.md) - used for Horizontal Pod Autoscalers
+- [Rules](instances/Rules.md) - used for Roles & Cluster Roles
+
+## Supported Resources
+
+Each resource inherits a default "base" class that is making the Resource build-up easier. Check the documentation for [General Resources](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.
+
+- [Namespaces](kinds/Namespace.md)
+- [Config Maps](kinds/ConfigMap.md)
+- [Secrets](kinds/Secret.md)
+- [Storage Classes](kinds/StorageClass.md)
 - [Persistent Volumes](kinds/PersistentVolume.md)
 - [Persistent Volume Claims](kinds/PersistentVolumeClaim.md)
-- [Service](kinds/Service.md)
-- [Ingress](kinds/Ingress.md)
-- [Pod](kinds/Pod.md)
-- [Statefulset](kinds/StatefulSet.md)
-- [Deployment](kinds/Deployment.md)
-- [DaemonSet](kinds/DaemonSet.md)
+- [Services](kinds/Service.md)
+- [Ingresses](kinds/Ingress.md)
+- [Pods](kinds/Pod.md)
+- [Stateful Sets](kinds/StatefulSet.md)
+- [Deployments](kinds/Deployment.md)
+- [DaemonSets](kinds/DaemonSet.md)
 - [Jobs](kinds/Job.md)
-- [Horizontal Pod Autoscaler](kinds/HorizontalPodAutoscaler.md)
-- [Service Account](kinds/ServiceAccount.md)
+- [Horizontal Pod Autoscalers](kinds/HorizontalPodAutoscaler.md)
+- [Service Accounts](kinds/ServiceAccount.md)
 - [Roles](kinds/Role.md)
 - [Cluster Roles](kinds/ClusterRole.md)
 - [Role Bindings](kinds/RoleBinding.md)
 - [Cluster Role Bindings](kinds/ClusterRoleBinding.md)
 
-# Work in Progress
+## Work In Progress
 
 The following list of resources are work in progress and they will be available soon:
 

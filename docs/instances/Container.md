@@ -1,8 +1,6 @@
 # Containers
 
-## Examples
-
-### Creating a container
+## Creating a container
 
 ```php
 $container = K8s::container()

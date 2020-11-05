@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
@@ -158,6 +159,21 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     public function getRestartPolicy()
     {
         return $this->getSpec('restartPolicy', 'Always');
+    }
+
+    /**
+     * Set the node affinity.
+     *
+     * @param  \RenokiCo\PhpK8s\Instances\Affinity  $affinity
+     * @return $this
+     */
+    public function setNodeAffinity($affinity)
+    {
+        if ($affinity instanceof Affinity) {
+            $affinity = $affinity->toArray();
+        }
+
+        return $this->setSpec('affinity.nodeAffinity', $affinity);
     }
 
     /**
