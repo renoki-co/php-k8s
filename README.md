@@ -65,7 +65,7 @@ $svc = $cluster->service()
 
 ## 📄 Extensive Documentation
 
-This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources docs](docs/Resources.md) documentation and the [PR List](../../pulls) to know what's up for development.
+This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources docs](docs/RESOURCES.md) documentation and the [PR List](../../pulls) to know what's up for development.
 
 Each existent resource has its own documentation, filled with examples:
 
@@ -89,7 +89,7 @@ Each existent resource has its own documentation, filled with examples:
 - [Role Bindings](docs/kinds/RoleBinding.md)
 - [Cluster Role Bindings](docs/kinds/ClusterRoleBinding.md)
 
-For other resources, you can check the [Resources Documentation](docs/Resources.md)
+For other resources, you can check the [Resources Documentation](docs/RESOURCES.md)
 
 ## 🐛 Testing
 
