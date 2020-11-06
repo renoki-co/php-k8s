@@ -86,7 +86,7 @@ class Container implements Arrayable
     {
         $envs = collect($envs)->map(function ($value, $name) {
             return ['name' => $name, 'value' => $value];
-        })->toArray();
+        })->values()->toArray();
 
         return $this->setAttribute('env', $envs);
     }
