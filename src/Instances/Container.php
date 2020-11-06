@@ -50,6 +50,48 @@ class Container implements Arrayable
     }
 
     /**
+     * Add an env variable to the container.
+     *
+     * @param  string  $name
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function addEnv(string $name, $value)
+    {
+        return $this->addToAttribute('env', ['name' => $name, 'value' => $value]);
+    }
+
+    /**
+     * Batch-add a list of envs.
+     *
+     * @param  array  $envs
+     * @return $this
+     */
+    public function addEnvs(array $envs)
+    {
+        foreach ($envs as $name => $value) {
+            $this->addEnv($name, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the environments.
+     *
+     * @param  array  $envs
+     * @return $this
+     */
+    public function setEnv(array $envs)
+    {
+        $envs = collect($envs)->map(function ($value, $name) {
+            return ['name' => $name, 'value' => $value];
+        })->toArray();
+
+        return $this->setAttribute('env', $envs);
+    }
+
+    /**
      * Requests minimum memory for the container.
      *
      * @param  int  $size

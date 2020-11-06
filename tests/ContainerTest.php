@@ -13,6 +13,7 @@ class ContainerTest extends TestCase
 
         $container->setImage('nginx', '1.4')
             ->setEnv(['key' => 'value'])
+            ->addEnvs(['key2' => 'value2'])
             ->setArgs(['--test'])
             ->addPort(80, 'TCP', 'http')
             ->addPort(443, 'TCP', 'https');
@@ -48,7 +49,10 @@ class ContainerTest extends TestCase
         );
 
         $this->assertEquals('nginx:1.4', $container->getImage());
-        $this->assertEquals(['key' => 'value'], $container->getEnv());
+        $this->assertEquals([
+            ['name' => 'key', 'value' => 'value'],
+            ['name' => 'key2', 'value' => 'value2'],
+        ], $container->getEnv());
         $this->assertEquals(['--test'], $container->getArgs());
         $this->assertEquals([
             ['name' => 'http', 'protocol' => 'TCP', 'containerPort' => 80],

@@ -98,10 +98,7 @@ class HorizontalPodAutoscalerTest extends TestCase
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
             ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv([[
-                'name' => 'MYSQL_ROOT_PASSWORD',
-                'value' => 'test',
-            ]]);
+            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
