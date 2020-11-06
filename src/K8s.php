@@ -7,7 +7,7 @@ class K8s
     /**
      * Create a new Namespace kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sNamespace
      */
@@ -19,7 +19,7 @@ class K8s
     /**
      * Create a new ConfigMap kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sConfigMap
      */
@@ -31,7 +31,7 @@ class K8s
     /**
      * Create a new Secret kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sSecret
      */
@@ -43,7 +43,7 @@ class K8s
     /**
      * Create a new Ingress kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sIngress
      */
@@ -55,7 +55,7 @@ class K8s
     /**
      * Create a new Service kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sService
      */
@@ -67,7 +67,7 @@ class K8s
     /**
      * Create a new StorageClass kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sStorageClass
      */
@@ -79,7 +79,7 @@ class K8s
     /**
      * Create a new PersistentVolume kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sPersistentVolume
      */
@@ -91,7 +91,7 @@ class K8s
     /**
      * Create a new PersistentVolumeClaim kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim
      */
@@ -103,7 +103,7 @@ class K8s
     /**
      * Create a new Pod kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sPod
      */
@@ -115,7 +115,7 @@ class K8s
     /**
      * Create a new StatefulSet kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sStatefulSet
      */
@@ -127,7 +127,7 @@ class K8s
     /**
      * Create a new Deployment kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sDeployment
      */
@@ -139,7 +139,7 @@ class K8s
     /**
      * Create a new Job kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sJob
      */
@@ -151,7 +151,7 @@ class K8s
     /**
      * Create a new DaemonSet kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sJob
      */
@@ -163,7 +163,7 @@ class K8s
     /**
      * Create a new HorizontalPodAutoscaler kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler
      */
@@ -175,7 +175,7 @@ class K8s
     /**
      * Create a new ServiceAccount kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sServiceAccount
      */
@@ -187,7 +187,7 @@ class K8s
     /**
      * Create a new Role kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sRole
      */
@@ -199,7 +199,7 @@ class K8s
     /**
      * Create a new ClusterRole kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sClusterRole
      */
@@ -211,7 +211,7 @@ class K8s
     /**
      * Create a new RoleBinding kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sRoleBinding
      */
@@ -223,7 +223,7 @@ class K8s
     /**
      * Create a new ClusterRoleBinding kind.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding
      */
@@ -235,11 +235,10 @@ class K8s
     /**
      * Create a new container instance.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Container
      */
-    public static function container($cluster = null, array $attributes = [])
+    public static function container(array $attributes = [])
     {
         return new Instances\Container($attributes);
     }
@@ -247,11 +246,10 @@ class K8s
     /**
      * Create a new probe instance.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Probe
      */
-    public static function probe($cluster = null, array $attributes = [])
+    public static function probe(array $attributes = [])
     {
         return new Instances\Probe($attributes);
     }
@@ -259,11 +257,10 @@ class K8s
     /**
      * Create a new metric instance.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\ResourceMetric
      */
-    public static function metric($cluster = null, array $attributes = [])
+    public static function metric(array $attributes = [])
     {
         return new Instances\ResourceMetric($attributes);
     }
@@ -271,11 +268,10 @@ class K8s
     /**
      * Create a new object instance.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\ResourceObject
      */
-    public static function object($cluster = null, array $attributes = [])
+    public static function object(array $attributes = [])
     {
         return new Instances\ResourceObject($attributes);
     }
@@ -283,11 +279,10 @@ class K8s
     /**
      * Create a new rule instance.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Rule
      */
-    public static function rule($cluster = null, array $attributes = [])
+    public static function rule(array $attributes = [])
     {
         return new Instances\Rule($attributes);
     }
@@ -295,11 +290,10 @@ class K8s
     /**
      * Create a new subject instance.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Rule
      */
-    public static function subject($cluster = null, array $attributes = [])
+    public static function subject(array $attributes = [])
     {
         return new Instances\Subject($attributes);
     }
@@ -307,7 +301,7 @@ class K8s
     /**
      * Load Kind configuration from an YAML text.
      *
-     * @param  null|\RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @param  string  $yaml
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
      */
