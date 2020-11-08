@@ -3,9 +3,7 @@
 namespace RenokiCo\PhpK8s\Instances;
 
 use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
-use stdClass;
 
 class MountedVolume implements Arrayable
 {

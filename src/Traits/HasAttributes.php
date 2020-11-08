@@ -72,7 +72,7 @@ trait HasAttributes
     }
 
     /**
-     * Proxy the attributes call to the current object
+     * Proxy the attributes call to the current object.
      *
      * @param  string  $method
      * @param  array  $parameters
