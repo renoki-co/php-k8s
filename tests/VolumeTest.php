@@ -2,8 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Instances\MountedVolume;
-use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\K8s;
 use stdClass;
 
@@ -100,7 +98,7 @@ class VolumeTest extends TestCase
             'gcePersistentDisk' => [
                 'pdName' => 'some-disk',
                 'fsType' => 'ext3',
-            ]
+            ],
         ], $volume->toArray());
 
         $this->assertEquals([
@@ -133,7 +131,7 @@ class VolumeTest extends TestCase
             'awsElasticBlockStore' => [
                 'volumeID' => 'vol-1234',
                 'fsType' => 'ext3',
-            ]
+            ],
         ], $volume->toArray());
 
         $this->assertEquals([

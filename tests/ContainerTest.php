@@ -2,9 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Instances\Probe;
 use RenokiCo\PhpK8s\Instances\MountedVolume;
-use RenokiCo\PhpK8s\Instances\Volume;
+use RenokiCo\PhpK8s\Instances\Probe;
 use RenokiCo\PhpK8s\K8s;
 
 class ContainerTest extends TestCase
