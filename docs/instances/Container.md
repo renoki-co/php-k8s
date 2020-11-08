@@ -50,6 +50,28 @@ $container->setReadinessProbe(
 );
 ```
 
+### Attaching volumes
+
+Volumes is a tricky concept that helps you mount volumes with a pod and container. Mainly, you are given the choice to create a new `Volume` instance that will be attached to the pod, and you can convert that instance to a `MountedVolume` instance where you can attach on the containers you need, just specifying the mounting path and subpath.
+
+Check docs on [Volumes](Volumes.md) for more details, where you are given details for more volume providers.
+
+```php
+$awsEbsVolume = K8s::volume()->awsEbs('vol-1234', 'ext4');
+
+$mysql = K8s::container()
+    ->setName('mysql')
+    ->setImage('mysql', '5.7')
+    ->addMountedVolumes([
+        $awsEbsVolume->mountTo('/path/in/container/to/mount/on'),
+    ]);
+
+$pod = K8s::pod()
+    ->setName('mysql')
+    ->setContainers([$mysql])
+    ->addVolumes([$awsEbVolume]);
+```
+
 ### Setting resources
 
 ```php

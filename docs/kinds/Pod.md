@@ -31,6 +31,10 @@ $pod = $cluster->pod()
     ->create();
 ```
 
+## Attaching volumes
+
+Pods can attach volumes so that container can mount them. Please check the [Container documentation](../instances/Container.md) where you can find details on how to attach volumes for different drivers.
+
 ## Container Retrieval
 
 Retrieving the containers and init containers can be retrieved as an array of `\RenokiCo\PhpK8s\Instances\Container` classes or as an array.
