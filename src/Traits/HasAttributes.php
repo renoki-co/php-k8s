@@ -71,6 +71,13 @@ trait HasAttributes
         return Arr::get($this->attributes, $name, $default);
     }
 
+    /**
+     * Proxy the attributes call to the current object
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return $this
+     */
     public function __call(string $method, array $parameters)
     {
         // Intercept methods like ->setXXXX(...)
