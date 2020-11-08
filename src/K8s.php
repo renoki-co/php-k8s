@@ -299,6 +299,17 @@ class K8s
     }
 
     /**
+     * Create a new volume instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Volume
+     */
+    public static function volume(array $attributes = [])
+    {
+        return new Instances\Volume($attributes);
+    }
+
+    /**
      * Load Kind configuration from an YAML text.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
