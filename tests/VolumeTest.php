@@ -11,7 +11,7 @@ class VolumeTest extends TestCase
     {
         $volume = K8s::volume()->emptyDirectory('some-volume');
 
-        $mountedVolume = $volume->mount('/some-path');
+        $mountedVolume = $volume->mountTo('/some-path');
 
         $mysql = K8s::container()
             ->setName('mysql')
@@ -50,7 +50,7 @@ class VolumeTest extends TestCase
 
         $volume = K8s::volume()->fromConfigMap($cm);
 
-        $mountedVolume = $volume->mount('/some-path', 'some-key');
+        $mountedVolume = $volume->mountTo('/some-path', 'some-key');
 
         $mysql = K8s::container()
             ->setName('mysql')
@@ -81,7 +81,7 @@ class VolumeTest extends TestCase
     {
         $volume = K8s::volume()->gcePersistentDisk('some-disk', 'ext3');
 
-        $mountedVolume = $volume->mount('/some-path');
+        $mountedVolume = $volume->mountTo('/some-path');
 
         $mysql = K8s::container()
             ->setName('mysql')
@@ -114,7 +114,7 @@ class VolumeTest extends TestCase
     {
         $volume = K8s::volume()->awsEbs('vol-1234', 'ext3');
 
-        $mountedVolume = $volume->mount('/some-path');
+        $mountedVolume = $volume->mountTo('/some-path');
 
         $mysql = K8s::container()
             ->setName('mysql')

@@ -20,7 +20,7 @@ class ContainerTest extends TestCase
             ->setArgs(['--test'])
             ->addPort(80, 'TCP', 'http')
             ->addPort(443, 'TCP', 'https')
-            ->setMountedVolumes([$volume->mount('/some/path')]);
+            ->setMountedVolumes([$volume->mountTo('/some/path')]);
 
         $container->minMemory(1, 'Gi')->maxMemory(2, 'Gi')
             ->minCpu('500m')->maxCpu(1);

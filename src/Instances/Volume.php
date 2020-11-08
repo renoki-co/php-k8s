@@ -79,7 +79,7 @@ class Volume implements Arrayable
      * @param  string|null  $subPath
      * @return \RenokiCo\PhpK8s\Instances\MountedVolume
      */
-    public function mount(string $mountPath, string $subPath = null)
+    public function mountTo(string $mountPath, string $subPath = null)
     {
         return MountedVolume::from($this)->mountTo($mountPath, $subPath);
     }
