@@ -13,6 +13,7 @@ Instances are custom classes that makes the build of containers, for example, mo
 - [Container Probes](instances/Probes.md) - used for Pods' Probes
 - [Resource Metrics](instances/Metrics.md) - used for Horizontal Pod Autoscalers
 - [Rules](instances/Rules.md) - used for Roles & Cluster Roles
+- [Volumes](instances/Volumes.md) - used for mounting volumes in pods and containers
 
 ## Supported Resources
 
