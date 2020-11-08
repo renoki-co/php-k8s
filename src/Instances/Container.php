@@ -50,6 +50,72 @@ class Container implements Arrayable
     }
 
     /**
+     * Add a volume mount.
+     *
+     * @param  array|\RenokiCo\PhpK8s\Instances\MountedVolume  $volume
+     * @return $this
+     */
+    public function addMountedVolume($volume)
+    {
+        if ($volume instanceof MountedVolume) {
+            $volume = $volume->toArray();
+        }
+
+        return $this->addToAttribute('volumeMounts', $volume);
+    }
+
+    /**
+     * Batch-add multiple volume mounts.
+     *
+     * @param  array  $volumes
+     * @return $this
+     */
+    public function addMountedVolumes(array $volumes)
+    {
+        foreach ($volumes as $volume) {
+            $this->addMountedVolume($volume);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the mounted volumes.
+     *
+     * @param  array  $volumes
+     * @return $this
+     */
+    public function setMountedVolumes(array $volumes)
+    {
+        foreach ($volumes as &$volume) {
+            if ($volume instanceof MountedVolume) {
+                $volume = $volume->toArray();
+            }
+        }
+
+        return $this->setAttribute('volumeMounts', $volumes);
+    }
+
+    /**
+     * Get the mounted volumes.
+     *
+     * @param  bool  $asInstance
+     * @return array
+     */
+    public function getMountedVolumes(bool $asInstance = true)
+    {
+        $mountedVolumes = $this->getAttribute('volumeMounts', []);
+
+        if ($asInstance) {
+            foreach ($mountedVolumes as &$volume) {
+                $volume = new MountedVolume($volume);
+            }
+        }
+
+        return $mountedVolumes;
+    }
+
+    /**
      * Add an env variable to the container.
      *
      * @param  string  $name

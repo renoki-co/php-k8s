@@ -7,6 +7,7 @@ use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
+use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
@@ -128,6 +129,72 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
         }
 
         return $this;
+    }
+
+    /**
+     * Add a new volume to the list.
+     *
+     * @param  array|\RenokiCo\PhpK8s\Instances\Volume  $volume
+     * @return $this
+     */
+    public function addVolume($volume)
+    {
+        if ($volume instanceof Volume) {
+            $volume = $volume->toArray();
+        }
+
+        return $this->addToAttribute('volumes', $volume);
+    }
+
+    /**
+     * Batch-add multiple volumes.
+     *
+     * @param  array  $volumes
+     * @return $this
+     */
+    public function addVolumes(array $volumes)
+    {
+        foreach ($volumes as $volume) {
+            $this->addVolume($volume);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the volumes.
+     *
+     * @param  array  $volumes
+     * @return $this
+     */
+    public function setVolumes(array $volumes)
+    {
+        foreach ($volumes as &$volume) {
+            if ($volume instanceof Volume) {
+                $volume = $volume->toArray();
+            }
+        }
+
+        return $this->setAttribute('volumes', $volumes);
+    }
+
+    /**
+     * Get the volumes.
+     *
+     * @param  bool  $asInstance
+     * @return array
+     */
+    public function getVolumes(bool $asInstance = true)
+    {
+        $volumes = $this->getAttribute('volumes', []);
+
+        if ($asInstance) {
+            foreach ($volumes as &$volume) {
+                $volume = new Volume($volume);
+            }
+        }
+
+        return $volumes;
     }
 
     /**
