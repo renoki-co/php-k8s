@@ -143,7 +143,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
             $volume = $volume->toArray();
         }
 
-        return $this->addToAttribute('volumes', $volume);
+        return $this->addToSpec('volumes', $volume);
     }
 
     /**
@@ -175,7 +175,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
             }
         }
 
-        return $this->setAttribute('volumes', $volumes);
+        return $this->setSpec('volumes', $volumes);
     }
 
     /**
@@ -186,7 +186,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function getVolumes(bool $asInstance = true)
     {
-        $volumes = $this->getAttribute('volumes', []);
+        $volumes = $this->getSpec('volumes', []);
 
         if ($asInstance) {
             foreach ($volumes as &$volume) {
