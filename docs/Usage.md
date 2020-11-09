@@ -66,12 +66,6 @@ $ns = $cluster->namespace()->setName('staging')->create();
 $ns->isSynced(); // true
 ```
 
-If you just wish to sync a resource by name with the Cluster, you might call `syncWithCluster` to avoid any errors (like creating a resource with the same name):
-
-```php
-$ns = $cluster->namespace()->setName('staging')->syncWithCluster();
-```
-
 ## Updating resources
 
 While Kubernetes has the ability to PATCH a resource or REPLACE it entirely, PHP K8s relies on REPLACE to update your resource since you have to retrieve it first (thus getting a synced class), edit it, then triggering the update.
@@ -100,6 +94,16 @@ The defaults are:
 delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'
 ```
 
+## Creating or updating resources
+
+Sometimes, you want to create a resource if it's not existent, or update it with the current resource class info. You can do this in one piece:
+
+```php
+$cluster->configmap()->addData('RAND', mt_rand(0, 999))->createOrUpdate();
+```
+
+Each time the above code is ran, it will create the configmap if it's not existent, or it will update the existent one with a random number between 0 and 999.
+
 ## Importing from YAML
 
 **For the imports to work, you will need the `ext-yaml` extension.**
@@ -116,13 +120,13 @@ The result would be a `\RenokiCo\PhpK8s\Kinds\K8sResource` instance you can call
 
 If there are more resources in the same YAML file, you will be given an array of them, representing the each kind, in order.
 
-Please keep in mind - the resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->syncWithCluster()`:
+Please keep in mind - the resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->createOrUpdate()`:
 
 ```php
 $storageClasses = $cluster->fromYaml($awsStorageClassesYamlPath);
 
 foreach ($storageClasses as $sc) {
-    $sc->syncWithCluster();
+    $sc->createOrUpdate();
 
     echo "{$sc->getName()} storage class got synced!";
 }

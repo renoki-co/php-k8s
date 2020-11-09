@@ -98,7 +98,7 @@ class IngressTest extends TestCase
         $this->assertFalse($ing->isSynced());
         $this->assertFalse($ing->exists());
 
-        $ing = $ing->syncWithCluster();
+        $ing = $ing->createOrUpdate();
 
         $this->assertTrue($ing->isSynced());
         $this->assertTrue($ing->exists());
@@ -146,7 +146,7 @@ class IngressTest extends TestCase
 
         $ing->setAnnotations([]);
 
-        $this->assertTrue($ing->update());
+        $this->assertTrue($ing->createOrUpdate());
 
         $this->assertTrue($ing->isSynced());
 

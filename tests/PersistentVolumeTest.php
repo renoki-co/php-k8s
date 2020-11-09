@@ -76,7 +76,7 @@ class PersistentVolumeTest extends TestCase
         $this->assertFalse($pv->isSynced());
         $this->assertFalse($pv->exists());
 
-        $pv = $pv->syncWithCluster();
+        $pv = $pv->createOrUpdate();
 
         $this->assertTrue($pv->isSynced());
         $this->assertTrue($pv->exists());
@@ -139,7 +139,7 @@ class PersistentVolumeTest extends TestCase
 
         $pv->setMountOptions(['debug', 'test']);
 
-        $this->assertTrue($pv->update());
+        $this->assertTrue($pv->createOrUpdate());
 
         $this->assertTrue($pv->isSynced());
 

@@ -64,8 +64,8 @@ class ServiceAccountTest extends TestCase
         $this->assertFalse($sa->isSynced());
         $this->assertFalse($sa->exists());
 
-        $sa = $sa->syncWithCluster();
-        $secret = $secret->syncWithCluster();
+        $sa = $sa->createOrUpdate();
+        $secret = $secret->createOrUpdate();
 
         $this->assertTrue($sa->isSynced());
         $this->assertTrue($sa->exists());
@@ -115,7 +115,7 @@ class ServiceAccountTest extends TestCase
 
         $sa->addPulledSecrets(['postgres2']);
 
-        $this->assertTrue($sa->update());
+        $this->assertTrue($sa->createOrUpdate());
 
         $this->assertTrue($sa->isSynced());
 

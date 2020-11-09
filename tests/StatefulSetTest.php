@@ -138,7 +138,7 @@ class StatefulSetTest extends TestCase
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ])
-            ->syncWithCluster();
+            ->createOrUpdate();
 
         $standard = $this->cluster->getStorageClassByName('standard');
 
@@ -161,7 +161,7 @@ class StatefulSetTest extends TestCase
         $this->assertFalse($sts->isSynced());
         $this->assertFalse($sts->exists());
 
-        $sts = $sts->syncWithCluster();
+        $sts = $sts->createOrUpdate();
 
         $this->assertTrue($sts->isSynced());
         $this->assertTrue($sts->exists());
@@ -273,7 +273,7 @@ class StatefulSetTest extends TestCase
 
         $sts->setAnnotations([]);
 
-        $this->assertTrue($sts->update());
+        $this->assertTrue($sts->createOrUpdate());
 
         $this->assertTrue($sts->isSynced());
 

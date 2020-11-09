@@ -99,8 +99,8 @@ class RoleBindingTest extends TestCase
         $this->assertFalse($rb->isSynced());
         $this->assertFalse($rb->exists());
 
-        $rb = $rb->syncWithCluster();
-        $role = $role->syncWithCluster();
+        $rb = $rb->createOrUpdate();
+        $role = $role->createOrUpdate();
 
         $this->assertTrue($rb->isSynced());
         $this->assertTrue($rb->exists());
@@ -160,7 +160,7 @@ class RoleBindingTest extends TestCase
 
         $rb->setSubjects([$subject]);
 
-        $this->assertTrue($rb->update());
+        $this->assertTrue($rb->createOrUpdate());
 
         $this->assertTrue($rb->isSynced());
 

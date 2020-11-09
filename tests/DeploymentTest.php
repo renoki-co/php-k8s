@@ -108,7 +108,7 @@ class DeploymentTest extends TestCase
         $this->assertFalse($dep->isSynced());
         $this->assertFalse($dep->exists());
 
-        $dep = $dep->syncWithCluster();
+        $dep = $dep->createOrUpdate();
 
         $this->assertTrue($dep->isSynced());
         $this->assertTrue($dep->exists());
@@ -212,7 +212,7 @@ class DeploymentTest extends TestCase
 
         $dep->setAnnotations([]);
 
-        $this->assertTrue($dep->update());
+        $this->assertTrue($dep->createOrUpdate());
 
         $this->assertTrue($dep->isSynced());
 
