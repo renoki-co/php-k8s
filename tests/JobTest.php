@@ -180,7 +180,7 @@ class JobTest extends TestCase
 
         $job->setAnnotations([]);
 
-        $this->assertTrue($job->createOrUpdate());
+        $job->createOrUpdate();
 
         $this->assertTrue($job->isSynced());
 

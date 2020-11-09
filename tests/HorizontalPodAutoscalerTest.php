@@ -210,7 +210,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $hpa->max(6);
 
-        $this->assertTrue($hpa->createOrUpdate());
+        $hpa->createOrUpdate();
 
         $this->assertTrue($hpa->isSynced());
 

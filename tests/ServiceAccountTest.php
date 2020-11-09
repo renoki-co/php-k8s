@@ -115,7 +115,7 @@ class ServiceAccountTest extends TestCase
 
         $sa->addPulledSecrets(['postgres2']);
 
-        $this->assertTrue($sa->createOrUpdate());
+        $sa->createOrUpdate();
 
         $this->assertTrue($sa->isSynced());
 

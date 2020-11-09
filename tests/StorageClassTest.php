@@ -106,7 +106,7 @@ class StorageClassTest extends TestCase
 
         $sc->setAttribute('mountOptions', ['debug']);
 
-        $this->assertTrue($sc->createOrUpdate());
+        $sc->createOrUpdate();
 
         $this->assertTrue($sc->isSynced());
 

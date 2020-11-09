@@ -212,7 +212,7 @@ class DeploymentTest extends TestCase
 
         $dep->setAnnotations([]);
 
-        $this->assertTrue($dep->createOrUpdate());
+        $dep->createOrUpdate();
 
         $this->assertTrue($dep->isSynced());
 

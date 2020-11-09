@@ -186,7 +186,7 @@ class PodTest extends TestCase
         $pod->setLabels([])
             ->setAnnotations([]);
 
-        $this->assertTrue($pod->createOrUpdate());
+        $pod->createOrUpdate();
 
         $this->assertTrue($pod->isSynced());
 

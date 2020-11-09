@@ -139,7 +139,7 @@ class PersistentVolumeTest extends TestCase
 
         $pv->setMountOptions(['debug', 'test']);
 
-        $this->assertTrue($pv->createOrUpdate());
+        $pv->createOrUpdate();
 
         $this->assertTrue($pv->isSynced());
 

@@ -115,7 +115,7 @@ class ServiceTest extends TestCase
 
         $svc->setAnnotations([]);
 
-        $this->assertTrue($svc->createOrUpdate());
+        $svc->createOrUpdate();
 
         $this->assertTrue($svc->isSynced());
 

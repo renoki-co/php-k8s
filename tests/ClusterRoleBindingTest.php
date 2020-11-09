@@ -163,7 +163,7 @@ class ClusterRoleBindingTest extends TestCase
 
         $crb->setSubjects([$subject]);
 
-        $this->assertTrue($crb->createOrUpdate());
+        $crb->createOrUpdate();
 
         $this->assertTrue($crb->isSynced());
 

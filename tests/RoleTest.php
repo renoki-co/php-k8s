@@ -126,7 +126,7 @@ class RoleTest extends TestCase
 
         $role->setRules([$rule]);
 
-        $this->assertTrue($role->createOrUpdate());
+        $role->createOrUpdate();
 
         $this->assertTrue($role->isSynced());
 

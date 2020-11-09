@@ -160,7 +160,7 @@ class RoleBindingTest extends TestCase
 
         $rb->setSubjects([$subject]);
 
-        $this->assertTrue($rb->createOrUpdate());
+        $rb->createOrUpdate();
 
         $this->assertTrue($rb->isSynced());
 

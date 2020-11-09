@@ -131,7 +131,7 @@ class ClusterRoleTest extends TestCase
 
         $cr->setRules([$rule]);
 
-        $this->assertTrue($cr->createOrUpdate());
+        $cr->createOrUpdate();
 
         $this->assertTrue($cr->isSynced());
 

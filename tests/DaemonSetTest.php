@@ -182,7 +182,7 @@ class DaemonSetTest extends TestCase
 
         $this->assertTrue($ds->isSynced());
 
-        $this->assertTrue($ds->createOrUpdate());
+        $ds->createOrUpdate();
 
         $this->assertTrue($ds->isSynced());
 

@@ -273,7 +273,7 @@ class StatefulSetTest extends TestCase
 
         $sts->setAnnotations([]);
 
-        $this->assertTrue($sts->createOrUpdate());
+        $sts->createOrUpdate();
 
         $this->assertTrue($sts->isSynced());
 
