@@ -201,6 +201,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return $this
+     * @deprecated Deprecated in 1.9.0, will be removed in 2.0
      */
     public function syncWithCluster(array $query = ['pretty' => 1])
     {
@@ -564,6 +565,19 @@ class K8sResource implements Arrayable, Jsonable
         $this->synced = false;
 
         return true;
+    }
+
+    /**
+     * Create or update the app based on existence.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function createOrUpdate(array $query = ['pretty' => 1])
+    {
+        return $this->exists($query)
+            ? $this->update($query)
+            : $this->create();
     }
 
     /**

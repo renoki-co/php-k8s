@@ -61,7 +61,7 @@ class ServiceTest extends TestCase
         $this->assertFalse($svc->isSynced());
         $this->assertFalse($svc->exists());
 
-        $svc = $svc->syncWithCluster();
+        $svc = $svc->createOrUpdate();
 
         $this->assertTrue($svc->isSynced());
         $this->assertTrue($svc->exists());
@@ -115,7 +115,7 @@ class ServiceTest extends TestCase
 
         $svc->setAnnotations([]);
 
-        $this->assertTrue($svc->update());
+        $this->assertTrue($svc->createOrUpdate());
 
         $this->assertTrue($svc->isSynced());
 

@@ -99,7 +99,7 @@ class DaemonSetTest extends TestCase
         $this->assertFalse($ds->isSynced());
         $this->assertFalse($ds->exists());
 
-        $ds = $ds->syncWithCluster();
+        $ds = $ds->createOrUpdate();
 
         $this->assertTrue($ds->isSynced());
         $this->assertTrue($ds->exists());
@@ -182,7 +182,7 @@ class DaemonSetTest extends TestCase
 
         $this->assertTrue($ds->isSynced());
 
-        $this->assertTrue($ds->update());
+        $this->assertTrue($ds->createOrUpdate());
 
         $this->assertTrue($ds->isSynced());
 

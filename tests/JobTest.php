@@ -98,7 +98,7 @@ class JobTest extends TestCase
         $this->assertFalse($job->isSynced());
         $this->assertFalse($job->exists());
 
-        $job = $job->syncWithCluster();
+        $job = $job->createOrUpdate();
 
         $this->assertTrue($job->isSynced());
         $this->assertTrue($job->exists());
@@ -180,7 +180,7 @@ class JobTest extends TestCase
 
         $job->setAnnotations([]);
 
-        $this->assertTrue($job->update());
+        $this->assertTrue($job->createOrUpdate());
 
         $this->assertTrue($job->isSynced());
 

@@ -102,8 +102,8 @@ class ClusterRoleBindingTest extends TestCase
         $this->assertFalse($crb->isSynced());
         $this->assertFalse($crb->exists());
 
-        $crb = $crb->syncWithCluster();
-        $cr = $cr->syncWithCluster();
+        $crb = $crb->createOrUpdate();
+        $cr = $cr->createOrUpdate();
 
         $this->assertTrue($crb->isSynced());
         $this->assertTrue($crb->exists());
@@ -163,7 +163,7 @@ class ClusterRoleBindingTest extends TestCase
 
         $crb->setSubjects([$subject]);
 
-        $this->assertTrue($crb->update());
+        $this->assertTrue($crb->createOrUpdate());
 
         $this->assertTrue($crb->isSynced());
 

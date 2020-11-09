@@ -56,7 +56,7 @@ class StorageClassTest extends TestCase
         $this->assertFalse($sc->isSynced());
         $this->assertFalse($sc->exists());
 
-        $sc = $sc->syncWithCluster();
+        $sc = $sc->createOrUpdate();
 
         $this->assertTrue($sc->isSynced());
         $this->assertTrue($sc->exists());
@@ -106,7 +106,7 @@ class StorageClassTest extends TestCase
 
         $sc->setAttribute('mountOptions', ['debug']);
 
-        $this->assertTrue($sc->update());
+        $this->assertTrue($sc->createOrUpdate());
 
         $this->assertTrue($sc->isSynced());
 

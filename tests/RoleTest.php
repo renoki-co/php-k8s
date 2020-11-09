@@ -68,7 +68,7 @@ class RoleTest extends TestCase
         $this->assertFalse($role->isSynced());
         $this->assertFalse($role->exists());
 
-        $role = $role->syncWithCluster();
+        $role = $role->createOrUpdate();
 
         $this->assertTrue($role->isSynced());
         $this->assertTrue($role->exists());
@@ -126,7 +126,7 @@ class RoleTest extends TestCase
 
         $role->setRules([$rule]);
 
-        $this->assertTrue($role->update());
+        $this->assertTrue($role->createOrUpdate());
 
         $this->assertTrue($role->isSynced());
 

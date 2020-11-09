@@ -127,8 +127,8 @@ class HorizontalPodAutoscalerTest extends TestCase
         $this->assertFalse($hpa->isSynced());
         $this->assertFalse($hpa->exists());
 
-        $dep = $dep->syncWithCluster();
-        $hpa = $hpa->syncWithCluster();
+        $dep = $dep->createOrUpdate();
+        $hpa = $hpa->createOrUpdate();
 
         $this->assertTrue($hpa->isSynced());
         $this->assertTrue($hpa->exists());
@@ -210,7 +210,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $hpa->max(6);
 
-        $this->assertTrue($hpa->update());
+        $this->assertTrue($hpa->createOrUpdate());
 
         $this->assertTrue($hpa->isSynced());
 

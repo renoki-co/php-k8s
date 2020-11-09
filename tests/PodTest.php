@@ -123,7 +123,7 @@ class PodTest extends TestCase
         $this->assertFalse($pod->isSynced());
         $this->assertFalse($pod->exists());
 
-        $pod = $pod->syncWithCluster();
+        $pod = $pod->createOrUpdate();
 
         $this->assertTrue($pod->isSynced());
         $this->assertTrue($pod->exists());
@@ -186,7 +186,7 @@ class PodTest extends TestCase
         $pod->setLabels([])
             ->setAnnotations([]);
 
-        $this->assertTrue($pod->update());
+        $this->assertTrue($pod->createOrUpdate());
 
         $this->assertTrue($pod->isSynced());
 

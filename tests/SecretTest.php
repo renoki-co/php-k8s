@@ -54,7 +54,7 @@ class SecretTest extends TestCase
         $this->assertFalse($secret->isSynced());
         $this->assertFalse($secret->exists());
 
-        $secret = $secret->syncWithCluster();
+        $secret = $secret->createOrUpdate();
 
         $this->assertTrue($secret->isSynced());
         $this->assertTrue($secret->exists());
@@ -104,7 +104,7 @@ class SecretTest extends TestCase
             ->removeData('postgres')
             ->addData('root', 'secret');
 
-        $this->assertTrue($secret->update());
+        $this->assertTrue($secret->createOrUpdate());
 
         $this->assertTrue($secret->isSynced());
 
