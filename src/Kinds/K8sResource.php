@@ -577,7 +577,7 @@ class K8sResource implements Arrayable, Jsonable
     {
         return $this->exists($query)
             ? $this->update($query)
-            : $this->create();
+            : $this->create($query);
     }
 
     /**
