@@ -818,4 +818,88 @@ class K8sResource implements Arrayable, Jsonable
 
         return $scaler;
     }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resources list.
+     *
+     * @return string
+     */
+    public function allResourcesPath(): string
+    {
+        return "{$this->getApiPathPrefix()}/".static::getPlural();
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource.
+     *
+     * @return string
+     */
+    public function resourcePath(): string
+    {
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource watch.
+     *
+     * @return string
+     */
+    public function allResourcesWatchPath(): string
+    {
+        return "{$this->getApiPathPrefix(false)}/watch/".static::getPlural();
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to watch.
+     *
+     * @return string
+     */
+    public function resourceWatchPath(): string
+    {
+        return "{$this->getApiPathPrefix(true, 'watch')}/".static::getPlural()."/{$this->getIdentifier()}";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the resource scale.
+     *
+     * @return string
+     */
+    public function resourceScalePath(): string
+    {
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/scale";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to log.
+     *
+     * @return string
+     */
+    public function resourceLogPath(): string
+    {
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/log";
+    }
+
+    /**
+     * Get the prefix path for the resource.
+     *
+     * @param  bool  $withNamespace
+     * @param  string|null  $preNamespaceAction
+     * @return string
+     */
+    protected function getApiPathPrefix(bool $withNamespace = true, string $preNamespaceAction = null): string
+    {
+        $version = $this->getApiVersion();
+
+        $path = $version === 'v1' ? '/api/v1' : "/apis/{$version}";
+
+        if ($withNamespace && static::$namespaceable) {
+            if ($preNamespaceAction) {
+                $path .= "/{$preNamespaceAction}";
+            }
+
+            $path .= "/namespaces/{$this->getNamespace()}";
+        }
+
+        return $path;
+    }
 }

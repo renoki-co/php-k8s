@@ -56,44 +56,4 @@ class K8sRoleBinding extends K8sResource implements InteractsWithK8sCluster, Wat
     {
         return $this->getAttribute('roleRef');
     }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/rolebindings";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/rolebindings/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/rolebindings";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/rolebindings/{$this->getIdentifier()}";
-    }
 }

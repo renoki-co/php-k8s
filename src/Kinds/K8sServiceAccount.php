@@ -93,44 +93,4 @@ class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, 
 
         return $this;
     }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/serviceaccounts";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/serviceaccounts/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/serviceaccounts";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/serviceaccounts/{$this->getIdentifier()}";
-    }
 }

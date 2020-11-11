@@ -261,56 +261,6 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     }
 
     /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/pods";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to log.
-     *
-     * @return string
-     */
-    public function resourceLogPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/pods/{$this->getIdentifier()}/log";
-    }
-
-    /**
      * Get the assigned pod IPs.
      *
      * @return array

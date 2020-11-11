@@ -76,56 +76,6 @@ class K8sDeployment extends K8sResource implements
     }
 
     /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/deployments";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/deployments/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/deployments";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/deployments/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource scale.
-     *
-     * @return string
-     */
-    public function resourceScalePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/deployments/{$this->getIdentifier()}/scale";
-    }
-
-    /**
      * Get the selector for the pods that are owned by this resource.
      *
      * @return array

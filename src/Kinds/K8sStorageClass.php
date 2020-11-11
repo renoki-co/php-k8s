@@ -51,44 +51,4 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster, Wa
     {
         return $this->getAttribute('parameters', []);
     }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/storageclasses";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/storageclasses/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/storageclasses";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/storageclasses/{$this->getIdentifier()}";
-    }
 }
