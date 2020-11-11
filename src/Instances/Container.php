@@ -2,24 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Instances;
 
-use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
-
-class Container implements Arrayable
+class Container extends Instance
 {
-    use HasAttributes;
-
-    /**
-     * Initialize the class.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->attributes = $attributes;
-    }
-
     /**
      * Set the image for the container.
      *
@@ -335,15 +319,5 @@ class Container implements Arrayable
     public function isReady(): bool
     {
         return $this->getAttribute('ready', false);
-    }
-
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->attributes;
     }
 }

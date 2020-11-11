@@ -63,46 +63,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
     }
 
     /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/daemonsets";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/daemonsets/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/daemonsets";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/daemonsets/{$this->getIdentifier()}";
-    }
-
-    /**
      * Get the selector for the pods that are owned by this resource.
      *
      * @return array

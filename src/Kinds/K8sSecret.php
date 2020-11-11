@@ -87,44 +87,4 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchabl
     {
         return $this->removeAttribute("data.{$name}");
     }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/secrets";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/secrets/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/secrets";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/secrets/{$this->getIdentifier()}";
-    }
 }

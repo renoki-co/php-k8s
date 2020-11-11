@@ -79,44 +79,4 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     {
         return $this->getSpec('rules', []);
     }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/ingresses";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/ingresses/{$this->getIdentifier()}";
-    }
 }

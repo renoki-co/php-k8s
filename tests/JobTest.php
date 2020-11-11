@@ -141,6 +141,8 @@ class JobTest extends TestCase
         $this->assertEquals(0, $job->getActivePodsCount());
         $this->assertEquals(0, $job->getFailedPodsCount());
         $this->assertEquals(1, $job->getSuccededPodsCount());
+
+        $this->assertTrue(is_array($job->getConditions()));
     }
 
     public function runGetAllTests()

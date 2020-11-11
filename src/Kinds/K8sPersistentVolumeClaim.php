@@ -28,6 +28,13 @@ class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCl
     protected static $kind = 'PersistentVolumeClaim';
 
     /**
+     * Wether the resource has a namespace.
+     *
+     * @var bool
+     */
+    protected static $namespaceable = true;
+
+    /**
      * Set the capacity of the PV.
      *
      * @param  int  $size
@@ -47,46 +54,6 @@ class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCl
     public function getCapacity()
     {
         return $this->getSpec('resources.requests.storage', null);
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/persistentvolumeclaims";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/api/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/persistentvolumeclaims/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/persistentvolumeclaims";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/persistentvolumeclaims/{$this->getIdentifier()}";
     }
 
     /**

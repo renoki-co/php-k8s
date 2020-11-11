@@ -40,16 +40,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     protected static $defaultVersion = 'autoscaling/v1';
 
     /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return '';
-    }
-
-    /**
      * Get the path, prefixed by '/', that points to the specific resource.
      *
      * @return string

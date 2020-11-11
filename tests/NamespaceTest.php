@@ -80,6 +80,7 @@ class NamespaceTest extends TestCase
         $ns->refresh();
 
         $this->assertTrue($ns->isActive());
+        $this->assertFalse($ns->isTerminating());
     }
 
     public function runUpdateTests()

@@ -52,7 +52,7 @@ trait AuthenticatesCluster
      */
     public function withToken(string $token = null)
     {
-        $this->token = $token;
+        $this->token = str_replace(["\r", "\n"], '', $token);
 
         return $this;
     }

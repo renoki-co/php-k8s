@@ -41,6 +41,7 @@ class IngressTest extends TestCase
         $ing = $this->cluster->ingress()
             ->setName('nginx')
             ->setAnnotations(['nginx/ann' => 'yes'])
+            ->addRules(self::$rules)
             ->setRules(self::$rules);
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());

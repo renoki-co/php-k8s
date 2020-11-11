@@ -31,6 +31,7 @@ class ClusterRoleBindingTest extends TestCase
         $crb = $this->cluster->clusterRoleBinding()
             ->setName('user-binding')
             ->setRole($cr)
+            ->addSubjects([$subject])
             ->setSubjects([$subject]);
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $crb->getApiVersion());
@@ -97,6 +98,7 @@ class ClusterRoleBindingTest extends TestCase
         $crb = $this->cluster->clusterRoleBinding()
             ->setName('user-binding')
             ->setRole($cr)
+            ->addSubjects([$subject])
             ->setSubjects([$subject]);
 
         $this->assertFalse($crb->isSynced());
@@ -118,11 +120,11 @@ class ClusterRoleBindingTest extends TestCase
 
     public function runGetAllTests()
     {
-        $crbindings = $this->cluster->getAllClusterRoleBindings();
+        $clusterrolebindings = $this->cluster->getAllClusterRoleBindings();
 
-        $this->assertInstanceOf(ResourcesList::class, $crbindings);
+        $this->assertInstanceOf(ResourcesList::class, $clusterrolebindings);
 
-        foreach ($crbindings as $crb) {
+        foreach ($clusterrolebindings as $crb) {
             $this->assertInstanceOf(K8sClusterRoleBinding::class, $crb);
 
             $this->assertNotNull($crb->getName());

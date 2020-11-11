@@ -37,6 +37,7 @@ class HorizontalPodAutoscalerTest extends TestCase
             ->setName('mysql-hpa')
             ->setResource($dep)
             ->addMetrics([$cpuMetric])
+            ->setMetrics([$cpuMetric])
             ->min(1)
             ->max(10);
 
@@ -170,6 +171,8 @@ class HorizontalPodAutoscalerTest extends TestCase
         }
 
         $this->assertEquals(1, $hpa->getCurrentReplicasCount());
+        $this->assertEquals(0, $hpa->getDesiredReplicasCount());
+        $this->assertTrue(is_array($hpa->getConditions()));
     }
 
     public function runGetAllTests()

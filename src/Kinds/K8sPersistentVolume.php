@@ -64,46 +64,6 @@ class K8sPersistentVolume extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/persistentvolumes";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/api/{$this->getApiVersion()}/persistentvolumes/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/persistentvolumes";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/api/{$this->getApiVersion()}/watch/persistentvolumes/{$this->getIdentifier()}";
-    }
-
-    /**
      * Check if the PV is available to be used.
      *
      * @return bool

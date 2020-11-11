@@ -166,44 +166,4 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     {
         return $this->getStatus('desiredReplicas', 0);
     }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @return string
-     */
-    public function allResourcesPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/horizontalpodautoscalers";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
-     */
-    public function resourcePath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/namespaces/{$this->getNamespace()}/horizontalpodautoscalers/{$this->getIdentifier()}";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
-     */
-    public function allResourcesWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/horizontalpodautoscalers";
-    }
-
-    /**
-     * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
-     */
-    public function resourceWatchPath(): string
-    {
-        return "/apis/{$this->getApiVersion()}/watch/namespaces/{$this->getNamespace()}/horizontalpodautoscalers/{$this->getIdentifier()}";
-    }
 }

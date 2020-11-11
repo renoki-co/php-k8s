@@ -2,24 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Instances;
 
-use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
-
-class Expression implements Arrayable
+class Expression extends Instance
 {
-    use HasAttributes;
-
-    /**
-     * Initialize the class.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->attributes = $attributes;
-    }
-
     /**
      * Make the expression checks for "in".
      *
@@ -100,15 +84,5 @@ class Expression implements Arrayable
         return $this->setAttribute('key', $name)
             ->setAttribute('operator', 'Lt')
             ->setAttribute('values', [$value]);
-    }
-
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->attributes;
     }
 }

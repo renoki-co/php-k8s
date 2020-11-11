@@ -16,10 +16,9 @@ trait HasPods
             $this->podsSelector()
         );
 
-        return $this->cluster
-            ->pod()
-            ->setNamespace($this->getNamespace())
-            ->all(array_merge(['labelSelector' => $labelSelector], $query));
+        return $this->cluster->pod()->setNamespace($this->getNamespace())->all(
+            array_merge(['labelSelector' => $labelSelector], $query)
+        );
     }
 
     /**
