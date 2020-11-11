@@ -18,7 +18,7 @@ class ClusterRoleBindingTest extends TestCase
             ->addResourceNames(['pod-name', 'configmap-name'])
             ->addVerbs(['get', 'list', 'watch']);
 
-        $crb = $this->cluster->clusterRole()
+        $cr = $this->cluster->clusterRole()
             ->setName('admin-cr')
             ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
@@ -30,7 +30,7 @@ class ClusterRoleBindingTest extends TestCase
 
         $crb = $this->cluster->clusterRoleBinding()
             ->setName('user-binding')
-            ->setRole($crb)
+            ->setRole($cr)
             ->setSubjects([$subject]);
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $crb->getApiVersion());
@@ -47,7 +47,7 @@ class ClusterRoleBindingTest extends TestCase
             ->addResourceNames(['pod-name', 'configmap-name'])
             ->addVerbs(['get', 'list', 'watch']);
 
-        $crb = $this->cluster->clusterRole()
+        $cr = $this->cluster->clusterRole()
             ->setName('admin-cr')
             ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
@@ -84,7 +84,7 @@ class ClusterRoleBindingTest extends TestCase
             ->addResourceNames(['pod-name', 'configmap-name'])
             ->addVerbs(['get', 'list', 'watch']);
 
-        $crb = $this->cluster->clusterRole()
+        $cr = $this->cluster->clusterRole()
             ->setName('admin-cr')
             ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
@@ -96,14 +96,14 @@ class ClusterRoleBindingTest extends TestCase
 
         $crb = $this->cluster->clusterRoleBinding()
             ->setName('user-binding')
-            ->setRole($crb)
+            ->setRole($cr)
             ->setSubjects([$subject]);
 
         $this->assertFalse($crb->isSynced());
         $this->assertFalse($crb->exists());
 
         $crb = $crb->createOrUpdate();
-        $crb = $crb->createOrUpdate();
+        $cr = $cr->createOrUpdate();
 
         $this->assertTrue($crb->isSynced());
         $this->assertTrue($crb->exists());
@@ -136,7 +136,7 @@ class ClusterRoleBindingTest extends TestCase
             ->setKind('User')
             ->setName('user-1');
 
-        $crb = $this->cluster->getClusterRoleByName('admin-cr');
+        $cr = $this->cluster->getClusterRoleByName('admin-cr');
         $crb = $this->cluster->getClusterRoleBindingByName('user-binding');
 
         $this->assertInstanceOf(K8sClusterRoleBinding::class, $crb);
@@ -151,7 +151,7 @@ class ClusterRoleBindingTest extends TestCase
 
     public function runUpdateTests()
     {
-        $crb = $this->cluster->getClusterRoleByName('admin-cr');
+        $cr = $this->cluster->getClusterRoleByName('admin-cr');
         $crb = $this->cluster->getClusterRoleBindingByName('user-binding');
 
         $subject = K8s::subject()
@@ -175,13 +175,13 @@ class ClusterRoleBindingTest extends TestCase
 
     public function runDeletionTests()
     {
-        $crb = $this->cluster->getClusterRoleByName('admin-cr');
+        $cr = $this->cluster->getClusterRoleByName('admin-cr');
         $crb = $this->cluster->getClusterRoleBindingByName('user-binding');
 
-        $this->assertTrue($crb->delete());
+        $this->assertTrue($cr->delete());
         $this->assertTrue($crb->delete());
 
-        while ($crb->exists()) {
+        while ($cr->exists()) {
             sleep(1);
         }
 
@@ -197,8 +197,8 @@ class ClusterRoleBindingTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->clusterRoleBinding()->watchAll(function ($type, $crb) {
-            if ($crb->getName() === 'user-binding') {
+        $watch = $this->cluster->clusterRoleBinding()->watchAll(function ($type, $cr) {
+            if ($cr->getName() === 'user-binding') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -208,8 +208,8 @@ class ClusterRoleBindingTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->clusterRoleBinding()->watchByName('user-binding', function ($type, $crb) {
-            return $crb->getName() === 'user-binding';
+        $watch = $this->cluster->clusterRoleBinding()->watchByName('user-binding', function ($type, $cr) {
+            return $cr->getName() === 'user-binding';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
