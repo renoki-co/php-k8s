@@ -892,11 +892,11 @@ class K8sResource implements Arrayable, Jsonable
 
         $path = $version === 'v1' ? '/api/v1' : "/apis/{$version}";
 
-        if ($withNamespace && static::$namespaceable) {
-            if ($preNamespaceAction) {
-                $path .= "/{$preNamespaceAction}";
-            }
+        if ($preNamespaceAction) {
+            $path .= "/{$preNamespaceAction}";
+        }
 
+        if ($withNamespace && static::$namespaceable) {
             $path .= "/namespaces/{$this->getNamespace()}";
         }
 
