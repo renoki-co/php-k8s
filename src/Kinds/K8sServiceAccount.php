@@ -61,7 +61,7 @@ class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, 
     {
         foreach ($secrets as &$secret) {
             if ($secret instanceof K8sSecret) {
-                $secret = $secret->toArray();
+                $secret = ['name' => $secret->getName()];
             }
         }
 

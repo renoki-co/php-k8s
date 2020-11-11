@@ -127,7 +127,6 @@ class JobTest extends TestCase
 
         foreach ($pods as $pod) {
             $this->assertInstanceOf(K8sPod::class, $pod);
-            $this->assertTrue($pod->isSuccessful());
         }
 
         $job->refresh();
