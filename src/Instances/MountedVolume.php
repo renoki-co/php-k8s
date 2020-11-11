@@ -12,7 +12,7 @@ class MountedVolume extends Instance
      */
     public static function from(Volume $volume)
     {
-        return (new static)->setName($volume->getName());
+        return (new self)->setName($volume->getName());
     }
 
     /**

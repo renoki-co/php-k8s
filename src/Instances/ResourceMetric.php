@@ -148,7 +148,7 @@ class ResourceMetric extends Instance
     public function toArray()
     {
         return array_merge($this->attributes, [
-            'type' => static::$type,
+            'type' => self::$type,
         ]);
     }
 }

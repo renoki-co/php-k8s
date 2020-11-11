@@ -95,7 +95,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public static function getPlural()
     {
-        return strtolower(Str::plural(static::getKind()));
+        return strtolower(Str::plural(self::getKind()));
     }
 
     /**
@@ -106,7 +106,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public static function setDefaultVersion(string $version)
     {
-        static::$defaultVersion = $version;
+        self::$defaultVersion = $version;
     }
 
     /**
@@ -117,7 +117,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public static function setDefaultNamespace(string $namespace)
     {
-        static::$defaultNamespace = $namespace;
+        self::$defaultNamespace = $namespace;
     }
 
     /**
@@ -129,7 +129,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getApiVersion(): string
     {
-        return $this->getAttribute('apiVersion', static::$defaultVersion);
+        return $this->getAttribute('apiVersion', self::$defaultVersion);
     }
 
     /**
@@ -139,7 +139,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public static function getKind()
     {
-        return static::$kind;
+        return self::$kind;
     }
 
     /**
@@ -248,7 +248,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function setNamespace($namespace)
     {
-        if (! static::$namespaceable) {
+        if (! self::$namespaceable) {
             return $this;
         }
 
@@ -284,7 +284,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function getNamespace()
     {
-        return $this->getAttribute('metadata.namespace', static::$defaultNamespace);
+        return $this->getAttribute('metadata.namespace', self::$defaultNamespace);
     }
 
     /**
@@ -826,7 +826,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function allResourcesPath(): string
     {
-        return "{$this->getApiPathPrefix()}/".static::getPlural();
+        return "{$this->getApiPathPrefix()}/".self::getPlural();
     }
 
     /**
@@ -836,7 +836,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function resourcePath(): string
     {
-        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}";
+        return "{$this->getApiPathPrefix()}/".self::getPlural()."/{$this->getIdentifier()}";
     }
 
     /**
@@ -846,7 +846,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function allResourcesWatchPath(): string
     {
-        return "{$this->getApiPathPrefix(false)}/watch/".static::getPlural();
+        return "{$this->getApiPathPrefix(false)}/watch/".self::getPlural();
     }
 
     /**
@@ -856,7 +856,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function resourceWatchPath(): string
     {
-        return "{$this->getApiPathPrefix(true, 'watch')}/".static::getPlural()."/{$this->getIdentifier()}";
+        return "{$this->getApiPathPrefix(true, 'watch')}/".self::getPlural()."/{$this->getIdentifier()}";
     }
 
     /**
@@ -866,7 +866,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function resourceScalePath(): string
     {
-        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/scale";
+        return "{$this->getApiPathPrefix()}/".self::getPlural()."/{$this->getIdentifier()}/scale";
     }
 
     /**
@@ -876,7 +876,7 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function resourceLogPath(): string
     {
-        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/log";
+        return "{$this->getApiPathPrefix()}/".self::getPlural()."/{$this->getIdentifier()}/log";
     }
 
     /**
@@ -896,7 +896,7 @@ class K8sResource implements Arrayable, Jsonable
             $path .= "/{$preNamespaceAction}";
         }
 
-        if ($withNamespace && static::$namespaceable) {
+        if ($withNamespace && self::$namespaceable) {
             $path .= "/namespaces/{$this->getNamespace()}";
         }
 

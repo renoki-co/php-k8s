@@ -26,7 +26,7 @@ trait LoadsFromKubeConfig
      */
     public static function setTempFolder(string $tempFolder)
     {
-        static::$tempFolder = $tempFolder;
+        self::$tempFolder = $tempFolder;
     }
 
     /**
@@ -133,7 +133,7 @@ trait LoadsFromKubeConfig
      */
     protected function writeTempFileForContext(string $context, string $fileName, string $contents)
     {
-        $tempFolder = static::$tempFolder ?: sys_get_temp_dir();
+        $tempFolder = self::$tempFolder ?: sys_get_temp_dir();
 
         $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR."ctx-{$context}-{$fileName}";
 

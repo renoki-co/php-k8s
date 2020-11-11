@@ -17,11 +17,4 @@ class K8sClusterRoleBinding extends K8sRoleBinding
      * @var bool
      */
     protected static $namespaceable = false;
-
-    /**
-     * The default version for the resource.
-     *
-     * @var string
-     */
-    protected static $defaultVersion = 'rbac.authorization.k8s.io/v1';
 }
