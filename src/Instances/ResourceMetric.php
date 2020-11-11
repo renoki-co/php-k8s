@@ -2,9 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Instances;
 
-use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
-
 class ResourceMetric extends Instance
 {
     /**
