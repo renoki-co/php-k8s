@@ -328,7 +328,7 @@ class K8s
 
             unset($yaml['apiVersion'], $yaml['kind']);
 
-            $classes[] = self::{$kind}($cluster, $yaml);
+            $classes[] = static::{$kind}($cluster, $yaml);
 
             return $classes;
         }, []);
@@ -347,6 +347,6 @@ class K8s
      */
     public static function fromYamlFile($cluster = null, string $path)
     {
-        return self::fromYaml($cluster, file_get_contents($path));
+        return static::fromYaml($cluster, file_get_contents($path));
     }
 }

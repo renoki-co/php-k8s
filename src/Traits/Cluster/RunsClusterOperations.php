@@ -158,16 +158,16 @@ trait RunsClusterOperations
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         // Calling a WATCH operation will trigger a SOCKET connection.
-        if ($operation === self::WATCH_OP) {
+        if ($operation === static::WATCH_OP) {
             return $this->watchPath($path, $payload, $query);
         }
 
         // Calling a WATCH LOGS operation should trigger a SOCKET connection.
-        if ($operation === self::WATCH_LOGS_OP) {
+        if ($operation === static::WATCH_LOGS_OP) {
             return $this->watchLogsPath($path, $payload, $query);
         }
 
-        $method = self::$operations[$operation] ?? self::$operations[self::GET_OP];
+        $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
 
         return $this->makeRequest($method, $path, $payload, $query);
     }
