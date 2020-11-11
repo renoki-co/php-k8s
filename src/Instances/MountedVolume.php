@@ -2,24 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Instances;
 
-use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
-
-class MountedVolume implements Arrayable
+class MountedVolume extends Instance
 {
-    use HasAttributes;
-
-    /**
-     * Initialize the class.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->attributes = $attributes;
-    }
-
     /**
      * Create a new mounted volume based on given volume.
      *
@@ -57,15 +41,5 @@ class MountedVolume implements Arrayable
         }
 
         return $this;
-    }
-
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->attributes;
     }
 }

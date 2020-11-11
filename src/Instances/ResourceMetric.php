@@ -5,27 +5,14 @@ namespace RenokiCo\PhpK8s\Instances;
 use Illuminate\Contracts\Support\Arrayable;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
 
-class ResourceMetric implements Arrayable
+class ResourceMetric extends Instance
 {
-    use HasAttributes;
-
     /**
      * The resource metric type.
      *
      * @var string
      */
     protected static $type = 'Resource';
-
-    /**
-     * Initialize the class.
-     *
-     * @param  array  $attributes
-     * @return void
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->attributes = $attributes;
-    }
 
     /**
      * Set the resource type to CPU.

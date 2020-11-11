@@ -2,13 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Instances;
 
-use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
-
-class Probe implements Arrayable
+class Probe extends Instance
 {
-    use HasAttributes;
-
     /**
      * Initialize the class.
      *
@@ -79,15 +74,5 @@ class Probe implements Arrayable
         }
 
         return $this->setAttribute('tcpSocket.port', $port);
-    }
-
-    /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->attributes;
     }
 }
