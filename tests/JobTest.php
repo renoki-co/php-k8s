@@ -127,6 +127,7 @@ class JobTest extends TestCase
 
         foreach ($pods as $pod) {
             $this->assertInstanceOf(K8sPod::class, $pod);
+            $this->assertTrue($pod->isSuccessful());
         }
 
         $job->refresh();
@@ -141,6 +142,8 @@ class JobTest extends TestCase
         $this->assertEquals(0, $job->getActivePodsCount());
         $this->assertEquals(0, $job->getFailedPodsCount());
         $this->assertEquals(1, $job->getSuccededPodsCount());
+
+        $this->assertTrue(is_array($job->getConditions()));
     }
 
     public function runGetAllTests()

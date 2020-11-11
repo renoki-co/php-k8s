@@ -31,6 +31,7 @@ class PodTest extends TestCase
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->addPulledSecrets(['secret1', 'secret2'])
             ->setInitContainers([$busybox])
             ->setContainers([$mysql]);
 
@@ -38,6 +39,7 @@ class PodTest extends TestCase
         $this->assertEquals('mysql', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
         $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+        $this->assertEquals([['name' => 'secret1'], ['name' => 'secret2']], $pod->getPulledSecrets());
         $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
         $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
 
@@ -117,6 +119,7 @@ class PodTest extends TestCase
             ->setName('mysql')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->addPulledSecrets(['secret1', 'secret2'])
             ->setInitContainers([$busybox])
             ->setContainers([$mysql]);
 
@@ -148,6 +151,11 @@ class PodTest extends TestCase
 
         $this->assertTrue($pod->containersAreReady());
         $this->assertTrue($pod->initContainersAreReady());
+
+        $this->assertTrue(is_array($pod->getConditions()));
+        $this->assertTrue(is_string($pod->getHostIp()));
+        $this->assertCount(1, $pod->getPodIps());
+        $this->assertEquals('BestEffort', $pod->getQos());
     }
 
     public function runGetAllTests()

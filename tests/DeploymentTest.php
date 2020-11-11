@@ -120,6 +120,7 @@ class DeploymentTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
         $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(1, $dep->getReplicas());
+        $this->assertEquals(0, $dep->getMinReadySeconds());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
@@ -149,6 +150,8 @@ class DeploymentTest extends TestCase
         $this->assertEquals(1, $dep->getReadyReplicasCount());
         $this->assertEquals(1, $dep->getDesiredReplicasCount());
         $this->assertEquals(0, $dep->getUnavailableReplicasCount());
+
+        $this->assertTrue(is_array($dep->getConditions()));
     }
 
     public function runGetAllTests()
@@ -191,6 +194,7 @@ class DeploymentTest extends TestCase
             ->setName('deploy-mysql')
             ->setResource($dep)
             ->addMetrics([$cpuMetric])
+            ->setMetrics([$cpuMetric])
             ->min(1)
             ->max(10)
             ->create();

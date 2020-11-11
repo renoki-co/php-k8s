@@ -132,6 +132,16 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     }
 
     /**
+     * Get the image pulling secrets.
+     *
+     * @return array
+     */
+    public function getPulledSecrets(): array
+    {
+        return $this->getAttribute('imagePullSecrets', []);
+    }
+
+    /**
      * Add a new volume to the list.
      *
      * @param  array|\RenokiCo\PhpK8s\Instances\Volume  $volume

@@ -204,6 +204,8 @@ class StatefulSetTest extends TestCase
         $this->assertEquals(1, $sts->getCurrentReplicasCount());
         $this->assertEquals(1, $sts->getReadyReplicasCount());
         $this->assertEquals(1, $sts->getDesiredReplicasCount());
+
+        $this->assertTrue(is_array($sts->getConditions()));
     }
 
     public function runGetAllTests()

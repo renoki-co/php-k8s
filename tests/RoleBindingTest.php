@@ -30,6 +30,7 @@ class RoleBindingTest extends TestCase
         $rb = $this->cluster->roleBinding()
             ->setName('user-binding')
             ->setRole($role)
+            ->addSubjects([$subject])
             ->setSubjects([$subject]);
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $rb->getApiVersion());
@@ -94,6 +95,7 @@ class RoleBindingTest extends TestCase
         $rb = $this->cluster->roleBinding()
             ->setName('user-binding')
             ->setRole($role)
+            ->addSubjects([$subject])
             ->setSubjects([$subject]);
 
         $this->assertFalse($rb->isSynced());

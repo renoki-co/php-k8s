@@ -81,7 +81,7 @@ class KubeConfigTest extends TestCase
 
     public function test_bearer_token_authentication()
     {
-        $this->cluster->withToken('some-token');
+        $this->cluster->loadTokenFromFile(__DIR__.'/cluster/token.txt');
 
         ['headers' => ['authorization' => $token]] = $this->cluster->getClient()->getConfig();
 

@@ -17,6 +17,7 @@ class ServiceAccountTest extends TestCase
         $sa = $this->cluster->serviceAccount()
             ->setName('user1')
             ->addSecrets([$secret])
+            ->setSecrets([$secret])
             ->addPulledSecrets(['postgres']);
 
         $this->assertEquals('v1', $sa->getApiVersion());
@@ -59,6 +60,7 @@ class ServiceAccountTest extends TestCase
         $sa = $this->cluster->serviceAccount()
             ->setName('user1')
             ->addSecrets([$secret])
+            ->setSecrets([$secret])
             ->addPulledSecrets(['postgres']);
 
         $this->assertFalse($sa->isSynced());

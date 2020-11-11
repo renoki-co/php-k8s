@@ -22,7 +22,7 @@ class MountedVolume extends Instance
      */
     public function readOnly()
     {
-        return $this->setReadOnly(true);
+        return $this->setAttribute('readOnly', true);
     }
 
     /**

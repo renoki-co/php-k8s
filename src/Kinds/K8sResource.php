@@ -252,13 +252,8 @@ class K8sResource implements Arrayable, Jsonable
             return $this;
         }
 
-        // If the namespace is passed as a K8sNamespace class instance,
-        // get the name of the namespace instead.
-
         if ($namespace instanceof K8sNamespace) {
-            $this->setAttribute('metadata.namespace', $namespace->getName());
-
-            return $this;
+            $namespace = $namespace->getName();
         }
 
         $this->setAttribute('metadata.namespace', $namespace);

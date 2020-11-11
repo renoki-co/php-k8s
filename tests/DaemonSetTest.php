@@ -33,6 +33,7 @@ class DaemonSetTest extends TestCase
         $this->assertEquals('apps/v1', $ds->getApiVersion());
         $this->assertEquals('mysql', $ds->getName());
         $this->assertEquals(['tier' => 'backend'], $ds->getLabels());
+        $this->assertEquals(0, $ds->getMinReadySeconds());
         $this->assertEquals($pod->getName(), $ds->getTemplate()->getName());
 
         $this->assertInstanceOf(K8sPod::class, $ds->getTemplate());
@@ -109,6 +110,7 @@ class DaemonSetTest extends TestCase
         $this->assertEquals('apps/v1', $ds->getApiVersion());
         $this->assertEquals('mysql', $ds->getName());
         $this->assertEquals(['tier' => 'backend'], $ds->getLabels());
+        $this->assertEquals(0, $ds->getMinReadySeconds());
         $this->assertEquals($pod->getName(), $ds->getTemplate()->getName());
 
         $this->assertInstanceOf(K8sPod::class, $ds->getTemplate());
@@ -146,6 +148,8 @@ class DaemonSetTest extends TestCase
         $this->assertEquals(1, $ds->getDesiredCount());
         $this->assertEquals(1, $ds->getReadyCount());
         $this->assertEquals(0, $ds->getUnavailableClount());
+
+        $this->assertTrue(is_array($ds->getConditions()));
     }
 
     public function runGetAllTests()
