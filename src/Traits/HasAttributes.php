@@ -4,9 +4,14 @@ namespace RenokiCo\PhpK8s\Traits;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
 
 trait HasAttributes
 {
+    use Macroable {
+        __call as macroCall;
+    }
+
     /**
      * The Kubernetes resource's attributes.
      *
@@ -80,6 +85,10 @@ trait HasAttributes
      */
     public function __call(string $method, array $parameters)
     {
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
+
         // Intercept methods like ->setXXXX(...)
         if (Str::startsWith($method, 'set')) {
             $attribute = Str::camel(

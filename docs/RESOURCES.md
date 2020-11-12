@@ -4,6 +4,7 @@
 
 - [Methods & Usage](Usage.md)
 - [Cluster & Authentication](Cluster.md)
+- [General Resources](kinds/Resource.md)
 
 ## Supported Instances
 
