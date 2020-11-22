@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Instances;
 
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
+use RenokiCo\PhpK8s\Kinds\K8sSecret;
 use stdClass;
 
 class Volume extends Instance
@@ -29,6 +30,18 @@ class Volume extends Instance
     {
         return $this->setAttribute('name', "{$configmap->getName()}-volume")
             ->setAttribute('configMap', ['name' => $configmap->getName()]);
+    }
+
+    /**
+     * Attach a volume from a secret file.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sSecret  $secret
+     * @return $this
+     */
+    public function fromSecret(K8sSecret $secret)
+    {
+        return $this->setAttribute('name', "{$secret->getName()}-secret-volume")
+            ->setAttribute('secret', ['secretName' => $secret->getName()]);
     }
 
     /**
