@@ -77,6 +77,44 @@ class VolumeTest extends TestCase
         $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
     }
 
+    public function test_volume_secret()
+    {
+        $secret = K8s::secret()
+            ->setName('some-secret')
+            ->setData([
+                'some-key' => 'some-content',
+                'some-key2' => 'some-content-again',
+            ]);
+
+        $volume = K8s::volume()->fromSecret($secret);
+
+        $mountedVolume = $volume->mountTo('/some-path', 'some-key');
+
+        $mysql = K8s::container()
+            ->setName('mysql')
+            ->setImage('mysql', '5.7')
+            ->addMountedVolumes([$mountedVolume]);
+
+        $pod = K8s::pod()
+            ->setName('mysql')
+            ->setContainers([$mysql])
+            ->addVolumes([$volume]);
+
+        $this->assertEquals([
+            'name' => 'some-secret-secret-volume',
+            'secret' => ['secretName' => $secret->getName()],
+        ], $volume->toArray());
+
+        $this->assertEquals([
+            'name' => 'some-secret-secret-volume',
+            'mountPath' => '/some-path',
+            'subPath' => 'some-key',
+        ], $mountedVolume->toArray());
+
+        $this->assertEquals($pod->getVolumes()[0]->toArray(), $volume->toArray());
+        $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
+    }
+
     public function test_volume_gce_pd()
     {
         $volume = K8s::volume()->gcePersistentDisk('some-disk', 'ext3');
