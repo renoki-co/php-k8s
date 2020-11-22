@@ -28,6 +28,22 @@ $container->addMountedVolumes([$volume->mountTo('/some-path/file.txt', 'some-key
 $pod->addVolumes([$volume]);
 ```
 
+## Secret
+
+```php
+$secret = K8s::secret()
+    ->setName('some-secret')
+    ->setData([
+        'some-key' => 'value-for-file',
+    ]);
+
+$volume = K8s::volume()->fromSecret($secret);
+
+$container->addMountedVolumes([$volume->mountTo('/some-path/file.txt', 'some-key')]);
+
+$pod->addVolumes([$volume]);
+```
+
 ## GCE Persistent Disk
 
 ```php
