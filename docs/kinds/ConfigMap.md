@@ -7,6 +7,7 @@
 ```php
 $cm = $cluster->configmap()
     ->setName('certificates')
+    ->setLabels(['tier' => 'backend'])
     ->setData([
         'key.pem' => '...',
         'ca.pem' => '...',
