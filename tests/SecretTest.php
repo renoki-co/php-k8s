@@ -12,12 +12,14 @@ class SecretTest extends TestCase
     {
         $secret = $this->cluster->secret()
             ->setName('passwords')
+            ->setLabels(['tier' => 'backend'])
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
             ->removeData('root');
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
@@ -28,6 +30,7 @@ class SecretTest extends TestCase
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
@@ -47,6 +50,7 @@ class SecretTest extends TestCase
     {
         $secret = $this->cluster->secret()
             ->setName('passwords')
+            ->setLabels(['tier' => 'backend'])
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
             ->removeData('root');
@@ -63,6 +67,7 @@ class SecretTest extends TestCase
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
@@ -90,6 +95,7 @@ class SecretTest extends TestCase
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
     }
@@ -110,6 +116,7 @@ class SecretTest extends TestCase
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
+        $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['root' => base64_encode('secret')], $secret->getData(false));
         $this->assertEquals(['root' => 'secret'], $secret->getData(true));
     }
