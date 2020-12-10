@@ -20,10 +20,12 @@ class RoleTest extends TestCase
 
         $role = $this->cluster->role()
             ->setName('admin')
+            ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
+        $this->assertEquals(['tier' => 'backend'], $role->getLabels());
         $this->assertEquals([$rule], $role->getRules());
     }
 
@@ -39,6 +41,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
+        $this->assertEquals(['tier' => 'backend'], $role->getLabels());
         $this->assertEquals([$rule], $role->getRules());
     }
 
@@ -63,6 +66,7 @@ class RoleTest extends TestCase
 
         $role = $this->cluster->role()
             ->setName('admin')
+            ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
 
         $this->assertFalse($role->isSynced());
@@ -77,6 +81,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
+        $this->assertEquals(['tier' => 'backend'], $role->getLabels());
         $this->assertEquals([$rule], $role->getRules());
     }
 
@@ -109,6 +114,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
+        $this->assertEquals(['tier' => 'backend'], $role->getLabels());
         $this->assertEquals([$rule], $role->getRules());
     }
 
@@ -132,6 +138,7 @@ class RoleTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $role->getApiVersion());
         $this->assertEquals('admin', $role->getName());
+        $this->assertEquals(['tier' => 'backend'], $role->getLabels());
         $this->assertEquals([$rule], $role->getRules());
     }
 
