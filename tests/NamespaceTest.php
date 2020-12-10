@@ -11,10 +11,12 @@ class NamespaceTest extends TestCase
     public function test_namespace_build()
     {
         $ns = $this->cluster->namespace()
-            ->setName('production');
+            ->setName('production')
+            ->setLabels(['tier' => 'backend']);
 
         $this->assertEquals('v1', $ns->getApiVersion());
         $this->assertEquals('production', $ns->getName());
+        $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
     }
 
     public function test_namespace_from_yaml()
@@ -23,6 +25,7 @@ class NamespaceTest extends TestCase
 
         $this->assertEquals('v1', $ns->getApiVersion());
         $this->assertEquals('production', $ns->getName());
+        $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
     }
 
     public function test_namespace_api_interaction()
@@ -58,12 +61,14 @@ class NamespaceTest extends TestCase
         $this->assertTrue($ns->isSynced());
 
         $this->assertEquals('production', $ns->getName());
+        $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
     }
 
     public function runCreationTests()
     {
         $ns = $this->cluster->namespace()
-            ->setName('production');
+            ->setName('production')
+            ->setLabels(['tier' => 'backend']);
 
         $this->assertFalse($ns->isSynced());
         $this->assertFalse($ns->exists());
@@ -76,6 +81,7 @@ class NamespaceTest extends TestCase
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
         $this->assertEquals('production', $ns->getName());
+        $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
 
         $ns->refresh();
 
