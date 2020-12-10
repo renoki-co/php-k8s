@@ -2,8 +2,12 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Traits\HasLabels;
+
 class K8sClusterRoleBinding extends K8sRoleBinding
 {
+    use HasLabels;
+
     /**
      * The resource Kind parameter.
      *
