@@ -2,6 +2,8 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: mysql-hpa
+  labels:
+    tier: backend
 spec:
   scaleTargetRef:
     kind: Deployment
