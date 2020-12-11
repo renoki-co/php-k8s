@@ -14,12 +14,14 @@ class PersistentVolumeClaimTest extends TestCase
 
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('app-pvc')
+            ->setLabels(['tier' => 'backend'])
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass($standard);
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals(['tier' => 'backend'], $pvc->getLabels());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
         $this->assertEquals('standard', $pvc->getStorageClass());
@@ -31,6 +33,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals(['tier' => 'backend'], $pvc->getLabels());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
         $this->assertEquals('standard', $pvc->getStorageClass());
@@ -53,6 +56,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $pvc = $this->cluster->persistentVolumeClaim()
             ->setName('app-pvc')
+            ->setLabels(['tier' => 'backend'])
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass($standard);
@@ -69,6 +73,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals(['tier' => 'backend'], $pvc->getLabels());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
         $this->assertEquals('standard', $pvc->getStorageClass());
@@ -106,6 +111,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals(['tier' => 'backend'], $pvc->getLabels());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
         $this->assertEquals('standard', $pvc->getStorageClass());
@@ -123,6 +129,7 @@ class PersistentVolumeClaimTest extends TestCase
 
         $this->assertEquals('v1', $pvc->getApiVersion());
         $this->assertEquals('app-pvc', $pvc->getName());
+        $this->assertEquals(['tier' => 'backend'], $pvc->getLabels());
         $this->assertEquals('1Gi', $pvc->getCapacity());
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
         $this->assertEquals('standard', $pvc->getStorageClass());
