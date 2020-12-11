@@ -7,6 +7,7 @@
 ```php
 $ingress = $cluster->ingress()
     ->setName('nginx')
+    ->setLabels(['tier' => 'backend'])
     ->setSelectors(['app' => 'frontend'])
     ->setRules([[
         'host' => 'nginx.test.com',

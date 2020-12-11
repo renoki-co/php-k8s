@@ -40,12 +40,14 @@ class IngressTest extends TestCase
     {
         $ing = $this->cluster->ingress()
             ->setName('nginx')
+            ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->addRules(self::$rules)
             ->setRules(self::$rules);
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
@@ -60,6 +62,7 @@ class IngressTest extends TestCase
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
@@ -74,6 +77,7 @@ class IngressTest extends TestCase
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
@@ -93,6 +97,7 @@ class IngressTest extends TestCase
     {
         $ing = $this->cluster->ingress()
             ->setName('nginx')
+            ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setRules(self::$rules);
 
@@ -108,6 +113,7 @@ class IngressTest extends TestCase
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
@@ -135,6 +141,7 @@ class IngressTest extends TestCase
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
@@ -153,6 +160,7 @@ class IngressTest extends TestCase
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
+        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals([], $ing->getAnnotations());
         $this->assertEquals(self::$rules, $ing->getRules());
     }

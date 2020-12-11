@@ -35,6 +35,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $hpa = $this->cluster->horizontalPodAutoscaler()
             ->setName('mysql-hpa')
+            ->setLabels(['tier' => 'backend'])
             ->setResource($dep)
             ->addMetrics([$cpuMetric])
             ->setMetrics([$cpuMetric])
@@ -43,6 +44,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
+        $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
         $this->assertEquals(1, $hpa->getMinReplicas());
         $this->assertEquals(10, $hpa->getMaxReplicas());
@@ -74,6 +76,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
+        $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
         $this->assertEquals(1, $hpa->getMinReplicas());
         $this->assertEquals(10, $hpa->getMaxReplicas());
@@ -120,6 +123,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $hpa = $this->cluster->horizontalPodAutoscaler()
             ->setName('mysql-hpa')
+            ->setLabels(['tier' => 'backend'])
             ->setResource($dep)
             ->addMetrics([$cpuMetric])
             ->min(1)
@@ -139,6 +143,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
+        $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
         $this->assertEquals(1, $hpa->getMinReplicas());
         $this->assertEquals(10, $hpa->getMaxReplicas());
@@ -200,6 +205,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
+        $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
         $this->assertEquals(1, $hpa->getMinReplicas());
         $this->assertEquals(10, $hpa->getMaxReplicas());
@@ -227,6 +233,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
+        $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
         $this->assertEquals(1, $hpa->getMinReplicas());
         $this->assertEquals(6, $hpa->getMaxReplicas());

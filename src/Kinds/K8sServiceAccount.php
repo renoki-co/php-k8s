@@ -4,9 +4,12 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Traits\HasLabels;
 
 class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
+    use HasLabels;
+
     /**
      * The resource Kind parameter.
      *

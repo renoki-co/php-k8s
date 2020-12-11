@@ -16,12 +16,14 @@ class ServiceAccountTest extends TestCase
 
         $sa = $this->cluster->serviceAccount()
             ->setName('user1')
+            ->setLabels(['tier' => 'backend'])
             ->addSecrets([$secret])
             ->setSecrets([$secret])
             ->addPulledSecrets(['postgres']);
 
         $this->assertEquals('v1', $sa->getApiVersion());
         $this->assertEquals('user1', $sa->getName());
+        $this->assertEquals(['tier' => 'backend'], $sa->getLabels());
         $this->assertEquals([['name' => $secret->getName()]], $sa->getSecrets());
         $this->assertEquals([['name' => 'postgres']], $sa->getImagePullSecrets());
     }
@@ -30,12 +32,14 @@ class ServiceAccountTest extends TestCase
     {
         $secret = $this->cluster->secret()
             ->setName('passwords')
+            ->setLabels(['tier' => 'backend'])
             ->addData('postgres', 'postgres');
 
         $sa = $this->cluster->fromYamlFile(__DIR__.'/yaml/serviceaccount.yaml');
 
         $this->assertEquals('v1', $sa->getApiVersion());
         $this->assertEquals('user1', $sa->getName());
+        $this->assertEquals(['tier' => 'backend'], $sa->getLabels());
         $this->assertEquals([['name' => $secret->getName()]], $sa->getSecrets());
         $this->assertEquals([['name' => 'postgres']], $sa->getImagePullSecrets());
     }
@@ -59,6 +63,7 @@ class ServiceAccountTest extends TestCase
 
         $sa = $this->cluster->serviceAccount()
             ->setName('user1')
+            ->setLabels(['tier' => 'backend'])
             ->addSecrets([$secret])
             ->setSecrets([$secret])
             ->addPulledSecrets(['postgres']);
@@ -76,6 +81,7 @@ class ServiceAccountTest extends TestCase
 
         $this->assertEquals('v1', $sa->getApiVersion());
         $this->assertEquals('user1', $sa->getName());
+        $this->assertEquals(['tier' => 'backend'], $sa->getLabels());
         $this->assertEquals([['name' => $secret->getName()]], $sa->getSecrets());
         $this->assertEquals([['name' => 'postgres']], $sa->getImagePullSecrets());
     }
@@ -104,6 +110,7 @@ class ServiceAccountTest extends TestCase
 
         $this->assertEquals('v1', $sa->getApiVersion());
         $this->assertEquals('user1', $sa->getName());
+        $this->assertEquals(['tier' => 'backend'], $sa->getLabels());
         $this->assertEquals(['name' => $secret->getName()], $sa->getSecrets()[0]);
         $this->assertEquals([['name' => 'postgres']], $sa->getImagePullSecrets());
     }
@@ -123,6 +130,7 @@ class ServiceAccountTest extends TestCase
 
         $this->assertEquals('v1', $sa->getApiVersion());
         $this->assertEquals('user1', $sa->getName());
+        $this->assertEquals(['tier' => 'backend'], $sa->getLabels());
         $this->assertEquals(['name' => $secret->getName()], $sa->getSecrets()[0]);
         $this->assertEquals([['name' => 'postgres'], ['name' => 'postgres2']], $sa->getImagePullSecrets());
     }

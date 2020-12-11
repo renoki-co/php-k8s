@@ -12,12 +12,14 @@ class ConfigMapTest extends TestCase
     {
         $cm = $this->cluster->configmap()
             ->setName('settings')
+            ->setLabels(['tier' => 'backend'])
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
             ->removeData('somekey');
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
     }
 
@@ -27,6 +29,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
     }
 
@@ -45,6 +48,7 @@ class ConfigMapTest extends TestCase
     {
         $cm = $this->cluster->configmap()
             ->setName('settings')
+            ->setLabels(['tier' => 'backend'])
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
             ->removeData('somekey');
@@ -61,6 +65,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
         $this->assertEquals('val2', $cm->getData('key2'));
     }
@@ -88,6 +93,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
         $this->assertEquals('val2', $cm->getData('key2'));
     }
@@ -107,6 +113,7 @@ class ConfigMapTest extends TestCase
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['newkey' => 'newval'], $cm->getData());
         $this->assertEquals('newval', $cm->getData('newkey'));
     }

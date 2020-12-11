@@ -12,6 +12,7 @@ class ServiceTest extends TestCase
     {
         $svc = $this->cluster->service()
             ->setName('nginx')
+            ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])
             ->addPorts([['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80]])
@@ -19,6 +20,7 @@ class ServiceTest extends TestCase
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['tier' => 'backend'], $svc->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
         $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
         $this->assertEquals([['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80]], $svc->getPorts());
@@ -30,6 +32,7 @@ class ServiceTest extends TestCase
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['tier' => 'backend'], $svc->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
         $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
         $this->assertEquals([[
@@ -52,6 +55,7 @@ class ServiceTest extends TestCase
     {
         $svc = $this->cluster->service()
             ->setName('nginx')
+            ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['nginx/ann' => 'yes'])
             ->setSelectors(['app' => 'frontend'])
             ->setPorts([
@@ -70,6 +74,7 @@ class ServiceTest extends TestCase
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['tier' => 'backend'], $svc->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
         $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
         $this->assertEquals([[
@@ -100,6 +105,7 @@ class ServiceTest extends TestCase
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['tier' => 'backend'], $svc->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $svc->getAnnotations());
         $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
         $this->assertEquals([[
@@ -121,6 +127,7 @@ class ServiceTest extends TestCase
 
         $this->assertEquals('v1', $svc->getApiVersion());
         $this->assertEquals('nginx', $svc->getName());
+        $this->assertEquals(['tier' => 'backend'], $svc->getLabels());
         $this->assertEquals([], $svc->getAnnotations());
         $this->assertEquals(['app' => 'frontend'], $svc->getSelectors());
         $this->assertEquals([[

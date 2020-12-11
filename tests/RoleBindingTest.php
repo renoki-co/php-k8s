@@ -29,12 +29,14 @@ class RoleBindingTest extends TestCase
 
         $rb = $this->cluster->roleBinding()
             ->setName('user-binding')
+            ->setLabels(['tier' => 'backend'])
             ->setRole($role)
             ->addSubjects([$subject])
             ->setSubjects([$subject]);
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $rb->getApiVersion());
         $this->assertEquals('user-binding', $rb->getName());
+        $this->assertEquals(['tier' => 'backend'], $rb->getLabels());
         $this->assertEquals([$subject], $rb->getSubjects());
         $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'Role', 'name' => 'admin'], $rb->getRole());
     }
@@ -60,6 +62,7 @@ class RoleBindingTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $rb->getApiVersion());
         $this->assertEquals('user-binding', $rb->getName());
+        $this->assertEquals(['tier' => 'backend'], $rb->getLabels());
         $this->assertEquals([$subject], $rb->getSubjects());
         $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'Role', 'name' => 'admin'], $rb->getRole());
     }
@@ -94,6 +97,7 @@ class RoleBindingTest extends TestCase
 
         $rb = $this->cluster->roleBinding()
             ->setName('user-binding')
+            ->setLabels(['tier' => 'backend'])
             ->setRole($role)
             ->addSubjects([$subject])
             ->setSubjects([$subject]);
@@ -111,6 +115,7 @@ class RoleBindingTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $rb->getApiVersion());
         $this->assertEquals('user-binding', $rb->getName());
+        $this->assertEquals(['tier' => 'backend'], $rb->getLabels());
         $this->assertEquals([$subject], $rb->getSubjects());
         $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'Role', 'name' => 'admin'], $rb->getRole());
     }
@@ -144,6 +149,7 @@ class RoleBindingTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $rb->getApiVersion());
         $this->assertEquals('user-binding', $rb->getName());
+        $this->assertEquals(['tier' => 'backend'], $rb->getLabels());
         $this->assertEquals([$subject], $rb->getSubjects());
         $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'Role', 'name' => 'admin'], $rb->getRole());
     }
@@ -168,6 +174,7 @@ class RoleBindingTest extends TestCase
 
         $this->assertEquals('rbac.authorization.k8s.io/v1', $rb->getApiVersion());
         $this->assertEquals('user-binding', $rb->getName());
+        $this->assertEquals(['tier' => 'backend'], $rb->getLabels());
         $this->assertEquals([$subject], $rb->getSubjects());
         $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'Role', 'name' => 'admin'], $rb->getRole());
     }

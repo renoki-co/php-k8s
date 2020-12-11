@@ -12,12 +12,14 @@ class StorageClassTest extends TestCase
     {
         $sc = $this->cluster->storageClass()
             ->setName('io1')
+            ->setLabels(['tier' => 'backend'])
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => 10])
             ->setMountOptions(['debug']);
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals(['tier' => 'backend'], $sc->getLabels());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
         $this->assertEquals(['debug'], $sc->getMountOptions());
@@ -29,6 +31,7 @@ class StorageClassTest extends TestCase
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals(['tier' => 'backend'], $sc->getLabels());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
         $this->assertEquals(['debug'], $sc->getMountOptions());
@@ -49,6 +52,7 @@ class StorageClassTest extends TestCase
     {
         $sc = $this->cluster->storageClass()
             ->setName('io1')
+            ->setLabels(['tier' => 'backend'])
             ->setProvisioner('csi.aws.amazon.com')
             ->setParameters(['type' => 'io1', 'iopsPerGB' => '10'])
             ->setMountOptions(['debug']);
@@ -65,6 +69,7 @@ class StorageClassTest extends TestCase
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals(['tier' => 'backend'], $sc->getLabels());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
         $this->assertEquals(['debug'], $sc->getMountOptions());
@@ -93,6 +98,7 @@ class StorageClassTest extends TestCase
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals(['tier' => 'backend'], $sc->getLabels());
         $this->assertEquals('csi.aws.amazon.com', $sc->getProvisioner());
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => 10], $sc->getParameters());
         $this->assertEquals(['debug'], $sc->getMountOptions());
@@ -112,6 +118,7 @@ class StorageClassTest extends TestCase
 
         $this->assertEquals('storage.k8s.io/v1', $sc->getApiVersion());
         $this->assertEquals('io1', $sc->getName());
+        $this->assertEquals(['tier' => 'backend'], $sc->getLabels());
         $this->assertEquals(['debug'], $sc->getAttribute('mountOptions'));
         $this->assertEquals(['type' => 'io1', 'iopsPerGB' => '10'], $sc->getParameters());
         $this->assertEquals(['debug'], $sc->getMountOptions());
