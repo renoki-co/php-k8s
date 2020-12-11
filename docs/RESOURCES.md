@@ -42,6 +42,14 @@ Each resource inherits a default "base" class that is making the Resource build-
 - [Role Bindings](kinds/RoleBinding.md)
 - [Cluster Role Bindings](kinds/ClusterRoleBinding.md)
 
+## Default Versions for Reosurces
+
+Since we support multiple K8s Cluster versions, some versions do promote certain resources to GA. Since each resource needs a default version, the package will set **the default versions for the oldest Kubernetes version supported**.
+
+For example, if the package supports `v1.17+`, then the package will make sure the versions are defaults for `v1.17`. In some cases, like Ingress in `v1.19` that switched from Beta to GA, that the `v1beta1` is no longer a default and instead, the `v1` is now a default. If `v1.17` is the oldest supported version, then it will stay to `v1beta`.
+
+The minimum Kubernetes version that is supported by a given package version can be found at the top of [README.md](../README.md).
+
 ## Work In Progress
 
 The following list of resources are work in progress and they will be available soon:
