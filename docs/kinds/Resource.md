@@ -58,6 +58,24 @@ $namespace->getName();
 
 Alias for [setName($name)](#setnamename). It's just a naming convention for better filters on get.
 
+## Labels
+
+### `setLabels(array $labels)`
+
+Set the labels of the resource.
+
+```php
+$service->setLabels(['tier' => 'backend']);
+```
+
+### `getLabels()`
+
+Get the labels of a resource.
+
+```php
+$service->getLabels();
+```
+
 ## API
 
 ### `getApiVersion()`
