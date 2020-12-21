@@ -19,7 +19,6 @@ jobs:
     strategy:
       matrix:
         php:
-          - '7.3'
           - '7.4'
           - '8.0'
         kubernetes:
@@ -41,13 +40,6 @@ jobs:
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
     steps:
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, soap
-        coverage: pcov
-
     - uses: actions/checkout@v1
 
     - name: Setup PHP
@@ -63,7 +55,7 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - uses: manusa/actions-setup-minikube@v2.0.1
+    - uses: manusa/actions-setup-minikube@v2.2.0
       name: Setup Minikube
       with:
         minikube version: v1.16.0
