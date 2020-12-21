@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use Carbon\Carbon;
 use Cron\CronExpression;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;

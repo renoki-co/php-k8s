@@ -7,7 +7,6 @@ use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sCronJob;
 use RenokiCo\PhpK8s\Kinds\K8sJob;
-use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
 
 class CronCronJobTest extends TestCase
