@@ -1,0 +1,35 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: pi
+  labels:
+    tier: backend
+  annotations:
+    perl/annotation: "yes"
+spec:
+  schedule: 0 * * * *
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 3600
+      template:
+        apiVersion: batch/v1
+        kind: Job
+        metadata:
+          name: pi
+          labels:
+            tier: backend
+          annotations:
+            perl/annotation: "yes"
+        spec:
+          containers:
+            - name: pi
+              image: perl:latest
+              command:
+                - perl
+                - Mbignum=bpi
+                - -wle
+                - print bpi(2000)
+          kind: Pod
+          apiVersion: v1
+    apiVersion: batch/v1
+    kind: Job

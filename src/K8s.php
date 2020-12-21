@@ -149,6 +149,18 @@ class K8s
     }
 
     /**
+     * Create a new CronJob kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\CronJob
+     */
+    public static function cronjob($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sCronJob($cluster, $attributes);
+    }
+
+    /**
      * Create a new DaemonSet kind.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
