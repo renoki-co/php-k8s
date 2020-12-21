@@ -21,10 +21,12 @@ jobs:
         php:
           - '7.3'
           - '7.4'
+          - '8.0'
         kubernetes:
           - '1.17.13'
           - '1.18.10'
           - '1.19.3'
+          - '1.20.1'
         laravel:
           - 7.*
           - 8.*
@@ -64,7 +66,7 @@ jobs:
     - uses: manusa/actions-setup-minikube@v2.0.1
       name: Setup Minikube
       with:
-        minikube version: v1.14.2
+        minikube version: v1.16.0
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
