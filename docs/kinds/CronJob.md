@@ -52,16 +52,6 @@ $pod = $cronjob->getJobTemplate(false);
 $jobName = $template['name'];
 ```
 
-## Getting all scheduled pods
-
-You can retrieve the pods as resources controlled by the CronJob by issuing `->getPods()`:
-
-```php
-foreach ($cronjob->getPods() as $pod) {
-    // $pod->logs()
-}
-```
-
 ## CronJob Status
 
 The Status API is available to be accessed for fresh instances:
@@ -86,17 +76,8 @@ while (! $job = $cronjob->getActiveJobs()->first()) {
     sleep(1);
 }
 
+// You can get the scheduled Job's pods.
 $job->getPods();
 ```
 
 The `$job` variable is a `K8sJob` instance class that is already synced with the existing job. Check [Job documentation](Job.md) for the K8sJob instance.
-
-## Getting all scheduled pods
-
-You can retrieve the pods as resources controlled by the CronJob's Jobs by issuing `->getPods()`:
-
-```php
-foreach ($cronjob->getPods() as $pod) {
-    // $pod->logs()
-}
-```

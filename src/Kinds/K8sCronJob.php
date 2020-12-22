@@ -5,22 +5,16 @@ namespace RenokiCo\PhpK8s\Kinds;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
-use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasLabels;
-use RenokiCo\PhpK8s\Traits\HasPods;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStatus;
 
-class K8sCronJob extends K8sResource implements
-    InteractsWithK8sCluster,
-    Podable,
-    Watchable
+class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasAnnotations;
     use HasLabels;
-    use HasPods;
     use HasSpec;
     use HasStatus;
 
@@ -44,18 +38,6 @@ class K8sCronJob extends K8sResource implements
      * @var bool
      */
     protected static $namespaceable = true;
-
-    /**
-     * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
-     */
-    public function podsSelector(): array
-    {
-        return [
-            'job-name' => $this->getJobTemplate()->getName(),
-        ];
-    }
 
     /**
      * Set the job template.
