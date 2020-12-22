@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use Carbon\Carbon;
 use Cron\CronExpression;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
@@ -36,7 +37,7 @@ class CronCronJobTest extends TestCase
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setJobTemplate($job)
-            ->setSchedule(CronExpression::factory('@hourly'));
+            ->setSchedule(CronExpression::factory('* * * * *'));
 
         $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
@@ -116,7 +117,7 @@ class CronCronJobTest extends TestCase
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setJobTemplate($job)
-            ->setSchedule(CronExpression::factory('@hourly'));
+            ->setSchedule(CronExpression::factory('* * * * *'));
 
         $this->assertFalse($cronjob->isSynced());
         $this->assertFalse($cronjob->exists());
@@ -139,11 +140,25 @@ class CronCronJobTest extends TestCase
 
         $cronjob->refresh();
 
-        while (! $cronjob->hasCompleted()) {
-            dump("Waiting for pods of {$cronjob->getName()} to finish executing...");
+        $activeJobs = $cronjob->getActiveJobs();
+
+        while ($cronjob->getActiveJobs()->count() === 0) {
+            dump("Waiting for the cronjob {$cronjob->getName()} to have active jobs...");
             sleep(1);
             $cronjob->refresh();
+            $activeJobs = $cronjob->getActiveJobs();
         }
+
+        $job = $activeJobs->first();
+
+        while (! $job->hasCompleted()) {
+            dump("Waiting for pods of {$job->getName()} to finish executing...");
+            sleep(1);
+            $job->refresh();
+        }
+
+        $this->assertInstanceOf(Carbon::class, $cronjob->getLastSchedule());
+        $this->assertTrue($cronjob->getLastSchedule()->gt(Carbon::now()->subSeconds(60)));
     }
 
     public function runGetAllTests()

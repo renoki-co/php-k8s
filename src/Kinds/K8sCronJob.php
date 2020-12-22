@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use Carbon\Carbon;
 use Cron\CronExpression;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
@@ -100,5 +101,31 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
         }
 
         return $schedule;
+    }
+
+    /**
+     * Get the last time a job was scheduled.
+     *
+     * @return \DateTime|null
+     */
+    public function getLastSchedule()
+    {
+        if (! $lastSchedule = $this->getStatus('lastScheduleTime')) {
+            return null;
+        }
+
+        return Carbon::parse($lastSchedule);
+    }
+
+    /**
+     * Get the active jobs created by the cronjob.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getActiveJobs()
+    {
+        return collect($this->getStatus('active', []))->map(function ($job) {
+            return $this->cluster->job($job)->refresh();
+        });
     }
 }

@@ -35,6 +35,7 @@ Each resource inherits a default "base" class that is making the Resource build-
 - [Deployments](kinds/Deployment.md)
 - [DaemonSets](kinds/DaemonSet.md)
 - [Jobs](kinds/Job.md)
+- [CronJobs](kinds/CronJob.md)
 - [Horizontal Pod Autoscalers](kinds/HorizontalPodAutoscaler.md)
 - [Service Accounts](kinds/ServiceAccount.md)
 - [Roles](kinds/Role.md)
@@ -54,7 +55,6 @@ The minimum Kubernetes version that is supported by a given package version can 
 
 The following list of resources are work in progress and they will be available soon:
 
-- cronjobs
 - bindings
 - networkpolicies
 - poddisruptionbudgets
