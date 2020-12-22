@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use Carbon\Carbon;
 use Cron\CronExpression;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
@@ -155,6 +156,9 @@ class CronCronJobTest extends TestCase
             sleep(1);
             $job->refresh();
         }
+
+        $this->assertInstanceOf(Carbon::class, $cronjob->getLastSchedule());
+        $this->assertTrue($cronjob->getLastSchedule()->gt(Carbon::now()->subSeconds(60)));
     }
 
     public function runGetAllTests()
