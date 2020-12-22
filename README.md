@@ -86,6 +86,7 @@ Each existent resource has its own documentation, filled with examples:
 - [Deployments](docs/kinds/Deployment.md)
 - [Daemon Sets](docs/kinds/DaemonSet.md)
 - [Jobs](docs/kinds/Job.md)
+- [CronJobs](docs/kinds/CronJob.md)
 - [Horizontal Pod Autoscalers](docs/kinds/HorizontalPodAutoscaler.md)
 - [Service Accounts](docs/kinds/ServiceAccount.md)
 - [Roles](docs/kinds/Role.md)
