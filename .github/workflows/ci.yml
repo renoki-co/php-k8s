@@ -25,7 +25,6 @@ jobs:
           - '1.17.16'
           - '1.18.14'
           - '1.19.6'
-          - '1.20.1'
         laravel:
           - 7.*
           - 8.*
@@ -37,15 +36,6 @@ jobs:
             testbench: 5.*
           - laravel: 8.*
             testbench: 6.*
-
-          - kubernetes: '1.20.1'
-            minikube: '1.16.0'
-          - kubernetes: '1.19.6'
-            minikube: '1.16.0'
-          - kubernetes: '1.18.4'
-            minikube: '1.16.0'
-          - kubernetes: '1.17.16'
-            minikube: '1.14.0'
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
     steps:
@@ -67,7 +57,7 @@ jobs:
     - uses: manusa/actions-setup-minikube@v2.2.0
       name: Setup Minikube
       with:
-        minikube version: "v${{ matrix.minikube }}"
+        minikube version: v1.16.0
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
