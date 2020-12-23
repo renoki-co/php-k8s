@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\K8s;
 
 class AffinityTest extends TestCase
