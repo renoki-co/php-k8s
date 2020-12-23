@@ -35,6 +35,17 @@ $pod = $cluster->pod()
 
 Pods can attach volumes so that container can mount them. Please check the [Container documentation](../instances/Container.md) where you can find details on how to attach volumes for different drivers.
 
+## Attaching affinities & anti-affinities
+
+Pods can declare `affinity` to handle pod and node affinities and anti-affinities. Check [Affinity documentation](../instances/Affinity.md) to read more about the pod affinity and anti-affinity declarations.
+
+You can simply attach affinities for both pod and node by calling specialized methods:
+
+```php
+$pod->setPodAffinity($affinity);
+$pod->setNodeAffinity($affinity);
+```
+
 ## Container Retrieval
 
 Retrieving the containers and init containers can be retrieved as an array of `\RenokiCo\PhpK8s\Instances\Container` classes or as an array.
@@ -59,9 +70,7 @@ foreach ($containers as $container) {
 
 ## Pod Logs
 
-Pods can contain logs, and PHP K8s is good at it. Before checking how it works, please see the [Live Tracking](../../README.md#live-tracking) section from README to see how the closures really work at interpreting the real-time data in Kubernetes.
-
-Retrieve a single string with all logs until the point of call:
+Pods can contain logs, and PHP K8s is good at it. You can retrieve a single string with all logs until the point of call:
 
 ```php
 // Simple logging, no watcher

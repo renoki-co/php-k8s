@@ -10,8 +10,10 @@
 
 Instances are custom classes that makes the build of containers, for example, more object-oriented that passing an array.
 
+- [Affinity](instances/Affinity.md) - used to declare affinities and anti-affinities
 - [Container](instances/Container.md) - used for Pods & Templates
 - [Container Probes](instances/Probes.md) - used for Pods' Probes
+- [Expressions](instances/Expression.md) - used for various match/fields expressions
 - [Resource Metrics](instances/Metrics.md) - used for Horizontal Pod Autoscalers
 - [Rules](instances/Rules.md) - used for Roles & Cluster Roles
 - [Volumes](instances/Volumes.md) - used for mounting volumes in pods and containers

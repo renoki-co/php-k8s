@@ -322,6 +322,28 @@ class K8s
     }
 
     /**
+     * Create a new affinity instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Affinity
+     */
+    public static function affinity(array $attributes = [])
+    {
+        return new Instances\Affinity($attributes);
+    }
+
+    /**
+     * Create a new expression instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Expression
+     */
+    public static function expression(array $attributes = [])
+    {
+        return new Instances\Expression($attributes);
+    }
+
+    /**
      * Load Kind configuration from an YAML text.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
