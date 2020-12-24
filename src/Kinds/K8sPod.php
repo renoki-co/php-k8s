@@ -254,6 +254,55 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
     }
 
     /**
+     * Get the node affinity.
+     *
+     * @param  bool  $asInstance
+     * @return array|\RenokiCo\PhpK8s\Instances\Affinity
+     */
+    public function getNodeAffinity(bool $asInstance = true)
+    {
+        $affinity = $this->getSpec('affinity.nodeAffinity', null);
+
+        if (! $affinity) {
+            return;
+        }
+
+        return $asInstance ? new Affinity($affinity) : $affinity;
+    }
+
+    /**
+     * Set the pod affinity.
+     *
+     * @param  \RenokiCo\PhpK8s\Instances\Affinity  $affinity
+     * @return $this
+     */
+    public function setPodAffinity($affinity)
+    {
+        if ($affinity instanceof Affinity) {
+            $affinity = $affinity->toArray();
+        }
+
+        return $this->setSpec('affinity.podAffinity', $affinity);
+    }
+
+    /**
+     * Get the pod affinity.
+     *
+     * @param  bool  $asInstance
+     * @return array|\RenokiCo\PhpK8s\Instances\Affinity
+     */
+    public function getPodAffinity(bool $asInstance = true)
+    {
+        $affinity = $this->getSpec('affinity.podAffinity', null);
+
+        if (! $affinity) {
+            return;
+        }
+
+        return $asInstance ? new Affinity($affinity) : $affinity;
+    }
+
+    /**
      * Transform any Container instance to an array.
      *
      * @param  array  $containers

@@ -5,6 +5,18 @@ namespace RenokiCo\PhpK8s;
 class K8s
 {
     /**
+     * Create a new Node kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sNode
+     */
+    public static function node($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sNode($cluster, $attributes);
+    }
+
+    /**
      * Create a new Namespace kind.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
@@ -319,6 +331,28 @@ class K8s
     public static function volume(array $attributes = [])
     {
         return new Instances\Volume($attributes);
+    }
+
+    /**
+     * Create a new affinity instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Affinity
+     */
+    public static function affinity(array $attributes = [])
+    {
+        return new Instances\Affinity($attributes);
+    }
+
+    /**
+     * Create a new expression instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Expression
+     */
+    public static function expression(array $attributes = [])
+    {
+        return new Instances\Expression($attributes);
     }
 
     /**

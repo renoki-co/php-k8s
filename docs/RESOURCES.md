@@ -10,8 +10,10 @@
 
 Instances are custom classes that makes the build of containers, for example, more object-oriented that passing an array.
 
+- [Affinity](instances/Affinity.md) - used to declare affinities and anti-affinities
 - [Container](instances/Container.md) - used for Pods & Templates
 - [Container Probes](instances/Probes.md) - used for Pods' Probes
+- [Expressions](instances/Expression.md) - used for various match/fields expressions
 - [Resource Metrics](instances/Metrics.md) - used for Horizontal Pod Autoscalers
 - [Rules](instances/Rules.md) - used for Roles & Cluster Roles
 - [Volumes](instances/Volumes.md) - used for mounting volumes in pods and containers
@@ -22,6 +24,7 @@ Each resource inherits a default "base" class that is making the Resource build-
 
 **Check the documentation for [General Resources](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.**
 
+- [Nodes](kinds/Node.md)
 - [Namespaces](kinds/Namespace.md)
 - [Config Maps](kinds/ConfigMap.md)
 - [Secrets](kinds/Secret.md)
@@ -59,11 +62,6 @@ The following list of resources are work in progress and they will be available 
 - networkpolicies
 - poddisruptionbudgets
 - podsecuritypolicies
-
-The following concepts are work in progress as instances:
-
-- pod affinity
-- node affinity
 
 # Discussable
 
