@@ -72,7 +72,7 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     {
         $this->resource->refresh($query);
 
-        return $this->syncWith($this->get($query)->toArray());
+        return parent::refresh($query);
     }
 
     /**
@@ -85,6 +85,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     {
         $this->resource->refreshOriginal($query);
 
-        return $this->syncOriginalWith($this->get($query)->toArray());
+        return parent::refreshOriginal($query);
     }
 }
