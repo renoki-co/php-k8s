@@ -41,7 +41,7 @@ $sts = $cluster->statefulSet()
     ->create();
 ```
 
-## Pod Template retrieval
+## Pod Template Retrieval
 
 Stateful Sets rely on pods, so you can get the pod template as `K8sPod` class:
 
@@ -59,7 +59,7 @@ $pod = $sts->getTemplate(false);
 $podName = $template['name'];
 ```
 
-## Getting all scheduled pods
+## Getting Pods
 
 You can retrieve the pods as resources controlled by the Stateful Set by issuing `->getPods()`:
 

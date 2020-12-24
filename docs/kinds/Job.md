@@ -26,7 +26,7 @@ $job = $cluster->job()
     ->create();
 ```
 
-## Pod Template retrieval
+## Pod Template Retrieval
 
 Jobs rely on pods, so you can get the pod template as `K8sPod` class:
 
@@ -44,7 +44,7 @@ $pod = $job->getTemplate(false);
 $podName = $template['name'];
 ```
 
-## Getting all scheduled pods
+## Getting Pods
 
 You can retrieve the pods as resources controlled by the Job by issuing `->getPods()`:
 

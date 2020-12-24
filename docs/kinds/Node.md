@@ -9,11 +9,8 @@ $nodes = K8s::node()->all();
 
 foreach ($nodes as $node) {
     $node->getInfo();
-
     $node->getImages();
-
     $node->getCapacity();
-
     $node->getAllocatableInfo();
 }
 ```

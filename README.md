@@ -9,7 +9,8 @@ PHP K8s
 [![Monthly Downloads](https://poser.pugx.org/renoki-co/php-k8s/d/monthly)](https://packagist.org/packages/renoki-co/php-k8s)
 [![License](https://poser.pugx.org/renoki-co/php-k8s/license)](https://packagist.org/packages/renoki-co/php-k8s)
 
-![K8s Version](https://img.shields.io/badge/K8s%20Version-v1.17%2B-%23326ce5)
+![Min. K8s Version](https://img.shields.io/badge/Min.%20K8s%20Version-v1.17.16%2B-%23326ce5)
+![Max. K8s Version](https://img.shields.io/badge/Max.%20K8s%20Version-v1.19.6-%23326ce5)
 
 PHP K8s is a PHP handler for the Kubernetes Cluster API, helping you handling the individual Kubernetes resources directly from PHP, like viewing, creating, updating or deleting resources.
 
@@ -73,27 +74,29 @@ This package is Work in Progress and while there is in active development, PRs a
 
 Each existent resource has its own documentation, filled with examples:
 
-- [Nodes](docs/kinds/Node.md)
-- [Namespaces](docs/kinds/Namespace.md)
-- [Config Maps](docs/kinds/ConfigMap.md)
-- [Secrets](docs/kinds/Secret.md)
-- [Storage Classes](docs/kinds/StorageClass.md)
-- [Persistent Volumes](docs/kinds/PersistentVolume.md)
-- [Persistent Volume Claims](docs/kinds/PersistentVolumeClaim.md)
-- [Services](docs/kinds/Service.md)
-- [Ingresses](docs/kinds/Ingress.md)
-- [Pod](docs/kinds/Pod.md)
-- [Stateful Sets](docs/kinds/StatefulSet.md)
-- [Deployments](docs/kinds/Deployment.md)
-- [Daemon Sets](docs/kinds/DaemonSet.md)
-- [Jobs](docs/kinds/Job.md)
-- [CronJobs](docs/kinds/CronJob.md)
-- [Horizontal Pod Autoscalers](docs/kinds/HorizontalPodAutoscaler.md)
-- [Service Accounts](docs/kinds/ServiceAccount.md)
-- [Roles](docs/kinds/Role.md)
-- [Cluster Roles](docs/kinds/ClusterRole.md)
-- [Role Bindings](docs/kinds/RoleBinding.md)
-- [Cluster Role Bindings](docs/kinds/ClusterRoleBinding.md)
+| Resource | Default Version
+| - | -
+| [ClusterRole](docs/kinds/ClusterRole.md) | `rbac.authorization.k8s.io/v1`
+| [ClusterRoleBinding](docs/kinds/ClusterRoleBinding.md) | `rbac.authorization.k8s.io/v1`
+| [ConfigMap](docs/kinds/ConfigMap.md) | `v1`
+| [CronJob](docs/kinds/CronJob.md) | `batch/v1beta1`
+| [DaemonSet](docs/kinds/DaemonSet.md) | `apps/v1`
+| [Deployment](docs/kinds/Deployment.md) | `apps/v1`
+| [HorizontalPodAutoscaler](docs/kinds/HorizontalPodAutoscaler.md) | `autoscaling/v2beta2`
+| [Ingress](docs/kinds/Ingress.md) | `networking.k8s.io/v1beta1` |
+| [Job](docs/kinds/Job.md) | `batch/v1`
+| [Namespace](docs/kinds/Namespace.md) | `v1`
+| [Node](docs/kinds/Node.md) | `v1`
+| [PersistenVolume](docs/kinds/PersistentVolume.md) | `v1`
+| [PersistenVolumeClaim](docs/kinds/PersistentVolumeClaim.md) | `v1`
+| [Pod](docs/kinds/Pod.md) | `v1`
+| [Role](docs/kinds/Role.md) | `rbac.authorization.k8s.io/v1`
+| [RoleBinding](docs/kinds/RoleBinding.md) | `rbac.authorization.k8s.io/v1`
+| [Secret](docs/kinds/Secret.md) | `v1`
+| [Service](docs/kinds/Service.md) | `v1`
+| [ServiceAccount](docs/kinds/ServiceAccount.md) | `v1`
+| [StatefulSet](docs/kinds/StatefulSet.md) | `apps/v1`
+| [StorageClass](docs/kinds/StorageClass.md) | `storage.k8s.io/v1`
 
 For other resources, you can check the [Resources Documentation](docs/RESOURCES.md)
 

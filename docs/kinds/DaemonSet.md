@@ -28,7 +28,7 @@ $ds = $this->cluster->daemonSet()
     ->setTemplate($pod);
 ```
 
-## Pod Template retrieval
+## Pod Template Retrieval
 
 Daemon Sets rely on pods, so you can get the pod template as `K8sPod` class:
 
@@ -46,7 +46,7 @@ $pod = $ds->getTemplate(false);
 $podName = $template['name'];
 ```
 
-## Getting all scheduled pods
+## Getting Pods
 
 You can retrieve the pods as resources controlled by the Daemon Set by issuing `->getPods()`:
 

@@ -34,7 +34,7 @@ $cronjob = $this->cluster->cronjob()
     ->create();
 ```
 
-## Job Template retrieval
+## Job Template Retrieval
 
 CronJobs rely on jobs, so you can get the pod template as `K8sJob` class:
 

@@ -28,7 +28,7 @@ $dep = $cluster->deployment()
     ->create();
 ```
 
-## Pod Template retrieval
+## Pod Template Retrieval
 
 Deployments rely on pods, so you can get the pod template as `K8sPod` class:
 
@@ -46,7 +46,7 @@ $pod = $dep->getTemplate(false);
 $podName = $template['name'];
 ```
 
-## Getting all scheduled pods
+## Getting Pods
 
 You can retrieve the pods as resources controlled by the Deployment by issuing `->getPods()`:
 

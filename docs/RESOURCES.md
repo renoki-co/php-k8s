@@ -24,27 +24,29 @@ Each resource inherits a default "base" class that is making the Resource build-
 
 **Check the documentation for [General Resources](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.**
 
-- [Nodes](kinds/Node.md)
-- [Namespaces](kinds/Namespace.md)
-- [Config Maps](kinds/ConfigMap.md)
-- [Secrets](kinds/Secret.md)
-- [Storage Classes](kinds/StorageClass.md)
-- [Persistent Volumes](kinds/PersistentVolume.md)
-- [Persistent Volume Claims](kinds/PersistentVolumeClaim.md)
-- [Services](kinds/Service.md)
-- [Ingresses](kinds/Ingress.md)
-- [Pods](kinds/Pod.md)
-- [Stateful Sets](kinds/StatefulSet.md)
-- [Deployments](kinds/Deployment.md)
-- [DaemonSets](kinds/DaemonSet.md)
-- [Jobs](kinds/Job.md)
-- [CronJobs](kinds/CronJob.md)
-- [Horizontal Pod Autoscalers](kinds/HorizontalPodAutoscaler.md)
-- [Service Accounts](kinds/ServiceAccount.md)
-- [Roles](kinds/Role.md)
-- [Cluster Roles](kinds/ClusterRole.md)
-- [Role Bindings](kinds/RoleBinding.md)
-- [Cluster Role Bindings](kinds/ClusterRoleBinding.md)
+| Resource | Default Version
+| - | -
+| [ClusterRole](kinds/ClusterRole.md) | `rbac.authorization.k8s.io/v1`
+| [ClusterRoleBinding](kinds/ClusterRoleBinding.md) | `rbac.authorization.k8s.io/v1`
+| [ConfigMap](kinds/ConfigMap.md) | `v1`
+| [CronJob](kinds/CronJob.md) | `batch/v1beta1`
+| [DaemonSet](kinds/DaemonSet.md) | `apps/v1`
+| [Deployment](kinds/Deployment.md) | `apps/v1`
+| [HorizontalPodAutoscaler](kinds/HorizontalPodAutoscaler.md) | `autoscaling/v2beta2`
+| [Ingress](kinds/Ingress.md) | `networking.k8s.io/v1beta1` |
+| [Job](kinds/Job.md) | `batch/v1`
+| [Namespace](kinds/Namespace.md) | `v1`
+| [Node](kinds/Node.md) | `v1`
+| [PersistenVolume](kinds/PersistentVolume.md) | `v1`
+| [PersistenVolumeClaim](kinds/PersistentVolumeClaim.md) | `v1`
+| [Pod](kinds/Pod.md) | `v1`
+| [Role](kinds/Role.md) | `rbac.authorization.k8s.io/v1`
+| [RoleBinding](kinds/RoleBinding.md) | `rbac.authorization.k8s.io/v1`
+| [Secret](kinds/Secret.md) | `v1`
+| [Service](kinds/Service.md) | `v1`
+| [ServiceAccount](kinds/ServiceAccount.md) | `v1`
+| [StatefulSet](kinds/StatefulSet.md) | `apps/v1`
+| [StorageClass](kinds/StorageClass.md) | `storage.k8s.io/v1`
 
 ## Default Versions for Reosurces
 
@@ -54,39 +56,31 @@ For example, if the package supports `v1.17+`, then the package will make sure t
 
 The minimum Kubernetes version that is supported by a given package version can be found at the top of [README.md](../README.md).
 
-## Work In Progress
+## Planned
 
-The following list of resources are work in progress and they will be available soon:
+The following list of resources are planned and they will be available soon:
 
-- bindings
-- networkpolicies
-- poddisruptionbudgets
-- podsecuritypolicies
+- Binding
+- NetworkPolicy
+- PodDisruptionBudget
+- PodSecurityPolicy
+- Endpoint
+- PriorityClass
+- ResourceQuota
+- CertificateSigningRequest
 
-# Discussable
+## Not Planned
 
-The following list of resources might not be useful for the basic needs, so they will be gladly accepted via PR in case there is a need of the resources or they might get discussed and implemented after further reasearch on the structure of the resource.
+The following list of resources are not planned soon, but any PR is welcomed!
 
-- componentstatuses
-- endpoints
-- limitranges
-- podtemplates
-- replicationcontrollers
-- resourcequotas
-- mutatingwebhookconfigurations
-- validatingwebhookconfigurations
-- customresourcedefinitions
-- apiservices
-- controllerrevisions
-- tokenreviews
-- localsubjectaccessreviews
-- selfsubjectaccessreviews
-- selfsubjectrulesreviews
-- subjectaccessreviews
-- certificatesigningrequests
-- leases
-- events
-- priorityclasses
-- csidrivers
-- csinodes
-- volumeattachment
+- CSINode
+- CSIDriver
+- Event
+- Lease
+- PodTemplate
+- VolumeAttachment
+- MutatingWebhookConfigurations
+- ValidatingWebhookConfigurations
+- LimitRange
+- ControllerRevision
+- TokenReview (just building)

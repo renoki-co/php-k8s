@@ -1,5 +1,7 @@
 # Expression
 
+The expression instance is used to define Match Expressions in a more PHP-oriented way.
+
 ## In & Not In
 
 ```php
