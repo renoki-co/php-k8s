@@ -30,7 +30,9 @@ class NodeTest extends TestCase
 
     public function runGetTests()
     {
-        $node = $this->cluster->getNodeByName($this->cluster->getAllNodes()->first()->getName());
+        $nodeName = $this->cluster->getAllNodes()->first()->getName();
+
+        $node = $this->cluster->getNodeByName($nodeName);
 
         $this->assertInstanceOf(K8sNode::class, $node);
 
@@ -45,8 +47,10 @@ class NodeTest extends TestCase
 
     public function runWatchAllTests()
     {
-        $watch = $this->cluster->node()->watchAll(function ($type, $node) {
-            if ($node->getName() === 'minikube') {
+        $nodeName = $this->cluster->getAllNodes()->first()->getName();
+
+        $watch = $this->cluster->node()->watchAll(function ($type, $node) use ($nodeName) {
+            if ($node->getName() === $nodeName) {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -56,8 +60,10 @@ class NodeTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->node()->watchByName('minikube', function ($type, $node) {
-            return $node->getName() === 'minikube';
+        $nodeName = $this->cluster->getAllNodes()->first()->getName();
+
+        $watch = $this->cluster->node()->watchByName($nodeName, function ($type, $node) use ($nodeName) {
+            return $node->getName() === $nodeName;
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
