@@ -30,13 +30,13 @@ class NodeTest extends TestCase
 
     public function runGetTests()
     {
-        $node = $this->cluster->getNodeByName('minikube');
+        $node = $this->cluster->getNodeByName($this->cluster->getAllNodes()->first()->getName());
 
         $this->assertInstanceOf(K8sNode::class, $node);
 
         $this->assertTrue($node->isSynced());
 
-        $this->assertEquals('minikube', $node->getName());
+        //$this->assertEquals('minikube', $node->getName());
         $this->assertNotEquals([], $node->getInfo());
         $this->assertTrue(is_array($node->getImages()));
         $this->assertNotEquals([], $node->getCapacity());
