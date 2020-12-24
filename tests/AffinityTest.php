@@ -15,6 +15,8 @@ class AffinityTest extends TestCase
             100
         );
 
+        $pod = K8s::pod()->setPodAffinity($affinity);
+
         $this->assertEquals([
             'preferredDuringSchedulingIgnoredDuringExecution' => [
                 [
@@ -29,7 +31,7 @@ class AffinityTest extends TestCase
                     ],
                 ],
             ],
-        ], $affinity->toArray());
+        ], $pod->getPodAffinity()->toArray());
     }
 
     public function test_affinity_preferredDuringSchedulingIgnoredDuringExecution_with_node_selector()
@@ -39,6 +41,8 @@ class AffinityTest extends TestCase
             [K8s::expression()->in('tier', ['backend'])],
             100
         );
+
+        $pod = K8s::pod()->setNodeAffinity($affinity);
 
         $this->assertEquals([
             'preferredDuringSchedulingIgnoredDuringExecution' => [
@@ -56,7 +60,7 @@ class AffinityTest extends TestCase
                     ],
                 ],
             ],
-        ], $affinity->toArray());
+        ], $pod->getNodeAffinity()->toArray());
     }
 
     public function test_affinity_requiredDuringSchedulingIgnoredDuringExecution_with_node_selector()
@@ -65,6 +69,8 @@ class AffinityTest extends TestCase
             [K8s::expression()->in('azname', ['us-east-1a'])],
             [K8s::expression()->in('tier', ['backend'])]
         );
+
+        $pod = K8s::pod()->setNodeAffinity($affinity);
 
         $this->assertEquals([
             'requiredDuringSchedulingIgnoredDuringExecution' => [
@@ -79,7 +85,7 @@ class AffinityTest extends TestCase
                     ],
                 ],
             ],
-        ], $affinity->toArray());
+        ], $pod->getNodeAffinity()->toArray());
     }
 
     public function test_affinity_requiredDuringSchedulingIgnoredDuringExecution_with_label_selector()
@@ -89,6 +95,8 @@ class AffinityTest extends TestCase
             [K8s::expression()->in('tier', ['backend'])],
             'aws.amazonaws.com/some-topology'
         );
+
+        $pod = K8s::pod()->setNodeAffinity($affinity);
 
         $this->assertEquals([
             'requiredDuringSchedulingIgnoredDuringExecution' => [
@@ -104,6 +112,6 @@ class AffinityTest extends TestCase
                     'topologyKey' => 'aws.amazonaws.com/some-topology',
                 ],
             ],
-        ], $affinity->toArray());
+        ], $pod->getNodeAffinity()->toArray());
     }
 }
