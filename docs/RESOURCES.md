@@ -24,6 +24,7 @@ Each resource inherits a default "base" class that is making the Resource build-
 
 **Check the documentation for [General Resources](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.**
 
+- [Nodes](kinds/Node.md)
 - [Namespaces](kinds/Namespace.md)
 - [Config Maps](kinds/ConfigMap.md)
 - [Secrets](kinds/Secret.md)
@@ -61,11 +62,6 @@ The following list of resources are work in progress and they will be available 
 - networkpolicies
 - poddisruptionbudgets
 - podsecuritypolicies
-
-The following concepts are work in progress as instances:
-
-- pod affinity
-- node affinity
 
 # Discussable
 

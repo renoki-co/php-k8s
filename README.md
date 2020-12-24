@@ -73,6 +73,7 @@ This package is Work in Progress and while there is in active development, PRs a
 
 Each existent resource has its own documentation, filled with examples:
 
+- [Nodes](docs/kinds/Node.md)
 - [Namespaces](docs/kinds/Namespace.md)
 - [Config Maps](docs/kinds/ConfigMap.md)
 - [Secrets](docs/kinds/Secret.md)

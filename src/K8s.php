@@ -5,6 +5,18 @@ namespace RenokiCo\PhpK8s;
 class K8s
 {
     /**
+     * Create a new Node kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sNode
+     */
+    public static function node($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sNode($cluster, $attributes);
+    }
+
+    /**
      * Create a new Namespace kind.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
