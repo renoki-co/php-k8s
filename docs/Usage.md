@@ -104,6 +104,16 @@ $cluster->configmap()->addData('RAND', mt_rand(0, 999))->createOrUpdate();
 
 Each time the above code is ran, it will create the configmap if it's not existent, or it will update the existent one with a random number between 0 and 999.
 
+## Recreating resources
+
+Whenever you want, you might recreate resources on-demand. The function returns the newly-created object just like in `->create()`:
+
+```php
+$cm = $cluster->getConfigmapByName('settings');
+
+$newCm = $cm->recreate();
+```
+
 ## Importing from YAML
 
 **For the imports to work, you will need the `ext-yaml` extension.**
