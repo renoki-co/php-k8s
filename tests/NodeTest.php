@@ -13,7 +13,7 @@ class NodeTest extends TestCase
         $this->runGetTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
-		$this->runRecreateTests();
+        $this->runRecreateTests();
     }
 
     public function runGetAllTests()

@@ -94,7 +94,7 @@ class PodTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
-		$this->runRecreateTests();
+        $this->runRecreateTests();
         $this->runWatchLogsTests();
         $this->runGetLogsTests();
         $this->runDeletionTests();

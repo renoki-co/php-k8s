@@ -77,7 +77,7 @@ class ClusterRoleBindingTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
-		$this->runRecreateTests();
+        $this->runRecreateTests();
         $this->runDeletionTests();
     }
 
