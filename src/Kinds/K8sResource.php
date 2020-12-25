@@ -539,14 +539,14 @@ class K8sResource implements Arrayable, Jsonable
             return true;
         }
 
+        $this->refreshOriginal();
+
         $this->setAttribute('preconditions', [
             'resourceVersion' => $this->getResourceVersion(),
             'uid' => $this->getResourceUid(),
             'propagationPolicy' => $propagationPolicy,
             'gracePeriodSeconds' => $gracePeriod,
         ]);
-
-        $this->refresh();
 
         $this->cluster
             ->setResourceClass(get_class($this))
