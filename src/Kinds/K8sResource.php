@@ -580,6 +580,31 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Recreate a resource based on existence.
+     *
+     * @param  array  $query
+     * @return $this
+     */
+    public function recreate(array $query = ['pretty' => 1])
+    {
+        if ($this->exists($query)) {
+            $this->delete($query);
+        }
+
+        unset(
+            $this->attributes['metadata']['selfLink'],
+            $this->attributes['metadata']['uid'],
+            $this->attributes['metadata']['resourceVersion'],
+            $this->attributes['metadata']['creationTimestamp'],
+            $this->attributes['metadata']['managedFields'],
+            $this->attributes['preconditions'],
+            $this->attributes['status']
+        );
+
+        return $this->create($query);
+    }
+
+    /**
      * Watch the resources list until the closure returns true or false.
      *
      * @param  Closure  $callback

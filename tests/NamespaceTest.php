@@ -36,6 +36,7 @@ class NamespaceTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runDeletionTests();
     }
 
@@ -134,5 +135,14 @@ class NamespaceTest extends TestCase
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getNamespaceByName('production');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }

@@ -90,6 +90,7 @@ class HorizontalPodAutoscalerTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runDeletionTests();
     }
 
@@ -273,5 +274,14 @@ class HorizontalPodAutoscalerTest extends TestCase
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getHorizontalPodAutoscalerByName('mysql-hpa');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }

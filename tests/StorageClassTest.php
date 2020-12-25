@@ -45,6 +45,7 @@ class StorageClassTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runDeletionTests();
     }
 
@@ -153,5 +154,14 @@ class StorageClassTest extends TestCase
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getStorageClassByName('io1');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }

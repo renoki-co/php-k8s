@@ -57,6 +57,7 @@ class PersistentVolumeTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runDeletionTests();
     }
 
@@ -193,5 +194,14 @@ class PersistentVolumeTest extends TestCase
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getPersistentVolumeByName('app');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }

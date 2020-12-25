@@ -113,6 +113,7 @@ class StatefulSetTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runDeletionTests();
     }
 
@@ -354,5 +355,14 @@ class StatefulSetTest extends TestCase
         $this->assertEquals(2, $sts->getReadyReplicasCount());
         $this->assertEquals(2, $scaler->getReplicas());
         $this->assertCount(2, $sts->getPods());
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getStatefulSetByName('mysql');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }

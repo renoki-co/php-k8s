@@ -75,6 +75,7 @@ class DeploymentTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runDeletionTests();
     }
 
@@ -294,5 +295,14 @@ class DeploymentTest extends TestCase
         $this->assertEquals(2, $dep->getReadyReplicasCount());
         $this->assertEquals(2, $scaler->getReplicas());
         $this->assertCount(2, $dep->getPods());
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getDeploymentByName('mysql');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }

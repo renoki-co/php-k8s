@@ -94,6 +94,7 @@ class PodTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+		$this->runRecreateTests();
         $this->runWatchLogsTests();
         $this->runGetLogsTests();
         $this->runDeletionTests();
@@ -260,5 +261,14 @@ class PodTest extends TestCase
         dump($logs);
 
         $this->assertTrue(strlen($logs) > 0);
+    }
+
+    public function runRecreateTests()
+    {
+        $oldResource = $this->cluster->getPodByName('mysql');
+
+        $newResource = $oldResource->recreate();
+
+        $this->assertNotEquals($oldResource->getResourceUid(), $newResource->getResourceUid());
     }
 }
