@@ -8,6 +8,7 @@ class K8s
 {
     use Macroable {
         __call as macroCall;
+        __callStatic as macroCallStatic;
     }
 
     /**
@@ -416,5 +417,21 @@ class K8s
         }
 
         return $this->cluster->{$method}(...$parameters);
+    }
+
+    /**
+     * Proxy the K8s static call to cluster object.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        if (static::hasMacro($method)) {
+            return static::macroCallStatic($method, $parameters);
+        }
+
+        return new static;
     }
 }
