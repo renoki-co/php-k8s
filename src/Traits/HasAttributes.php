@@ -81,7 +81,7 @@ trait HasAttributes
      *
      * @param  string  $method
      * @param  array  $parameters
-     * @return $this
+     * @return mixed
      */
     public function __call(string $method, array $parameters)
     {

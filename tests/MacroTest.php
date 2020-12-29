@@ -37,4 +37,15 @@ class MacroTest extends TestCase
 
         $this->assertEquals(['val1', 'val2'], $pod->getMacroTest());
     }
+
+    public function test_k8s_macro()
+    {
+        K8s::macro('newResource', function ($cluster = null, $attributes = []) {
+            return new Kinds\NewResource($cluster, $attributes);
+        });
+
+        $this->assertInstanceOf(Kinds\NewResource::class, K8s::newResource());
+        $this->assertInstanceOf(Kinds\NewResource::class, (new K8s)->newResource());
+        $this->assertInstanceOf(Kinds\NewResource::class, $this->cluster->newResource());
+    }
 }

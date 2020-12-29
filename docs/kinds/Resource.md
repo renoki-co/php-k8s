@@ -228,3 +228,15 @@ K8sPod::macro('changeMetadata', function (array $metadata) {
     return $this->setMetadata($metadata);
 });
 ```
+
+Usually, it's initialize the resources from `K8s` class, so that they automatically gets redirected to cluster calls that actually make the API requests, so if you have new resources to initialize, you can use the macro on it, for example, like an [Agones Fleet](https://agones.dev/site/docs/reference/fleet):
+
+```php
+K8s::macro('agonesFleet', function ($cluster = null, $attributes = []) {
+    return new Kinds\MyAgonesFleet($cluster, $attributes);
+});
+
+foreach (K8s::agonesFleet()->all() as $fleet) {
+    //
+}
+```
