@@ -2,8 +2,14 @@
 
 namespace RenokiCo\PhpK8s;
 
+use Illuminate\Support\Traits\Macroable;
+
 class K8s
 {
+    use Macroable {
+        __call as macroCall;
+    }
+
     /**
      * Create a new Node kind.
      *
@@ -394,5 +400,21 @@ class K8s
     public static function fromYamlFile($cluster, string $path)
     {
         return static::fromYaml($cluster, file_get_contents($path));
+    }
+
+    /**
+     * Proxy the K8s call to cluster object.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
+
+        return $this->cluster->{$method}(...$parameters);
     }
 }
