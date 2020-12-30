@@ -217,8 +217,6 @@ trait RunsClusterOperations
      */
     protected function watchLogsPath(string $path, Closure $closure, array $query = ['pretty' => 1])
     {
-        $resourceClass = $this->resourceClass;
-
         $sock = fopen($this->getCallableUrl($path, $query), 'r');
 
         $data = null;
