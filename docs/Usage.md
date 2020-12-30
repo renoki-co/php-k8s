@@ -138,9 +138,7 @@ foreach ($storageClasses as $sc) {
 
 The package comes with a PHP-native way to be able to track the changes via the Kubernetes cluster's Watch API.
 
-You can watch the resource directly from the Resource class, and check & process your logic inside a closure. See more on [Kubernetes Documentation](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes) about the live detection of resources.
-
-**The watch closures will run indifinitely until you return a `true` or `false`.**
+You can watch the resource directly from the Resource class, and check & process your logic inside a closure. See more on [Kubernetes Documentation](https://kubernetes.io/docs/reference/using-api/api-concepts/#efficient-detection-of-changes).
 
 ### Watching a specific resource
 
@@ -151,6 +149,8 @@ $cluster->pod()->watchByName('mysql', function ($type, $pod) {
     return true;
 });
 ```
+
+**The watch closures will run indifinitely until you return a `true` or `false`.**
 
 Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
 

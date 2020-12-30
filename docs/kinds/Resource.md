@@ -229,10 +229,10 @@ K8sPod::macro('changeMetadata', function (array $metadata) {
 });
 ```
 
-Usually, it's initialize the resources from `K8s` class, so that they automatically gets redirected to cluster calls that actually make the API requests, so if you have new resources to initialize, you can use the macro on it, for example, like an [Agones Fleet](https://agones.dev/site/docs/reference/fleet):
+Usually, it's a good practice to initialize the resources from `K8s` class, so that they automatically gets redirected to cluster calls that actually make the API requests, so if you have new resources to initialize, you can use the macro on it, for example, like an [Agones Fleet](https://agones.dev/site/docs/reference/fleet), that is a custom third-party CRD which is not supported by this package:
 
 ```php
-K8s::macro('agonesFleet', function ($cluster = null, $attributes = []) {
+K8s::macro('agonesFleet', function ($cluster = null, array $attributes = []) {
     return new Kinds\MyAgonesFleet($cluster, $attributes);
 });
 
