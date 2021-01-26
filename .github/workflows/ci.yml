@@ -22,9 +22,9 @@ jobs:
           - '7.4'
           - '8.0'
         kubernetes:
-          - '1.17.17'
           - '1.18.15'
           - '1.19.7'
+          - '1.20.2'
         laravel:
           - 7.*
           - 8.*
@@ -55,10 +55,10 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - uses: manusa/actions-setup-minikube@v2.2.0
+    - uses: manusa/actions-setup-minikube@v2.3.0
       name: Setup Minikube
       with:
-        minikube version: v1.14.2
+        minikube version: v1.17.0
         kubernetes version: "v${{ matrix.kubernetes }}"
         github token: "${{ secrets.GITHUB_TOKEN }}"
 
