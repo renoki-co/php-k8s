@@ -22,19 +22,10 @@ class IngressTest extends TestCase
                     'serviceName' => 'nginx',
                     'servicePort' => 80,
                 ],
+                'pathType' => 'ImplementationSpecific',
             ]],
         ],
     ]];
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        // >= v1.18.0: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
-        if ($this->cluster->newerThan('1.18.0')) {
-            self::$rules[0]['http']['paths'][0]['pathType'] = 'ImplementationSpecific';
-        }
-    }
 
     public function test_ingress_build()
     {
@@ -52,28 +43,9 @@ class IngressTest extends TestCase
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
-    public function test_ingress_from_yaml_pre_1_18_0()
+    public function test_ingress_from_yaml_post()
     {
-        if ($this->cluster->newerThan('1.18.0')) {
-            $this->markTestSkipped('The current tested version is newer than 1.18.0');
-        }
-
-        $ing = $this->cluster->fromYamlFile(__DIR__.'/yaml/ingress_pre_1.18.0.yaml');
-
-        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
-        $this->assertEquals('nginx', $ing->getName());
-        $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
-        $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
-        $this->assertEquals(self::$rules, $ing->getRules());
-    }
-
-    public function test_ingress_from_yaml_post_1_18_0()
-    {
-        if ($this->cluster->olderThan('1.18.0')) {
-            $this->markTestSkipped('The current tested version is older than 1.18.0');
-        }
-
-        $ing = $this->cluster->fromYamlFile(__DIR__.'/yaml/ingress_post_1.18.0.yaml');
+        $ing = $this->cluster->fromYamlFile(__DIR__.'/yaml/ingress.yaml');
 
         $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
