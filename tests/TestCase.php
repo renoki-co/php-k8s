@@ -23,7 +23,7 @@ abstract class TestCase extends Orchestra
     {
         parent::setUp();
 
-        $this->cluster = new KubernetesCluster('http://127.0.0.1');
+        $this->cluster = new KubernetesCluster('http://127.0.0.1:8080');
 
         $this->cluster->withoutSslChecks();
     }

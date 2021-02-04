@@ -86,10 +86,7 @@ trait LoadsFromKubeConfig
             throw new KubeConfigUserNotFound("The user {$user} does not exist in the provided Kube Config file.");
         }
 
-        $extractedServer = $this->extract($clusterConfig['cluster']['server']);
-
-        $this->url = $extractedServer['url'];
-        $this->port = $extractedServer['port'];
+        $this->url = $clusterConfig['cluster']['server'];
 
         if (isset($clusterConfig['cluster']['certificate-authority'])) {
             $this->withCaCertificate($clusterConfig['cluster']['certificate-authority']);
@@ -146,21 +143,5 @@ trait LoadsFromKubeConfig
         }
 
         return $tempFilePath;
-    }
-
-    /**
-     * Extract the given server address into URL and port.
-     *
-     * @param  string  $server
-     * @return array
-     */
-    protected function extract(string $server): array
-    {
-        $parts = parse_url($server);
-
-        return [
-            'url' => ($parts['protocol'] ?? 'http').'//'.$parts['host'],
-            'port' => $parts['port'] ?? 8080,
-        ];
     }
 }

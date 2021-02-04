@@ -27,9 +27,7 @@ trait ChecksClusterVersion
             return;
         }
 
-        $apiUrl = $this->getApiUrl();
-
-        $callableUrl = "{$apiUrl}/version";
+        $callableUrl = "{$this->url}/version";
 
         try {
             $response = $this->getClient()->request('GET', $callableUrl);

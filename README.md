@@ -57,7 +57,7 @@ Can be written like this:
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 // Create a new instance of KubernetesCluster
-$cluster = new KubernetesCluster('http://127.0.0.1', 8080);
+$cluster = new KubernetesCluster('http://127.0.0.1:8080');
 
 // Create a new NGINX service.
 $svc = $cluster->service()
