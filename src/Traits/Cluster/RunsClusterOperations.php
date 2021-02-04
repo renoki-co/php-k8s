@@ -29,16 +29,6 @@ trait RunsClusterOperations
     ];
 
     /**
-     * Get the API Cluster URL as string.
-     *
-     * @return string
-     */
-    public function getApiUrl(): string
-    {
-        return "{$this->url}:{$this->port}";
-    }
-
-    /**
      * Get the callable URL for a specific path.
      *
      * @param  string  $path
@@ -47,7 +37,7 @@ trait RunsClusterOperations
      */
     public function getCallableUrl(string $path, array $query = ['pretty' => 1])
     {
-        return $this->getApiUrl().$path.'?'.http_build_query($query);
+        return $this->url.$path.'?'.http_build_query($query);
     }
 
     /**

@@ -11,7 +11,7 @@ You can initialize a Kubernetes Cluster class by doing so:
 ```php
 use RenokiCo\PhpK8s\KubernetesCluster;
 
-$cluster = new KubernetesCluster('http://127.0.0.1', 8080);
+$cluster = new KubernetesCluster('http://127.0.0.1:8080');
 ```
 
 ### Attaching Bearer Token

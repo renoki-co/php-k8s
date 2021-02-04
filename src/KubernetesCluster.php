@@ -45,13 +45,11 @@ class KubernetesCluster
      * Create a new class instance.
      *
      * @param  string  $url
-     * @param  int  $port
      * @return void
      */
-    public function __construct(string $url, int $port = 8080)
+    public function __construct(string $url)
     {
         $this->url = $url;
-        $this->port = $port;
     }
 
     /**

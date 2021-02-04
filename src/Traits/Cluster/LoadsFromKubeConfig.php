@@ -86,10 +86,7 @@ trait LoadsFromKubeConfig
             throw new KubeConfigUserNotFound("The user {$user} does not exist in the provided Kube Config file.");
         }
 
-        $serverAndPort = explode(':', $clusterConfig['cluster']['server']);
-
-        $this->url = $serverAndPort[0];
-        $this->port = $serverAndPort[1] ?? 8080;
+        $this->url = $clusterConfig['cluster']['server'];
 
         if (isset($clusterConfig['cluster']['certificate-authority'])) {
             $this->withCaCertificate($clusterConfig['cluster']['certificate-authority']);
