@@ -17,7 +17,7 @@ $container = K8s::container()
 
 $pod = K8s::pod()
     ->setName('mysql')
-    ->setLabels(['tier' => 'backend'])
+    ->setLabels(['tier' => 'backend']) // needs deployment-name: mysql so that ->getPods() can work
     ->setContainers([$mysql]);
 
 $dep = $cluster->deployment()

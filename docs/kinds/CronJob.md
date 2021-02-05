@@ -16,7 +16,7 @@ $container = K8s::container()
 
 $pod = K8s::pod()
     ->setName('pi')
-    ->setLabels(['tier' => 'backend'])
+    ->setLabels(['job-name' => 'pi']) // needs job-name: pi so that ->getPods() can work
     ->setContainers([$container])
     ->restartOnFailure();
 

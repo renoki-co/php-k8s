@@ -70,11 +70,9 @@ $svc = $cluster->service()
     ->create();
 ```
 
-## 📄 Extensive Documentation
+## 📄 Getting Started
 
-This package is Work in Progress and while there is in active development, PRs are also welcomed. Please refer to the [Resources docs](docs/RESOURCES.md) documentation and the [PR List](../../pulls) to know what's up for development.
-
-Each existent resource has its own documentation, filled with examples:
+Please refer to the [Resources docs](docs/RESOURCES.md) extensive documentation and the [PR List](../../pulls) to know what's up for development. Below you will find the list of supported resources for a quick and easy access.
 
 | Resource | Default Version
 | - | -
@@ -99,8 +97,6 @@ Each existent resource has its own documentation, filled with examples:
 | [ServiceAccount](docs/kinds/ServiceAccount.md) | `v1`
 | [StatefulSet](docs/kinds/StatefulSet.md) | `apps/v1`
 | [StorageClass](docs/kinds/StorageClass.md) | `storage.k8s.io/v1`
-
-For other resources, you can check the [Resources Documentation](docs/RESOURCES.md)
 
 ## 🐛 Testing
 
