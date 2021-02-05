@@ -117,6 +117,10 @@ trait LoadsFromKubeConfig
                 $this->writeTempFileForContext($context, 'client-key.pem', $userConfig['user']['client-key-data'])
             );
         }
+
+        if (isset($userConfig['user']['token'])) {
+            $this->withToken($userConfig['user']['token']);
+        }
     }
 
     /**
