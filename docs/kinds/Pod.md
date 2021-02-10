@@ -118,16 +118,6 @@ if ($pod->isRunning()) {
 }
 ```
 
-For [Job](Job.md) support, you may also check if the pod ran successfully:
-
-```php
-foreach ($job->getPods() as $pod) {
-    if ($pod->isSuccessful()) {
-        //
-    }
-}
-```
-
 ## Containers' Statuses
 
 You can check the container statuses:

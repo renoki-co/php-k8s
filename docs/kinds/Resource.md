@@ -1,6 +1,6 @@
 # K8s Resource
 
-Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods, generally-available. In this documentation, we'll dive in on what the available methods are and how you can use them in order to build your own resource.
+Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods, generally-available for all CRDs. We'll dive in on what the available methods are and how you can use them in order to build your own resource.
 
 # General Methods
 
@@ -8,7 +8,7 @@ Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that cont
 
 ### `getNamespace()`
 
-Get the namespace the resource is in.
+Get the namespace the resource is in. This usually works only for namespaceable resources.
 
 ```php
 $service->getNamespace();
@@ -16,7 +16,7 @@ $service->getNamespace();
 
 ### `setNamespace($namespace)`
 
-Set the namespace for the resource, if namespaceable.
+Set the namespace for the resource, if namespaceable. This usually works only for namespaceable resources.
 
 ```php
 $service->setNamespace('staging');
@@ -34,7 +34,7 @@ $service->setNamespace($ns);
 
 Alias for [setNamespace($namespace)](#setnamespacenamespace)
 
-It's just a naming convention for better filters on get.
+It's just a naming convention for better filters on the get methods.
 
 ## Names
 

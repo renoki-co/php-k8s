@@ -16,7 +16,7 @@ $container = K8s::container()
 
 $pod = K8s::pod()
     ->setName('mysql')
-    ->setLabels(['tier' => 'backend'])
+    ->setLabels(['statefulset-name' => 'mysql']) // needs statefulset-name: mysql so that ->getPods() can work
     ->setContainers([$mysql]);
 
 $svc = $cluster->service()
@@ -64,7 +64,7 @@ $podName = $template['name'];
 You can retrieve the pods as resources controlled by the Stateful Set by issuing `->getPods()`:
 
 ```php
-foreach ($de->getPods() as $pod) {
+foreach ($sts->getPods() as $pod) {
     // $pod->logs()
 }
 ```

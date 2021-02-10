@@ -17,7 +17,7 @@ $container = K8s::container()
 
 $pod = K8s::pod()
     ->setName('mysql')
-    ->setLabels(['tier' => 'backend'])
+    ->setLabels(['daemonset-name' => 'mysql']) // needs daemonset-name: mysql so that ->getPods() can work
     ->setContainers([$mysql]);
 
 $ds = $this->cluster->daemonSet()

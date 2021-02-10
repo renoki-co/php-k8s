@@ -1,6 +1,6 @@
-# Usage
+# Methods & Usage
 
-All delivered [Resources](Resources.md) coming with this package do interact with the K8s Cluster you define. For instance, the idea behind this is to be able to import or create resources, with or without YAML, using PHP.
+CRDs are by default interacting with the API. For instance, the idea behind this is to be able to import or create resources, with or without YAML, using PHP.
 
 ## Retrieving all resources
 
@@ -8,17 +8,11 @@ Getting all resources can be done by calling `->all()`:
 
 ```php
 $namespaces = $cluster->namespace()->all();
-```
 
-Or you can use a specific method to call it at once:
-
-```php
+// Or you can use a specific method to call it at once
 $namespaces = $cluster->getAllNamespaces();
-```
 
-For namespaced resources, you may pass the namespace:
-
-```php
+// For namespaced resources, you may pass the namespace
 $stagingServices = $cluster->getAllServices('staging');
 ```
 
@@ -38,23 +32,15 @@ Getting only one resource is done by calling `->get()`:
 
 ```php
 $service = $cluster->service()->whereNamespace('staging')->whereName('nginx')->get();
-```
 
-You can also shorten it like:
-
-```php
+// You can also shorten it like
 $service = $cluster->service()->whereNamespace('staging')->getByName('nginx');
-```
 
-Or you can use a specific method to call it in at once:
-
-```php
+// Or you can use a specific method to call it in at once
 $service = $cluster->getServiceByName('nginx', 'staging');
 ```
 
-Filters can vary, depending if the resources are namespaceable or not.
-
-By default, the namespace is `default` and can be missed from the filters.
+Filters can vary, depending if the resources are namespaceable or not. By default, the namespace is `default` and can be missed from the filters.
 
 ## Creating resources
 
@@ -91,7 +77,7 @@ Additionally, you can pass query parameters, grace period and the propagation po
 The defaults are:
 
 ```php
-delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'
+delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground')
 ```
 
 ## Creating or updating resources
