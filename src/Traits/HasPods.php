@@ -12,9 +12,9 @@ trait HasPods
      */
     public function getPods(array $query = ['pretty' => 1])
     {
-        $labelSelector = http_build_query(
+        $labelSelector = urldecode(http_build_query(
             $this->podsSelector()
-        );
+        ));
 
         return $this->cluster->pod()->setNamespace($this->getNamespace())->all(
             array_merge(['labelSelector' => $labelSelector], $query)
