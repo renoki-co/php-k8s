@@ -93,7 +93,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
         return $this->setSpec('tls', $tlsData);
     }
 
-
     /**
      * Get the tls spec.
      *

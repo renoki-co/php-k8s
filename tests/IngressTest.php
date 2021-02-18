@@ -34,7 +34,7 @@ class IngressTest extends TestCase
      */
     protected static $tls = [[
         'hosts' => [
-            'nginx.test.com'
+            'nginx.test.com',
         ],
         'secretName' => 'verySecretName',
     ]];
