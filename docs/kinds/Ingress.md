@@ -9,6 +9,12 @@ $ingress = $cluster->ingress()
     ->setName('nginx')
     ->setLabels(['tier' => 'backend'])
     ->setSelectors(['app' => 'frontend'])
+    ->setTls([[
+        'hosts' => [
+            'test.com'
+        ],
+        'secretName'=> 'verySecretName'
+    ]])
     ->setRules([[
         'host' => 'nginx.test.com',
         'http' => [
