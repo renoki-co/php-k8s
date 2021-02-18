@@ -27,12 +27,25 @@ class IngressTest extends TestCase
         ],
     ]];
 
+    /**
+     * The default testing tls.
+     *
+     * @var array
+     */
+    protected static $tls = [[
+        'hosts' => [
+            'nginx.test.com'
+        ],
+        'secretName' => 'verySecretName',
+    ]];
+
     public function test_ingress_build()
     {
         $ing = $this->cluster->ingress()
             ->setName('nginx')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['nginx/ann' => 'yes'])
+            ->setTls(self::$tls)
             ->addRules(self::$rules)
             ->setRules(self::$rules);
 
@@ -40,6 +53,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
+        $this->assertEquals(self::$tls, $ing->getTls());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
@@ -71,6 +85,7 @@ class IngressTest extends TestCase
             ->setName('nginx')
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['nginx/ann' => 'yes'])
+            ->setTls(self::$tls)
             ->setRules(self::$rules);
 
         $this->assertFalse($ing->isSynced());
@@ -87,6 +102,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
+        $this->assertEquals(self::$tls, $ing->getTls());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
@@ -134,6 +150,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals([], $ing->getAnnotations());
+        $this->assertEquals(self::$tls, $ing->getTls());
         $this->assertEquals(self::$rules, $ing->getRules());
     }
 
