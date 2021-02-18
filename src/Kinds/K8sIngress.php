@@ -81,4 +81,26 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     {
         return $this->getSpec('rules', []);
     }
+
+    /**
+     * Set the spec tls.
+     *
+     * @param  array  $rules
+     * @return $this
+     */
+    public function setTls(array $tlsData = [])
+    {
+        return $this->setSpec('tls', $tlsData);
+    }
+
+
+    /**
+     * Get the tls spec.
+     *
+     * @return array
+     */
+    public function getTls(): array
+    {
+        return $this->getSpec('tls', []);
+    }
 }
