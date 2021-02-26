@@ -113,7 +113,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function addPulledSecret(string $name)
     {
-        return $this->addToAttribute('imagePullSecrets', ['name' => $name]);
+        return $this->addToSpec('imagePullSecrets', ['name' => $name]);
     }
 
     /**
@@ -138,7 +138,7 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      */
     public function getPulledSecrets(): array
     {
-        return $this->getAttribute('imagePullSecrets', []);
+        return $this->getSpec('imagePullSecrets', []);
     }
 
     /**
