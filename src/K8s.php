@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s;
 
+use Closure;
 use Illuminate\Support\Traits\Macroable;
 
 class K8s
@@ -396,11 +397,18 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\Kinds\KubernetesCluster|null  $cluster
      * @param  string  $path
+     * @param  Closure|null  $callback
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
      */
-    public static function fromYamlFile($cluster, string $path)
+    public static function fromYamlFile($cluster, string $path, Closure $callback = null)
     {
-        return static::fromYaml($cluster, file_get_contents($path));
+        $content = file_get_contents($path);
+
+        if ($callback) {
+            $content = $callback($content);
+        }
+
+        return static::fromYaml($cluster, $content);
     }
 
     /**
