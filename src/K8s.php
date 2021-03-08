@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s;
 
+use Closure;
 use Illuminate\Support\Traits\Macroable;
 
 class K8s
