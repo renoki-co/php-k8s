@@ -173,7 +173,7 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Kinds\CronJob
+     * @return \RenokiCo\PhpK8s\Kinds\K8sCronJob
      */
     public static function cronjob($cluster = null, array $attributes = [])
     {
@@ -185,7 +185,7 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Kinds\K8sJob
+     * @return \RenokiCo\PhpK8s\Kinds\K8sDaemonSet
      */
     public static function daemonSet($cluster = null, array $attributes = [])
     {
@@ -323,7 +323,7 @@ class K8s
      * Create a new subject instance.
      *
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Instances\Rule
+     * @return \RenokiCo\PhpK8s\Instances\Subject
      */
     public static function subject(array $attributes = [])
     {
