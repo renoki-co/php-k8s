@@ -111,7 +111,7 @@ class KubeConfigTest extends TestCase
 
         [
             'headers' => ['authorization' => $token],
-            'verify' => $certPath,
+            'verify' => $caPath,
         ] = $cluster->getClient()->getConfig();
 
         $this->assertEquals('Bearer some-token', $token);
