@@ -95,11 +95,13 @@ class KubeConfigTest extends TestCase
 
         [
             'headers' => ['authorization' => $token],
-            'cert' => $certPath,
+            'verify' => $certPath,
         ] = $this->cluster->getClient()->getConfig();
 
         $this->assertEquals('Bearer some-token', $token);
         $this->assertEquals('/var/run/secrets/kubernetes.io/serviceaccount/ca.crt', $caPath);
         $this->assertEquals('some-namespace', K8sResource::$defaultNamespace);
+
+        K8sResource::setDefaultNamespace('default');
     }
 }
