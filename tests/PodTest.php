@@ -156,6 +156,9 @@ class PodTest extends TestCase
         $this->assertTrue(is_string($pod->getHostIp()));
         $this->assertCount(1, $pod->getPodIps());
         $this->assertEquals('BestEffort', $pod->getQos());
+
+        $ipSlug = Str::slug($this->getPodIps()[0]['ip']);
+        $this->assertEquals("{$ipSlug}.{$pod->getNamespace()}.pod.cluster.local", $pod->getClusterDns());
     }
 
     public function runGetAllTests()

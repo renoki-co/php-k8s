@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Contracts\Dnsable;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
@@ -9,7 +10,7 @@ use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
-class K8sService extends K8sResource implements InteractsWithK8sCluster, Watchable
+class K8sService extends K8sResource implements Dnsable, InteractsWithK8sCluster, Watchable
 {
     use HasAnnotations;
     use HasSelector;
@@ -29,6 +30,16 @@ class K8sService extends K8sResource implements InteractsWithK8sCluster, Watchab
      * @var bool
      */
     protected static $namespaceable = true;
+
+    /**
+     * Get the DNS name within the cluster.
+     *
+     * @return string|null
+     */
+    public function getClusterDns()
+    {
+        return "{$this->getName()}.{$this->getNamespace()}.svc.cluster.local";
+    }
 
     /**
      * Set the ports spec attribute.
