@@ -20,13 +20,6 @@ class KubernetesCluster
     protected $url;
 
     /**
-     * The API port.
-     *
-     * @var int
-     */
-    protected $port = 8080;
-
-    /**
      * The class name for the K8s resource.
      *
      * @var string
