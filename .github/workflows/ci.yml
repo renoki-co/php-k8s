@@ -76,7 +76,7 @@ jobs:
         sudo mkdir -p /var/run/secrets/kubernetes.io/serviceaccount
         echo "some-token" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/token
         echo "c29tZS1jZXJ0Cg==" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        echo "some-namespace" | /var/run/secrets/kubernetes.io/serviceaccount/namespace
+        echo "some-namespace" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
         sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
 
     - name: Run tests
