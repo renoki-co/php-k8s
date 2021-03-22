@@ -71,6 +71,14 @@ jobs:
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
 
+    - name: Setup in-cluster config
+      run: |
+        sudo mkdir -p /var/run/secrets/kubernetes.io/serviceaccount
+        echo "some-token" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/token
+        echo "c29tZS1jZXJ0Cg==" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        echo "some-namespace" | /var/run/secrets/kubernetes.io/serviceaccount/namespace
+        sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
+
     - name: Run tests
       run: |
         vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml

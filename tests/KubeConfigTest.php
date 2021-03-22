@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Test;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
+use RenokiCo\PhpK8s\Kinds\K8sResource;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 class KubeConfigTest extends TestCase
@@ -86,5 +87,19 @@ class KubeConfigTest extends TestCase
         ['headers' => ['authorization' => $token]] = $this->cluster->getClient()->getConfig();
 
         $this->assertEquals('Bearer some-token', $token);
+    }
+
+    public function test_in_cluster_config()
+    {
+        $this->cluster->inClusterConfiguration();
+
+        [
+            'headers' => ['authorization' => $token],
+            'cert' => $certPath,
+        ] = $this->cluster->getClient()->getConfig();
+
+        $this->assertEquals('Bearer some-token', $token);
+        $this->assertEquals('/var/run/secrets/kubernetes.io/serviceaccount/ca.crt', $caPath);
+        $this->assertEquals('some-namespace', K8sResource::$defaultNamespace);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
+use RenokiCo\PhpK8s\Kinds\K8sResource;
+
 trait AuthenticatesCluster
 {
     /**
@@ -52,7 +54,7 @@ trait AuthenticatesCluster
      */
     public function withToken(string $token = null)
     {
-        $this->token = str_replace(["\r", "\n"], '', $token);
+        $this->token = $this->normalize($token);
 
         return $this;
     }
@@ -133,5 +135,40 @@ trait AuthenticatesCluster
         $this->verify = false;
 
         return $this;
+    }
+
+    /**
+     * Load the in-cluster configuration to run the code
+     * under a Pod in a cluster.
+     *
+     * @return $this
+     */
+    public function inClusterConfiguration()
+    {
+        if (file_exists($tokenPath = '/var/run/secrets/kubernetes.io/serviceaccount/token')) {
+            $this->loadTokenFromFile($tokenPath);
+        }
+
+        if (file_exists($caPath = '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt')) {
+            $this->withCaCertificate($caPath);
+        }
+
+        if ($namespace = @file_get_contents('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
+            K8sResource::setDefaultNamespace($this->normalize($namespace));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Replace \r and \n with nothing. Used to read
+     * strings from files that might contain extra chars.
+     *
+     * @param  string  $content
+     * @return string
+     */
+    protected function normalize(string $content): string
+    {
+        return str_replace(["\r", "\n"], '', $content);
     }
 }

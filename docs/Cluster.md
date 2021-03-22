@@ -51,3 +51,21 @@ For testing purposes or local checkups, you can disable SSL checks:
 ```php
 $cluster->withoutSslChecks();
 ```
+
+## In-Cluster Configuration
+
+Kubernetes allows Pods to access [the internal kubeapi within a container](https://kubernetes.io/docs/tasks/run-application/access-api-from-pod/).
+
+PhpK8s allows you to set up an in-cluster-ready client with minimal configuration. Please keep in mind that this works only within pods that run in a Kubernetes cluster.
+
+```php
+use RenokiCo\PhpK8s\KubernetesCluster;
+
+$cluster = new KubernetesCluster('https://kubernetes.default.svc');
+
+$cluster->inClusterConfiguration();
+
+foreach ($cluster->getAllServices() as $svc) {
+    //
+}
+```
