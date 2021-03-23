@@ -86,7 +86,7 @@ class KubernetesCluster
             if (method_exists(K8s::class, $resource)) {
                 return $this->{$resource}()
                     ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
-                    ->getByName($parameters[0], $parameters[3] ?? ['pretty' => 1]);
+                    ->getByName($parameters[0], $parameters[2] ?? ['pretty' => 1]);
             }
         }
 
@@ -99,8 +99,8 @@ class KubernetesCluster
 
             if (method_exists(K8s::class, $resource)) {
                 return $this->{$resource}()
-                    ->whereNamespace($parameters[1] ?? K8sResource::$defaultNamespace)
-                    ->all($parameters[2] ?? ['pretty' => 1]);
+                    ->whereNamespace($parameters[0] ?? K8sResource::$defaultNamespace)
+                    ->all($parameters[1] ?? ['pretty' => 1]);
             }
         }
 
