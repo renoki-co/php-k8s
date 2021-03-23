@@ -48,7 +48,7 @@ class K8sPod extends K8sResource implements Dnsable, InteractsWithK8sCluster, Wa
      */
     public function getClusterDns()
     {
-        $ipSlug = Str::slug($this->getPodIps()[0]['ip'] ?? null);
+        $ipSlug = str_replace('.', '-', $this->getPodIps()[0]['ip'] ?? '');
 
         return $ipSlug ? "{$ipSlug}.{$this->getNamespace()}.pod.cluster.local" : null;
     }
