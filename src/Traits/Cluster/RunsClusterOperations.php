@@ -6,9 +6,9 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
+use Ratchet\Client\Connector as WebSocketConnector;
 use React\EventLoop\Factory as ReactFactory;
 use React\Socket\Connector as ReactSocketConnector;
-use Ratchet\Client\Connector as WebSocketConnector;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -121,13 +121,13 @@ trait RunsClusterOperations
         if (is_bool($this->verify)) {
             $options['tls']['verify_peer'] = $this->verify;
             $options['tls']['verify_peer_name'] = $this->verify;
-        } else if (is_string($this->verify)) {
+        } elseif (is_string($this->verify)) {
             $options['tls']['cafile'] = $this->verify;
         }
 
         if ($this->token) {
             $headers['Authorization'] = "Bearer {$this->token}";
-        } else if ($this->auth) {
+        } elseif ($this->auth) {
             $headers['Authorization'] = 'Basic '.base64_encode(implode(':', $this->auth));
         }
 
@@ -145,7 +145,7 @@ trait RunsClusterOperations
 
         return [
             $loop,
-            $wsConnector($url, ['base64.channel.k8s.io'], $headers)
+            $wsConnector($url, ['base64.channel.k8s.io'], $headers),
         ];
     }
 
