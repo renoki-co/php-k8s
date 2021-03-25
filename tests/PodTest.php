@@ -99,6 +99,33 @@ class PodTest extends TestCase
         $this->runDeletionTests();
     }
 
+    public function test_pod_exec()
+    {
+        $busybox = K8s::container()
+            ->setName('busybox')
+            ->setImage('busybox')
+            ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
+
+        $pod = $this->cluster->pod()
+            ->setName('busybox-exec')
+            ->setContainers([$busybox])
+            ->createOrUpdate();
+
+        while (! $pod->isRunning()) {
+            dump("Waiting for pod {$pod->getName()} to be up and running...");
+            sleep(1);
+            $pod->refresh();
+        }
+
+        $messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'busybox');
+
+        $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
+            return Str::contains($message['output'], '.dockerenv');
+        })->isNotEmpty();
+
+        $this->assertTrue($hasDesiredOutput);
+    }
+
     public function runCreationTests()
     {
         $mysql = K8s::container()

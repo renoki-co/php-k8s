@@ -4,6 +4,7 @@
   - [Affinities & Anti-Affinities](#affinities--anti-affinities)
   - [Container Retrieval](#container-retrieval)
   - [Pod Logs](#pod-logs)
+  - [Pod Exec](#pod-exec)
   - [Pod Status](#pod-status)
   - [Containers' Statuses](#containers-statuses)
 
@@ -106,6 +107,46 @@ $pod->watchContainerLogs('mysql', function ($line) {
     // Process the logic here
     // with the given line for the mysql container.
 })
+```
+
+## Pod Exec
+
+Commands can be executed within the Pod via the exec method. The result is the list of messages received prior to the WS being closed by the Kube API.
+
+```php
+$messages = $pod->exec(['/bin/sh', '-c', 'ls -al']);
+
+foreach ($messages as $message) {
+    /**
+        [
+            "channel" => "stdout"
+            "message" => """
+                total 44\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34m.\e[m\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34m..\e[m\r\n
+                -rwxr-xr-x    1 root     root             0 Mar 25 13:01 \e[1;32m.dockerenv\e[m\r\n
+                drwxr-xr-x    2 root     root         12288 Mar  9 19:16 \e[1;34mbin\e[m\r\n
+                drwxr-xr-x    5 root     root           360 Mar 25 13:01 \e[1;34mdev\e[m\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34metc\e[m\r\n
+                drwxr-xr-x    2 nobody   nobody        4096 Mar  9 19:16 \e[1;34mhome\e[m\r\n
+                dr-xr-xr-x  226 root     root             0 Mar 25 13:01 \e[1;34mproc\e[m\r\n
+                drwx------    2 root     root          4096 Mar  9 19:16 \e[1;34mroot\e[m\r\n
+                dr-xr-xr-x   12 root     root             0 Mar 25 13:01 \e[1;34msys\e[m\r\n
+                drwxrwxrwt    2 root     root          4096 Mar  9 19:16 \e[1;34mtmp\e[m\r\n
+                drwxr-xr-x    3 root     root          4096 Mar  9 19:16 \e[1;34musr\e[m\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34mvar\e[m\r\n
+            """
+        ]
+    */
+
+    echo "[{$message['channel']}] {$message['output']}".PHP_EOL;
+}
+```
+
+Pass an additional container parameter in case there is more than just 1 container inside the pod:
+
+```php
+$messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'mysql');
 ```
 
 ## Pod Status

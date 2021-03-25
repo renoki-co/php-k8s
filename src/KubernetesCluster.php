@@ -33,6 +33,7 @@ class KubernetesCluster
     const LOG_OP = 'logs';
     const WATCH_OP = 'watch';
     const WATCH_LOGS_OP = 'watch_logs';
+    const EXEC_OP = 'exec';
 
     /**
      * Create a new class instance.
