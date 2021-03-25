@@ -74,7 +74,7 @@ $svc = $cluster->service()
 
 ## 📄 Getting Started
 
-To easily get started about how the CRDs are being handled, take a look at the [Resources: Getting Started](docs/RESOURCES-GETTING-STARTED.md) guide, which provides a lot of examples on how to interact with the resources within the cluster.
+To easily get started about how the CRDs are being handled, take a look at the [Resources: Getting Started](docs/RESOURCES-GETTING-STARTED.md) and [Cluster Authentication](docs/CLUSTER-AUTHENTICATION.md) guides, which provides a lot of examples on how to interact with the resources within the cluster.
 
 Once you got started with how PHPK8s works, you can get specific methods, examples and tips for each CRDs that's implemented.
 
