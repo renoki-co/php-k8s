@@ -4,6 +4,7 @@
   - [Affinities & Anti-Affinities](#affinities--anti-affinities)
   - [Container Retrieval](#container-retrieval)
   - [Pod Logs](#pod-logs)
+  - [Pod Exec](#pod-exec)
   - [Pod Status](#pod-status)
   - [Containers' Statuses](#containers-statuses)
 
