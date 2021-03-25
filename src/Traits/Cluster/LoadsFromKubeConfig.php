@@ -130,6 +130,7 @@ trait LoadsFromKubeConfig
      * @param  string  $fileName
      * @param  string  $contents
      * @return string
+     * @throws \Exception
      */
     protected function writeTempFileForContext(string $context, string $fileName, string $contents)
     {
