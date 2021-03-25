@@ -124,6 +124,39 @@ class PodTest extends TestCase
         })->isNotEmpty();
 
         $this->assertTrue($hasDesiredOutput);
+
+        $pod->delete();
+    }
+
+    public function test_pod_attach()
+    {
+        $mysql = K8s::container()
+            ->setName('mysql')
+            ->setImage('mysql', '5.7')
+            ->setPorts([
+                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+            ])
+            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+
+        $pod = $this->cluster->pod()
+            ->setName('mysql-exec')
+            ->setContainers([$mysql])
+            ->createOrUpdate();
+
+        while (! $pod->isRunning()) {
+            dump("Waiting for pod {$pod->getName()} to be up and running...");
+            sleep(1);
+            $pod->refresh();
+        }
+
+        $pod->attach(function ($connection) use ($pod) {
+            $connection->on('message', function ($message) use ($connection) {
+                $this->assertTrue(true);
+                $connection->close();
+            });
+
+            $pod->delete();
+        });
     }
 
     public function runCreationTests()
