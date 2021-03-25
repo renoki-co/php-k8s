@@ -1,3 +1,11 @@
+- [Metrics](#metrics)
+  - [Resource Metrics](#resource-metrics)
+  - [Value Types](#value-types)
+    - [Average Utilization (`Utilization`)](#average-utilization-utilization)
+    - [Average Value (`AverageValue`)](#average-value-averagevalue)
+    - [Value (`AverageValue`)](#value-averagevalue)
+  - [Object Resource](#object-resource)
+
 # Metrics
 
 ## Resource Metrics

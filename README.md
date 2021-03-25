@@ -16,7 +16,7 @@ PHP K8s
 
 PHP K8s is a PHP handler for the Kubernetes Cluster API, helping you handling the individual Kubernetes resources directly from PHP, like viewing, creating, updating or deleting resources.
 
-For Laravel projects, you might want to use [renoki-co/laravel-php-k8s](https://github.com/renoki-co/laravel-php-k8s) which eases the access.
+For Laravel projects, you might want to use [renoki-co/laravel-php-k8s](https://github.com/renoki-co/laravel-php-k8s) which eases the access for this particular case.
 
 ## 🤝 Supporting
 
@@ -36,7 +36,7 @@ composer require renoki-co/php-k8s
 
 ## 🙌 Usage
 
-Having the following YAML configuratin for your Service kind:
+Having the following YAML configuration for a Service:
 
 ```yaml
 apiVersion: v1
@@ -58,7 +58,7 @@ Can be written like this:
 ``` php
 use RenokiCo\PhpK8s\KubernetesCluster;
 
-// Create a new instance of KubernetesCluster
+// Create a new instance of KubernetesCluster.
 $cluster = new KubernetesCluster('http://127.0.0.1:8080');
 
 // Create a new NGINX service.
@@ -74,7 +74,11 @@ $svc = $cluster->service()
 
 ## 📄 Getting Started
 
-Please refer to the [Resources docs](docs/RESOURCES.md) extensive documentation and the [PR List](../../pulls) to know what's up for development. Below you will find the list of supported resources for a quick and easy access.
+To easily get started about how the CRDs are being handled, take a look at the [Resources: Getting Started](docs/RESOURCES-GETTING-STARTED.md) and [Cluster Authentication](docs/CLUSTER-AUTHENTICATION.md) guides, which provides a lot of examples on how to interact with the resources within the cluster.
+
+Once you got started with how PHPK8s works, you can get specific methods, examples and tips for each CRDs that's implemented.
+
+PHP K8s comes out-of-the-box with the following listed resources. For missing core Kubernetes CRDs, refer to the [Planned Resources section](docs/RESOURCES.md#planned) and if you have custom CRDs, you can [implement them yourself](docs/CUSTOM-CRDS.md).
 
 | Resource | Default Version
 | - | -
@@ -99,6 +103,19 @@ Please refer to the [Resources docs](docs/RESOURCES.md) extensive documentation 
 | [ServiceAccount](docs/kinds/ServiceAccount.md) | `v1`
 | [StatefulSet](docs/kinds/StatefulSet.md) | `apps/v1`
 | [StorageClass](docs/kinds/StorageClass.md) | `storage.k8s.io/v1`
+
+
+## Cluster Authentication
+
+PHP K8s supports any kind of HTTP cluster authentication, from Bearer Tokens to In-Cluster configuration for Pods. The extensive documentation on authentication & security can be found [here](docs/CLUSTER-AUTHENTICATION.md).
+
+## Default Versions for CRDs
+
+Since the package supports multiple K8s Cluster versions, some versions do promote certain resources to GA. Since each resource needs a default version, the package will set **the default versions for the oldest Kubernetes version supported**.
+
+For example, if the package supports `v1.18+`, then the package will make sure the versions are defaults for `v1.18`. In some cases, like Ingress in `v1.19` that switched from Beta to GA, the `v1beta1` is no longer a default and instead, the `v1` is now a default. If `v1.17` is the oldest supported version, then it will stay to `v1beta`.
+
+The minimum Kubernetes version that is supported by a given package version can be found at the top of this file. Maintainers try as hard as possible to update the Kubernetes versions that are put into test to the latest patch as often as possible.
 
 ## 🐛 Testing
 

@@ -1,6 +1,12 @@
+- [Containers](#containers)
+  - [Example](#example)
+  - [Attaching probes](#attaching-probes)
+  - [Attaching volumes](#attaching-volumes)
+  - [Setting resources](#setting-resources)
+
 # Containers
 
-## Creating a container
+## Example
 
 ```php
 $container = K8s::container()
@@ -15,7 +21,7 @@ $container = K8s::container()
     ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
 ```
 
-### Attaching probes
+## Attaching probes
 
 Check docs on [Probes](Probes.md) for more details.
 
@@ -50,7 +56,7 @@ $container->setReadinessProbe(
 );
 ```
 
-### Attaching volumes
+## Attaching volumes
 
 Volumes is a tricky concept that helps you mount volumes with a pod and container. Mainly, you are given the choice to create a new `Volume` instance that will be attached to the pod, and you can convert that instance to a `MountedVolume` instance where you can attach on the containers you need, just specifying the mounting path and subpath.
 
@@ -72,7 +78,7 @@ $pod = K8s::pod()
     ->addVolumes([$awsEbVolume]);
 ```
 
-### Setting resources
+## Setting resources
 
 ```php
 $container->minMemory(512, 'Mi')->maxMemory(2, 'Gi');

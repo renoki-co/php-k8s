@@ -1,3 +1,8 @@
+- [Expression](#expression)
+  - [In & Not In](#in--not-in)
+  - [Exists & Does Not Exist](#exists--does-not-exist)
+  - [Greater & Less Than](#greater--less-than)
+
 # Expression
 
 The expression instance is used to define Match Expressions in a more PHP-oriented way.

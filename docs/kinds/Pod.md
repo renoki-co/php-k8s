@@ -1,3 +1,12 @@
+- [Pod](#pod)
+  - [Example](#example)
+  - [Attaching Volumes](#attaching-volumes)
+  - [Affinities & Anti-Affinities](#affinities--anti-affinities)
+  - [Container Retrieval](#container-retrieval)
+  - [Pod Logs](#pod-logs)
+  - [Pod Status](#pod-status)
+  - [Containers' Statuses](#containers-statuses)
+
 # Pod
 
 - [Official Documentation](https://kubernetes.io/docs/tasks/configure-pod-container/)
@@ -31,11 +40,11 @@ $pod = $cluster->pod()
     ->create();
 ```
 
-## Attaching volumes
+## Attaching Volumes
 
 Pods can attach volumes so that container can mount them. Please check the [Container documentation](../instances/Container.md) where you can find details on how to attach volumes for different drivers.
 
-## Attaching affinities & anti-affinities
+## Affinities & Anti-Affinities
 
 Pods can declare `affinity` to handle pod and node affinities and anti-affinities. Check [Affinity documentation](../instances/Affinity.md) to read more about the pod affinity and anti-affinity declarations.
 
@@ -45,6 +54,7 @@ You can simply attach affinities for both pod and node by calling specialized me
 $pod->setPodAffinity($affinity);
 $pod->setNodeAffinity($affinity);
 ```
+
 
 ## Container Retrieval
 
