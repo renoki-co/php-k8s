@@ -120,7 +120,7 @@ class PodTest extends TestCase
         $messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'busybox');
 
         $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
-            return str_contains($message['output'], '.dockerenv');
+            return Str::contains($message['output'], '.dockerenv');
         })->isNotEmpty();
 
         $this->assertTrue($hasDesiredOutput);
