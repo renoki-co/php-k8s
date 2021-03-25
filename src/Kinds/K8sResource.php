@@ -840,6 +840,8 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $container
      * @param  array  $query
      * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesExecException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function exec($command, string $container = null, array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1])
     {
