@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
-use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Contracts\Dnsable;
 use RenokiCo\PhpK8s\Contracts\Executable;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
