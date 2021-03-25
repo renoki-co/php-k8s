@@ -5,6 +5,7 @@
   - [Container Retrieval](#container-retrieval)
   - [Pod Logs](#pod-logs)
   - [Pod Exec](#pod-exec)
+  - [Pod Attach](#pod-attach)
   - [Pod Status](#pod-status)
   - [Containers' Statuses](#containers-statuses)
 
@@ -148,6 +149,38 @@ Pass an additional container parameter in case there is more than just 1 contain
 ```php
 $messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'mysql');
 ```
+
+## Pod Attach
+
+You can attach to a container of a pod using the `attach` method. It accepts a callback that passes a WebSocket connection where you can listen to the pod's container output:
+
+```php
+use Ratchet\Client\WebSocket;
+
+$stdChannels = [
+    'stdin',
+    'stdout',
+    'stderr',
+    'error',
+    'resize',
+];
+
+$pod->attach(function (WebSocket $connection) use ($stdChannels) {
+    $connection->on('message', function ($message) use ($connection, $stdChannels) {
+        // Decode the channel (stdin, stdout, etc.) and the message.
+        $channel = $stdChannels[substr($data, 0, 1)];
+        $message = base64_decode(substr($data, 1));
+
+        // Do something with the message.
+        echo $message.PHP_EOL;
+
+        // Call ->close() to end the loop and close the connection.
+        $connection->close();
+    });
+});
+```
+
+The connection is provided using [ratchet/pawl](https://github.com/ratchetphp/Pawl#example) and it will block the main thread of the app by running it in a React event loop.
 
 ## Pod Status
 

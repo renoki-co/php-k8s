@@ -6,11 +6,13 @@ use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
+use RenokiCo\PhpK8s\Contracts\Attachable;
 use RenokiCo\PhpK8s\Contracts\Executable;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAttachException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesExecException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesLogsException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesScalingException;
@@ -843,8 +845,11 @@ class K8sResource implements Arrayable, Jsonable
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesExecException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function exec($command, string $container = null, array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1])
-    {
+    public function exec(
+        $command,
+        string $container = null,
+        array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
+    ) {
         if (! $this instanceof Executable) {
             throw new KubernetesExecException(
                 'The resource '.get_class($this).' does not support exec commands.'
@@ -858,6 +863,37 @@ class K8sResource implements Arrayable, Jsonable
                 $this->resourceExecPath(),
                 '',
                 ['command' => $command, 'container' => $container] + $query
+            );
+    }
+
+    /**
+     * Attach to the current resource.
+     *
+     * @param
+     * @param  string|null  $container
+     * @param  array  $query
+     * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAttachException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function attach(
+        Closure $callback = null,
+        string $container = null,
+        array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
+    ) {
+        if (! $this instanceof Attachable) {
+            throw new KubernetesAttachException(
+                'The resource '.get_class($this).' does not support attach commands.'
+            );
+        }
+
+        return $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::ATTACH_OP,
+                $this->resourceAttachPath(),
+                $callback,
+                ['container' => $container] + $query
             );
     }
 
@@ -929,6 +965,16 @@ class K8sResource implements Arrayable, Jsonable
     public function resourceExecPath(): string
     {
         return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/exec";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to attach.
+     *
+     * @return string
+     */
+    public function resourceAttachPath(): string
+    {
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/attach";
     }
 
     /**
