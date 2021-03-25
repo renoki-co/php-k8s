@@ -450,6 +450,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function all(array $query = ['pretty' => 1])
     {
@@ -468,6 +469,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function get(array $query = ['pretty' => 1])
     {
@@ -486,6 +488,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function create(array $query = ['pretty' => 1])
     {
@@ -504,6 +507,7 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return bool
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function update(array $query = ['pretty' => 1]): bool
     {
@@ -535,6 +539,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  null|int  $gracePeriod
      * @param  string  $propagationPolicy
      * @return bool
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
     {
@@ -652,11 +657,13 @@ class K8sResource implements Arrayable, Jsonable
      *
      * @param  array  $query
      * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function logs(array $query = ['pretty' => 1])
     {
         if (! $this instanceof Loggable) {
-            throw new KubernetesWatchException(
+            throw new KubernetesLogsException(
                 'The resource '.get_class($this).' does not support logs.'
             );
         }
@@ -677,6 +684,8 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string  $container
      * @param  array  $query
      * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function containerLogs(string $container, array $query = ['pretty' => 1])
     {
@@ -690,6 +699,8 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function logsByName(string $name, array $query = ['pretty' => 1])
     {
@@ -704,6 +715,8 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return string
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function containerLogsByName(string $name, string $container, array $query = ['pretty' => 1])
     {
@@ -768,6 +781,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  array  $query
      * @return mixed
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
     public function watchLogsByName(string $name, Closure $callback, array $query = ['pretty' => 1])
     {
@@ -794,6 +808,8 @@ class K8sResource implements Arrayable, Jsonable
      * Get a specific resource scaling data.
      *
      * @return \RenokiCo\PhpK8s\Kinds\K8sScale
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesScalingException
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function scaler(): K8sScale
     {
