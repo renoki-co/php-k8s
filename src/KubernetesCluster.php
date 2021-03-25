@@ -12,7 +12,6 @@ use React\EventLoop\Factory as ReactFactory;
 use React\Socket\Connector as ReactSocketConnector;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
-use RenokiCo\PhpK8s\ResourcesList;
 
 class KubernetesCluster
 {
