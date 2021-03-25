@@ -1,3 +1,12 @@
+- [Defining CRDs](#defining-crds)
+- [Getting started](#getting-started)
+  - [Watchable Resources](#watchable-resources)
+  - [Scalable Resources](#scalable-resources)
+  - [Podable Resources](#podable-resources)
+  - [Loggable Resources](#loggable-resources)
+- [Applying Macros](#applying-macros)
+- [Helper Traits](#helper-traits)
+
 # Defining CRDs
 
 The ease of using basic Kubernetes resources can be extended into creating CRDs for your custom use case. This needs a lot of context about what you can apply to the resources, based on your needs.
@@ -58,7 +67,7 @@ Watchable Resources are resources that can access the `/watch` endpoint in order
 
 For example, on basic CRDs (the default K8s ones), many resources like Service or Secret come with a watchable implementation.
 
-You can read more about [how to watch a resource](Usage.md#watch-resource).
+You can read more about [how to watch a resource](RESOURCES-GETTING-STARTED.md#watch-resource).
 
 ```php
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
@@ -168,6 +177,22 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
 
 class GameServerSet extends K8sResource implements InteractsWithK8sCluster, Loggable
 {
+    //
+}
+```
+
+# Applying Macros
+
+[Macros](kinds/Resource.md#macros) come in help to fix issues with initialization of your own CRDs. For example, instead of `new GameServer()`, you may create a custom caller for your resource that will automatically get the `KubernetesCluster` object injected:
+
+```php
+use RenokiCo\PhpK8s\K8s;
+
+K8s::macro('gameServer', function ($cluster = null, array $attributes = []) {
+    return new Kinds\GameServer($cluster, $attributes);
+});
+
+foreach (K8s::gameServer()->all() as $gs) {
     //
 }
 ```

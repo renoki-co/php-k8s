@@ -1,3 +1,10 @@
+- [Daemon Set](#daemon-set)
+  - [Example](#example)
+  - [Pod Template Retrieval](#pod-template-retrieval)
+  - [Getting Pods](#getting-pods)
+  - [Scaling](#scaling)
+  - [Daemon Set Status](#daemon-set-status)
+
 # Daemon Set
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
