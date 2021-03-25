@@ -6,10 +6,12 @@ use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
+use RenokiCo\PhpK8s\Contracts\Executable;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\Exceptions\KubernetesExecException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesLogsException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesScalingException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesWatchException;
@@ -816,6 +818,32 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * Exec a command on the current resource.
+     *
+     * @param  string|array  $command
+     * @param  string|null  $container
+     * @param  array  $query
+     * @return string
+     */
+    public function exec($command, string $container = null, array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1])
+    {
+        if (! $this instanceof Executable) {
+            throw new KubernetesExecException(
+                'The resource '.get_class($this).' does not support exec commands.'
+            );
+        }
+
+        return $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::EXEC_OP,
+                $this->resourceExecPath(),
+                '',
+                ['command' => $command, 'container' => $container] + $query
+            );
+    }
+
+    /**
      * Get the path, prefixed by '/', that points to the resources list.
      *
      * @return string
@@ -873,6 +901,16 @@ class K8sResource implements Arrayable, Jsonable
     public function resourceLogPath(): string
     {
         return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/log";
+    }
+
+    /**
+     * Get the path, prefixed by '/', that points to the specific resource to exec.
+     *
+     * @return string
+     */
+    public function resourceExecPath(): string
+    {
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/exec";
     }
 
     /**

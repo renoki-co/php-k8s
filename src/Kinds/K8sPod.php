@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Contracts\Dnsable;
+use RenokiCo\PhpK8s\Contracts\Executable;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
@@ -18,7 +19,7 @@ use RenokiCo\PhpK8s\Traits\HasStatus;
 use RenokiCo\PhpK8s\Traits\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\HasStatusPhase;
 
-class K8sPod extends K8sResource implements Dnsable, InteractsWithK8sCluster, Watchable, Loggable
+class K8sPod extends K8sResource implements Dnsable, Executable, InteractsWithK8sCluster, Watchable, Loggable
 {
     use HasAnnotations;
     use HasLabels;
