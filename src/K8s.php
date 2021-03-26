@@ -372,12 +372,7 @@ class K8s
      */
     public static function fromYaml($cluster, string $yaml)
     {
-        $docs = explode('---', $yaml);
-
-        $instances = collect($docs)->reduce(function ($classes, $doc) use ($cluster) {
-            $yaml = yaml_parse($doc);
-
-            $version = $yaml['apiVersion'];
+        $instances = collect(yaml_parse($yaml, -1))->reduce(function ($classes, $yaml) use ($cluster) {
             $kind = $yaml['kind'];
 
             unset($yaml['apiVersion'], $yaml['kind']);
