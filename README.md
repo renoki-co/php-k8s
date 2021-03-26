@@ -67,7 +67,7 @@ $cluster = new KubernetesCluster('http://127.0.0.1:8080');
 $svc = $cluster->service()
     ->setName('nginx')
     ->setNamespace('frontend')
-    ->setSelectors(['matchLabels' => ['app' => 'frontend']])
+    ->setSelectors(['app' => 'frontend'])
     ->setPorts([
         ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
     ])
