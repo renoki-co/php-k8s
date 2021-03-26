@@ -1,0 +1,27 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: mysql-pdb
+  labels:
+    tier: backend
+  annotations:
+    mysql/annotation: "yes"
+spec:
+  selector:
+    matchLabels:
+      tier: backend
+  maxUnavailable: 25%
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: mysql-pdb
+  labels:
+    tier: backend
+  annotations:
+    mysql/annotation: "yes"
+spec:
+  selector:
+    matchLabels:
+      tier: backend
+  minAvailable: 25%
