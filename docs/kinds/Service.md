@@ -8,7 +8,7 @@
 $svc = $cluster->service()
     ->setName('nginx')
     ->setLabels(['tier' => 'backend'])
-    ->setSelectors(['app' => 'frontend'])
+    ->setSelectors(['matchLabels' => ['app' => 'frontend']])
     ->setPorts([
         ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
     ])->create();

@@ -48,7 +48,8 @@ metadata:
   namespace: frontend
 spec:
   selector:
-    app: frontend
+    matchLabels:
+      app: frontend
   ports:
     - protocol: TCP
       port: 80
@@ -67,7 +68,7 @@ $cluster = new KubernetesCluster('http://127.0.0.1:8080');
 $svc = $cluster->service()
     ->setName('nginx')
     ->setNamespace('frontend')
-    ->setSelectors(['app' => 'frontend'])
+    ->setSelectors(['matchLabels' => ['app' => 'frontend']])
     ->setPorts([
         ['protocol' => 'TCP', 'port' => 80, 'targetPort' => 80],
     ])

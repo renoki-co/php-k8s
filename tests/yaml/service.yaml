@@ -8,7 +8,8 @@ metadata:
     nginx/ann: "yes"
 spec:
   selector:
-    app: frontend
+    matchLabels:
+      app: frontend
   ports:
     - protocol: TCP
       port: 80
