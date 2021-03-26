@@ -265,6 +265,18 @@ class K8s
     }
 
     /**
+     * Create a new PodDisruptionBudget kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget
+     */
+    public static function podDisruptionBudget($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sPodDisruptionBudget($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes

@@ -46,6 +46,7 @@ Instances are custom PHP classes that makes the nested YAML definitions be easie
 | [PersistenVolume](kinds/PersistentVolume.md) | `v1`
 | [PersistenVolumeClaim](kinds/PersistentVolumeClaim.md) | `v1`
 | [Pod](kinds/Pod.md) | `v1`
+| [PodDisruptionBudget](kinds/PodDisruptionBudget.md) | `policy/v1beta1`
 | [Role](kinds/Role.md) | `rbac.authorization.k8s.io/v1`
 | [RoleBinding](kinds/RoleBinding.md) | `rbac.authorization.k8s.io/v1`
 | [Secret](kinds/Secret.md) | `v1`
@@ -68,7 +69,6 @@ The following list of resources are planned and they will be available soon:
 
 - Binding
 - NetworkPolicy
-- PodDisruptionBudget
 - PodSecurityPolicy
 - Endpoint
 - PriorityClass

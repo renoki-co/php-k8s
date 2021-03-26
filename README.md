@@ -98,6 +98,7 @@ PHP K8s comes out-of-the-box with the following listed resources. For missing co
 | [PersistenVolume](docs/kinds/PersistentVolume.md) | `v1`
 | [PersistenVolumeClaim](docs/kinds/PersistentVolumeClaim.md) | `v1`
 | [Pod](docs/kinds/Pod.md) | `v1`
+| [PodDisruptionBudget](kinds/PodDisruptionBudget.md) | `policy/v1beta1`
 | [Role](docs/kinds/Role.md) | `rbac.authorization.k8s.io/v1`
 | [RoleBinding](docs/kinds/RoleBinding.md) | `rbac.authorization.k8s.io/v1`
 | [Secret](docs/kinds/Secret.md) | `v1`
