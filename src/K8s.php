@@ -269,7 +269,7 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Kinds\K8sPod
+     * @return \RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget
      */
     public static function podDisruptionBudget($cluster = null, array $attributes = [])
     {

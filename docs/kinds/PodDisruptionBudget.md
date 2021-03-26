@@ -21,6 +21,7 @@ $pod = K8s::pod()
 
 $dep = $cluster->deployment()
     ->setName('mysql')
+    ->setLabels(['tier' => 'server'])
     ->setSelectors(['matchLabels' => ['tier' => 'backend']])
     ->setReplicas(1)
     ->setTemplate($pod)
@@ -28,8 +29,9 @@ $dep = $cluster->deployment()
 
 $pdb = $this->cluster->podDisruptionBudget()
     ->setName('mysql-pdb')
-    ->setSelectors(['matchLabels' => ['tier' => 'backend']])
-    ->setMinAvailable(3);
+    ->setSelectors(['matchLabels' => ['tier' => 'server']])
+    ->setMinAvailable(3)
+    ->create();
 ```
 
 ## PDB Status
@@ -37,7 +39,7 @@ $pdb = $this->cluster->podDisruptionBudget()
 The Status API is available to be accessed for fresh instances:
 
 ```php
-$hpa->refresh();
+$pdb->refresh();
 
-$status = $hpa->getStatus();
+$status = $pdb->getStatus();
 ```
