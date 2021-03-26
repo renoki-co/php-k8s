@@ -76,11 +76,11 @@ $svc = $cluster->service()
 
 ## 📄 Getting Started
 
-To easily get started about how the CRDs are being handled, take a look at the [Resources: Getting Started](docs/RESOURCES-GETTING-STARTED.md) and [Cluster Authentication](docs/CLUSTER-AUTHENTICATION.md) guides, which provides a lot of examples on how to interact with the resources within the cluster.
+To easily get started about how the resources are being handled, take a look at the [Resources: Getting Started](docs/RESOURCES-GETTING-STARTED.md) and [Cluster Authentication](docs/CLUSTER-AUTHENTICATION.md) guides, which provides a lot of examples on how to interact with the resources within the cluster.
 
-Once you got started with how PHPK8s works, you can get specific methods, examples and tips for each CRDs that's implemented.
+Once you got started with how PHPK8s works, you can get specific methods, examples and tips for each resource that's implemented.
 
-PHP K8s comes out-of-the-box with the following listed resources. For missing core Kubernetes CRDs, refer to the [Planned Resources section](docs/RESOURCES.md#planned) and if you have custom CRDs, you can [implement them yourself](docs/CUSTOM-CRDS.md).
+PHP K8s comes out-of-the-box with the following listed resources. For missing core Kubernetes CRDs, refer to the [Planned Resources section](docs/RESOURCES.md#planned) and if you have custom resources (CRDs), you can [implement them yourself](docs/CUSTOM-CRDS.md).
 
 | Resource | Default Version
 | - | -
@@ -112,7 +112,7 @@ PHP K8s comes out-of-the-box with the following listed resources. For missing co
 
 PHP K8s supports any kind of HTTP cluster authentication, from Bearer Tokens to In-Cluster configuration for Pods. The extensive documentation on authentication & security can be found [here](docs/CLUSTER-AUTHENTICATION.md).
 
-## Default Versions for CRDs
+## Default Versions for resources
 
 Since the package supports multiple K8s Cluster versions, some versions do promote certain resources to GA. Since each resource needs a default version, the package will set **the default versions for the oldest Kubernetes version supported**.
 

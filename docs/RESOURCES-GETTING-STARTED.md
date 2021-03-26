@@ -12,9 +12,9 @@
 
 # CRUD Resource operations
 
-CRDs are by default interacting with the API. For instance, the idea behind this is to be able to import or create resources, with or without YAML, using PHP.
+Resources are by default interacting with the API. For instance, the idea behind this is to be able to import or create resources, with or without YAML, using PHP.
 
-Each CRD extends basic functionality from a single class: `K8sResource`. This is used to [extend your custom CRDs](CUSTOM-CRDS.md) or make a specific set of methods available across all CRDs, like [interacting with the namespace, labels, or annotations](kinds/Resource.md).
+Each resource extends basic functionality from a single class: `K8sResource`. This is used to [Custom: CRDs](CUSTOM-CRDS.md) or make a specific set of methods available across all resources, like [interacting with the namespace, labels, or annotations](kinds/Resource.md).
 
 ## Retrieving all resources
 

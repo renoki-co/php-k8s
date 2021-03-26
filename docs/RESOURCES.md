@@ -1,9 +1,9 @@
 - [Resources](#resources)
   - [Getting Started](#getting-started)
   - [Instances](#instances)
-  - [Resources (CRDs)](#resources-crds)
+  - [Resources](#resources-1)
 - [Extending](#extending)
-  - [Custom CRDs](#custom-crds)
+  - [Custom: CRDs](#custom-crds)
 - [Upcoming Resources](#upcoming-resources)
   - [Planned](#planned)
   - [Not Planned](#not-planned)
@@ -14,7 +14,7 @@
 
 If you haven't been getting started with the K8s Resources methods, please do so by reading [Resources: Getting Started](RESOURCES-GETTING-STARTED.md).
 
-Each CRD extends basic functionality from a single class: `K8sResource`. This is used to [extend your custom CRDs](CUSTOM-CRDS.md) or make a specific set of methods available across all CRDs, like [interacting with the namespace, labels, or annotations](kinds/Resource.md).
+Each resource extends basic functionality from a single class: `K8sResource`. This is used to [create your own CRDs](CUSTOM-CRDS.md) or make a specific set of methods available across all CRDs, like [interacting with the namespace, labels, or annotations](kinds/Resource.md).
 
 ## Instances
 
@@ -28,7 +28,7 @@ Instances are custom PHP classes that makes the nested YAML definitions be easie
 - [Rules](instances/Rules.md) - used for Roles & Cluster Roles
 - [Volumes](instances/Volumes.md) - used for mounting volumes in pods and containers
 
-## Resources (CRDs)
+## Resources
 
 | Resource | Default Version
 | - | -
@@ -57,9 +57,9 @@ Instances are custom PHP classes that makes the nested YAML definitions be easie
 
 # Extending
 
-## Custom CRDs
+## Custom: CRDs
 
-The `K8sResource` class is extendable and expose a lot of PHP OOP functionalities that you can use to build your custom resources. [Head up to the Custom CRDs docs](CUSTOM-CRDS.md) to learn more about implementing your own custom resources.
+The `K8sResource` class is extendable and expose a lot of PHP OOP functionalities that you can use to build your custom resources. [Head up to the Custom: CRDs docs](CUSTOM-CRDS.md) to learn more about implementing your own custom resources.
 
 # Upcoming Resources
 

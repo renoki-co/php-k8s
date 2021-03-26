@@ -1,4 +1,4 @@
-- [Defining CRDs](#defining-crds)
+- [Custom: CRDs](#custom-crds)
 - [Getting started](#getting-started)
   - [Watchable Resources](#watchable-resources)
   - [Scalable Resources](#scalable-resources)
@@ -7,7 +7,7 @@
 - [Applying Macros](#applying-macros)
 - [Helper Traits](#helper-traits)
 
-# Defining CRDs
+# Custom: CRDs
 
 The ease of using basic Kubernetes resources can be extended into creating CRDs for your custom use case. This needs a lot of context about what you can apply to the resources, based on your needs.
 
@@ -65,7 +65,7 @@ $ir->create();
 
 Watchable Resources are resources that can access the `/watch` endpoint in order to poll the changes over one or more resources. Typically, this can happen on any resource on which you can run `kubectl get some-crd --watch` upon.
 
-For example, on basic CRDs (the default K8s ones), many resources like Service or Secret come with a watchable implementation.
+For example, on basic resources (the default K8s ones), many resources like Service or Secret come with a watchable implementation.
 
 You can read more about [how to watch a resource](RESOURCES-GETTING-STARTED.md#watch-resource).
 
@@ -88,7 +88,7 @@ class IngressRoute extends K8sResource implements InteractsWithK8sCluster, Watch
 
 Scalable resources need a custom API on which you can call scale operations on them. Usually, this is done for resources that open a `/scale` endpoint to the API.
 
-On the default CRDs, this is applied to StatefulSets and Deployments.
+On the default resources, this is applied to StatefulSets and Deployments.
 
 You can look on [how StatefulSets are scaled](kinds/StatefulSet.md#scaling)
 
