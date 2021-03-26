@@ -48,8 +48,7 @@ metadata:
   namespace: frontend
 spec:
   selector:
-    matchLabels:
-      app: frontend
+    app: frontend
   ports:
     - protocol: TCP
       port: 80
