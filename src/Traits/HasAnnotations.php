@@ -24,4 +24,16 @@ trait HasAnnotations
     {
         return $this->getAttribute('metadata.annotations', []);
     }
+
+    /**
+     * Get a specific annotation. Returns null if does not exist.
+     *
+     * @param  string  $name
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function getAnnotation(string $name, $default = null)
+    {
+        return $this->getAttribute("metadata.annotations.{$name}", $default);
+    }
 }
