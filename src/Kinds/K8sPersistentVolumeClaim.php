@@ -5,7 +5,6 @@ namespace RenokiCo\PhpK8s\Kinds;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\HasAccessModes;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStatus;
@@ -20,7 +19,6 @@ class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCl
     use HasStatus;
     use HasStatusPhase;
     use HasStorageClass;
-    use HasLabels;
 
     /**
      * The resource Kind parameter.

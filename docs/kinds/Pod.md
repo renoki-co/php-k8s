@@ -35,7 +35,7 @@ Later on, you can attach the `Container` classes directly to the `K8sPod` instan
 ```php
 $pod = $cluster->pod()
     ->setName('mysql')
-    ->setSelectors(['app' => 'db'])
+    ->setSelectors(['matchLabels' => ['app' => 'db']])
     ->setContainers([$mysql])
     ->setInitContainers([$busybox])
     ->addPulledSecrets(['someSecret', 'anotherSecret'])

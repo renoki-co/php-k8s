@@ -6,8 +6,6 @@ use Carbon\Carbon;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasPods;
 use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
@@ -20,8 +18,6 @@ class K8sJob extends K8sResource implements
     Podable,
     Watchable
 {
-    use HasAnnotations;
-    use HasLabels;
     use HasPods;
     use HasSelector;
     use HasSpec;

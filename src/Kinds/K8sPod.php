@@ -12,8 +12,6 @@ use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\K8s;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStatus;
 use RenokiCo\PhpK8s\Traits\HasStatusConditions;
@@ -27,8 +25,6 @@ class K8sPod extends K8sResource implements
     Watchable,
     Loggable
 {
-    use HasAnnotations;
-    use HasLabels;
     use HasSpec;
     use HasStatus;
     use HasStatusConditions;
