@@ -50,7 +50,7 @@ class IngressRoute extends K8sResource implements InteractsWithK8sCluster
     protected static $namespaceable = true;
 }
 
-$ir = new IngressRoute([
+$ir = new IngressRoute($cluster, [
     'spec' => [
         'entryPoints' => ...
     ],
@@ -79,7 +79,7 @@ class IngressRoute extends K8sResource implements InteractsWithK8sCluster, Watch
     //
 }
 
-(new IngressRoute)->whereName('foo')->watch(function ($type, $ir) {
+(new IngressRoute($cluster))->whereName('foo')->watch(function ($type, $ir) {
     //
 });
 ```
@@ -137,7 +137,7 @@ class GameServerSet extends K8sResource implements InteractsWithK8sCluster, Poda
     }
 }
 
-$gameServerSet = new GameServerSet([
+$gameServerSet = new GameServerSet($cluster, [
     'metadata' => [
         'name' => 'some-name',
     ],
@@ -201,7 +201,7 @@ foreach (K8s::gameServer()->all() as $gs) {
 
 "Helper Traits" are just traits that make the boring nested variables be easier set with a more friendly way.
 
-You can find some in the [Traits folder](../../tree/master/src/Traits). By default, the `K8sResource` already uses the `HasAttributes` trait.
+You can find some in the [Traits folder](../../master/src/Traits). By default, the `K8sResource` already uses the `HasAttributes` trait.
 
 ```php
 use RenokiCo\PhpK8s\Kinds\K8sResource;
