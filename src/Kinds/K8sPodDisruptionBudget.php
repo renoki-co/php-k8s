@@ -4,17 +4,11 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
-use RenokiCo\PhpK8s\Traits\HasSelector;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStatus;
 
 class K8sPodDisruptionBudget extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAnnotations;
-    use HasLabels;
-    use HasSelector;
     use HasSpec;
     use HasStatus;
 
