@@ -6,7 +6,6 @@ use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Instances\ResourceMetric;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStatus;
 use RenokiCo\PhpK8s\Traits\HasStatusConditions;
@@ -16,7 +15,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     use HasSpec;
     use HasStatus;
     use HasStatusConditions;
-    use HasLabels;
 
     /**
      * The resource Kind parameter.

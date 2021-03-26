@@ -4,14 +4,10 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasStatus;
 
 class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAnnotations;
-    use HasLabels;
     use HasStatus;
 
     /**

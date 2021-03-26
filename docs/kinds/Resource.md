@@ -11,6 +11,9 @@
   - [Labels](#labels)
     - [`setLabels(array $labels)`](#setlabelsarray-labels)
     - [`getLabels()`](#getlabels)
+  - [Annotations](#annotations)
+    - [`setAnnotations(array $annotations)`](#setannotationsarray-annotations)
+    - [`getAnnotations()`](#getannotations)
   - [API](#api)
     - [`getApiVersion()`](#getapiversion)
     - [`getKind()`](#getkind)
@@ -101,6 +104,24 @@ Get the labels of a resource.
 
 ```php
 $service->getLabels();
+```
+
+## Annotations
+
+### `setAnnotations(array $annotations)`
+
+Set the annotations for the resource.
+
+```php
+$service->setAnnotations(['kubernetes.io/some-annotation' => 'yes']);
+```
+
+### `getAnnotations()`
+
+Get the annotations of a resource.
+
+```php
+$service->getAnnotations();
 ```
 
 ## API

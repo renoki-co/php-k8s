@@ -8,7 +8,7 @@
 $ingress = $cluster->ingress()
     ->setName('nginx')
     ->setLabels(['tier' => 'backend'])
-    ->setSelectors(['app' => 'frontend'])
+    ->setSelectors(['matchLabels' => ['app' => 'frontend']])
     ->setTls([[
         'hosts' => [
             'test.com'

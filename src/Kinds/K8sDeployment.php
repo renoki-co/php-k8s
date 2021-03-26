@@ -7,8 +7,6 @@ use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\CanScale;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasMinimumSurge;
 use RenokiCo\PhpK8s\Traits\HasPods;
 use RenokiCo\PhpK8s\Traits\HasReplicas;
@@ -25,8 +23,6 @@ class K8sDeployment extends K8sResource implements
     Watchable
 {
     use CanScale;
-    use HasAnnotations;
-    use HasLabels;
     use HasMinimumSurge;
     use HasPods;
     use HasReplicas;
