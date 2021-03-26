@@ -14,7 +14,6 @@
   - [Annotations](#annotations)
     - [`setAnnotations(array $annotations)`](#setannotationsarray-annotations)
     - [`getAnnotations()`](#getannotations)
-    - [`getAnnotations(string $name)`](#getannotationsstring-name)
   - [API](#api)
     - [`getApiVersion()`](#getapiversion)
     - [`getKind()`](#getkind)
@@ -123,20 +122,6 @@ Get the annotations of a resource.
 
 ```php
 $service->getAnnotations();
-```
-
-### `getAnnotations(string $name)`
-
-Get a specific annotation value. Returns `null` if not existent.
-
-```php
-$service->getAnnotation('kubernetes.io/some-annotation');
-```
-
-You can specify a default value other than `null` in case the annotation does not exist:
-
-```php
-$service->getAnnotation('kubernetes.io/some-integer', 0);
 ```
 
 ## API
