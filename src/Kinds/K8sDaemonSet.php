@@ -5,7 +5,6 @@ namespace RenokiCo\PhpK8s\Kinds;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasMinimumSurge;
 use RenokiCo\PhpK8s\Traits\HasPods;
 use RenokiCo\PhpK8s\Traits\HasSelector;
@@ -16,7 +15,6 @@ use RenokiCo\PhpK8s\Traits\HasTemplate;
 
 class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podable, Watchable
 {
-    use HasLabels;
     use HasMinimumSurge;
     use HasPods;
     use HasSelector;

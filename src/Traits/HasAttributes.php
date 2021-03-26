@@ -20,6 +20,22 @@ trait HasAttributes
     protected $attributes = [];
 
     /**
+     * The Kubernetes resource's attributes,
+     * but stored as being the original ones.
+     *
+     * @var array
+     */
+    protected $original = [];
+
+    /**
+     * Wether the current state is synced
+     * with the cluster.
+     *
+     * @var bool
+     */
+    protected $synced = false;
+
+    /**
      * Set an attribute.
      *
      * @param  string  $name
@@ -74,6 +90,70 @@ trait HasAttributes
     public function getAttribute(string $name, $default = null)
     {
         return Arr::get($this->attributes, $name, $default);
+    }
+
+    /**
+     * Mark the current resource as
+     * being fetched from the cluster.
+     *
+     * @return $this
+     */
+    public function synced()
+    {
+        $this->synced = true;
+
+        return $this;
+    }
+
+    /**
+     * Check if the resource is synced.
+     *
+     * @return bool
+     */
+    public function isSynced(): bool
+    {
+        return $this->synced;
+    }
+
+    /**
+     * Check if the resource changed from
+     * its initial state.
+     *
+     * @return bool
+     */
+    public function hasChanged(): bool
+    {
+        return $this->isSynced() && $this->attributes !== $this->original;
+    }
+
+    /**
+     * Hydrate the current resource with a payload.
+     *
+     * @param  array  $instance
+     * @return $this
+     */
+    public function syncWith(array $attributes = [])
+    {
+        $this->attributes = $attributes;
+
+        $this->syncOriginalWith($attributes);
+
+        return $this;
+    }
+
+    /**
+     * Hydrate the current original details with a payload.
+     *
+     * @param  array  $instance
+     * @return $this
+     */
+    public function syncOriginalWith(array $attributes = [])
+    {
+        $this->original = $attributes;
+
+        $this->synced();
+
+        return $this;
     }
 
     /**

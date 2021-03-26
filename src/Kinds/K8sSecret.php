@@ -8,8 +8,6 @@ use RenokiCo\PhpK8s\Traits\HasLabels;
 
 class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasLabels;
-
     /**
      * The resource Kind parameter.
      *

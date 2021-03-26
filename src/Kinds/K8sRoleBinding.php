@@ -4,13 +4,11 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSubjects;
 
 class K8sRoleBinding extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasSubjects;
-    use HasLabels;
 
     /**
      * The resource Kind parameter.
