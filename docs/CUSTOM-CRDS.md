@@ -179,6 +179,8 @@ class GameServerSet extends K8sResource implements InteractsWithK8sCluster, Logg
 {
     //
 }
+
+$logs = $gs->logs();
 ```
 
 # Applying Macros
@@ -192,7 +194,7 @@ K8s::macro('gameServer', function ($cluster = null, array $attributes = []) {
     return new Kinds\GameServer($cluster, $attributes);
 });
 
-foreach (K8s::gameServer()->all() as $gs) {
+foreach ($cluster->gameServer()->all() as $gs) {
     //
 }
 ```
