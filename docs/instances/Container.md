@@ -15,7 +15,7 @@ $container = K8s::container()
     ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test'])
 ```
 
-For adding a env value based on an secret, first make sure that the secret exists in the namespace that this container will be deployed in, otherwise a KubernetesAPIException will be thrown.
+For adding a env value based on an [secretKeyRef](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables), first make sure that the secret exists in the namespace that this container will be deployed in, otherwise a KubernetesAPIException will be thrown.
 
 ```php
 // Single
