@@ -62,7 +62,7 @@ class ContainerTest extends TestCase
                     'secretKeyRef' => [
                         'name' => 'ref_name',
                         'key' => 'ref_key',
-                    ]
+                    ],
                 ],
             ],
         ], $container->getEnv());
@@ -115,9 +115,9 @@ class ContainerTest extends TestCase
                         'secretKeyRef' => [
                             'name' => 'ref_name',
                             'key' => 'ref_key',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ])
             ->addEnvs([
                 'SECRET_TWO' => [
@@ -125,9 +125,9 @@ class ContainerTest extends TestCase
                         'secretKeyRef' => [
                             'name' => 'ref_name',
                             'key' => 'ref_key',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ])
             ->addSecretKeyRef('SECRET_THREE', 'ref_name', 'ref_key')
             ->addSecretKeyRefs([
@@ -144,7 +144,7 @@ class ContainerTest extends TestCase
                     'secretKeyRef' => [
                         'name' => 'ref_name',
                         'key' => 'ref_key',
-                    ]
+                    ],
                 ],
             ],
             ['name' => 'SECRET_TWO',
@@ -152,7 +152,7 @@ class ContainerTest extends TestCase
                     'secretKeyRef' => [
                         'name' => 'ref_name',
                         'key' => 'ref_key',
-                    ]
+                    ],
                 ],
             ],
             ['name' => 'SECRET_THREE',
@@ -160,7 +160,7 @@ class ContainerTest extends TestCase
                     'secretKeyRef' => [
                         'name' => 'ref_name',
                         'key' => 'ref_key',
-                    ]
+                    ],
                 ],
             ],
             ['name' => 'SECRET_FOUR',
@@ -168,7 +168,7 @@ class ContainerTest extends TestCase
                     'secretKeyRef' => [
                         'name' => 'ref_name',
                         'key' => 'ref_key',
-                    ]
+                    ],
                 ],
             ],
             ['name' => 'SECRET_FIVE',
@@ -176,9 +176,9 @@ class ContainerTest extends TestCase
                     'secretKeyRef' => [
                         'name' => 'ref_name',
                         'key' => 'ref_key',
-                    ]
+                    ],
                 ],
-            ]
+            ],
         ], $container->getEnv());
 
 
