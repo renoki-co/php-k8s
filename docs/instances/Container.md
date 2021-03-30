@@ -28,7 +28,7 @@ $container->addSecretKeyRefs([
             ])
 ```
 
-Enviornment variables can also be set using a value from the [configMapKeyRef](https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-object) or [fieldRef](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables). When using a configMapKeyRef, also make sure the configMap exists in the same namespace as the container, otherwise a KubernetesAPIException will be thrown.
+Environment variables can also be set using a value from the [configMapKeyRef](https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-object) or [fieldRef](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables). When using a configMapKeyRef, also make sure the configMap exists in the same namespace as the container, otherwise a KubernetesAPIException will be thrown.
 
 ```php
 $container->addEnv([
