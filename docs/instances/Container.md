@@ -12,7 +12,42 @@ $container = K8s::container()
     ->addPort(3307, 'TCP', 'mysql-alt')
     ->setCommand(['mysqld'])
     ->setArgs(['--test'])
-    ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+    ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test'])
+```
+
+For adding a env value based on an secret, first make sure that the secret exists in the namespace that this container will be deployed in, otherwise a KubernetesAPIException will be thrown.
+
+```php
+// Single
+$container->addSecretKeyRef('SECRET_TEST', 'ref_name', 'ref_key')
+
+// Multiple
+$container->addSecretKeyRefs([
+                'SECRET_FOUR' => ['ref_name', 'ref_key'],
+                'SECRET_FIVE' => ['ref_name', 'ref_key']
+            ])
+```
+
+Enviornment variables can also be set using a value from the [configMapKeyRef](https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-object) or [fieldRef](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables). When using a configMapKeyRef, also make sure the configMap exists in the same namespace as the container, otherwise a KubernetesAPIException will be thrown.
+
+```php
+$container->addEnv([
+    'CONFIG_VARIABLE' => [
+        'valueFrom' => [
+            'configMapKeyRef' => [
+                'name' => 'ref_name',
+                'key' => 'ref_key'
+            ]
+        ]
+    ],
+    'FIELD_REF' => [
+        'valueFrom' => [
+            'fieldRef' => [
+                'fieldPath' => 'spec.nodeName'
+            ]
+        ]
+    ]
+])
 ```
 
 ### Attaching probes
