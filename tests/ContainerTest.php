@@ -135,7 +135,6 @@ class ContainerTest extends TestCase
                 'SECRET_FIVE' => ['ref_name', 'ref_key'],
             ]);
 
-
         $this->assertEquals('nginx:1.4', $container->getImage());
         $this->assertEquals([
             ['name' => 'key', 'value' => 'value'],
@@ -180,7 +179,6 @@ class ContainerTest extends TestCase
                 ],
             ],
         ], $container->getEnv());
-
 
         $container->removeEnv();
 

@@ -149,6 +149,7 @@ class Container extends Instance
         if (is_array($value) && array_key_exists('valueFrom', $value)) {
             return $this->addToAttribute('env', ['name' => $name, 'valueFrom' => $value['valueFrom']]);
         }
+
         return $this->addToAttribute('env', ['name' => $name, 'value' => $value]);
     }
 
@@ -176,7 +177,6 @@ class Container extends Instance
     public function setEnv(array $envs)
     {
         $envs = collect($envs)->map(function ($value, $name) {
-
             if (is_array($value) && array_key_exists('valueFrom', $value)) {
                 return ['name' => $name, 'valueFrom' => $value['valueFrom']];
             }
