@@ -146,6 +146,9 @@ class Container extends Instance
      */
     public function addEnv(string $name, $value)
     {
+        if (is_array($value) && array_key_exists('valueFrom', $value)) {
+            return $this->addToAttribute('env', ['name' => $name, 'valueFrom' => $value['valueFrom']]);
+        }
         return $this->addToAttribute('env', ['name' => $name, 'value' => $value]);
     }
 
