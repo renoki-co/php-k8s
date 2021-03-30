@@ -100,6 +100,44 @@ class Container extends Instance
     }
 
     /**
+     * Add an env variable by using a secret reference to the container.
+     *
+     * @param  string  $name
+     * @param  string  $refName
+     * @param  string  $refKey
+     * @return $this
+     */
+    public function addSecretKeyRef(string $name, string $refName, string $refKey)
+    {
+        return $this->addToAttribute('env', [
+            'name' => $name,
+            'valueFrom' => [
+                'secretKeyRef' => [
+                    'name' => $refName,
+                    'key' => $refKey
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Add multiple secret references to the container.
+     *
+     * @param  array  $refs
+     * @return $this
+     */
+    public function addSecretKeyRefs(array $refs)
+    {
+        foreach ($refs as $ref => $value) {
+            if (is_array($value)){
+                $this->addSecretKeyRef($ref, $value[0], $value[1]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Add an env variable to the container.
      *
      * @param  string  $name
@@ -135,6 +173,11 @@ class Container extends Instance
     public function setEnv(array $envs)
     {
         $envs = collect($envs)->map(function ($value, $name) {
+
+            if (is_array($value) && array_key_exists('valueFrom', $value)) {
+                return ['name' => $name, 'valueFrom' => $value['valueFrom']];
+            }
+
             return ['name' => $name, 'value' => $value];
         })->values()->toArray();
 
