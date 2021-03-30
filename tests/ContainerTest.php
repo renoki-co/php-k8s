@@ -15,12 +15,22 @@ class ContainerTest extends TestCase
         $volume = K8s::volume()->awsEbs('vol-1234', 'ext3');
 
         $container->setImage('nginx', '1.4')
-            ->setEnv(['key' => 'value'])
+            ->setEnv([
+                'key' => 'value',
+                'SECRET_ONE' => [
+                    'valueFrom' => [
+                        'secretKeyRef' => [
+                            'name' => 'ref_name',
+                            'key' => 'ref_key'
+                        ]
+                    ]
+                ]
+            ])
             ->addEnvs(['key2' => 'value2'])
-            ->addSecretKeyRef('SECRET_ONE', 'ref_name', 'ref_key')
+            ->addSecretKeyRef('SECRET_TWO', 'ref_name', 'ref_key')
             ->addSecretKeyRefs([
-                'SECRET_TWO' => ['ref_name', 'ref_key'],
-                'SECRET_THREE' => ['ref_name', 'ref_key']
+                'SECRET_THREE' => ['ref_name', 'ref_key'],
+                'SECRET_FOUR' => ['ref_name', 'ref_key']
             ])
             ->setArgs(['--test'])
             ->addPort(80, 'TCP', 'http')
@@ -60,7 +70,6 @@ class ContainerTest extends TestCase
         $this->assertEquals('nginx:1.4', $container->getImage());
         $this->assertEquals([
             ['name' => 'key', 'value' => 'value'],
-            ['name' => 'key2', 'value' => 'value2'],
             ['name' => 'SECRET_ONE',
                 'valueFrom' => [
                     'secretKeyRef' => [
@@ -69,6 +78,7 @@ class ContainerTest extends TestCase
                     ]
                 ],
             ],
+            ['name' => 'key2', 'value' => 'value2'],
             ['name' => 'SECRET_TWO',
                 'valueFrom' => [
                     'secretKeyRef' => [
@@ -78,6 +88,14 @@ class ContainerTest extends TestCase
                 ],
             ],
             ['name' => 'SECRET_THREE',
+                'valueFrom' => [
+                    'secretKeyRef' => [
+                        'name' => 'ref_name',
+                        'key' => 'ref_key'
+                    ]
+                ],
+            ],
+            ['name' => 'SECRET_FOUR',
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
