@@ -61,7 +61,7 @@ class ContainerTest extends TestCase
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
-                        'key' => 'ref_key'
+                        'key' => 'ref_key',
                     ]
                 ],
             ],
@@ -114,7 +114,7 @@ class ContainerTest extends TestCase
                     'valueFrom' => [
                         'secretKeyRef' => [
                             'name' => 'ref_name',
-                            'key' => 'ref_key'
+                            'key' => 'ref_key',
                         ]
                     ]
                 ]
@@ -124,7 +124,7 @@ class ContainerTest extends TestCase
                     'valueFrom' => [
                         'secretKeyRef' => [
                             'name' => 'ref_name',
-                            'key' => 'ref_key'
+                            'key' => 'ref_key',
                         ]
                     ]
                 ]
@@ -132,7 +132,7 @@ class ContainerTest extends TestCase
             ->addSecretKeyRef('SECRET_THREE', 'ref_name', 'ref_key')
             ->addSecretKeyRefs([
                 'SECRET_FOUR' => ['ref_name', 'ref_key'],
-                'SECRET_FIVE' => ['ref_name', 'ref_key']
+                'SECRET_FIVE' => ['ref_name', 'ref_key'],
             ]);
 
 
@@ -143,7 +143,7 @@ class ContainerTest extends TestCase
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
-                        'key' => 'ref_key'
+                        'key' => 'ref_key',
                     ]
                 ],
             ],
@@ -151,7 +151,7 @@ class ContainerTest extends TestCase
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
-                        'key' => 'ref_key'
+                        'key' => 'ref_key',
                     ]
                 ],
             ],
@@ -159,7 +159,7 @@ class ContainerTest extends TestCase
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
-                        'key' => 'ref_key'
+                        'key' => 'ref_key',
                     ]
                 ],
             ],
@@ -167,7 +167,7 @@ class ContainerTest extends TestCase
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
-                        'key' => 'ref_key'
+                        'key' => 'ref_key',
                     ]
                 ],
             ],
@@ -175,7 +175,7 @@ class ContainerTest extends TestCase
                 'valueFrom' => [
                     'secretKeyRef' => [
                         'name' => 'ref_name',
-                        'key' => 'ref_key'
+                        'key' => 'ref_key',
                     ]
                 ],
             ]
