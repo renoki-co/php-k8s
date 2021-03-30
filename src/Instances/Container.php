@@ -114,9 +114,9 @@ class Container extends Instance
             'valueFrom' => [
                 'secretKeyRef' => [
                     'name' => $refName,
-                    'key' => $refKey
-                ]
-            ]
+                    'key' => $refKey,
+                ],
+            ],
         ]);
     }
 
@@ -129,7 +129,7 @@ class Container extends Instance
     public function addSecretKeyRefs(array $refs)
     {
         foreach ($refs as $ref => $value) {
-            if (is_array($value)){
+            if (is_array($value)) {
                 $this->addSecretKeyRef($ref, $value[0], $value[1]);
             }
         }
