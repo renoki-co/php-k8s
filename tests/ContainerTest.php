@@ -17,7 +17,9 @@ class ContainerTest extends TestCase
         $container->setImage('nginx', '1.4')
             ->setEnv(['key' => 'value'])
             ->addEnvs(['key2' => 'value2'])
-            ->addSecretKeyRef('SECRET_ONE', 'ref_name', 'ref_key')
+            ->addSecretKeyRefs(['SECRET_ONE' => ['secret_ref_name', 'secret_ref_key']])
+            ->addConfigMapRefs(['SECRET_TWO' => ['cm_ref_name', 'cm_ref_key']])
+            ->addFieldRefs(['NODE_NAME' => ['spec.nodeName']])
             ->setArgs(['--test'])
             ->addPort(80, 'TCP', 'http')
             ->addPort(443, 'TCP', 'https')
@@ -57,11 +59,21 @@ class ContainerTest extends TestCase
         $this->assertEquals([
             ['name' => 'key', 'value' => 'value'],
             ['name' => 'key2', 'value' => 'value2'],
-            ['name' => 'SECRET_ONE',
+            [
+                'name' => 'SECRET_ONE',
                 'valueFrom' => [
                     'secretKeyRef' => [
-                        'name' => 'ref_name',
-                        'key' => 'ref_key',
+                        'name' => 'secret_ref_name',
+                        'key' => 'secret_ref_key',
+                    ],
+                ],
+            ],
+            [
+                'name' => 'SECRET_TWO',
+                'valueFrom' => [
+                    'secretKeyRef' => [
+                        'name' => 'cm_ref_name',
+                        'key' => 'cm_ref_key',
                     ],
                 ],
             ],
@@ -101,88 +113,5 @@ class ContainerTest extends TestCase
             'name' => 'vol-1234-volume',
             'mountPath' => '/some/path',
         ], $container->getMountedVolumes()[0]->toArray());
-    }
-
-    public function test_adding_secrets_to_container()
-    {
-        $container = K8s::container();
-
-        $container->setImage('nginx', '1.4')
-            ->setEnv([
-                'key' => 'value',
-                'SECRET_ONE' => [
-                    'valueFrom' => [
-                        'secretKeyRef' => [
-                            'name' => 'ref_name',
-                            'key' => 'ref_key',
-                        ],
-                    ],
-                ],
-            ])
-            ->addEnvs([
-                'SECRET_TWO' => [
-                    'valueFrom' => [
-                        'secretKeyRef' => [
-                            'name' => 'ref_name',
-                            'key' => 'ref_key',
-                        ],
-                    ],
-                ],
-            ])
-            ->addSecretKeyRef('SECRET_THREE', 'ref_name', 'ref_key')
-            ->addSecretKeyRefs([
-                'SECRET_FOUR' => ['ref_name', 'ref_key'],
-                'SECRET_FIVE' => ['ref_name', 'ref_key'],
-            ]);
-
-        $this->assertEquals('nginx:1.4', $container->getImage());
-        $this->assertEquals([
-            ['name' => 'key', 'value' => 'value'],
-            ['name' => 'SECRET_ONE',
-                'valueFrom' => [
-                    'secretKeyRef' => [
-                        'name' => 'ref_name',
-                        'key' => 'ref_key',
-                    ],
-                ],
-            ],
-            ['name' => 'SECRET_TWO',
-                'valueFrom' => [
-                    'secretKeyRef' => [
-                        'name' => 'ref_name',
-                        'key' => 'ref_key',
-                    ],
-                ],
-            ],
-            ['name' => 'SECRET_THREE',
-                'valueFrom' => [
-                    'secretKeyRef' => [
-                        'name' => 'ref_name',
-                        'key' => 'ref_key',
-                    ],
-                ],
-            ],
-            ['name' => 'SECRET_FOUR',
-                'valueFrom' => [
-                    'secretKeyRef' => [
-                        'name' => 'ref_name',
-                        'key' => 'ref_key',
-                    ],
-                ],
-            ],
-            ['name' => 'SECRET_FIVE',
-                'valueFrom' => [
-                    'secretKeyRef' => [
-                        'name' => 'ref_name',
-                        'key' => 'ref_key',
-                    ],
-                ],
-            ],
-        ], $container->getEnv());
-
-        $container->removeEnv();
-
-        $this->assertEquals('nginx:1.4', $container->getImage());
-        $this->assertEquals([], $container->getEnv([]));
     }
 }
