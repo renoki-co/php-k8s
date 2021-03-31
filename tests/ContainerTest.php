@@ -77,6 +77,14 @@ class ContainerTest extends TestCase
                     ],
                 ],
             ],
+            [
+                'name' => 'NODE_NAME',
+                'valueFrom' => [
+                    'fieldRef' => [
+                        'fieldPath' => 'spec.nodeName',
+                    ],
+                ],
+            ],
         ], $container->getEnv());
         $this->assertEquals(['--test'], $container->getArgs());
         $this->assertEquals([
