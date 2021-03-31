@@ -71,7 +71,7 @@ class ContainerTest extends TestCase
             [
                 'name' => 'SECRET_TWO',
                 'valueFrom' => [
-                    'secretKeyRef' => [
+                    'configMapKeyRef' => [
                         'name' => 'cm_ref_name',
                         'key' => 'cm_ref_key',
                     ],
