@@ -1,8 +1,10 @@
 - [Containers](#containers)
-  - [Example](#example)
-  - [Attaching probes](#attaching-probes)
-  - [Attaching volumes](#attaching-volumes)
-  - [Setting resources](#setting-resources)
+  - [Creating a container](#creating-a-container)
+    - [Setting environment variables](#setting-environment-variables)
+    - [Adding variables from references](#adding-variables-from-references)
+    - [Attaching probes](#attaching-probes)
+    - [Attaching volumes](#attaching-volumes)
+    - [Limits & Requests](#limits--requests)
 
 # Containers
 
@@ -17,8 +19,52 @@ $container = K8s::container()
     ])
     ->addPort(3307, 'TCP', 'mysql-alt')
     ->setCommand(['mysqld'])
-    ->setArgs(['--test'])
-    ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+    ->setArgs(['--test']);
+```
+
+### Setting environment variables
+
+To set the environment variable, simply call `->setEnv()`:
+
+```php
+$container->setEnv([
+    'MYSQL_ROOT_PASSWORD' => 'test',
+]);
+
+$container->addEnv('MYSQL_DATABASE', 'my_db') // this will append an env
+```
+
+### Adding variables from references
+
+To add an environment variable based on [secretKeyRef](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables), [configMapKeyRef](https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-object) or [fieldRef](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables), refer to the following examples.
+
+In the below examples, the `ref_key` referes to the key on which the data is stored within a configmap or a secret.
+
+```php
+$container->addSecretKeyRef('MYSQL_ROOT_PASSWORD', 'secret-name', 'ref_key');
+
+$container->addSecretKeyRefs([
+    'MYSQL_ROOT_PASSWORD' => ['secret-name', 'ref_key'],
+    'MYSQL_DATABASE' => ['secret-name', 'ref_key'],
+]);
+```
+
+```php
+$container->addConfigMapRef('MYSQL_ROOT_PASSWORD', 'configmap-name', 'ref_key');
+
+$container->addConfigMapRefs([
+    'MYSQL_ROOT_PASSWORD' => ['cm-name', 'ref_key'],
+    'MYSQL_DATABASE' => ['cm-name', 'ref_key'],
+]);
+```
+
+```php
+$container->addFieldRef('NODE_NAME', 'spec.nodeName');
+
+$container->addFieldRefs([
+    'NODE_NAME' => ['spec.nodeName'],
+    'POD_NAME' => ['metadata.name'],
+]);
 ```
 
 ## Attaching probes
@@ -78,7 +124,7 @@ $pod = K8s::pod()
     ->addVolumes([$awsEbVolume]);
 ```
 
-## Setting resources
+### Limits & Requests
 
 ```php
 $container->minMemory(512, 'Mi')->maxMemory(2, 'Gi');

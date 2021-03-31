@@ -17,6 +17,9 @@ class ContainerTest extends TestCase
         $container->setImage('nginx', '1.4')
             ->setEnv(['key' => 'value'])
             ->addEnvs(['key2' => 'value2'])
+            ->addSecretKeyRefs(['SECRET_ONE' => ['secret_ref_name', 'secret_ref_key']])
+            ->addConfigMapRefs(['SECRET_TWO' => ['cm_ref_name', 'cm_ref_key']])
+            ->addFieldRefs(['NODE_NAME' => ['spec.nodeName']])
             ->setArgs(['--test'])
             ->addPort(80, 'TCP', 'http')
             ->addPort(443, 'TCP', 'https')
@@ -56,6 +59,32 @@ class ContainerTest extends TestCase
         $this->assertEquals([
             ['name' => 'key', 'value' => 'value'],
             ['name' => 'key2', 'value' => 'value2'],
+            [
+                'name' => 'SECRET_ONE',
+                'valueFrom' => [
+                    'secretKeyRef' => [
+                        'name' => 'secret_ref_name',
+                        'key' => 'secret_ref_key',
+                    ],
+                ],
+            ],
+            [
+                'name' => 'SECRET_TWO',
+                'valueFrom' => [
+                    'configMapKeyRef' => [
+                        'name' => 'cm_ref_name',
+                        'key' => 'cm_ref_key',
+                    ],
+                ],
+            ],
+            [
+                'name' => 'NODE_NAME',
+                'valueFrom' => [
+                    'fieldRef' => [
+                        'fieldPath' => 'spec.nodeName',
+                    ],
+                ],
+            ],
         ], $container->getEnv());
         $this->assertEquals(['--test'], $container->getArgs());
         $this->assertEquals([

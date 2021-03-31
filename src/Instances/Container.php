@@ -100,6 +100,110 @@ class Container extends Instance
     }
 
     /**
+     * Add an env variable by using a secret reference to the container.
+     *
+     * @param  string  $name
+     * @param  string  $secretName
+     * @param  string  $key
+     * @return $this
+     */
+    public function addSecretKeyRef(string $name, string $secretName, string $key)
+    {
+        return $this->addEnv($name, [
+            'valueFrom' => [
+                'secretKeyRef' => [
+                    'name' => $secretName,
+                    'key' => $key,
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Add multiple secret references to the container.
+     *
+     * @param  array  $envsWithRefs
+     * @return $this
+     */
+    public function addSecretKeyRefs(array $envsWithRefs)
+    {
+        foreach ($envsWithRefs as $envName => $refs) {
+            $this->addSecretKeyRef($envName, ...$refs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an env variable by using a configmap reference to the container.
+     *
+     * @param  string  $name
+     * @param  string  $cmName
+     * @param  string  $key
+     * @return $this
+     */
+    public function addConfigMapRef(string $name, string $cmName, string $key)
+    {
+        return $this->addEnv($name, [
+            'valueFrom' => [
+                'configMapKeyRef' => [
+                    'name' => $cmName,
+                    'key' => $key,
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Add multiple configmap references to the container.
+     *
+     * @param  array  $envsWithRefs
+     * @return $this
+     */
+    public function addConfigMapRefs(array $envsWithRefs)
+    {
+        foreach ($envsWithRefs as $envName => $refs) {
+            $this->addConfigMapRef($envName, ...$refs);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an env variable by using a field reference to the container.
+     *
+     * @param  string  $name
+     * @param  string  $cmName
+     * @param  string  $key
+     * @return $this
+     */
+    public function addFieldRef(string $name, string $fieldPath)
+    {
+        return $this->addEnv($name, [
+            'valueFrom' => [
+                'fieldRef' => [
+                    'fieldPath' => $fieldPath,
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Add multiple field references to the container.
+     *
+     * @param  array  $envsWithRefs
+     * @return $this
+     */
+    public function addFieldRefs(array $envsWithRefs)
+    {
+        foreach ($envsWithRefs as $envName => $refs) {
+            $this->addFieldRef($envName, ...$refs);
+        }
+
+        return $this;
+    }
+
+    /**
      * Add an env variable to the container.
      *
      * @param  string  $name
@@ -108,6 +212,11 @@ class Container extends Instance
      */
     public function addEnv(string $name, $value)
     {
+        // If a valuFrom is encountered, add it under valueFrom instead.
+        if (is_array($value) && array_key_exists('valueFrom', $value)) {
+            return $this->addToAttribute('env', ['name' => $name, 'valueFrom' => $value['valueFrom']]);
+        }
+
         return $this->addToAttribute('env', ['name' => $name, 'value' => $value]);
     }
 
@@ -135,6 +244,11 @@ class Container extends Instance
     public function setEnv(array $envs)
     {
         $envs = collect($envs)->map(function ($value, $name) {
+            // If a valuFrom is encountered, add it under valueFrom instead.
+            if (is_array($value) && array_key_exists('valueFrom', $value)) {
+                return ['name' => $name, 'valueFrom' => $value['valueFrom']];
+            }
+
             return ['name' => $name, 'value' => $value];
         })->values()->toArray();
 
