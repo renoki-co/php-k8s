@@ -1,3 +1,11 @@
+- [Containers](#containers)
+  - [Creating a container](#creating-a-container)
+    - [Setting environment variables](#setting-environment-variables)
+    - [Adding variables from references](#adding-variables-from-references)
+    - [Attaching probes](#attaching-probes)
+    - [Attaching volumes](#attaching-volumes)
+    - [Limits & Requests](#limits--requests)
+
 # Containers
 
 ## Creating a container
@@ -11,45 +19,52 @@ $container = K8s::container()
     ])
     ->addPort(3307, 'TCP', 'mysql-alt')
     ->setCommand(['mysqld'])
-    ->setArgs(['--test'])
-    ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test'])
+    ->setArgs(['--test']);
 ```
 
-## Adding environment variables
+### Setting environment variables
 
-For adding a env value based on an [secretKeyRef](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables), first make sure that the secret exists in the namespace that this container will be deployed in, otherwise a KubernetesAPIException will be thrown.
+To set the environment variable, simply call `->setEnv()`:
 
 ```php
-// Single
-$container->addSecretKeyRef('SECRET_TEST', 'ref_name', 'ref_key')
+$container->setEnv([
+    'MYSQL_ROOT_PASSWORD' => 'test',
+]);
 
-// Multiple
+$container->addEnv('MYSQL_DATABASE', 'my_db') // this will append an env
+```
+
+### Adding variables from references
+
+To add an environment variable based on [secretKeyRef](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables), [configMapKeyRef](https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-object) or [fieldRef](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables), refer to the following examples.
+
+In the below examples, the `ref_key` referes to the key on which the data is stored within a configmap or a secret.
+
+```php
+$container->addSecretKeyRef('MYSQL_ROOT_PASSWORD', 'secret-name', 'ref_key');
+
 $container->addSecretKeyRefs([
-                'SECRET_FOUR' => ['ref_name', 'ref_key'],
-                'SECRET_FIVE' => ['ref_name', 'ref_key']
-            ])
+    'MYSQL_ROOT_PASSWORD' => ['secret-name', 'ref_key'],
+    'MYSQL_DATABASE' => ['secret-name', 'ref_key'],
+]);
 ```
 
-Environment variables can also be set using a value from the [configMapKeyRef](https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-object) or [fieldRef](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/#use-pod-fields-as-values-for-environment-variables). When using a configMapKeyRef, also make sure the configMap exists in the same namespace as the container, otherwise a KubernetesAPIException will be thrown.
+```php
+$container->addConfigMapRef('MYSQL_ROOT_PASSWORD', 'configmap-name', 'ref_key');
+
+$container->addConfigMapRefs([
+    'MYSQL_ROOT_PASSWORD' => ['cm-name', 'ref_key'],
+    'MYSQL_DATABASE' => ['cm-name', 'ref_key'],
+]);
+```
 
 ```php
-$container->addEnv([
-    'CONFIG_VARIABLE' => [
-        'valueFrom' => [
-            'configMapKeyRef' => [
-                'name' => 'ref_name',
-                'key' => 'ref_key'
-            ]
-        ]
-    ],
-    'FIELD_REF' => [
-        'valueFrom' => [
-            'fieldRef' => [
-                'fieldPath' => 'spec.nodeName'
-            ]
-        ]
-    ]
-])
+$container->addFieldRef('NODE_NAME', 'spec.nodeName');
+
+$container->addFieldRefs([
+    'NODE_NAME' => ['spec.nodeName'],
+    'POD_NAME' => ['metadata.name'],
+]);
 ```
 
 ### Attaching probes
@@ -109,7 +124,7 @@ $pod = K8s::pod()
     ->addVolumes([$awsEbVolume]);
 ```
 
-### Setting resources
+### Limits & Requests
 
 ```php
 $container->minMemory(512, 'Mi')->maxMemory(2, 'Gi');
