@@ -80,6 +80,7 @@ class ServiceTest extends TestCase
         $this->assertEquals([[
             'protocol' => 'TCP', 'port' => 80, 'targetPort' => 80,
         ]], $svc->getPorts());
+        $this->assertEquals("{$svc->getName()}.{$svc->getNamespace()}.svc.cluster.local", $svc->getClusterDns());
     }
 
     public function runGetAllTests()

@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s;
 
+use Closure;
 use Illuminate\Support\Traits\Macroable;
 
 class K8s
@@ -172,7 +173,7 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Kinds\CronJob
+     * @return \RenokiCo\PhpK8s\Kinds\K8sCronJob
      */
     public static function cronjob($cluster = null, array $attributes = [])
     {
@@ -184,7 +185,7 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Kinds\K8sJob
+     * @return \RenokiCo\PhpK8s\Kinds\K8sDaemonSet
      */
     public static function daemonSet($cluster = null, array $attributes = [])
     {
@@ -264,6 +265,18 @@ class K8s
     }
 
     /**
+     * Create a new PodDisruptionBudget kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget
+     */
+    public static function podDisruptionBudget($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sPodDisruptionBudget($cluster, $attributes);
+    }
+
+    /**
      * Create a new container instance.
      *
      * @param  array  $attributes
@@ -322,7 +335,7 @@ class K8s
      * Create a new subject instance.
      *
      * @param  array  $attributes
-     * @return \RenokiCo\PhpK8s\Instances\Rule
+     * @return \RenokiCo\PhpK8s\Instances\Subject
      */
     public static function subject(array $attributes = [])
     {
@@ -371,12 +384,7 @@ class K8s
      */
     public static function fromYaml($cluster, string $yaml)
     {
-        $docs = explode('---', $yaml);
-
-        $instances = collect($docs)->reduce(function ($classes, $doc) use ($cluster) {
-            $yaml = yaml_parse($doc);
-
-            $version = $yaml['apiVersion'];
+        $instances = collect(yaml_parse($yaml, -1))->reduce(function ($classes, $yaml) use ($cluster) {
             $kind = $yaml['kind'];
 
             unset($yaml['apiVersion'], $yaml['kind']);
@@ -396,11 +404,18 @@ class K8s
      *
      * @param  \RenokiCo\PhpK8s\Kinds\KubernetesCluster|null  $cluster
      * @param  string  $path
+     * @param  Closure|null  $callback
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
      */
-    public static function fromYamlFile($cluster, string $path)
+    public static function fromYamlFile($cluster, string $path, Closure $callback = null)
     {
-        return static::fromYaml($cluster, file_get_contents($path));
+        $content = file_get_contents($path);
+
+        if ($callback) {
+            $content = $callback($content);
+        }
+
+        return static::fromYaml($cluster, $content);
     }
 
     /**

@@ -1,3 +1,14 @@
+- [Pod](#pod)
+  - [Example](#example)
+  - [Attaching Volumes](#attaching-volumes)
+  - [Affinities & Anti-Affinities](#affinities--anti-affinities)
+  - [Container Retrieval](#container-retrieval)
+  - [Pod Logs](#pod-logs)
+  - [Pod Exec](#pod-exec)
+  - [Pod Attach](#pod-attach)
+  - [Pod Status](#pod-status)
+  - [Containers' Statuses](#containers-statuses)
+
 # Pod
 
 - [Official Documentation](https://kubernetes.io/docs/tasks/configure-pod-container/)
@@ -24,18 +35,18 @@ Later on, you can attach the `Container` classes directly to the `K8sPod` instan
 ```php
 $pod = $cluster->pod()
     ->setName('mysql')
-    ->setSelectors(['app' => 'db'])
+    ->setSelectors(['matchLabels' => ['app' => 'db']])
     ->setContainers([$mysql])
     ->setInitContainers([$busybox])
     ->addPulledSecrets(['someSecret', 'anotherSecret'])
     ->create();
 ```
 
-## Attaching volumes
+## Attaching Volumes
 
 Pods can attach volumes so that container can mount them. Please check the [Container documentation](../instances/Container.md) where you can find details on how to attach volumes for different drivers.
 
-## Attaching affinities & anti-affinities
+## Affinities & Anti-Affinities
 
 Pods can declare `affinity` to handle pod and node affinities and anti-affinities. Check [Affinity documentation](../instances/Affinity.md) to read more about the pod affinity and anti-affinity declarations.
 
@@ -45,6 +56,7 @@ You can simply attach affinities for both pod and node by calling specialized me
 $pod->setPodAffinity($affinity);
 $pod->setNodeAffinity($affinity);
 ```
+
 
 ## Container Retrieval
 
@@ -97,6 +109,78 @@ $pod->watchContainerLogs('mysql', function ($line) {
     // with the given line for the mysql container.
 })
 ```
+
+## Pod Exec
+
+Commands can be executed within the Pod via the exec method. The result is the list of messages received prior to the WS being closed by the Kube API.
+
+```php
+$messages = $pod->exec(['/bin/sh', '-c', 'ls -al']);
+
+foreach ($messages as $message) {
+    /**
+        [
+            "channel" => "stdout"
+            "message" => """
+                total 44\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34m.\e[m\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34m..\e[m\r\n
+                -rwxr-xr-x    1 root     root             0 Mar 25 13:01 \e[1;32m.dockerenv\e[m\r\n
+                drwxr-xr-x    2 root     root         12288 Mar  9 19:16 \e[1;34mbin\e[m\r\n
+                drwxr-xr-x    5 root     root           360 Mar 25 13:01 \e[1;34mdev\e[m\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34metc\e[m\r\n
+                drwxr-xr-x    2 nobody   nobody        4096 Mar  9 19:16 \e[1;34mhome\e[m\r\n
+                dr-xr-xr-x  226 root     root             0 Mar 25 13:01 \e[1;34mproc\e[m\r\n
+                drwx------    2 root     root          4096 Mar  9 19:16 \e[1;34mroot\e[m\r\n
+                dr-xr-xr-x   12 root     root             0 Mar 25 13:01 \e[1;34msys\e[m\r\n
+                drwxrwxrwt    2 root     root          4096 Mar  9 19:16 \e[1;34mtmp\e[m\r\n
+                drwxr-xr-x    3 root     root          4096 Mar  9 19:16 \e[1;34musr\e[m\r\n
+                drwxr-xr-x    1 root     root          4096 Mar 25 13:01 \e[1;34mvar\e[m\r\n
+            """
+        ]
+    */
+
+    echo "[{$message['channel']}] {$message['output']}".PHP_EOL;
+}
+```
+
+Pass an additional container parameter in case there is more than just 1 container inside the pod:
+
+```php
+$messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'mysql');
+```
+
+## Pod Attach
+
+You can attach to a container of a pod using the `attach` method. It accepts a callback that passes a WebSocket connection where you can listen to the pod's container output:
+
+```php
+use Ratchet\Client\WebSocket;
+
+$stdChannels = [
+    'stdin',
+    'stdout',
+    'stderr',
+    'error',
+    'resize',
+];
+
+$pod->attach(function (WebSocket $connection) use ($stdChannels) {
+    $connection->on('message', function ($message) use ($connection, $stdChannels) {
+        // Decode the channel (stdin, stdout, etc.) and the message.
+        $channel = $stdChannels[substr($data, 0, 1)];
+        $message = base64_decode(substr($data, 1));
+
+        // Do something with the message.
+        echo $message.PHP_EOL;
+
+        // Call ->close() to end the loop and close the connection.
+        $connection->close();
+    });
+});
+```
+
+The connection is provided using [ratchet/pawl](https://github.com/ratchetphp/Pawl#example) and it will block the main thread of the app by running it in a React event loop.
 
 ## Pod Status
 

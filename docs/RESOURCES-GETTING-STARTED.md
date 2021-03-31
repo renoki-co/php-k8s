@@ -1,6 +1,20 @@
-# Methods & Usage
+- [CRUD Resource operations](#crud-resource-operations)
+  - [Retrieving all resources](#retrieving-all-resources)
+  - [Retrieving a specific resource](#retrieving-a-specific-resource)
+  - [Creating resources](#creating-resources)
+  - [Updating resources](#updating-resources)
+  - [Deleting resources](#deleting-resources)
+  - [Creating or updating resources](#creating-or-updating-resources)
+  - [Importing from YAML](#importing-from-yaml)
+  - [Watch Resource](#watch-resource)
+    - [Watching a specific resource](#watching-a-specific-resource)
+    - [Watching all resources](#watching-all-resources)
 
-CRDs are by default interacting with the API. For instance, the idea behind this is to be able to import or create resources, with or without YAML, using PHP.
+# CRUD Resource operations
+
+Resources are by default interacting with the API. For instance, the idea behind this is to be able to import or create resources, with or without YAML, using PHP.
+
+Each resource extends basic functionality from a single class: `K8sResource`. This is used to [Custom: CRDs](CUSTOM-CRDS.md) or make a specific set of methods available across all resources, like [interacting with the namespace, labels, or annotations](kinds/Resource.md).
 
 ## Retrieving all resources
 
@@ -16,15 +30,7 @@ $namespaces = $cluster->getAllNamespaces();
 $stagingServices = $cluster->getAllServices('staging');
 ```
 
-The result is an `RenokiCo\PhpK8s\ResourcesList` instance.
-
-The class is extending the default `\Illuminate\Support\Collection`, on which you can chain various methods as described here: https://laravel.com/docs/master/collections
-
-Getting resources can be filtered if needed:
-
-```php
-$stagingServices = $cluster->service()->whereNamespace('staging')->all();
-```
+The result is an `RenokiCo\PhpK8s\ResourcesList` instance. The class is extending `\Illuminate\Support\Collection`, on which you can chain various methods as described here: https://laravel.com/docs/master/collections
 
 ## Retrieving a specific resource
 
@@ -40,7 +46,7 @@ $service = $cluster->service()->whereNamespace('staging')->getByName('nginx');
 $service = $cluster->getServiceByName('nginx', 'staging');
 ```
 
-Filters can vary, depending if the resources are namespaceable or not. By default, the namespace is `default` and can be missed from the filters.
+**Filters can vary, depending if the resources are namespaceable or not. By default, the namespace is `default` and can be missed from the filters.**
 
 ## Creating resources
 
@@ -69,12 +75,12 @@ You will have to simply call `->delete()` on the resource, after you retrieve it
 ```php
 $cm = $cluster->getConfigmapByName('settings');
 
-$cm->delete(); // true
+if ($cm->delete()) {
+    echo 'Configmap deleted! 🎉';
+}
 ```
 
-Additionally, you can pass query parameters, grace period and the propagation policy.
-
-The defaults are:
+Additionally, you can pass query parameters, grace period and the propagation policy if needed:
 
 ```php
 delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground')
@@ -106,7 +112,7 @@ The result would be a `\RenokiCo\PhpK8s\Kinds\K8sResource` instance you can call
 
 If there are more resources in the same YAML file, you will be given an array of them, representing the each kind, in order.
 
-Please keep in mind - the resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->createOrUpdate()`:
+**The resources are not synced, since it's not known if they exist already or not. So everything you have to do is to parse them and make sure to call `->create()` if it's needed or sync them using `->createOrUpdate()`**:
 
 ```php
 $storageClasses = $cluster->fromYaml($awsStorageClassesYamlPath);
@@ -138,7 +144,7 @@ $cluster->pod()->watchByName('mysql', function ($type, $pod) {
 
 **The watch closures will run indifinitely until you return a `true` or `false`.**
 
-Additionally, if you want to pass additional parameters like `resourceVersion`, you can pass an array of query parameters alongside with the closure:
+For additional parameters like `resourceVersion`, continue passing an array of query parameters alongside with the closure:
 
 ```php
 $cluster->pod()->watchByName('mysql', function ($type, $pod) {
@@ -148,12 +154,9 @@ $cluster->pod()->watchByName('mysql', function ($type, $pod) {
 
 ### Watching all resources
 
-To watch all resources instead of just one, `watchAll` is available.
-
-This time, you do not need to call any filter or retrieval, because there is nothing to filter:
+To watch all resources instead of just one, `watchAll` is available. This time, you do not need to call any filter or retrieval, because there is nothing to filter:
 
 ```php
-// Create just a new K8sPod instance.
 $cluster->pod()->watchAll(function ($type, $pod) {
     if ($pod->getName() === 'nginx') {
         // do something

@@ -4,15 +4,11 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 
 class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
-    use HasAnnotations;
     use HasSpec;
-    use HasLabels;
 
     /**
      * The resource Kind parameter.

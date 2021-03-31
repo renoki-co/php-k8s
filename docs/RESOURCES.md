@@ -1,10 +1,20 @@
-# Resources Docs
+- [Resources](#resources)
+  - [Getting Started](#getting-started)
+  - [Instances](#instances)
+  - [Resources](#resources-1)
+- [Extending](#extending)
+  - [Custom: CRDs](#custom-crds)
+- [Upcoming Resources](#upcoming-resources)
+  - [Planned](#planned)
+  - [Not Planned](#not-planned)
 
-## Cluster Interaction
+# Resources
 
-- [Methods & Usage - learn the basics](Usage.md)
-- [Cluster & Authentication - authenticate to your cluster](Cluster.md)
-- [General API - Methods implemented in all resources](kinds/Resource.md)
+## Getting Started
+
+If you haven't been getting started with the K8s Resources methods, please do so by reading [Resources: Getting Started](RESOURCES-GETTING-STARTED.md).
+
+Each resource extends basic functionality from a single class: `K8sResource`. This is used to [create your own CRDs](CUSTOM-CRDS.md) or make a specific set of methods available across all CRDs, like [interacting with the namespace, labels, or annotations](kinds/Resource.md).
 
 ## Instances
 
@@ -18,11 +28,7 @@ Instances are custom PHP classes that makes the nested YAML definitions be easie
 - [Rules](instances/Rules.md) - used for Roles & Cluster Roles
 - [Volumes](instances/Volumes.md) - used for mounting volumes in pods and containers
 
-## Resources (CRDs)
-
-Each resource inherits a default "base" class that is making the Resource build-up easier.
-
-**Check the documentation for [General API](kinds/Resource.md) and [K8s API Usage](Usage.md) before diving in to the actual resources documentation.**
+## Resources
 
 | Resource | Default Version
 | - | -
@@ -40,6 +46,7 @@ Each resource inherits a default "base" class that is making the Resource build-
 | [PersistenVolume](kinds/PersistentVolume.md) | `v1`
 | [PersistenVolumeClaim](kinds/PersistentVolumeClaim.md) | `v1`
 | [Pod](kinds/Pod.md) | `v1`
+| [PodDisruptionBudget](kinds/PodDisruptionBudget.md) | `policy/v1beta1`
 | [Role](kinds/Role.md) | `rbac.authorization.k8s.io/v1`
 | [RoleBinding](kinds/RoleBinding.md) | `rbac.authorization.k8s.io/v1`
 | [Secret](kinds/Secret.md) | `v1`
@@ -48,17 +55,13 @@ Each resource inherits a default "base" class that is making the Resource build-
 | [StatefulSet](kinds/StatefulSet.md) | `apps/v1`
 | [StorageClass](kinds/StorageClass.md) | `storage.k8s.io/v1`
 
-## Default Versions for Resources
+# Extending
 
-Since we support multiple K8s Cluster versions, some versions do promote certain resources to GA. Since each resource needs a default version, the package will set **the default versions for the oldest Kubernetes version supported**.
+## Custom: CRDs
 
-For example, if the package supports `v1.18 +`, then the package will make sure the versions are defaults for `v1.18`. In some cases, like Ingress in `v1.19` that switched from Beta to GA, the `v1beta1` is no longer a default and instead, the `v1` is now a default. If `v1.17` is the oldest supported version, then it will stay to `v1beta`.
+The `K8sResource` class is extendable and expose a lot of PHP OOP functionalities that you can use to build your custom resources. [Head up to the Custom: CRDs docs](CUSTOM-CRDS.md) to learn more about implementing your own custom resources.
 
-The minimum Kubernetes version that is supported by a given package version can be found at the top of [README.md](../README.md).
-
-## Custom CRDs
-
-The `K8sResource` class is extendable and expose a lot of PHP API that you can use to build your custom resources. [Head up to the CRDs docs](CRDS.md) to learn more about implementing your own custom resources.
+# Upcoming Resources
 
 ## Planned
 
@@ -66,7 +69,6 @@ The following list of resources are planned and they will be available soon:
 
 - Binding
 - NetworkPolicy
-- PodDisruptionBudget
 - PodSecurityPolicy
 - Endpoint
 - PriorityClass

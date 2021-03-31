@@ -1,6 +1,36 @@
-# K8s Resource
+- [K8s Basic Resource](#k8s-basic-resource)
+- [General Methods](#general-methods)
+  - [Namespace](#namespace)
+    - [`getNamespace()`](#getnamespace)
+    - [`setNamespace($namespace)`](#setnamespacenamespace)
+    - [`whereNamespace($namespace)`](#wherenamespacenamespace)
+  - [Names](#names)
+    - [`setName($name)`](#setnamename)
+    - [`getName()`](#getname)
+    - [`whereName($name)`](#wherenamename)
+  - [Labels](#labels)
+    - [`setLabels(array $labels)`](#setlabelsarray-labels)
+    - [`getLabels()`](#getlabels)
+  - [Annotations](#annotations)
+    - [`setAnnotations(array $annotations)`](#setannotationsarray-annotations)
+    - [`getAnnotations()`](#getannotations)
+  - [API](#api)
+    - [`getApiVersion()`](#getapiversion)
+    - [`getKind()`](#getkind)
+    - [`setDefaultVersion()`](#setdefaultversion)
+    - [`setDefaultNamespace()`](#setdefaultnamespace)
+  - [Transformers](#transformers)
+    - [`toArray()`](#toarray)
+- [Custom Callers](#custom-callers)
+  - [`getAttribute($name, $default)`](#getattributename-default)
+  - [`setAttribute($name, $value)`](#setattributename-value)
+  - [`removeAttribute($name)`](#removeattributename)
+  - [`addToAttribute($name, $element)`](#addtoattributename-element)
+- [Macros](#macros)
 
-Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods, generally-available for all CRDs. We'll dive in on what the available methods are and how you can use them in order to build your own resource.
+# K8s Basic Resource
+
+Each resource extends a base `RenokiCo\PhpK8s\Kinds\K8sResource` class that contains helpful methods, generally-available for all resources. We'll dive in on what the available methods are and how you can use them in order to build your own resource.
 
 # General Methods
 
@@ -74,6 +104,24 @@ Get the labels of a resource.
 
 ```php
 $service->getLabels();
+```
+
+## Annotations
+
+### `setAnnotations(array $annotations)`
+
+Set the annotations for the resource.
+
+```php
+$service->setAnnotations(['kubernetes.io/some-annotation' => 'yes']);
+```
+
+### `getAnnotations()`
+
+Get the annotations of a resource.
+
+```php
+$service->getAnnotations();
 ```
 
 ## API
@@ -232,6 +280,8 @@ K8sPod::macro('changeMetadata', function (array $metadata) {
 Usually, it's a good practice to initialize the resources from `K8s` class, so that they automatically gets redirected to cluster calls that actually make the API requests, so if you have new resources to initialize, you can use the macro on it, for example, like an [Agones Fleet](https://agones.dev/site/docs/reference/fleet), that is a custom third-party CRD which is not supported by this package:
 
 ```php
+use RenokiCo\PhpK8s\K8s;
+
 K8s::macro('agonesFleet', function ($cluster = null, array $attributes = []) {
     return new Kinds\MyAgonesFleet($cluster, $attributes);
 });

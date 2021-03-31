@@ -1,3 +1,7 @@
+- [Affinity](#affinity)
+  - [preferredDuringSchedulingIgnoredDuringExecution](#preferredduringschedulingignoredduringexecution)
+  - [requiredDuringSchedulingIgnoredDuringExecution](#requiredduringschedulingignoredduringexecution)
+
 # Affinity
 
 Affinities work with the help of [Expressions](Expression.md) to specify inclusions and exclusions for particular needs.

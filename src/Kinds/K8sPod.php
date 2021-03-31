@@ -2,6 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Kinds;
 
+use RenokiCo\PhpK8s\Contracts\Attachable;
+use RenokiCo\PhpK8s\Contracts\Dnsable;
+use RenokiCo\PhpK8s\Contracts\Executable;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
@@ -9,17 +12,19 @@ use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\K8s;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasSpec;
 use RenokiCo\PhpK8s\Traits\HasStatus;
 use RenokiCo\PhpK8s\Traits\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\HasStatusPhase;
 
-class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, Loggable
+class K8sPod extends K8sResource implements
+    Attachable,
+    Dnsable,
+    Executable,
+    InteractsWithK8sCluster,
+    Watchable,
+    Loggable
 {
-    use HasAnnotations;
-    use HasLabels;
     use HasSpec;
     use HasStatus;
     use HasStatusConditions;
@@ -38,6 +43,18 @@ class K8sPod extends K8sResource implements InteractsWithK8sCluster, Watchable, 
      * @var bool
      */
     protected static $namespaceable = true;
+
+    /**
+     * Get the DNS name within the cluster.
+     *
+     * @return string|null
+     */
+    public function getClusterDns()
+    {
+        $ipSlug = str_replace('.', '-', $this->getPodIps()[0]['ip'] ?? '');
+
+        return $ipSlug ? "{$ipSlug}.{$this->getNamespace()}.pod.cluster.local" : null;
+    }
 
     /**
      * Set the Pod containers.

@@ -1,4 +1,13 @@
-# Defining CRDs
+- [Custom: CRDs](#custom-crds)
+- [Getting started](#getting-started)
+  - [Watchable Resources](#watchable-resources)
+  - [Scalable Resources](#scalable-resources)
+  - [Podable Resources](#podable-resources)
+  - [Loggable Resources](#loggable-resources)
+- [Applying Macros](#applying-macros)
+- [Helper Traits](#helper-traits)
+
+# Custom: CRDs
 
 The ease of using basic Kubernetes resources can be extended into creating CRDs for your custom use case. This needs a lot of context about what you can apply to the resources, based on your needs.
 
@@ -41,7 +50,7 @@ class IngressRoute extends K8sResource implements InteractsWithK8sCluster
     protected static $namespaceable = true;
 }
 
-$ir = new IngressRoute([
+$ir = new IngressRoute($cluster, [
     'spec' => [
         'entryPoints' => ...
     ],
@@ -56,9 +65,9 @@ $ir->create();
 
 Watchable Resources are resources that can access the `/watch` endpoint in order to poll the changes over one or more resources. Typically, this can happen on any resource on which you can run `kubectl get some-crd --watch` upon.
 
-For example, on basic CRDs (the default K8s ones), many resources like Service or Secret come with a watchable implementation.
+For example, on basic resources (the default K8s ones), many resources like Service or Secret come with a watchable implementation.
 
-You can read more about [how to watch a resource](Usage.md#watch-resource).
+You can read more about [how to watch a resource](RESOURCES-GETTING-STARTED.md#watch-resource).
 
 ```php
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
@@ -70,7 +79,7 @@ class IngressRoute extends K8sResource implements InteractsWithK8sCluster, Watch
     //
 }
 
-(new IngressRoute)->whereName('foo')->watch(function ($type, $ir) {
+(new IngressRoute($cluster))->whereName('foo')->watch(function ($type, $ir) {
     //
 });
 ```
@@ -79,7 +88,7 @@ class IngressRoute extends K8sResource implements InteractsWithK8sCluster, Watch
 
 Scalable resources need a custom API on which you can call scale operations on them. Usually, this is done for resources that open a `/scale` endpoint to the API.
 
-On the default CRDs, this is applied to StatefulSets and Deployments.
+On the default resources, this is applied to StatefulSets and Deployments.
 
 You can look on [how StatefulSets are scaled](kinds/StatefulSet.md#scaling)
 
@@ -128,7 +137,7 @@ class GameServerSet extends K8sResource implements InteractsWithK8sCluster, Poda
     }
 }
 
-$gameServerSet = new GameServerSet([
+$gameServerSet = new GameServerSet($cluster, [
     'metadata' => [
         'name' => 'some-name',
     ],
@@ -170,13 +179,31 @@ class GameServerSet extends K8sResource implements InteractsWithK8sCluster, Logg
 {
     //
 }
+
+$logs = $gs->logs();
+```
+
+# Applying Macros
+
+[Macros](kinds/Resource.md#macros) come in help to fix issues with initialization of your own CRDs. For example, instead of `new GameServer()`, you may create a custom caller for your resource that will automatically get the `KubernetesCluster` object injected:
+
+```php
+use RenokiCo\PhpK8s\K8s;
+
+K8s::macro('gameServer', function ($cluster = null, array $attributes = []) {
+    return new Kinds\GameServer($cluster, $attributes);
+});
+
+foreach ($cluster->gameServer()->all() as $gs) {
+    //
+}
 ```
 
 # Helper Traits
 
 "Helper Traits" are just traits that make the boring nested variables be easier set with a more friendly way.
 
-You can find some in the [Traits folder](../../tree/master/src/Traits). By default, the `K8sResource` already uses the `HasAttributes` trait.
+You can find some in the [Traits folder](../../master/src/Traits). By default, the `K8sResource` already uses the `HasAttributes` trait.
 
 ```php
 use RenokiCo\PhpK8s\Kinds\K8sResource;

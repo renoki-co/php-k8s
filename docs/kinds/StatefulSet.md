@@ -1,3 +1,10 @@
+- [StatefulSet](#statefulset)
+  - [Example](#example)
+  - [Pod Template Retrieval](#pod-template-retrieval)
+  - [Getting Pods](#getting-pods)
+  - [Scaling](#scaling)
+  - [StatefulSet Status](#statefulset-status)
+
 # StatefulSet
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)

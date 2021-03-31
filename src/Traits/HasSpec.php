@@ -39,4 +39,15 @@ trait HasSpec
     {
         return $this->getAttribute("spec.{$name}", $default);
     }
+
+    /**
+     * Remove a given spec parameter.
+     *
+     * @param  string  $name
+     * @return mixed
+     */
+    public function removeSpec(string $name)
+    {
+        return $this->removeAttribute("spec.{$name}");
+    }
 }

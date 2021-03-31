@@ -99,6 +99,66 @@ class PodTest extends TestCase
         $this->runDeletionTests();
     }
 
+    public function test_pod_exec()
+    {
+        $busybox = K8s::container()
+            ->setName('busybox')
+            ->setImage('busybox')
+            ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
+
+        $pod = $this->cluster->pod()
+            ->setName('busybox-exec')
+            ->setContainers([$busybox])
+            ->createOrUpdate();
+
+        while (! $pod->isRunning()) {
+            dump("Waiting for pod {$pod->getName()} to be up and running...");
+            sleep(1);
+            $pod->refresh();
+        }
+
+        $messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'busybox');
+
+        $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
+            return Str::contains($message['output'], '.dockerenv');
+        })->isNotEmpty();
+
+        $this->assertTrue($hasDesiredOutput);
+
+        $pod->delete();
+    }
+
+    public function test_pod_attach()
+    {
+        $mysql = K8s::container()
+            ->setName('mysql')
+            ->setImage('mysql', '5.7')
+            ->setPorts([
+                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+            ])
+            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+
+        $pod = $this->cluster->pod()
+            ->setName('mysql-exec')
+            ->setContainers([$mysql])
+            ->createOrUpdate();
+
+        while (! $pod->isRunning()) {
+            dump("Waiting for pod {$pod->getName()} to be up and running...");
+            sleep(1);
+            $pod->refresh();
+        }
+
+        $pod->attach(function ($connection) use ($pod) {
+            $connection->on('message', function ($message) use ($connection) {
+                $this->assertTrue(true);
+                $connection->close();
+            });
+
+            $pod->delete();
+        });
+    }
+
     public function runCreationTests()
     {
         $mysql = K8s::container()
@@ -156,6 +216,9 @@ class PodTest extends TestCase
         $this->assertTrue(is_string($pod->getHostIp()));
         $this->assertCount(1, $pod->getPodIps());
         $this->assertEquals('BestEffort', $pod->getQos());
+
+        $ipSlug = str_replace('.', '-', $pod->getPodIps()[0]['ip'] ?? '');
+        $this->assertEquals("{$ipSlug}.{$pod->getNamespace()}.pod.cluster.local", $pod->getClusterDns());
     }
 
     public function runGetAllTests()

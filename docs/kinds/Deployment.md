@@ -1,3 +1,10 @@
+- [Deployment](#deployment)
+  - [Example](#example)
+  - [Pod Template Retrieval](#pod-template-retrieval)
+  - [Getting Pods](#getting-pods)
+  - [Scaling](#scaling)
+  - [Deployment Status](#deployment-status)
+
 # Deployment
 
 - [Official Documentation](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
