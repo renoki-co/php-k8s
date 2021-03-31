@@ -110,10 +110,12 @@ class Container extends Instance
     public function addSecretKeyRef(string $name, string $secretName, string $key)
     {
         return $this->addEnv($name, [
-            'valueFrom' => $this->formatValueFrom('secretKeyRef', [
-                'name' => $secretName,
-                'key' => $key,
-            ]),
+            'valueFrom' => [
+                'secretKeyRef' => [
+                    'name' => $secretName,
+                    'key' => $key,
+                ],
+            ],
         ]);
     }
 
@@ -143,10 +145,12 @@ class Container extends Instance
     public function addConfigMapRef(string $name, string $cmName, string $key)
     {
         return $this->addEnv($name, [
-            'valueFrom' => $this->formatValueFrom('configMapKeyRef', [
-                'name' => $cmName,
-                'key' => $key,
-            ]),
+            'valueFrom' => [
+                'configMapKeyRef' => [
+                    'name' => $cmName,
+                    'key' => $key,
+                ],
+            ],
         ]);
     }
 
@@ -176,9 +180,11 @@ class Container extends Instance
     public function addFieldRef(string $name, string $fieldPath)
     {
         return $this->addEnv($name, [
-            'valueFrom' => $this->formatValueFrom('fieldRef', [
-                'fieldPath' => $fieldPath,
-            ]),
+            'valueFrom' => [
+                'fieldRef' => [
+                    'fieldPath' => $fieldPath,
+                ],
+            ],
         ]);
     }
 
@@ -206,7 +212,7 @@ class Container extends Instance
      */
     public function addEnv(string $name, $value)
     {
-        // If a valuFrom is encountered, add it instead.
+        // If a valuFrom is encountered, add it under valueFrom instead.
         if (is_array($value) && array_key_exists('valueFrom', $value)) {
             return $this->addToAttribute('env', ['name' => $name, 'valueFrom' => $value['valueFrom']]);
         }
@@ -238,7 +244,7 @@ class Container extends Instance
     public function setEnv(array $envs)
     {
         $envs = collect($envs)->map(function ($value, $name) {
-            // If a valuFrom is encountered, add it instead.
+            // If a valuFrom is encountered, add it under valueFrom instead.
             if (is_array($value) && array_key_exists('valueFrom', $value)) {
                 return ['name' => $name, 'valueFrom' => $value['valueFrom']];
             }
@@ -427,22 +433,5 @@ class Container extends Instance
     public function isReady(): bool
     {
         return $this->getAttribute('ready', false);
-    }
-
-    /**
-     * Create a `valueFrom` format.
-     *
-     * @param  string  $type
-     * @param  array  $params
-     * @return array
-     */
-    protected function formatValueFrom(string $type, array $params): array
-    {
-        return [
-            'secretKeyRef' => [
-                'name' => $secretName,
-                'key' => $key,
-            ],
-        ];
     }
 }
