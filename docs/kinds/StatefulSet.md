@@ -2,6 +2,7 @@
   - [Example](#example)
   - [Pod Template Retrieval](#pod-template-retrieval)
   - [Getting Pods](#getting-pods)
+    - [Custom Pod Labels](#custom-pod-labels)
   - [Scaling](#scaling)
   - [StatefulSet Status](#statefulset-status)
 
@@ -68,12 +69,41 @@ $podName = $template['name'];
 
 ## Getting Pods
 
+To get the pods, the Pod template must have the `statefulset-name` label set. This way, the `labelSelector` API parameter is issued and you may retrieve the associated pods:
+
+```yaml
+metadata:
+  name: [here it goes the statefulset name]
+spec:
+  template:
+    metadata:
+      labels:
+        statefulset-name: [here it goes the statefulset name]
+```
+
 You can retrieve the pods as resources controlled by the Stateful Set by issuing `->getPods()`:
 
 ```php
 foreach ($sts->getPods() as $pod) {
     // $pod->logs()
 }
+```
+
+### Custom Pod Labels
+
+If you cannot declare the `statefulset-name` label or simply want to use something else, you may call `selectPods` from the resource:
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sStatefulSet;
+
+K8sStatefulSet::selectPods(function (K8sStatefulSet $sts) {
+    // $sts is the current StatefulSet
+
+    return [
+        'some-label' => 'some-label-value',
+        'some-other-label' => "{$sts->getName()}-custom-name",
+    ];
+});
 ```
 
 ## Scaling

@@ -22,7 +22,9 @@ class K8sStatefulSet extends K8sResource implements
     Watchable
 {
     use CanScale;
-    use HasPods;
+    use HasPods {
+        podsSelector as protected customPodsSelector;
+    }
     use HasReplicas;
     use HasSelector;
     use HasSpec;
@@ -147,6 +149,10 @@ class K8sStatefulSet extends K8sResource implements
      */
     public function podsSelector(): array
     {
+        if ($podsSelector = $this->customPodsSelector()) {
+            return $podsSelector;
+        }
+
         return [
             'statefulset-name' => $this->getName(),
         ];
