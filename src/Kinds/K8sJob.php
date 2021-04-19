@@ -18,7 +18,9 @@ class K8sJob extends K8sResource implements
     Podable,
     Watchable
 {
-    use HasPods;
+    use HasPods {
+        podsSelector as protected customPodsSelector;
+    }
     use HasSelector;
     use HasSpec;
     use HasStatus;
@@ -64,6 +66,10 @@ class K8sJob extends K8sResource implements
      */
     public function podsSelector(): array
     {
+        if ($podsSelector = $this->customPodsSelector()) {
+            return $podsSelector;
+        }
+
         return [
             'job-name' => $this->getName(),
         ];

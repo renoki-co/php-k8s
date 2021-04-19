@@ -121,8 +121,18 @@ class JobTest extends TestCase
             $job->refresh();
         }
 
-        $pods = $job->getPods();
+        K8sJob::selectPods(function ($job) {
+            $this->assertInstanceOf(K8sJob::class, $job);
 
+            return ['tier' => 'backend'];
+        });
+
+        $pods = $job->getPods();
+        $this->assertTrue($pods->count() > 0);
+
+        K8sJob::resetPodsSelector();
+
+        $pods = $job->getPods();
         $this->assertTrue($pods->count() > 0);
 
         foreach ($pods as $pod) {

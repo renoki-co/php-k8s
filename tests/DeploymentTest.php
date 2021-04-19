@@ -130,8 +130,18 @@ class DeploymentTest extends TestCase
             sleep(1);
         }
 
-        $pods = $dep->getPods();
+        K8sDeployment::selectPods(function ($dep) {
+            $this->assertInstanceOf(K8sDeployment::class, $dep);
 
+            return ['tier' => 'backend'];
+        });
+
+        $pods = $dep->getPods();
+        $this->assertTrue($pods->count() > 0);
+
+        K8sDeployment::resetPodsSelector();
+
+        $pods = $dep->getPods();
         $this->assertTrue($pods->count() > 0);
 
         foreach ($pods as $pod) {

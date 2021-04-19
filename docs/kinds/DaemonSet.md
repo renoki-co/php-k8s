@@ -2,6 +2,7 @@
   - [Example](#example)
   - [Pod Template Retrieval](#pod-template-retrieval)
   - [Getting Pods](#getting-pods)
+    - [Custom Pod Labels](#custom-pod-labels)
   - [Scaling](#scaling)
   - [Daemon Set Status](#daemon-set-status)
 
@@ -55,12 +56,41 @@ $podName = $template['name'];
 
 ## Getting Pods
 
+To get the pods, the Pod template must have the `daemonset-name` label set. This way, the `labelSelector` API parameter is issued and you may retrieve the associated pods:
+
+```yaml
+metadata:
+  name: [here it goes the daemonset name]
+spec:
+  template:
+    metadata:
+      labels:
+        daemonset-name: [here it goes the daemonset name]
+```
+
 You can retrieve the pods as resources controlled by the Daemon Set by issuing `->getPods()`:
 
 ```php
 foreach ($ds->getPods() as $pod) {
     // $pod->logs()
 }
+```
+
+### Custom Pod Labels
+
+If you cannot declare the `daemonset-name` label or simply want to use something else, you may call `selectPods` from the resource:
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sDaemonSet;
+
+K8sDaemonSet::selectPods(function (K8sDaemonSet $ds) {
+    // $ds is the current DaemonSet
+
+    return [
+        'some-label' => 'some-label-value',
+        'some-other-label' => "{$ds->getName()}-custom-name",
+    ];
+});
 ```
 
 ## Scaling

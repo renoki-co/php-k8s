@@ -185,8 +185,18 @@ class StatefulSetTest extends TestCase
             sleep(1);
         }
 
-        $pods = $sts->getPods();
+        K8sStatefulSet::selectPods(function ($sts) {
+            $this->assertInstanceOf(K8sStatefulSet::class, $sts);
 
+            return ['tier' => 'backend'];
+        });
+
+        $pods = $sts->getPods();
+        $this->assertTrue($pods->count() > 0);
+
+        K8sStatefulSet::resetPodsSelector();
+
+        $pods = $sts->getPods();
         $this->assertTrue($pods->count() > 0);
 
         foreach ($pods as $pod) {

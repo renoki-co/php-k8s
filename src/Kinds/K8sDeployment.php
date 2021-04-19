@@ -24,7 +24,9 @@ class K8sDeployment extends K8sResource implements
 {
     use CanScale;
     use HasMinimumSurge;
-    use HasPods;
+    use HasPods {
+        podsSelector as protected customPodsSelector;
+    }
     use HasReplicas;
     use HasSelector;
     use HasSpec;
@@ -78,6 +80,10 @@ class K8sDeployment extends K8sResource implements
      */
     public function podsSelector(): array
     {
+        if ($podsSelector = $this->customPodsSelector()) {
+            return $podsSelector;
+        }
+
         return [
             'deployment-name' => $this->getName(),
         ];

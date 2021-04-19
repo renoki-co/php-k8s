@@ -120,8 +120,18 @@ class DaemonSetTest extends TestCase
             sleep(1);
         }
 
-        $pods = $ds->getPods();
+        K8sDaemonSet::selectPods(function ($ds) {
+            $this->assertInstanceOf(K8sDaemonSet::class, $ds);
 
+            return ['tier' => 'backend'];
+        });
+
+        $pods = $ds->getPods();
+        $this->assertTrue($pods->count() > 0);
+
+        K8sDaemonSet::resetPodsSelector();
+
+        $pods = $ds->getPods();
         $this->assertTrue($pods->count() > 0);
 
         foreach ($pods as $pod) {
