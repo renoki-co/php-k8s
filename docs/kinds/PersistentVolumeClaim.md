@@ -7,7 +7,7 @@
 ```php
 $pvc = $cluster->persistentVolumeClaim()
     ->setName('pvc-1')
-    ->setSelectors(['matchLabels' => ['app' => 'bigdata'])
+    ->setSelectors(['matchLabels' => ['app' => 'bigdata']])
     ->setCapacity(10, 'Gi')
     ->setAccessModes(['ReadWriteOnce'])
     ->setStorageClass('gp2')
