@@ -16,7 +16,7 @@ PHP K8s
 [![Client Capabilities](https://img.shields.io/badge/Kubernetes%20Client-Silver-blue.svg?colorB=C0C0C0&colorA=306CE8)](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/csi-new-client-library-procedure.md#client-capabilities)
 [![Client Support Level](https://img.shields.io/badge/Kubernetes%20Client-beta-green.svg?colorA=306CE8)](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/csi-new-client-library-procedure.md#client-support-level)
 
-PHP K8s is a PHP handler for the Kubernetes Cluster API, helping you handling the individual Kubernetes resources directly from PHP, like viewing, creating, updating or deleting resources.
+Control your Kubernetes clusters with this PHP-based Kubernetes client. It supports any form of authentication, the exec API, and it has an easy implementation for CRDs.
 
 For Laravel projects, you might want to use [renoki-co/laravel-php-k8s](https://github.com/renoki-co/laravel-php-k8s) which eases the access for this particular case.
 
@@ -108,11 +108,11 @@ PHP K8s comes out-of-the-box with the following listed resources. For missing co
 | [StorageClass](docs/kinds/StorageClass.md) | `storage.k8s.io/v1`
 
 
-## Cluster Authentication
+## 🔒 Cluster Authentication
 
 PHP K8s supports any kind of HTTP cluster authentication, from Bearer Tokens to In-Cluster configuration for Pods. The extensive documentation on authentication & security can be found [here](docs/CLUSTER-AUTHENTICATION.md).
 
-## Default Versions for resources
+## 📗 Default Versions for resources
 
 Since the package supports multiple K8s Cluster versions, some versions do promote certain resources to GA. Since each resource needs a default version, the package will set **the default versions for the oldest Kubernetes version supported**.
 
