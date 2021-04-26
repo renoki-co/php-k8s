@@ -55,7 +55,7 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - uses: manusa/actions-setup-minikube@v2.3.1
+    - uses: manusa/actions-setup-minikube@v2.4.0
       name: Setup Minikube
       with:
         minikube version: v1.17.0
