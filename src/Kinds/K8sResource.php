@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Kinds;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Scalable;
@@ -381,7 +382,14 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function toArray(string $kind = null)
     {
-        return array_merge($this->attributes, [
+        $attributes = $this->attributes;
+
+        // Make sure to also include the namespace.
+        if (static::$namespaceable) {
+            Arr::set($attributes, 'metadata.namespace', $this->getNamespace());
+        }
+
+        return array_merge($attributes, [
             'kind' => $kind ?: $this::getKind(),
             'apiVersion' => $this->getApiVersion(),
         ]);
