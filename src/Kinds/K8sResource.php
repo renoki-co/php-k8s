@@ -3,19 +3,20 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use Closure;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\KubernetesCluster;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
 use RenokiCo\PhpK8s\Traits\HasKind;
-use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
-use RenokiCo\PhpK8s\Traits\HasNamespace;
+use RenokiCo\PhpK8s\Traits\HasLabels;
+use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasVersion;
+use RenokiCo\PhpK8s\Traits\HasNamespace;
+use RenokiCo\PhpK8s\Traits\HasAttributes;
+use Illuminate\Contracts\Support\Jsonable;
+use RenokiCo\PhpK8s\Traits\HasAnnotations;
+use Illuminate\Contracts\Support\Arrayable;
 use RenokiCo\PhpK8s\Traits\RunsClusterOperations;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 
 class K8sResource implements Arrayable, Jsonable
 {
@@ -93,7 +94,14 @@ class K8sResource implements Arrayable, Jsonable
      */
     public function toArray(string $kind = null)
     {
-        return array_merge($this->attributes, [
+        $attributes = $this->attributes;
+
+        // Make sure to also include the namespace.
+        if (static::$namespaceable) {
+            Arr::set($attributes, 'metadata.namespace', $this->getNamespace());
+        }
+
+        return array_merge($attributes, [
             'kind' => $kind ?: $this::getKind(),
             'apiVersion' => $this->getApiVersion(),
         ]);
