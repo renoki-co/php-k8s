@@ -49,7 +49,7 @@ class IngressTest extends TestCase
             ->addRules(self::$rules)
             ->setRules(self::$rules);
 
-        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
@@ -61,7 +61,7 @@ class IngressTest extends TestCase
     {
         $ing = $this->cluster->fromYamlFile(__DIR__.'/yaml/ingress.yaml');
 
-        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
@@ -98,7 +98,7 @@ class IngressTest extends TestCase
 
         $this->assertInstanceOf(K8sIngress::class, $ing);
 
-        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
@@ -127,7 +127,7 @@ class IngressTest extends TestCase
 
         $this->assertTrue($ing->isSynced());
 
-        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
@@ -146,7 +146,7 @@ class IngressTest extends TestCase
 
         $this->assertTrue($ing->isSynced());
 
-        $this->assertEquals('networking.k8s.io/v1beta1', $ing->getApiVersion());
+        $this->assertEquals('networking.k8s.io/v1', $ing->getApiVersion());
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals([], $ing->getAnnotations());

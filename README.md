@@ -91,7 +91,7 @@ PHP K8s comes out-of-the-box with the following listed resources. For missing co
 | [DaemonSet](docs/kinds/DaemonSet.md) | `apps/v1`
 | [Deployment](docs/kinds/Deployment.md) | `apps/v1`
 | [HorizontalPodAutoscaler](docs/kinds/HorizontalPodAutoscaler.md) | `autoscaling/v2beta2`
-| [Ingress](docs/kinds/Ingress.md) | `networking.k8s.io/v1beta1` |
+| [Ingress](docs/kinds/Ingress.md) | `networking.k8s.io/v1` |
 | [Job](docs/kinds/Job.md) | `batch/v1`
 | [Namespace](docs/kinds/Namespace.md) | `v1`
 | [Node](docs/kinds/Node.md) | `v1`
