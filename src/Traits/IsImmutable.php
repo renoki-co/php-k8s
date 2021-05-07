@@ -4,8 +4,6 @@ namespace RenokiCo\PhpK8s\Traits;
 
 trait IsImmutable
 {
-    use HasAttributes;
-
     /**
      * Turn on the resource's immutable mode.
      *
