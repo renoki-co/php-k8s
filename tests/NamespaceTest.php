@@ -61,7 +61,12 @@ class NamespaceTest extends TestCase
         $this->assertTrue($ns->isSynced());
 
         $this->assertEquals('production', $ns->getName());
-        $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
+
+        if ($this->cluster->olderThan('1.21.0')) {
+            $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
+        } else {
+            $this->assertEquals(['kubernetes.io/metadata.name' => 'production'], $ns->getLabels());
+        }
     }
 
     public function runCreationTests()
@@ -81,7 +86,12 @@ class NamespaceTest extends TestCase
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
         $this->assertEquals('production', $ns->getName());
-        $this->assertEquals(['kubernetes.io/metadata.name' => 'production'], $ns->getLabels());
+
+        if ($this->cluster->olderThan('1.21.0')) {
+            $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
+        } else {
+            $this->assertEquals(['kubernetes.io/metadata.name' => 'production'], $ns->getLabels());
+        }
 
         $ns->refresh();
 
