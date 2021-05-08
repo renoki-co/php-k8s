@@ -32,26 +32,6 @@ class IngressTest extends TestCase
     ]];
 
     /**
-     * Since v1.21.0's GA transition to v1, the
-     * expected output is based on v1beta1.
-     *
-     * @var array
-     */
-    protected static $expectedRules = [[
-        'host' => 'nginx.test.com',
-        'http' => [
-            'paths' => [[
-                'path' => '/',
-                'backend' => [
-                    'serviceName' => 'nginx',
-                    'servicePort' => 80,
-                ],
-                'pathType' => 'ImplementationSpecific',
-            ]],
-        ],
-    ]];
-
-    /**
      * The default testing tls.
      *
      * @var array
@@ -60,7 +40,7 @@ class IngressTest extends TestCase
         'hosts' => [
             'nginx.test.com',
         ],
-        'secretName' => 'verySecretName',
+        'secretName' => 'very-secret-name',
     ]];
 
     public function test_ingress_build()
@@ -89,7 +69,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
-        $this->assertEquals(self::$expectedRules, $ing->getRules());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function test_ingress_api_interaction()
@@ -127,7 +107,7 @@ class IngressTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$tls, $ing->getTls());
-        $this->assertEquals(self::$expectedRules, $ing->getRules());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function runGetAllTests()
@@ -155,7 +135,7 @@ class IngressTest extends TestCase
         $this->assertEquals('nginx', $ing->getName());
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
-        $this->assertEquals(self::$expectedRules, $ing->getRules());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function runUpdateTests()
@@ -175,7 +155,7 @@ class IngressTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals([], $ing->getAnnotations());
         $this->assertEquals(self::$tls, $ing->getTls());
-        $this->assertEquals(self::$expectedRules, $ing->getRules());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function runDeletionTests()
