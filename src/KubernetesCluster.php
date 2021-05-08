@@ -211,6 +211,7 @@ class KubernetesCluster
      * @param  string  $payload
      * @param  array  $query
      * @return \Psr\Http\Message\ResponseInterface
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function call(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
     {
