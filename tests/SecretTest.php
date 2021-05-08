@@ -15,13 +15,15 @@ class SecretTest extends TestCase
             ->setLabels(['tier' => 'backend'])
             ->setData(['root' => 'somevalue'])
             ->addData('postgres', 'postgres')
-            ->removeData('root');
+            ->removeData('root')
+            ->immutable();
 
         $this->assertEquals('v1', $secret->getApiVersion());
         $this->assertEquals('passwords', $secret->getName());
         $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
+        $this->assertTrue($secret->isImmutable());
     }
 
     public function test_secret_from_yaml()
@@ -33,6 +35,7 @@ class SecretTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $secret->getLabels());
         $this->assertEquals(['postgres' => base64_encode('postgres')], $secret->getData(false));
         $this->assertEquals(['postgres' => 'postgres'], $secret->getData(true));
+        $this->assertTrue($secret->isImmutable());
     }
 
     public function test_secret_api_interaction()
@@ -44,6 +47,29 @@ class SecretTest extends TestCase
         $this->runWatchAllTests();
         $this->runWatchTests();
         $this->runDeletionTests();
+    }
+
+    public function test_immutability()
+    {
+        if ($this->cluster->olderThan('1.21.0')) {
+            $this->markTestSkipped('Secrets do not support immutability earlier than v1.21.0');
+        }
+
+        $secret = $this->cluster->secret()
+            ->setName('passwords')
+            ->setLabels(['tier' => 'backend'])
+            ->setData(['root' => 'somevalue'])
+            ->addData('postgres', 'postgres')
+            ->removeData('root')
+            ->immutable();
+
+        $secret->createOrUpdate();
+
+        $secret->refresh();
+
+        $this->assertTrue($secret->isImmutable());
+
+        $secret->delete();
     }
 
     public function runCreationTests()

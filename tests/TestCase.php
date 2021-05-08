@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
+use RenokiCo\PhpK8s\Exceptions\PhpK8sException;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 abstract class TestCase extends Orchestra
@@ -26,6 +27,13 @@ abstract class TestCase extends Orchestra
         $this->cluster = new KubernetesCluster('http://127.0.0.1:8080');
 
         $this->cluster->withoutSslChecks();
+
+        set_exception_handler(function ($exception) {
+            if ($exception instanceof PhpK8sException) {
+                dump($exception->getPayload());
+                dump($exception->getMessage());
+            }
+        });
     }
 
     /**

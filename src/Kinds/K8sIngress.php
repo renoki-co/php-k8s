@@ -22,7 +22,7 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
      *
      * @var string
      */
-    protected static $defaultVersion = 'networking.k8s.io/v1beta1';
+    protected static $defaultVersion = 'networking.k8s.io/v1';
 
     /**
      * Wether the resource has a namespace.
