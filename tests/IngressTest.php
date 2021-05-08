@@ -78,7 +78,7 @@ class IngressTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $ing->getLabels());
         $this->assertEquals(['nginx/ann' => 'yes'], $ing->getAnnotations());
         $this->assertEquals(self::$tls, $ing->getTls());
-        $this->assertEquals(self::$expectedRules, $ing->getRules());
+        $this->assertEquals(self::$rules, $ing->getRules());
     }
 
     public function test_ingress_from_yaml_post()
