@@ -81,7 +81,7 @@ class NamespaceTest extends TestCase
         $this->assertInstanceOf(K8sNamespace::class, $ns);
 
         $this->assertEquals('production', $ns->getName());
-        $this->assertEquals(['tier' => 'backend'], $ns->getLabels());
+        $this->assertEquals(['kubernetes.io/metadata.name' => 'production'], $ns->getLabels());
 
         $ns->refresh();
 
