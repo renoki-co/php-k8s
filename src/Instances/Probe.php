@@ -50,14 +50,19 @@ class Probe extends Instance
      */
     public function http(string $path = '/healthz', int $port = 8080, array $headers = [], string $scheme = 'HTTP')
     {
-        return $this->setAttribute('httpGet', [
+        $probeData = [
             'path' => $path,
             'port' => $port,
-            'httpHeaders' => collect($headers)->map(function ($value, $key) {
-                return ['name' => $key, 'value' => $value];
-            })->values()->toArray(),
             'scheme' => $scheme,
-        ]);
+        ];
+
+        if (count($headers) > 0) {
+            $probeData['httpHeaders'] = collect($headers)->map(function ($value, $key) {
+                return ['name' => $key, 'value' => $value];
+            })->values()->toArray();
+        }
+
+        return $this->setAttribute('httpGet', $probeData);
     }
 
     /**
