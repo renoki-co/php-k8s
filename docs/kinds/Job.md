@@ -2,6 +2,7 @@
   - [Example](#example)
   - [Pod Template Retrieval](#pod-template-retrieval)
   - [Getting Pods](#getting-pods)
+    - [Custom Pod Labels](#custom-pod-labels)
   - [Job's Restart Policy](#jobs-restart-policy)
   - [Job Status](#job-status)
 
@@ -53,12 +54,41 @@ $podName = $template['name'];
 
 ## Getting Pods
 
+To get the pods, the Pod template must have the `job-name` label set. This way, the `labelSelector` API parameter is issued and you may retrieve the associated pods:
+
+```yaml
+metadata:
+  name: [here it goes the job name]
+spec:
+  template:
+    metadata:
+      labels:
+        job-name: [here it goes the job name]
+```
+
 You can retrieve the pods as resources controlled by the Job by issuing `->getPods()`:
 
 ```php
 foreach ($job->getPods() as $pod) {
     // $pod->logs()
 }
+```
+
+### Custom Pod Labels
+
+If you cannot declare the `job-name` label or simply want to use something else, you may call `selectPods` from the resource:
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sJob;
+
+K8sJob::selectPods(function (K8sJob $job) {
+    // $job is the current Job
+
+    return [
+        'some-label' => 'some-label-value',
+        'some-other-label' => "{$job->getName()}-custom-name",
+    ];
+});
 ```
 
 ## Job's Restart Policy

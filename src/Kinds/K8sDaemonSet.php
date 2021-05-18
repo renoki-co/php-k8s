@@ -16,7 +16,9 @@ use RenokiCo\PhpK8s\Traits\HasTemplate;
 class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podable, Watchable
 {
     use HasMinimumSurge;
-    use HasPods;
+    use HasPods {
+        podsSelector as protected customPodsSelector;
+    }
     use HasSelector;
     use HasSpec;
     use HasStatus;
@@ -67,6 +69,10 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
      */
     public function podsSelector(): array
     {
+        if ($podsSelector = $this->customPodsSelector()) {
+            return $podsSelector;
+        }
+
         return [
             'daemonset-name' => $this->getName(),
         ];

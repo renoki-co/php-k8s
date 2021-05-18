@@ -204,19 +204,17 @@ class KubernetesCluster
     }
 
     /**
-     * Call the API with the specified method and path.
+     * Make a HTTP call to a given path with a method and payload.
      *
      * @param  string  $method
      * @param  string  $path
      * @param  string  $payload
      * @param  array  $query
-     * @return mixed
+     * @return \Psr\Http\Message\ResponseInterface
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    public function call(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
     {
-        $resourceClass = $this->resourceClass;
-
         try {
             $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), [
                 RequestOptions::BODY => $payload,
@@ -230,6 +228,25 @@ class KubernetesCluster
                 $errorPayload
             );
         }
+
+        return $response;
+    }
+
+    /**
+     * Call the API with the specified method and path.
+     *
+     * @param  string  $method
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
+     * @return mixed
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    {
+        $resourceClass = $this->resourceClass;
+
+        $response = $this->call($method, $path, $payload, $query);
 
         $json = @json_decode($response->getBody(), true);
 

@@ -2,6 +2,7 @@
   - [Example](#example)
   - [Pod Template Retrieval](#pod-template-retrieval)
   - [Getting Pods](#getting-pods)
+    - [Custom Pod Labels](#custom-pod-labels)
   - [Scaling](#scaling)
   - [Deployment Status](#deployment-status)
 
@@ -55,12 +56,41 @@ $podName = $template['name'];
 
 ## Getting Pods
 
+To get the pods, the Pod template must have the `deployment-name` label set. This way, the `labelSelector` API parameter is issued and you may retrieve the associated pods:
+
+```yaml
+metadata:
+  name: [here it goes the deployment name]
+spec:
+  template:
+    metadata:
+      labels:
+        deployment-name: [here it goes the deployment name]
+```
+
 You can retrieve the pods as resources controlled by the Deployment by issuing `->getPods()`:
 
 ```php
 foreach ($de->getPods() as $pod) {
     // $pod->logs()
 }
+```
+
+### Custom Pod Labels
+
+If you cannot declare the `deployment-name` label or simply want to use something else, you may call `selectPods` from the resource:
+
+```php
+use RenokiCo\PhpK8s\Kinds\K8sDeployment;
+
+K8sDeployment::selectPods(function (K8sDeployment $dep) {
+    // $dep is the current Deployment
+
+    return [
+        'some-label' => 'some-label-value',
+        'some-other-label' => "{$dep->getName()}-custom-name",
+    ];
+});
 ```
 
 ## Scaling

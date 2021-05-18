@@ -13,3 +13,16 @@ $cm = $cluster->configmap()
         'ca.pem' => '...',
     ])->create();
 ```
+
+## Immutability
+
+Since Kubernetes v1.21.0, Configmaps support immutability. If you do not specify the `immutable()` method, it will default to false:
+
+```php
+$cm = $cluster->configmap()
+    ...
+    ->immutable()
+    ->create();
+
+$cm->isImmutable(); // true
+```

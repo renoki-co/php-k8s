@@ -6,3 +6,4 @@ metadata:
     tier: backend
 data:
   key2: val2
+immutable: true

@@ -15,12 +15,14 @@ class ConfigMapTest extends TestCase
             ->setLabels(['tier' => 'backend'])
             ->setData(['somekey' => 'somevalue'])
             ->addData('key2', 'val2')
-            ->removeData('somekey');
+            ->removeData('somekey')
+            ->immutable();
 
         $this->assertEquals('v1', $cm->getApiVersion());
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
+        $this->assertTrue($cm->isImmutable());
     }
 
     public function test_config_map_from_yaml()
@@ -31,6 +33,7 @@ class ConfigMapTest extends TestCase
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['tier' => 'backend'], $cm->getLabels());
         $this->assertEquals(['key2' => 'val2'], $cm->getData());
+        $this->assertTrue($cm->isImmutable());
     }
 
     public function test_config_map_api_interaction()
@@ -42,6 +45,29 @@ class ConfigMapTest extends TestCase
         $this->runWatchAllTests();
         $this->runWatchTests();
         $this->runDeletionTests();
+    }
+
+    public function test_immutability()
+    {
+        if ($this->cluster->olderThan('1.21.0')) {
+            $this->markTestSkipped('Configmaps do not support immutability earlier than v1.21.0');
+        }
+
+        $cm = $this->cluster->configmap()
+            ->setName('settings')
+            ->setLabels(['tier' => 'backend'])
+            ->setData(['somekey' => 'somevalue'])
+            ->addData('key2', 'val2')
+            ->removeData('somekey')
+            ->immutable();
+
+        $cm->createOrUpdate();
+
+        $cm->refresh();
+
+        $this->assertTrue($cm->isImmutable());
+
+        $cm->delete();
     }
 
     public function runCreationTests()

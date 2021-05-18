@@ -40,3 +40,16 @@ $data = $secret->getData(true);
 
 $key = $data['key.pem'] // '...'
 ```
+
+## Immutability
+
+Since Kubernetes v1.21.0, Secrets support immutability. If you do not specify the `immutable()` method, it will default to false:
+
+```php
+$secret = $cluster->secret()
+    ...
+    ->immutable()
+    ->create();
+
+$secret->isImmutable(); // true
+```
