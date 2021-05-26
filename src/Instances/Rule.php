@@ -33,7 +33,7 @@ class Rule extends Instance
     /**
      * Set the API groups to core.
      *
-     * @return string
+     * @return $this
      */
     public function core()
     {
