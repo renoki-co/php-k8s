@@ -18,6 +18,13 @@ class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
     protected static $kind = 'Node';
 
     /**
+     * Wether the resource has a namespace.
+     *
+     * @var bool
+     */
+    protected static $namespaceable = false;
+
+    /**
      * Get the node info.
      *
      * @return array
