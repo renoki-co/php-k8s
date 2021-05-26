@@ -112,9 +112,9 @@ class KubernetesCluster
          * Replace any name[<number>]=value occurences with name=value
          * to support argv input.
          */
-        $query = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($query));
+        $query = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', urldecode(http_build_query($query)));
 
-        return $this->url.$path.'?'.$query;
+        return "{$this->url}{$path}?{$query}";
     }
 
     /**
