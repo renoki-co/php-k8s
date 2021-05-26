@@ -10,11 +10,4 @@ class K8sClusterRole extends K8sRole
      * @var null|string
      */
     protected static $kind = 'ClusterRole';
-
-    /**
-     * Wether the resource has a namespace.
-     *
-     * @var bool
-     */
-    protected static $namespaceable = false;
 }
