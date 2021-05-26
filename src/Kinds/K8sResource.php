@@ -11,6 +11,7 @@ use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\HasAttributes;
+use RenokiCo\PhpK8s\Traits\HasEvents;
 use RenokiCo\PhpK8s\Traits\HasKind;
 use RenokiCo\PhpK8s\Traits\HasLabels;
 use RenokiCo\PhpK8s\Traits\HasName;
@@ -22,6 +23,7 @@ class K8sResource implements Arrayable, Jsonable
 {
     use HasAnnotations;
     use HasAttributes;
+    use HasEvents;
     use HasKind;
     use HasLabels;
     use HasName;
@@ -101,10 +103,14 @@ class K8sResource implements Arrayable, Jsonable
             Arr::set($attributes, 'metadata.namespace', $this->getNamespace());
         }
 
-        return array_merge($attributes, [
+        $instanceToArray = array_merge($attributes, [
             'kind' => $kind ?: $this::getKind(),
             'apiVersion' => $this->getApiVersion(),
         ]);
+
+        ksort($instanceToArray);
+
+        return $instanceToArray;
     }
 
     /**
