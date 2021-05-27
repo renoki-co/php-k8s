@@ -2,8 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-use RenokiCo\PhpK8s\K8s;
-
 trait HasEvents
 {
     /**
