@@ -25,6 +25,18 @@ class K8s
     }
 
     /**
+     * Create a new Event kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sEvent
+     */
+    public static function event($cluster = null, array $attributes = [])
+    {
+        return new Kinds\K8sEvent($cluster, $attributes);
+    }
+
+    /**
      * Create a new Namespace kind.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster

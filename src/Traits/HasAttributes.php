@@ -93,6 +93,17 @@ trait HasAttributes
     }
 
     /**
+     * Check if the given instance is the same as this one.
+     *
+     * @param  self  $instance
+     * @return bool
+     */
+    public function is(self $instance)
+    {
+        return $instance->toJson() === $this->toJson();
+    }
+
+    /**
      * Mark the current resource as
      * being fetched from the cluster.
      *
