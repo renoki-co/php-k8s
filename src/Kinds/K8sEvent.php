@@ -40,23 +40,7 @@ class K8sEvent extends K8sResource implements InteractsWithK8sCluster, Watchable
             $object['resourceVersion'] = $resourceVersion;
         }
 
-        if ($resourceUid = $resource->getUid()) {
-            $object['uid'] = $resourceUid;
-        }
-
         return $this->setAttribute('involvedObject', $object);
-    }
-
-    /**
-     * Emit the event.
-     *
-     * @param  array  $query
-     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
-     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
-     */
-    public function emit(array $query = ['pretty' => 1])
-    {
-        return $this->create($query);
     }
 
     /**
