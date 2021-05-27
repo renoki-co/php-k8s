@@ -24,4 +24,16 @@ trait HasLabels
     {
         return $this->getAttribute('metadata.labels', []);
     }
+
+    /**
+     * Get the label value from the list.
+     *
+     * @param  string  $name
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function getLabel(string $name, $default = null)
+    {
+        return $this->getLabels()[$name] ?? $default;
+    }
 }

@@ -24,4 +24,16 @@ trait HasAnnotations
     {
         return $this->getAttribute('metadata.annotations', []);
     }
+
+    /**
+     * Get the annotation value from the list.
+     *
+     * @param  string  $name
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public function getAnnotation(string $name, $default = null)
+    {
+        return $this->getAnnotations()[$name] ?? $default;
+    }
 }

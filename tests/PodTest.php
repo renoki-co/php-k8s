@@ -43,6 +43,12 @@ class PodTest extends TestCase
         $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
         $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
 
+        $this->assertEquals('backend', $pod->getLabel('tier'));
+        $this->assertNull($pod->getLabel('inexistentLabel'));
+
+        $this->assertEquals('yes', $pod->getAnnotation('mysql/annotation'));
+        $this->assertNull($pod->getAnnotation('inexistentAnnot'));
+
         foreach ($pod->getInitContainers() as $container) {
             $this->assertInstanceOf(Container::class, $container);
         }
