@@ -38,7 +38,7 @@ Instances are custom PHP classes that makes the nested YAML definitions be easie
 | [CronJob](kinds/CronJob.md) | `batch/v1beta1`
 | [DaemonSet](kinds/DaemonSet.md) | `apps/v1`
 | [Deployment](kinds/Deployment.md) | `apps/v1`
-| [Event](kinds/Event.md) | `v1`
+| [Event](docs/kinds/Event.md) | `v1`
 | [HorizontalPodAutoscaler](kinds/HorizontalPodAutoscaler.md) | `autoscaling/v2beta2`
 | [Ingress](kinds/Ingress.md) | `networking.k8s.io/v1` |
 | [Job](kinds/Job.md) | `batch/v1`
