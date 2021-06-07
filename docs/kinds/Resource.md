@@ -11,9 +11,13 @@
   - [Labels](#labels)
     - [`setLabels(array $labels)`](#setlabelsarray-labels)
     - [`getLabels()`](#getlabels)
+    - [`getLabel($name, $default = null)`](#getlabelname-default--null)
+    - [`setOrUpdateLabels(array $labels)`](#setorupdatelabelsarray-labels)
   - [Annotations](#annotations)
     - [`setAnnotations(array $annotations)`](#setannotationsarray-annotations)
     - [`getAnnotations()`](#getannotations)
+    - [`getAnnotation($name, $default = null)`](#getannotationname-default--null)
+    - [`setOrUpdateAnnotations(array $annotations)`](#setorupdateannotationsarray-annotations)
   - [API](#api)
     - [`getApiVersion()`](#getapiversion)
     - [`getKind()`](#getkind)
@@ -106,6 +110,26 @@ Get the labels of a resource.
 $service->getLabels();
 ```
 
+### `getLabel($name, $default = null)`
+
+Get the label value by key. Defaults to null.
+
+```php
+$service->getLabel('tier'); // "backend"
+$service->getLabel('not-a-label'); // null
+```
+
+### `setOrUpdateLabels(array $labels)`
+
+Set or update the labels. The method used will be merge.
+
+```php
+$service->setOrUpdateLabels([
+    'tier' => 'backend'
+    'some-other-label' => 'test',
+]);
+```
+
 ## Annotations
 
 ### `setAnnotations(array $annotations)`
@@ -122,6 +146,26 @@ Get the annotations of a resource.
 
 ```php
 $service->getAnnotations();
+```
+
+### `getAnnotation($name, $default = null)`
+
+Get the annotation value by key. Defaults to null.
+
+```php
+$service->getAnnotation('kubernetes.io/some-annotation'); // "yes"
+$service->getAnnotation('kubernetes.io/non-existing-annotation'); // null
+```
+
+### `setOrUpdateAnnotations(array $annotations)`
+
+Set or update the annotations. The method used will be merge.
+
+```php
+$service->setOrUpdateAnnotations([
+    'kubernetes.io/some-annotation' => 'yes'
+    'kubernetes.io/some-otherannotation' => 'yes',
+]);
 ```
 
 ## API
