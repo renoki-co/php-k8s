@@ -36,4 +36,17 @@ trait HasLabels
     {
         return $this->getLabels()[$name] ?? $default;
     }
+
+    /**
+     * Set or update the given labels.
+     *
+     * @param  array  $labels
+     * @return $this
+     */
+    public function setOrUpdateLabels(array $labels = [])
+    {
+        return $this->setLabels(
+            array_merge($this->getLabels(), $labels)
+        );
+    }
 }

@@ -29,16 +29,18 @@ class PodTest extends TestCase
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
-            ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setOrUpdateLabels(['tier' => 'test'])
+            ->setOrUpdateLabels(['tier' => 'backend', 'type' => 'test'])
+            ->setOrUpdateAnnotations(['mysql/annotation' => 'no'])
+            ->setOrUpdateAnnotations(['mysql/annotation' => 'yes', 'mongodb/annotation' => 'no'])
             ->addPulledSecrets(['secret1', 'secret2'])
             ->setInitContainers([$busybox])
             ->setContainers([$mysql]);
 
         $this->assertEquals('v1', $pod->getApiVersion());
         $this->assertEquals('mysql', $pod->getName());
-        $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+        $this->assertEquals(['tier' => 'backend', 'type' => 'test'], $pod->getLabels());
+        $this->assertEquals(['mysql/annotation' => 'yes', 'mongodb/annotation' => 'no'], $pod->getAnnotations());
         $this->assertEquals([['name' => 'secret1'], ['name' => 'secret2']], $pod->getPulledSecrets());
         $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
         $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
@@ -47,6 +49,7 @@ class PodTest extends TestCase
         $this->assertNull($pod->getLabel('inexistentLabel'));
 
         $this->assertEquals('yes', $pod->getAnnotation('mysql/annotation'));
+        $this->assertEquals('no', $pod->getAnnotation('mongodb/annotation'));
         $this->assertNull($pod->getAnnotation('inexistentAnnot'));
 
         foreach ($pod->getInitContainers() as $container) {

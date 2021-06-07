@@ -36,4 +36,17 @@ trait HasAnnotations
     {
         return $this->getAnnotations()[$name] ?? $default;
     }
+
+    /**
+     * Set or update the given annotations.
+     *
+     * @param  array  $annotations
+     * @return $this
+     */
+    public function setOrUpdateAnnotations(array $annotations = [])
+    {
+        return $this->setAnnotations(
+            array_merge($this->getAnnotations(), $annotations)
+        );
+    }
 }
