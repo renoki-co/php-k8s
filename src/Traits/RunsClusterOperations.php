@@ -195,12 +195,12 @@ trait RunsClusterOperations
      */
     public function update(array $query = ['pretty' => 1]): bool
     {
+        $this->refreshOriginal();
+
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
             return true;
         }
-
-        $this->refreshOriginal();
 
         $instance = $this->cluster
             ->setResourceClass(get_class($this))
