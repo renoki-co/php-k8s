@@ -77,7 +77,7 @@ trait LoadsFromKubeConfig
         }
 
         ['context' => ['cluster' => $cluster, 'user' => $user]] = $contextConfig;
-        
+
         if (isset($contextConfig['context']['namespace'])) {
             K8sResource::$defaultNamespace = $contextConfig['context']['namespace'];
         }
