@@ -6,6 +6,7 @@ use Exception;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
+use RenokiCo\PhpK8s\Kinds\K8sResource;
 
 trait LoadsFromKubeConfig
 {
