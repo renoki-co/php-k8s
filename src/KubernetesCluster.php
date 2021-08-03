@@ -289,11 +289,17 @@ class KubernetesCluster
      */
     protected function makeWsRequest(string $path, Closure $callback = null, array $query = ['pretty' => 1])
     {
-        $url = str_replace(
-            ['https://', 'http://'],
-            ['wss://', 'ws://'],
-            $this->getCallableUrl($path, $query)
-        );
+        $url = $this->getCallableUrl($path, $query);
+
+        // Replace the HTTP protocol prefixes with WS protocols.
+        $replaces = [
+            'https://' => 'wss://',
+            'http://' => 'ws://',
+        ];
+
+        foreach ($replaces as $search => $replace) {
+            $url = Str::replaceFirst($search, $replace, $url);
+        }
 
         [$loop, $ws] = $this->getWsClient($url);
 
