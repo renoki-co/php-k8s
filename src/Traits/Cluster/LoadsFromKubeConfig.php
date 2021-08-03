@@ -71,7 +71,7 @@ trait LoadsFromKubeConfig
      */
     protected function loadKubeConfigFromArray(array $kubeconfig, string $context): void
     {
-        $contextConfig = collect($kubeconfig['contexts'] ?? [])->where('name', $context)->first();
+        $contextConfig = collect($kubeconfig['contexts'] ?? [])->firstWhere('name', $context);
 
         if (! $contextConfig) {
             throw new KubeConfigContextNotFound("The context {$context} does not exist in the provided Kube Config file.");
