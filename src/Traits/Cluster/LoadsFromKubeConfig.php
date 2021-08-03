@@ -6,6 +6,7 @@ use Exception;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
+use RenokiCo\PhpK8s\Kinds\K8sResource;
 
 trait LoadsFromKubeConfig
 {
@@ -70,13 +71,17 @@ trait LoadsFromKubeConfig
      */
     protected function loadKubeConfigFromArray(array $kubeconfig, string $context): void
     {
-        $contextConfig = collect($kubeconfig['contexts'] ?? [])->where('name', $context)->first();
+        $contextConfig = collect($kubeconfig['contexts'] ?? [])->firstWhere('name', $context);
 
         if (! $contextConfig) {
             throw new KubeConfigContextNotFound("The context {$context} does not exist in the provided Kube Config file.");
         }
 
         ['context' => ['cluster' => $cluster, 'user' => $user]] = $contextConfig;
+
+        if (isset($contextConfig['context']['namespace'])) {
+            K8sResource::setDefaultNamespace($contextConfig['context']['namespace']);
+        }
 
         if (! $clusterConfig = collect($kubeconfig['clusters'] ?? [])->where('name', $cluster)->first()) {
             throw new KubeConfigClusterNotFound("The cluster {$cluster} does not exist in the provided Kube Config file.");
