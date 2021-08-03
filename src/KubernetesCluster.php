@@ -298,7 +298,9 @@ class KubernetesCluster
         ];
 
         foreach ($replaces as $search => $replace) {
-            $url = Str::replaceFirst($search, $replace, $url);
+            if (Str::startsWith($url, $search)) {
+                $url = Str::replaceFirst($search, $replace, $url);
+            }
         }
 
         [$loop, $ws] = $this->getWsClient($url);
