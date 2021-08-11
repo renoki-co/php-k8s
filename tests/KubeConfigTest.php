@@ -77,7 +77,6 @@ class KubeConfigTest extends TestCase
         ]);
     }
 
-
     public function test_kube_config_from_yaml_cannot_load_if_no_cluster()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
