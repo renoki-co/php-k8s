@@ -66,13 +66,13 @@ class KubeConfigTest extends TestCase
         $options = $reflectionMethod->invoke($cluster);
 
         $this->assertEquals([
-            "http" => [
-                "header" => []
+            'http' => [
+                'header' => [],
             ],
             'ssl' => [
-                "cafile" => "/path/to/.minikube/ca.crt",
-                "local_cert" => "/path/to/.minikube/client.crt",
-                "local_pk" => "/path/to/.minikube/client.key",
+                'cafile' => '/path/to/.minikube/ca.crt',
+                'local_cert' => '/path/to/.minikube/client.crt',
+                'local_pk' => ''/path/to/.minikube/client.key',
             ]
         ]);
     }
