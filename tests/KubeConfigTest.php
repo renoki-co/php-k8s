@@ -54,7 +54,51 @@ class KubeConfigTest extends TestCase
         $this->assertEquals('/path/to/.minikube/client.key', $keyPath);
     }
 
-    public function test_cluster_can_get_correct_config_for_socket_connection()
+    public function test_cluster_can_get_correct_config_for_token_socket_connection()
+    {
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+
+        $cluster->loadTokenFromFile(__DIR__.'/cluster/token.txt');
+
+        $reflectionMethod = new \ReflectionMethod($cluster, 'makeStreamContextOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = $reflectionMethod->invoke($cluster);
+
+        $this->assertEquals([
+            'http' => [
+                'header' => [
+                    'Authorization: Bearer some-token'
+                ],
+            ],
+            'ssl' => [
+            ],
+        ], $options);
+    }
+
+    public function test_cluster_can_get_correct_config_for_user_pass_socket_connection()
+    {
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+
+        $cluster->httpAuthentication('some-user', 'some-password');
+
+        $reflectionMethod = new \ReflectionMethod($cluster, 'makeStreamContextOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = $reflectionMethod->invoke($cluster);
+
+        $this->assertEquals([
+            'http' => [
+                'header' => [
+                    'Authorization: Basic c29tZS11c2VyOnNvbWUtcGFzc3dvcmQ='
+                ],
+            ],
+            'ssl' => [
+            ],
+        ], $options);
+    }
+
+    public function test_cluster_can_get_correct_config_for_ssl_socket_connection()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
 
