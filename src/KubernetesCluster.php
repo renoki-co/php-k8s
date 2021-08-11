@@ -417,7 +417,7 @@ class KubernetesCluster
             $streamContext = stream_context_create($streamOptions);
         }
 
-        $sock =  fopen($callableUrl, 'r', false, $streamContext);
+        $sock = fopen($callableUrl, 'r', false, $streamContext);
 
         return $sock;
     }
@@ -458,7 +458,7 @@ class KubernetesCluster
             'http' => [
                 'header' => $headers,
             ],
-            'ssl' => $sslOptions
+            'ssl' => $sslOptions,
         ];
     }
 
