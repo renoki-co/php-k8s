@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Resource_;
 use Ratchet\Client\Connector as WebSocketConnector;
 use React\EventLoop\Factory as ReactFactory;
 use React\Socket\Connector as ReactSocketConnector;
@@ -384,10 +385,9 @@ class KubernetesCluster
     {
         $resourceClass = $this->resourceClass;
 
-        $sock = fopen($this->getCallableUrl($path, $query), 'r');
+        $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
 
         $data = null;
-
         while (($data = fgets($sock)) == true) {
             $data = @json_decode($data, true);
 
@@ -408,6 +408,62 @@ class KubernetesCluster
     }
 
     /**
+     * @param string $callableUrl
+     * @return resource
+     */
+    private function createSocketConnection(string $callableUrl)
+    {
+        $streamContext = null;
+        if ($streamOptions = $this->makeStreamContextOptions()) {
+            $streamContext = stream_context_create($streamOptions);
+        }
+
+        $sock =  fopen($callableUrl, 'r', false, $streamContext);
+
+        return $sock;
+    }
+
+    /**
+     * @return array
+     */
+    private function makeStreamContextOptions(): array
+    {
+        $sslOptions = $headers = [] ;
+
+        if (is_bool($this->verify)) {
+            $sslOptions['verify_peer'] = $this->verify;
+            $sslOptions['verify_peer_name'] = $this->verify;
+        } elseif (is_string($this->verify)) {
+            $sslOptions['cafile'] = $this->verify;
+        }
+
+        if ($this->token) {
+            $headers[] = "Authorization: Bearer {$this->token}";
+        } elseif ($this->auth) {
+            $headers[] = 'Authorization: Basic '.base64_encode(implode(':', $this->auth));
+        }
+
+        if ($this->cert) {
+            $sslOptions['local_cert'] = $this->cert;
+        }
+
+        if ($this->sslKey) {
+            $sslOptions['local_pk'] = $this->sslKey;
+        }
+
+        if (empty($sslOptions) && empty($headers)) {
+            return [];
+        }
+
+        return [
+            'http' => [
+                'header' => $headers,
+            ],
+            'ssl' => $sslOptions
+        ];
+    }
+
+    /**
      * Watch for the logs for the resource.
      *
      * @param  string   $path
@@ -417,7 +473,7 @@ class KubernetesCluster
      */
     protected function watchLogsPath(string $path, Closure $callback, array $query = ['pretty' => 1])
     {
-        $sock = fopen($this->getCallableUrl($path, $query), 'r');
+        $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
 
         $data = null;
 

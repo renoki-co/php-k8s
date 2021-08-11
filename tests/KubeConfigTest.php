@@ -54,6 +54,30 @@ class KubeConfigTest extends TestCase
         $this->assertEquals('/path/to/.minikube/client.key', $keyPath);
     }
 
+    public function test_cluster_can_get_correct_config_for_socket_connection()
+    {
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+
+        $cluster->fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'minikube-2');
+
+        $reflectionMethod = new \ReflectionMethod($cluster, 'makeStreamContextOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = $reflectionMethod->invoke($cluster);
+
+        $this->assertEquals([
+            "http" => [
+                "header" => []
+            ],
+            'ssl' => [
+                "cafile" => "/path/to/.minikube/ca.crt",
+                "local_cert" => "/path/to/.minikube/client.crt",
+                "local_pk" => "/path/to/.minikube/client.key",
+            ]
+        ]);
+    }
+
+
     public function test_kube_config_from_yaml_cannot_load_if_no_cluster()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
