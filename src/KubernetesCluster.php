@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\Resource_;
 use Ratchet\Client\Connector as WebSocketConnector;
 use React\EventLoop\Factory as ReactFactory;
 use React\Socket\Connector as ReactSocketConnector;
@@ -428,7 +427,7 @@ class KubernetesCluster
      */
     private function makeStreamContextOptions(): array
     {
-        $sslOptions = $headers = [] ;
+        $sslOptions = $headers = [];
 
         if (is_bool($this->verify)) {
             $sslOptions['verify_peer'] = $this->verify;
