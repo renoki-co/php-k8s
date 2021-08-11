@@ -74,7 +74,7 @@ class KubeConfigTest extends TestCase
                 'local_cert' => '/path/to/.minikube/client.crt',
                 'local_pk' => '/path/to/.minikube/client.key',
             ],
-        ]);
+        ], $options);
     }
 
     public function test_kube_config_from_yaml_cannot_load_if_no_cluster()
