@@ -54,6 +54,73 @@ class KubeConfigTest extends TestCase
         $this->assertEquals('/path/to/.minikube/client.key', $keyPath);
     }
 
+    public function test_cluster_can_get_correct_config_for_token_socket_connection()
+    {
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+
+        $cluster->loadTokenFromFile(__DIR__.'/cluster/token.txt');
+
+        $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = $reflectionMethod->invoke($cluster);
+
+        $this->assertEquals([
+            'http' => [
+                'header' => [
+                    'Authorization: Bearer some-token',
+                ],
+            ],
+            'ssl' => [
+            ],
+        ], $options);
+    }
+
+    public function test_cluster_can_get_correct_config_for_user_pass_socket_connection()
+    {
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+
+        $cluster->httpAuthentication('some-user', 'some-password');
+
+        $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = $reflectionMethod->invoke($cluster);
+
+        $this->assertEquals([
+            'http' => [
+                'header' => [
+                    'Authorization: Basic c29tZS11c2VyOnNvbWUtcGFzc3dvcmQ=',
+                ],
+            ],
+            'ssl' => [
+            ],
+        ], $options);
+    }
+
+    public function test_cluster_can_get_correct_config_for_ssl_socket_connection()
+    {
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+
+        $cluster->fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'minikube-2');
+
+        $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = $reflectionMethod->invoke($cluster);
+
+        $this->assertEquals([
+            'http' => [
+                'header' => [],
+            ],
+            'ssl' => [
+                'cafile' => '/path/to/.minikube/ca.crt',
+                'local_cert' => '/path/to/.minikube/client.crt',
+                'local_pk' => '/path/to/.minikube/client.key',
+            ],
+        ], $options);
+    }
+
     public function test_kube_config_from_yaml_cannot_load_if_no_cluster()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
