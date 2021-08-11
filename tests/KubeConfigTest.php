@@ -68,7 +68,7 @@ class KubeConfigTest extends TestCase
         $this->assertEquals([
             'http' => [
                 'header' => [
-                    'Authorization: Bearer some-token'
+                    'Authorization: Bearer some-token',
                 ],
             ],
             'ssl' => [
@@ -90,7 +90,7 @@ class KubeConfigTest extends TestCase
         $this->assertEquals([
             'http' => [
                 'header' => [
-                    'Authorization: Basic c29tZS11c2VyOnNvbWUtcGFzc3dvcmQ='
+                    'Authorization: Basic c29tZS11c2VyOnNvbWUtcGFzc3dvcmQ=',
                 ],
             ],
             'ssl' => [
