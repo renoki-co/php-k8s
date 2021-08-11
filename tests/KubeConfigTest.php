@@ -73,7 +73,7 @@ class KubeConfigTest extends TestCase
                 'cafile' => '/path/to/.minikube/ca.crt',
                 'local_cert' => '/path/to/.minikube/client.crt',
                 'local_pk' => '/path/to/.minikube/client.key',
-            ]
+            ],
         ]);
     }
 
