@@ -204,6 +204,65 @@ class KubernetesCluster
     }
 
     /**
+     * Create a new socket connection as stream context.
+     *
+     * @param  string  $callableUrl
+     * @return resource
+     */
+    protected function createSocketConnection(string $callableUrl)
+    {
+        $streamContext = null;
+
+        if ($streamOptions = $this->buildStreamContextOptions()) {
+            $streamContext = stream_context_create($streamOptions);
+        }
+
+        return fopen($callableUrl, 'r', false, $streamContext);
+    }
+
+    /**
+     * Build the stream context options for socket connections.
+     *
+     * @return array
+     */
+    protected function buildStreamContextOptions(): array
+    {
+        $sslOptions = $headers = [];
+
+        if (is_bool($this->verify)) {
+            $sslOptions['verify_peer'] = $this->verify;
+            $sslOptions['verify_peer_name'] = $this->verify;
+        } elseif (is_string($this->verify)) {
+            $sslOptions['cafile'] = $this->verify;
+        }
+
+        if ($this->token) {
+            $headers[] = "Authorization: Bearer {$this->token}";
+        } elseif ($this->auth) {
+            $headers[] = 'Authorization: Basic '.base64_encode(implode(':', $this->auth));
+        }
+
+        if ($this->cert) {
+            $sslOptions['local_cert'] = $this->cert;
+        }
+
+        if ($this->sslKey) {
+            $sslOptions['local_pk'] = $this->sslKey;
+        }
+
+        if (empty($sslOptions) && empty($headers)) {
+            return [];
+        }
+
+        return [
+            'http' => [
+                'header' => $headers,
+            ],
+            'ssl' => $sslOptions,
+        ];
+    }
+
+    /**
      * Make a HTTP call to a given path with a method and payload.
      *
      * @param  string  $method
@@ -383,10 +442,9 @@ class KubernetesCluster
     protected function watchPath(string $path, Closure $callback, array $query = ['pretty' => 1])
     {
         $resourceClass = $this->resourceClass;
-
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
-
         $data = null;
+
         while (($data = fgets($sock)) == true) {
             $data = @json_decode($data, true);
 
@@ -404,62 +462,6 @@ class KubernetesCluster
                 return $call;
             }
         }
-    }
-
-    /**
-     * @param string $callableUrl
-     * @return resource
-     */
-    private function createSocketConnection(string $callableUrl)
-    {
-        $streamContext = null;
-        if ($streamOptions = $this->makeStreamContextOptions()) {
-            $streamContext = stream_context_create($streamOptions);
-        }
-
-        $sock = fopen($callableUrl, 'r', false, $streamContext);
-
-        return $sock;
-    }
-
-    /**
-     * @return array
-     */
-    private function makeStreamContextOptions(): array
-    {
-        $sslOptions = $headers = [];
-
-        if (is_bool($this->verify)) {
-            $sslOptions['verify_peer'] = $this->verify;
-            $sslOptions['verify_peer_name'] = $this->verify;
-        } elseif (is_string($this->verify)) {
-            $sslOptions['cafile'] = $this->verify;
-        }
-
-        if ($this->token) {
-            $headers[] = "Authorization: Bearer {$this->token}";
-        } elseif ($this->auth) {
-            $headers[] = 'Authorization: Basic '.base64_encode(implode(':', $this->auth));
-        }
-
-        if ($this->cert) {
-            $sslOptions['local_cert'] = $this->cert;
-        }
-
-        if ($this->sslKey) {
-            $sslOptions['local_pk'] = $this->sslKey;
-        }
-
-        if (empty($sslOptions) && empty($headers)) {
-            return [];
-        }
-
-        return [
-            'http' => [
-                'header' => $headers,
-            ],
-            'ssl' => $sslOptions,
-        ];
     }
 
     /**
