@@ -60,7 +60,7 @@ class KubeConfigTest extends TestCase
 
         $cluster->loadTokenFromFile(__DIR__.'/cluster/token.txt');
 
-        $reflectionMethod = new \ReflectionMethod($cluster, 'makeStreamContextOptions');
+        $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
         $reflectionMethod->setAccessible(true);
 
         $options = $reflectionMethod->invoke($cluster);
@@ -82,7 +82,7 @@ class KubeConfigTest extends TestCase
 
         $cluster->httpAuthentication('some-user', 'some-password');
 
-        $reflectionMethod = new \ReflectionMethod($cluster, 'makeStreamContextOptions');
+        $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
         $reflectionMethod->setAccessible(true);
 
         $options = $reflectionMethod->invoke($cluster);
@@ -104,7 +104,7 @@ class KubeConfigTest extends TestCase
 
         $cluster->fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'minikube-2');
 
-        $reflectionMethod = new \ReflectionMethod($cluster, 'makeStreamContextOptions');
+        $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
         $reflectionMethod->setAccessible(true);
 
         $options = $reflectionMethod->invoke($cluster);
