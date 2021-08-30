@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "php": ">=7.4",
         "guzzlehttp/guzzle": "^6.5|^7.0",
         "illuminate/support": "^7.0|^8.0",
         "ratchet/pawl": "^0.3.5",
@@ -34,6 +35,7 @@
         "test": "vendor/bin/phpunit"
     },
     "require-dev": {
+        "ext-yaml": "*",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^5.0|^6.0"
     },
