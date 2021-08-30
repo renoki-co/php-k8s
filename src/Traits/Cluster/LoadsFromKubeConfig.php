@@ -3,10 +3,13 @@
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use Exception;
+use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
+use RenokiCo\PhpK8s\Exceptions\KubeConfigFileNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
+use RenokiCo\PhpK8s\KubernetesCluster;
 
 trait LoadsFromKubeConfig
 {
@@ -28,6 +31,59 @@ trait LoadsFromKubeConfig
     public static function setTempFolder(string $tempFolder)
     {
         static::$tempFolder = $tempFolder;
+    }
+
+    /**
+     * Creates a KubernetesCluster instance according to the current environment.
+     *
+     * This method implements the same connection algorithm as kubectl.
+     * First, it will read the KUBECONFIG environment variable and merge the referenced YAML files.
+     * If KUBECONFIG isn't set, the method will try to load $HOME/.kube/config.
+     *
+     * The current context will be used unless a context name is explicitly passed as parameter of this method.
+     *
+     * @see https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
+     * @see https://github.com/kubernetes/client-go/blob/f6ce18ae578c8cca64d14ab9687824d9e1305a67/tools/clientcmd/loader.go#L139
+     *
+     * @return LoadsFromKubeConfig
+     * @throws KubeConfigClusterNotFound
+     * @throws KubeConfigContextNotFound
+     * @throws KubeConfigFileNotFound
+     * @throws KubeConfigUserNotFound
+     */
+    public static function create(?string $currentContext = null): KubernetesCluster
+    {
+        if (isset($_SERVER['KUBECONFIG'])) {
+            $paths = array_unique(explode(':', $_SERVER['KUBECONFIG']));
+        } else {
+            $paths = [($_SERVER['HOME'] ?? '').'/.kube/config'];
+        }
+
+        $kubeconfig = [];
+        foreach ($paths as $path) {
+            if ('' === $path || ! @is_readable($path) || false === $yaml = yaml_parse_file($path)) {
+                continue;
+            }
+
+            $kubeconfig = self::mergeKubeconfig($kubeconfig, $yaml);
+        }
+
+        if ([] === $kubeconfig) {
+            throw new KubeConfigFileNotFound(sprintf('Kubernetes configuration not found (paths: "%s")', implode('", "', $paths)));
+        }
+
+        if (null === $currentContext && isset($kubeconfig['current-context'])) {
+            $currentContext = $kubeconfig['current-context'];
+        }
+
+        if (null === $currentContext) {
+            throw new KubeConfigContextNotFound('Kubernetes context not set.');
+        }
+
+        $cluster = new KubernetesCluster('');
+        $cluster->loadKubeConfigFromArray($kubeconfig, $currentContext);
+
+        return $cluster;
     }
 
     /**
@@ -153,5 +209,23 @@ trait LoadsFromKubeConfig
         }
 
         return $tempFilePath;
+    }
+
+    private static function mergeKubeconfig(array $a1, array $a2): array
+    {
+        $a1 += $a2;
+        foreach ($a1 as $key => $value) {
+            if (
+                is_array($value) &&
+                isset($a2[$key]) &&
+                is_array($a2[$key]) &&
+                ! Arr::isAssoc($value) &&
+                ! Arr::isAssoc($a2[$key])
+            ) {
+                $a1[$key] = array_merge($a1[$key], $a2[$key]);
+            }
+        }
+
+        return $a1;
     }
 }

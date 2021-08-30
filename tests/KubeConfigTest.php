@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
+use RenokiCo\PhpK8s\Exceptions\KubeConfigFileNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
 use RenokiCo\PhpK8s\KubernetesCluster;
@@ -18,6 +19,16 @@ class KubeConfigTest extends TestCase
         parent::setUp();
 
         KubernetesCluster::setTempFolder(__DIR__.DIRECTORY_SEPARATOR.'temp');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($_SERVER['KUBECONFIG']);
     }
 
     public function test_kube_config_from_yaml_file_with_base64_encoded_ssl()
@@ -186,5 +197,39 @@ class KubeConfigTest extends TestCase
         $this->assertEquals('some-namespace', K8sResource::$defaultNamespace);
 
         K8sResource::setDefaultNamespace('default');
+    }
+
+    /**
+     * @dataProvider contextProvider
+     */
+    public function test_from_environment_variable(?string $context, string $domain)
+    {
+        $_SERVER['KUBECONFIG'] = __DIR__.'/cluster/kubeconfig.yaml::'.__DIR__.'/cluster/kubeconfig-2.yaml';
+
+        $cluster = KubernetesCluster::create($context);
+        $this->assertSame("https://$domain:8443/?", $cluster->getCallableUrl('/', []));
+    }
+
+    public function contextProvider(): iterable
+    {
+        yield [null, 'minikube'];
+        yield ['minikube-2', 'minikube-2'];
+        yield ['minikube-3', 'minikube-3'];
+    }
+
+    public function test_from_environment_variable_file_not_found()
+    {
+        $this->expectException(KubeConfigFileNotFound::class);
+
+        $_SERVER['KUBECONFIG'] = '/notfound';
+        KubernetesCluster::create();
+    }
+
+    public function test_from_environment_variable_context_not_set()
+    {
+        $this->expectException(KubeConfigContextNotFound::class);
+
+        $_SERVER['KUBECONFIG'] = __DIR__.'/cluster/kubeconfig-2.yaml';
+        KubernetesCluster::create();
     }
 }
