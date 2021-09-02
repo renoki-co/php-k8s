@@ -54,7 +54,7 @@ trait HasPods
      * Get the pods owned by this resource.
      *
      * @param  array  $query
-     * @return \RenokiCo\PhpK8s\ResourceList
+     * @return \RenokiCo\PhpK8s\ResourcesList
      */
     public function getPods(array $query = ['pretty' => 1])
     {
