@@ -11,7 +11,7 @@ trait HasPods
      *
      * @var Closure|null
      */
-    protected static $podSelctorCallback;
+    protected static $podSelectorCallback;
 
     /**
      * Get the selector for the pods that are owned by this resource.
@@ -20,7 +20,7 @@ trait HasPods
      */
     public function podsSelector(): array
     {
-        if ($callback = static::$podSelctorCallback) {
+        if ($callback = static::$podSelectorCallback) {
             return $callback($this);
         }
 
@@ -36,7 +36,7 @@ trait HasPods
      */
     public static function resetPodsSelector(): void
     {
-        static::$podSelctorCallback = null;
+        static::$podSelectorCallback = null;
     }
 
     /**
@@ -47,7 +47,7 @@ trait HasPods
      */
     public static function selectPods(Closure $callback): void
     {
-        static::$podSelctorCallback = $callback;
+        static::$podSelectorCallback = $callback;
     }
 
     /**
