@@ -576,6 +576,18 @@ class KubernetesCluster
             }
         }
 
+        // Proxy the ->getAll[Resources]FromAllNamespaces($query = [...])
+        // For example, ->getAllIngressesFromAllNamespaces()
+        if (preg_match('/getAll(.+)FromAllNamespaces/', $method, $matches)) {
+            [$method, $resourcePlural] = $matches;
+
+            $resource = Str::singular($resourcePlural);
+
+            if (method_exists(K8s::class, $resource)) {
+                return $this->{$resource}()->allNamespaces($parameters[0] ?? ['pretty' => 1]);
+            }
+        }
+
         // Proxy the ->getAll[Resources]($namespace = 'default', $query = [...])
         // For example, ->getAllServices('staging')
         if (preg_match('/getAll(.+)/', $method, $matches)) {

@@ -149,6 +149,25 @@ trait RunsClusterOperations
     }
 
     /**
+     * Get a list with all resources from all namespaces.
+     *
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\ResourcesList
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function allNamespaces(array $query = ['pretty' => 1])
+    {
+        return $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->allResourcesPath(false),
+                $this->toJsonPayload(),
+                $query
+            );
+    }
+
+    /**
      * Get a specific resource.
      *
      * @param  array  $query
@@ -462,11 +481,12 @@ trait RunsClusterOperations
     /**
      * Get the path, prefixed by '/', that points to the resources list.
      *
+     * @param  bool  $withNamespace
      * @return string
      */
-    public function allResourcesPath(): string
+    public function allResourcesPath(bool $withNamespace = true): string
     {
-        return "{$this->getApiPathPrefix()}/".static::getPlural();
+        return "{$this->getApiPathPrefix($withNamespace)}/".static::getPlural();
     }
 
     /**
