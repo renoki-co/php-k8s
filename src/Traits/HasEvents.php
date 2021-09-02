@@ -22,7 +22,7 @@ trait HasEvents
      * Get the list of events for this resource.
      *
      * @param  array  $query
-     * @return \RenokiCo\PhpK8s\ResourceList
+     * @return \RenokiCo\PhpK8s\ResourcesList
      */
     public function getEvents(array $query = ['pretty' => 1])
     {
