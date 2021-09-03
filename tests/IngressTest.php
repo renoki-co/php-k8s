@@ -76,6 +76,7 @@ class IngressTest extends TestCase
     {
         $this->runCreationTests();
         $this->runGetAllTests();
+        $this->runGetAllFromAllNamespacesTests();
         $this->runGetTests();
         $this->runUpdateTests();
         $this->runWatchAllTests();
@@ -113,6 +114,19 @@ class IngressTest extends TestCase
     public function runGetAllTests()
     {
         $ingresss = $this->cluster->getAllIngresses();
+
+        $this->assertInstanceOf(ResourcesList::class, $ingresss);
+
+        foreach ($ingresss as $ing) {
+            $this->assertInstanceOf(K8sIngress::class, $ing);
+
+            $this->assertNotNull($ing->getName());
+        }
+    }
+
+    public function runGetAllFromAllNamespacesTests()
+    {
+        $ingresss = $this->cluster->getAllIngressesFromAllNamespaces();
 
         $this->assertInstanceOf(ResourcesList::class, $ingresss);
 

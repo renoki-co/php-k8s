@@ -101,7 +101,6 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return $this
-     * @deprecated Deprecated in 1.9.0, will be removed in 2.0
      */
     public function syncWithCluster(array $query = ['pretty' => 1])
     {
@@ -143,6 +142,25 @@ trait RunsClusterOperations
             ->runOperation(
                 KubernetesCluster::GET_OP,
                 $this->allResourcesPath(),
+                $this->toJsonPayload(),
+                $query
+            );
+    }
+
+    /**
+     * Get a list with all resources from all namespaces.
+     *
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\ResourcesList
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function allNamespaces(array $query = ['pretty' => 1])
+    {
+        return $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::GET_OP,
+                $this->allResourcesPath(false),
                 $this->toJsonPayload(),
                 $query
             );
@@ -462,11 +480,12 @@ trait RunsClusterOperations
     /**
      * Get the path, prefixed by '/', that points to the resources list.
      *
+     * @param  bool  $withNamespace
      * @return string
      */
-    public function allResourcesPath(): string
+    public function allResourcesPath(bool $withNamespace = true): string
     {
-        return "{$this->getApiPathPrefix()}/".static::getPlural();
+        return "{$this->getApiPathPrefix($withNamespace)}/".static::getPlural();
     }
 
     /**
