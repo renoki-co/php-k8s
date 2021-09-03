@@ -101,7 +101,6 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return $this
-     * @deprecated Deprecated in 1.9.0, will be removed in 2.0
      */
     public function syncWithCluster(array $query = ['pretty' => 1])
     {
