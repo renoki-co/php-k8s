@@ -2,29 +2,29 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-use RenokiCo\PhpK8s\Kinds\K8sJob;
-use RenokiCo\PhpK8s\Kinds\K8sPod;
-use RenokiCo\PhpK8s\Kinds\K8sNode;
-use RenokiCo\PhpK8s\Kinds\K8sRole;
-use RenokiCo\PhpK8s\Kinds\K8sEvent;
-use RenokiCo\PhpK8s\Kinds\K8sSecret;
-use RenokiCo\PhpK8s\Kinds\K8sCronJob;
-use RenokiCo\PhpK8s\Kinds\K8sIngress;
-use RenokiCo\PhpK8s\Kinds\K8sService;
-use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
-use RenokiCo\PhpK8s\Kinds\K8sDaemonSet;
-use RenokiCo\PhpK8s\Kinds\K8sNamespace;
-use RenokiCo\PhpK8s\Kinds\K8sDeployment;
 use RenokiCo\PhpK8s\Kinds\K8sClusterRole;
+use RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding;
+use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
+use RenokiCo\PhpK8s\Kinds\K8sCronJob;
+use RenokiCo\PhpK8s\Kinds\K8sDaemonSet;
+use RenokiCo\PhpK8s\Kinds\K8sDeployment;
+use RenokiCo\PhpK8s\Kinds\K8sEvent;
+use RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler;
+use RenokiCo\PhpK8s\Kinds\K8sIngress;
+use RenokiCo\PhpK8s\Kinds\K8sJob;
+use RenokiCo\PhpK8s\Kinds\K8sNamespace;
+use RenokiCo\PhpK8s\Kinds\K8sNode;
+use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
+use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
+use RenokiCo\PhpK8s\Kinds\K8sPod;
+use RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget;
+use RenokiCo\PhpK8s\Kinds\K8sRole;
 use RenokiCo\PhpK8s\Kinds\K8sRoleBinding;
+use RenokiCo\PhpK8s\Kinds\K8sSecret;
+use RenokiCo\PhpK8s\Kinds\K8sService;
+use RenokiCo\PhpK8s\Kinds\K8sServiceAccount;
 use RenokiCo\PhpK8s\Kinds\K8sStatefulSet;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
-use RenokiCo\PhpK8s\Kinds\K8sServiceAccount;
-use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
-use RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding;
-use RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget;
-use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
-use RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler;
 
 trait InitializesResources
 {
