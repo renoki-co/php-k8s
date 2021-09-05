@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use Exception;
+use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
@@ -28,6 +29,44 @@ trait LoadsFromKubeConfig
     public static function setTempFolder(string $tempFolder)
     {
         static::$tempFolder = $tempFolder;
+    }
+
+    /**
+     * Loads the configuration fro the KubernetesCluster instance
+     * according to the current KUBECONFIG environment variable.
+     *
+     * @param  string|null  $context
+     * @return $this
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
+     */
+    public function fromKubeConfigVariable(string $context = null)
+    {
+        if (! isset($_SERVER['KUBECONFIG'])) {
+            return $this;
+        }
+
+        $paths = array_unique(explode(':', $_SERVER['KUBECONFIG']));
+        $kubeconfig = [];
+
+        foreach ($paths as $path) {
+            if (! @is_readable($path) || ($yaml = yaml_parse_file($path)) === false) {
+                continue;
+            }
+
+            $kubeconfig = static::mergeKubeconfigContents($kubeconfig, $yaml);
+        }
+
+        if ($kubeconfig === []) {
+            return $this;
+        }
+
+        if (! $context && isset($kubeconfig['current-context'])) {
+            $context = $kubeconfig['current-context'];
+        }
+
+        $this->loadKubeConfigFromArray($kubeconfig, $context);
     }
 
     /**
@@ -153,5 +192,31 @@ trait LoadsFromKubeConfig
         }
 
         return $tempFilePath;
+    }
+
+    /**
+     * Merge the two kubeconfig contents.
+     *
+     * @param  array  $kubeconfig1
+     * @param  array  $kubeconfig2
+     * @return array
+     */
+    protected static function mergeKubeconfigContents(array $kubeconfig1, array $kubeconfig2): array
+    {
+        $kubeconfig1 += $kubeconfig2;
+
+        foreach ($kubeconfig1 as $key => $value) {
+            if (
+                is_array($value) &&
+                isset($kubeconfig2[$key]) &&
+                is_array($kubeconfig2[$key]) &&
+                ! Arr::isAssoc($value) &&
+                ! Arr::isAssoc($kubeconfig2[$key])
+            ) {
+                $kubeconfig1[$key] = array_merge($kubeconfig1[$key], $kubeconfig2[$key]);
+            }
+        }
+
+        return $kubeconfig1;
     }
 }

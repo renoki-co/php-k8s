@@ -20,6 +20,16 @@ class KubeConfigTest extends TestCase
         KubernetesCluster::setTempFolder(__DIR__.DIRECTORY_SEPARATOR.'temp');
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($_SERVER['KUBECONFIG']);
+    }
+
     public function test_kube_config_from_yaml_file_with_base64_encoded_ssl()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
@@ -186,5 +196,26 @@ class KubeConfigTest extends TestCase
         $this->assertEquals('some-namespace', K8sResource::$defaultNamespace);
 
         K8sResource::setDefaultNamespace('default');
+    }
+
+    /**
+     * @dataProvider environmentVariableContextProvider
+     */
+    public function test_from_environment_variable(string $context = null, string $expectedDomain)
+    {
+        $_SERVER['KUBECONFIG'] = __DIR__.'/cluster/kubeconfig.yaml::'.__DIR__.'/cluster/kubeconfig-2.yaml';
+
+        $cluster = new KubernetesCluster("https://{$expectedDomain}:8443");
+
+        $cluster->fromKubeConfigVariable($context);
+
+        $this->assertSame("https://{$expectedDomain}:8443/?", $cluster->getCallableUrl('/', []));
+    }
+
+    public function environmentVariableContextProvider(): iterable
+    {
+        yield [null, 'minikube'];
+        yield ['minikube-2', 'minikube-2'];
+        yield ['minikube-3', 'minikube-3'];
     }
 }
