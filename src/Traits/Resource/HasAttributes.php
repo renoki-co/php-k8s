@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\PhpK8s\Traits;
+namespace RenokiCo\PhpK8s\Traits\Resource;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;

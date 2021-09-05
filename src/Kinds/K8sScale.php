@@ -3,8 +3,8 @@
 namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
-use RenokiCo\PhpK8s\Traits\HasReplicas;
-use RenokiCo\PhpK8s\Traits\HasSpec;
+use RenokiCo\PhpK8s\Traits\Resource\HasReplicas;
+use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
 
 class K8sScale extends K8sResource implements InteractsWithK8sCluster
 {

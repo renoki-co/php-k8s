@@ -3,7 +3,7 @@
 namespace RenokiCo\PhpK8s\Instances;
 
 use Illuminate\Contracts\Support\Arrayable;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
+use RenokiCo\PhpK8s\Traits\Resource\HasAttributes;
 
 class Instance implements Arrayable
 {
