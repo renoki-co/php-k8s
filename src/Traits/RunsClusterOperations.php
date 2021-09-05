@@ -19,8 +19,8 @@ use RenokiCo\PhpK8s\KubernetesCluster;
 
 trait RunsClusterOperations
 {
-    use HasAttributes;
-    use HasNamespace;
+    use Resource\HasAttributes;
+    use Resource\HasNamespace;
 
     /**
      * The cluster instance that
