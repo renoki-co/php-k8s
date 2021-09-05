@@ -2,15 +2,15 @@
 
 namespace RenokiCo\PhpK8s\Traits;
 
-use RenokiCo\PhpK8s\Instances\Rule;
-use RenokiCo\PhpK8s\Instances\Probe;
-use RenokiCo\PhpK8s\Instances\Volume;
-use RenokiCo\PhpK8s\Instances\Subject;
 use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Expression;
+use RenokiCo\PhpK8s\Instances\Probe;
 use RenokiCo\PhpK8s\Instances\ResourceMetric;
 use RenokiCo\PhpK8s\Instances\ResourceObject;
+use RenokiCo\PhpK8s\Instances\Rule;
+use RenokiCo\PhpK8s\Instances\Subject;
+use RenokiCo\PhpK8s\Instances\Volume;
 
 trait InitializesInstances
 {

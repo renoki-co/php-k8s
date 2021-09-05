@@ -3,10 +3,10 @@
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
-use RenokiCo\PhpK8s\ResourcesList;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\ResourcesList;
 
 trait MakesHttpCalls
 {
