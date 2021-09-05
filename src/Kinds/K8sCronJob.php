@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Cron\CronExpression;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasSpec;
-use RenokiCo\PhpK8s\Traits\HasStatus;
+use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 
 class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchable
 {

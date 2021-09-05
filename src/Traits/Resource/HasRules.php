@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\PhpK8s\Traits;
+namespace RenokiCo\PhpK8s\Traits\Resource;
 
 use RenokiCo\PhpK8s\Instances\Rule;
 use RenokiCo\PhpK8s\K8s;

@@ -12,10 +12,10 @@ use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\K8s;
-use RenokiCo\PhpK8s\Traits\HasSpec;
-use RenokiCo\PhpK8s\Traits\HasStatus;
-use RenokiCo\PhpK8s\Traits\HasStatusConditions;
-use RenokiCo\PhpK8s\Traits\HasStatusPhase;
+use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatusPhase;
 
 class K8sPod extends K8sResource implements
     Attachable,

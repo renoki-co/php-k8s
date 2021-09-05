@@ -9,14 +9,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\KubernetesCluster;
-use RenokiCo\PhpK8s\Traits\HasAnnotations;
-use RenokiCo\PhpK8s\Traits\HasAttributes;
-use RenokiCo\PhpK8s\Traits\HasEvents;
-use RenokiCo\PhpK8s\Traits\HasKind;
-use RenokiCo\PhpK8s\Traits\HasLabels;
-use RenokiCo\PhpK8s\Traits\HasName;
-use RenokiCo\PhpK8s\Traits\HasNamespace;
-use RenokiCo\PhpK8s\Traits\HasVersion;
+use RenokiCo\PhpK8s\Traits\Resource\HasAnnotations;
+use RenokiCo\PhpK8s\Traits\Resource\HasAttributes;
+use RenokiCo\PhpK8s\Traits\Resource\HasEvents;
+use RenokiCo\PhpK8s\Traits\Resource\HasKind;
+use RenokiCo\PhpK8s\Traits\Resource\HasLabels;
+use RenokiCo\PhpK8s\Traits\Resource\HasName;
+use RenokiCo\PhpK8s\Traits\Resource\HasNamespace;
+use RenokiCo\PhpK8s\Traits\Resource\HasVersion;
 use RenokiCo\PhpK8s\Traits\RunsClusterOperations;
 
 class K8sResource implements Arrayable, Jsonable

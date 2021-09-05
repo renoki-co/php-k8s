@@ -4,12 +4,12 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasAccessModes;
-use RenokiCo\PhpK8s\Traits\HasSelector;
-use RenokiCo\PhpK8s\Traits\HasSpec;
-use RenokiCo\PhpK8s\Traits\HasStatus;
-use RenokiCo\PhpK8s\Traits\HasStatusPhase;
-use RenokiCo\PhpK8s\Traits\HasStorageClass;
+use RenokiCo\PhpK8s\Traits\Resource\HasAccessModes;
+use RenokiCo\PhpK8s\Traits\Resource\HasSelector;
+use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatusPhase;
+use RenokiCo\PhpK8s\Traits\Resource\HasStorageClass;
 
 class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
