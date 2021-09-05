@@ -60,6 +60,28 @@ class K8s
     }
 
     /**
+     * Load Kind configuration fron a YAML file, making sure to
+     * replace all variables in curly braces with the values from
+     * the given array.
+     *
+     * @param  \RenokiCo\PhpK8s\Kinds\KubernetesCluster|null  $cluster
+     * @param  string  $path
+     * @param  array  $replace
+     * @param  \Closure|null  $callback
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
+     */
+    public static function fromTemplatedYamlFile($cluster, string $path, array $replace, Closure $callback = null)
+    {
+        return static::fromYamlFile($cluster, $path, function ($content) use ($replace, $callback) {
+            foreach ($replace as $search => $replacement) {
+                $content = str_replace("{{$search}}", $replacement, $content);
+            }
+
+            return $callback ? $callback($content) : $content;
+        });
+    }
+
+    /**
      * Proxy the K8s call to cluster object.
      *
      * @param  string  $method

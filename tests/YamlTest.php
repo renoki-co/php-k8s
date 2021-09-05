@@ -30,4 +30,18 @@ class YamlTest extends TestCase
         $this->assertEquals('settings', $cm->getName());
         $this->assertEquals(['key' => 'assigned_value'], $cm->getData());
     }
+
+    public function test_yaml_template()
+    {
+        $replacements = [
+            'value' => 'assigned_value_at_template',
+            'value2' => 'not_assigned',
+        ];
+
+        $cm = $this->cluster->fromTemplatedYamlFile(__DIR__.'/yaml/configmap_with_placeholder.yaml', $replacements);
+
+        $this->assertEquals('v1', $cm->getApiVersion());
+        $this->assertEquals('settings', $cm->getName());
+        $this->assertEquals(['key' => 'assigned_value_at_template'], $cm->getData());
+    }
 }
