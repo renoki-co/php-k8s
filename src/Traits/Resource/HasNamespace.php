@@ -1,6 +1,6 @@
 <?php
 
-namespace RenokiCo\PhpK8s\Traits;
+namespace RenokiCo\PhpK8s\Traits\Resource;
 
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 

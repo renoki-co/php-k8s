@@ -6,15 +6,15 @@ use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Podable;
 use RenokiCo\PhpK8s\Contracts\Scalable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\CanScale;
-use RenokiCo\PhpK8s\Traits\HasMinimumSurge;
-use RenokiCo\PhpK8s\Traits\HasPods;
-use RenokiCo\PhpK8s\Traits\HasReplicas;
-use RenokiCo\PhpK8s\Traits\HasSelector;
-use RenokiCo\PhpK8s\Traits\HasSpec;
-use RenokiCo\PhpK8s\Traits\HasStatus;
-use RenokiCo\PhpK8s\Traits\HasStatusConditions;
-use RenokiCo\PhpK8s\Traits\HasTemplate;
+use RenokiCo\PhpK8s\Traits\Resource\CanScale;
+use RenokiCo\PhpK8s\Traits\Resource\HasMinimumSurge;
+use RenokiCo\PhpK8s\Traits\Resource\HasPods;
+use RenokiCo\PhpK8s\Traits\Resource\HasReplicas;
+use RenokiCo\PhpK8s\Traits\Resource\HasSelector;
+use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
+use RenokiCo\PhpK8s\Traits\Resource\HasTemplate;
 
 class K8sDeployment extends K8sResource implements
     InteractsWithK8sCluster,

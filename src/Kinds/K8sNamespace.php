@@ -4,8 +4,8 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Traits\HasStatus;
-use RenokiCo\PhpK8s\Traits\HasStatusPhase;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
+use RenokiCo\PhpK8s\Traits\Resource\HasStatusPhase;
 
 class K8sNamespace extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
