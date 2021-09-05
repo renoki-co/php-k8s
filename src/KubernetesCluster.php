@@ -78,10 +78,10 @@ class KubernetesCluster
     /**
      * Create a new class instance.
      *
-     * @param  string  $url
+     * @param  string|null  $url
      * @return void
      */
-    public function __construct(string $url)
+    public function __construct(string $url = null)
     {
         $this->url = $url;
     }

@@ -47,6 +47,17 @@ trait AuthenticatesCluster
     private $verify;
 
     /**
+     * Start the current cluster with URL.
+     *
+     * @param  string  $url
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
+     */
+    public static function fromUrl(string $url)
+    {
+        return new static($url);
+    }
+
+    /**
      * Pass a Bearer Token for authentication.
      *
      * @param  string|null  $token
