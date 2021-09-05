@@ -47,6 +47,17 @@ trait AuthenticatesCluster
     private $verify;
 
     /**
+     * Start the current cluster with URL.
+     *
+     * @param  string  $url
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
+     */
+    public static function fromUrl(string $url)
+    {
+        return new static($url);
+    }
+
+    /**
      * Pass a Bearer Token for authentication.
      *
      * @param  string|null  $token
@@ -143,21 +154,23 @@ trait AuthenticatesCluster
      *
      * @return $this
      */
-    public function inClusterConfiguration()
+    public static function inClusterConfiguration()
     {
+        $cluster = new static('https://kubernetes.default.svc');
+
         if (file_exists($tokenPath = '/var/run/secrets/kubernetes.io/serviceaccount/token')) {
-            $this->loadTokenFromFile($tokenPath);
+            $cluster->loadTokenFromFile($tokenPath);
         }
 
         if (file_exists($caPath = '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt')) {
-            $this->withCaCertificate($caPath);
+            $cluster->withCaCertificate($caPath);
         }
 
         if ($namespace = @file_get_contents('/var/run/secrets/kubernetes.io/serviceaccount/namespace')) {
-            K8sResource::setDefaultNamespace($this->normalize($namespace));
+            K8sResource::setDefaultNamespace($cluster->normalize($namespace));
         }
 
-        return $this;
+        return $cluster;
     }
 
     /**

@@ -36,15 +36,17 @@ trait LoadsFromKubeConfig
      * according to the current KUBECONFIG environment variable.
      *
      * @param  string|null  $context
-     * @return $this
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
      */
-    public function fromKubeConfigVariable(string $context = null)
+    public static function fromKubeConfigVariable(string $context = null)
     {
+        $cluster = new static;
+
         if (! isset($_SERVER['KUBECONFIG'])) {
-            return $this;
+            return $cluster;
         }
 
         $paths = array_unique(explode(':', $_SERVER['KUBECONFIG']));
@@ -59,42 +61,40 @@ trait LoadsFromKubeConfig
         }
 
         if ($kubeconfig === []) {
-            return $this;
+            return $cluster;
         }
 
         if (! $context && isset($kubeconfig['current-context'])) {
             $context = $kubeconfig['current-context'];
         }
 
-        $this->loadKubeConfigFromArray($kubeconfig, $context);
+        return $cluster->loadKubeConfigFromArray($kubeconfig, $context);
     }
 
     /**
      * Load configuration from a Kube Config context.
      *
      * @param  string  $yaml
-     * @param  string  $context
-     * @return $this
+     * @param  string|null  $context
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
      */
-    public function fromKubeConfigYaml(string $yaml, string $context)
+    public static function fromKubeConfigYaml(string $yaml, string $context = null)
     {
-        $kubeconfig = yaml_parse($yaml);
+        $cluster = new static;
 
-        $this->loadKubeConfigFromArray($kubeconfig, $context);
-
-        return $this;
+        return $cluster->loadKubeConfigFromArray(yaml_parse($yaml), $context);
     }
 
     /**
      * Load configuration from a Kube Config file context.
      *
      * @param  string  $path
-     * @param  string  $context
-     * @return $this
+     * @param  string|null  $context
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
      */
-    public function fromKubeConfigYamlFile(string $path = '/.kube/config', string $context = 'minikube')
+    public static function fromKubeConfigYamlFile(string $path = '/.kube/config', string $context = null)
     {
-        return $this->fromKubeConfigYaml(file_get_contents($path), $context);
+        return (new static)->fromKubeConfigYaml(file_get_contents($path), $context);
     }
 
     /**
@@ -102,14 +102,18 @@ trait LoadsFromKubeConfig
      * coming from a Kube Config file.
      *
      * @param  array  $kubeconfig
-     * @param  string  $context
-     * @return void
+     * @param  string|null  $context
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
      */
-    protected function loadKubeConfigFromArray(array $kubeconfig, string $context): void
+    protected function loadKubeConfigFromArray(array $kubeconfig, string $context = null)
     {
+        // Compute the context from the method, or in case it is passed as null
+        // try to find it from the current kubeconfig's "current-context" field.
+        $context = $context ?: ($kubeconfig['current-context'] ?? null);
+
         $contextConfig = collect($kubeconfig['contexts'] ?? [])->firstWhere('name', $context);
 
         if (! $contextConfig) {
@@ -130,8 +134,6 @@ trait LoadsFromKubeConfig
             throw new KubeConfigUserNotFound("The user {$user} does not exist in the provided Kube Config file.");
         }
 
-        $this->url = $clusterConfig['cluster']['server'];
-
         if (isset($clusterConfig['cluster']['certificate-authority'])) {
             $this->withCaCertificate($clusterConfig['cluster']['certificate-authority']);
         }
@@ -141,6 +143,8 @@ trait LoadsFromKubeConfig
                 $this->writeTempFileForContext($context, 'ca-cert.pem', $clusterConfig['cluster']['certificate-authority-data'])
             );
         }
+
+        $this->url = $clusterConfig['cluster']['server'];
 
         if (isset($userConfig['user']['client-certificate'])) {
             $this->withCertificate($userConfig['user']['client-certificate']);
@@ -165,6 +169,8 @@ trait LoadsFromKubeConfig
         if (isset($userConfig['user']['token'])) {
             $this->withToken($userConfig['user']['token']);
         }
+
+        return $this;
     }
 
     /**
