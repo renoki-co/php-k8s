@@ -62,7 +62,7 @@ class KubeConfigTest extends TestCase
 
     public function test_cluster_can_get_correct_config_for_token_socket_connection()
     {
-        $cluster = KubernetesCluster::loadTokenFromFile(__DIR__.'/cluster/token.txt');
+        $cluster = KubernetesCluster::fromUrl('http://127.0.0.1:8080')->loadTokenFromFile(__DIR__.'/cluster/token.txt');
 
         $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
         $reflectionMethod->setAccessible(true);
@@ -82,7 +82,7 @@ class KubeConfigTest extends TestCase
 
     public function test_cluster_can_get_correct_config_for_user_pass_socket_connection()
     {
-        $cluster = KubernetesCluster::httpAuthentication('some-user', 'some-password');
+        $cluster = KubernetesCluster::fromUrl('http://127.0.0.1:8080')->httpAuthentication('some-user', 'some-password');
 
         $reflectionMethod = new \ReflectionMethod($cluster, 'buildStreamContextOptions');
         $reflectionMethod->setAccessible(true);
@@ -144,7 +144,7 @@ class KubeConfigTest extends TestCase
 
     public function test_http_authentication()
     {
-        $cluster = KubernetesCluster::httpAuthentication('some-user', 'some-password');
+        $cluster = KubernetesCluster::fromUrl('http://127.0.0.1:8080')->httpAuthentication('some-user', 'some-password');
 
         ['auth' => $auth] = $cluster->getClient()->getConfig();
 
@@ -153,7 +153,7 @@ class KubeConfigTest extends TestCase
 
     public function test_bearer_token_authentication()
     {
-        $cluster = KubernetesCluster::loadTokenFromFile(__DIR__.'/cluster/token.txt');
+        $cluster = KubernetesCluster::fromUrl('http://127.0.0.1:8080')->loadTokenFromFile(__DIR__.'/cluster/token.txt');
 
         ['headers' => ['authorization' => $token]] = $cluster->getClient()->getConfig();
 
