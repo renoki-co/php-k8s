@@ -82,9 +82,7 @@ trait LoadsFromKubeConfig
     {
         $cluster = new static;
 
-        $cluster->loadKubeConfigFromArray(yaml_parse($yaml), $context);
-
-        return $cluster;
+        return $cluster->loadKubeConfigFromArray(yaml_parse($yaml), $context);
     }
 
     /**
@@ -105,12 +103,12 @@ trait LoadsFromKubeConfig
      *
      * @param  array  $kubeconfig
      * @param  string|null  $context
-     * @return void
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
      */
-    protected function loadKubeConfigFromArray(array $kubeconfig, string $context = null): void
+    protected function loadKubeConfigFromArray(array $kubeconfig, string $context = null)
     {
         // Compute the context from the method, or in case it is passed as null
         // try to find it from the current kubeconfig's "current-context" field.
@@ -136,8 +134,6 @@ trait LoadsFromKubeConfig
             throw new KubeConfigUserNotFound("The user {$user} does not exist in the provided Kube Config file.");
         }
 
-        $this->url = $clusterConfig['cluster']['server'];
-
         if (isset($clusterConfig['cluster']['certificate-authority'])) {
             $this->withCaCertificate($clusterConfig['cluster']['certificate-authority']);
         }
@@ -147,6 +143,8 @@ trait LoadsFromKubeConfig
                 $this->writeTempFileForContext($context, 'ca-cert.pem', $clusterConfig['cluster']['certificate-authority-data'])
             );
         }
+
+        $this->url = $clusterConfig['cluster']['server'];
 
         if (isset($userConfig['user']['client-certificate'])) {
             $this->withCertificate($userConfig['user']['client-certificate']);
@@ -171,6 +169,8 @@ trait LoadsFromKubeConfig
         if (isset($userConfig['user']['token'])) {
             $this->withToken($userConfig['user']['token']);
         }
+
+        return $this;
     }
 
     /**
