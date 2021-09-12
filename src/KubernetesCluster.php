@@ -187,6 +187,7 @@ class KubernetesCluster
      * @param  string|Closure  $payload
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
@@ -207,7 +208,7 @@ class KubernetesCluster
     /**
      * Watch for the current resource or a resource list.
      *
-     * @param  string   $path
+     * @param  string  $path
      * @param  Closure  $callback
      * @param  array  $query
      * @return bool
@@ -240,7 +241,7 @@ class KubernetesCluster
     /**
      * Watch for the logs for the resource.
      *
-     * @param  string   $path
+     * @param  string  $path
      * @param  Closure  $callback
      * @param  array  $query
      * @return bool
@@ -270,6 +271,7 @@ class KubernetesCluster
      * @param  string  $path
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     protected function execPath(
@@ -301,6 +303,7 @@ class KubernetesCluster
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     protected function attachPath(
