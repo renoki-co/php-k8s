@@ -133,6 +133,7 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function all(array $query = ['pretty' => 1])
@@ -152,6 +153,7 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function allNamespaces(array $query = ['pretty' => 1])
@@ -171,6 +173,7 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function get(array $query = ['pretty' => 1])
@@ -190,6 +193,7 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function create(array $query = ['pretty' => 1])
@@ -209,6 +213,7 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return bool
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function update(array $query = ['pretty' => 1]): bool
@@ -241,6 +246,7 @@ trait RunsClusterOperations
      * @param  null|int  $gracePeriod
      * @param  string  $propagationPolicy
      * @return bool
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function delete(array $query = ['pretty' => 1], $gracePeriod = null, string $propagationPolicy = 'Foreground'): bool
@@ -278,6 +284,7 @@ trait RunsClusterOperations
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchAll(Closure $callback, array $query = ['pretty' => 1])
@@ -304,6 +311,7 @@ trait RunsClusterOperations
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watch(Closure $callback, array $query = ['pretty' => 1])
@@ -329,6 +337,7 @@ trait RunsClusterOperations
      *
      * @param  array  $query
      * @return string
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -356,6 +365,7 @@ trait RunsClusterOperations
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
@@ -390,6 +400,7 @@ trait RunsClusterOperations
      * Get a specific resource scaling data.
      *
      * @return \RenokiCo\PhpK8s\Kinds\K8sScale
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesScalingException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -422,6 +433,7 @@ trait RunsClusterOperations
      * @param  string|null  $container
      * @param  array  $query
      * @return string
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesExecException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -453,6 +465,7 @@ trait RunsClusterOperations
      * @param  string|null  $container
      * @param  array  $query
      * @return string
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAttachException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */

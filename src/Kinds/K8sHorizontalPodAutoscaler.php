@@ -66,7 +66,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Add multiple metrics in one batch.
      *
-     * @param  array $metrics
+     * @param  array  $metrics
      * @return $this
      */
     public function addMetrics(array $metrics)

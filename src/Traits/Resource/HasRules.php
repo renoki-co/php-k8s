@@ -41,7 +41,7 @@ trait HasRules
      * Set the rules for the resource.
      *
      * @param  array  $rules
-     * @return  $this
+     * @return $this
      */
     public function setRules(array $rules)
     {

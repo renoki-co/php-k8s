@@ -41,7 +41,7 @@ trait HasSubjects
      * Set the subjects for the resource.
      *
      * @param  array  $subjects
-     * @return  $this
+     * @return $this
      */
     public function setSubjects(array $subjects)
     {

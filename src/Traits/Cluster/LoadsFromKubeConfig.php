@@ -37,6 +37,7 @@ trait LoadsFromKubeConfig
      *
      * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
@@ -104,6 +105,7 @@ trait LoadsFromKubeConfig
      * @param  array  $kubeconfig
      * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
@@ -181,6 +183,7 @@ trait LoadsFromKubeConfig
      * @param  string  $fileName
      * @param  string  $contents
      * @return string
+     *
      * @throws \Exception
      */
     protected function writeTempFileForContext(string $context, string $fileName, string $contents)
