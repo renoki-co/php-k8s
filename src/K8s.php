@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s;
 
 use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 use RenokiCo\PhpK8s\Traits\InitializesInstances;
 use RenokiCo\PhpK8s\Traits\InitializesResources;
@@ -79,6 +80,23 @@ class K8s
 
             return $callback ? $callback($content) : $content;
         });
+    }
+
+    /**
+     * Register a CRD inside the package.
+     *
+     * @param  string  $class
+     * @param  string|null  $name
+     * @return void
+     */
+    public static function registerCrd(string $class, string $name = null): void
+    {
+        static::macro(
+            Str::camel($name ?: substr($class, strrpos($class, '\\') + 1)),
+            function ($cluster = null, array $attributes = []) use ($class) {
+                return new $class($cluster, $attributes);
+            }
+        );
     }
 
     /**
