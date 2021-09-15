@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 use RenokiCo\PhpK8s\Exceptions\PhpK8sException;
+use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 abstract class TestCase extends Orchestra
@@ -34,6 +35,8 @@ abstract class TestCase extends Orchestra
                 dump($exception->getMessage());
             }
         });
+
+        K8s::flushMacros();
     }
 
     /**
