@@ -91,7 +91,7 @@ class K8s
     public static function registerCrd(string $class, string $name = null): void
     {
         static::macro(
-            $name ?: substr($class, strrpos($class, '\\')+  1),
+            $name ?: substr($class, strrpos($class, '\\') + 1),
             function ($cluster = null, array $attributes = []) use ($class) {
                 return new $class($cluster, $attributes);
             }
