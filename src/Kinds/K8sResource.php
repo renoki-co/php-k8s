@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Traits\Resource\HasAnnotations;
 use RenokiCo\PhpK8s\Traits\Resource\HasAttributes;
@@ -46,6 +47,17 @@ class K8sResource implements Arrayable, Jsonable
         if ($cluster instanceof KubernetesCluster) {
             $this->onCluster($cluster);
         }
+    }
+
+    /**
+     * Register the current resource in macros.
+     *
+     * @param  string|null  $name
+     * @return void
+     */
+    public static function register(string $name = null): void
+    {
+        K8s::registerCrd(static::class, $name);
     }
 
     /**
