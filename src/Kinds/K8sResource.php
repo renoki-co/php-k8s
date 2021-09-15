@@ -61,6 +61,23 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
+     * This method should be used only for CRDs.
+     * It returns an internal macro name to help transition from YAML to resource
+     * when importing YAML.
+     *
+     * @param  string|null  $kind
+     * @param  string|null  $defaultVersion
+     * @return string
+     */
+    public static function getUniqueCrdMacro(string $kind = null, string $defaultVersion = null): string
+    {
+        $kind = $kind ?: static::getKind();
+        $defaultVersion = $defaultVersion ?: static::getDefaultVersion();
+
+        return Str::of($kind.explode('/', $defaultVersion)[0])->camel()->slug();
+    }
+
+    /**
      * Get the plural resource name.
      *
      * @return string|null

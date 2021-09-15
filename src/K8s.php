@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s;
 use Closure;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
+use RenokiCo\PhpK8s\Kinds\K8sResource;
 use RenokiCo\PhpK8s\Traits\InitializesInstances;
 use RenokiCo\PhpK8s\Traits\InitializesResources;
 
@@ -28,10 +29,17 @@ class K8s
     {
         $instances = collect(yaml_parse($yaml, -1))->reduce(function ($classes, $yaml) use ($cluster) {
             $kind = $yaml['kind'];
+            $apiVersion = $yaml['apiVersion'];
 
             unset($yaml['apiVersion'], $yaml['kind']);
 
-            $classes[] = static::{$kind}($cluster, $yaml);
+            if (static::hasMacro($macro = K8sResource::getUniqueCrdMacro($kind, $apiVersion))) {
+                $classes[] = static::{$macro}($cluster, $yaml);
+            }
+
+            if (method_exists(static::class, $kind)) {
+                $classes[] = static::{$kind}($cluster, $yaml);
+            }
 
             return $classes;
         }, []);
@@ -93,6 +101,13 @@ class K8s
     {
         static::macro(
             Str::camel($name ?: substr($class, strrpos($class, '\\') + 1)),
+            function ($cluster = null, array $attributes = []) use ($class) {
+                return new $class($cluster, $attributes);
+            }
+        );
+
+        static::macro(
+            $class::getUniqueCrdMacro(),
             function ($cluster = null, array $attributes = []) use ($class) {
                 return new $class($cluster, $attributes);
             }

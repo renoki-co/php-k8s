@@ -25,6 +25,16 @@ trait HasVersion
     }
 
     /**
+     * Get the default version of the resource.
+     *
+     * @return string
+     */
+    public static function getDefaultVersion(): string
+    {
+        return static::$defaultVersion;
+    }
+
+    /**
      * Get the API version of the resource.
      * This function can be overwritten at the resource
      * level, depending which are the defaults.
