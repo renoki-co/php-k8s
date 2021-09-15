@@ -128,6 +128,6 @@ class YamlTest extends TestCase
      */
     protected function arrayToYaml(array $arr)
     {
-        return str_replace("---\n", "", yaml_emit($arr));
+        return str_replace("---\n", '', yaml_emit($arr));
     }
 }
