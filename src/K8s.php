@@ -82,6 +82,23 @@ class K8s
     }
 
     /**
+     * Register a CRD inside the package.
+     *
+     * @param  string  $class
+     * @param  string|null  $name
+     * @return void
+     */
+    public static function registerCrd(string $class, string $name = null): void
+    {
+        static::macro(
+            $name ?: substr($class, strrpos($class, '\\')+  1),
+            function ($cluster = null, array $attributes = []) use ($class) {
+                return new $class($cluster, $attributes);
+            }
+        );
+    }
+
+    /**
      * Proxy the K8s call to cluster object.
      *
      * @param  string  $method
