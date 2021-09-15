@@ -52,7 +52,7 @@ class YamlTest extends TestCase
     {
         IstioGateway::register();
 
-        $gatewayYaml = $this->arrayToYaml(
+        $gatewayYaml = yaml_emit(
             $this->cluster
                 ->istioGateway()
                 ->setName('test-gateway')
@@ -88,7 +88,7 @@ class YamlTest extends TestCase
     {
         IstioGatewayNoNamespacedVersion::register('istioGateway');
 
-        $gatewayYaml = $this->arrayToYaml(
+        $gatewayYaml = yaml_emit(
             $this->cluster
                 ->istioGateway()
                 ->setName('test-gateway')
@@ -118,16 +118,5 @@ class YamlTest extends TestCase
         $gateway = $this->cluster->fromYaml($gatewayYaml);
 
         $this->assertInstanceOf(IstioGatewayNoNamespacedVersion::class, $gateway);
-    }
-
-    /**
-     * Transform array to YAML content.
-     *
-     * @param  array  $arr
-     * @return string
-     */
-    protected function arrayToYaml(array $arr)
-    {
-        return str_replace("---\n", '', yaml_emit($arr));
     }
 }
