@@ -115,6 +115,16 @@ class K8s
     }
 
     /**
+     * Flush the macros.
+     *
+     * @return void
+     */
+    public static function flushMacros(): void
+    {
+        static::$macros = [];
+    }
+
+    /**
      * Proxy the K8s call to cluster object.
      *
      * @param  string  $method
