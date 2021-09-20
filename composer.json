@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^5.0|^6.0"
+        "orchestra/testbench": "^5.x-dev"
     },
     "config": {
         "sort-packages": true
