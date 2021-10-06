@@ -140,7 +140,7 @@ trait HasAttributes
     /**
      * Hydrate the current resource with a payload.
      *
-     * @param  array  $instance
+     * @param  array  $attributes
      * @return $this
      */
     public function syncWith(array $attributes = [])
@@ -155,7 +155,7 @@ trait HasAttributes
     /**
      * Hydrate the current original details with a payload.
      *
-     * @param  array  $instance
+     * @param  array  $attributes
      * @return $this
      */
     public function syncOriginalWith(array $attributes = [])
