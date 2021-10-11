@@ -10,6 +10,8 @@ use React\Socket\Connector as ReactSocketConnector;
 
 trait MakesWebsocketCalls
 {
+    use MakesHttpCalls;
+
     /**
      * The exec STD channels.
      *

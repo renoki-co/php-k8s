@@ -76,7 +76,7 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     }
 
     /**
-     * Make a call to teh cluster to get fresh original values.
+     * Make a call to the cluster to get fresh original values.
      *
      * @param  array  $query
      * @return $this

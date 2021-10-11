@@ -85,7 +85,7 @@ trait RunsClusterOperations
     }
 
     /**
-     * Make a call to teh cluster to get fresh original values.
+     * Make a call to the cluster to get fresh original values.
      *
      * @param  array  $query
      * @return $this
@@ -96,8 +96,8 @@ trait RunsClusterOperations
     }
 
     /**
-     * Create or update the resource according
-     * to the cluster availability.
+     * Create or update the resource, wether the resource exists
+     * or not within the cluster.
      *
      * @param  array  $query
      * @return $this
@@ -169,7 +169,7 @@ trait RunsClusterOperations
     }
 
     /**
-     * Get a specific resource.
+     * Get a fresh instance from the cluster.
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
@@ -454,7 +454,7 @@ trait RunsClusterOperations
                 KubernetesCluster::EXEC_OP,
                 $this->resourceExecPath(),
                 '',
-                ['command' => $command, 'container' => $container] + $query
+                ['command' => array_map('urlencode', $command), 'container' => $container] + $query
             );
     }
 
