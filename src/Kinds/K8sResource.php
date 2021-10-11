@@ -88,23 +88,6 @@ class K8sResource implements Arrayable, Jsonable
     }
 
     /**
-     * Check if the current resource exists.
-     *
-     * @param  array  $query
-     * @return bool
-     */
-    public function exists(array $query = ['pretty' => 1]): bool
-    {
-        try {
-            $this->get($query);
-        } catch (KubernetesAPIException $e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Get a resource by name.
      *
      * @param  string  $name

@@ -178,7 +178,7 @@ trait RunsClusterOperations
      */
     public function get(array $query = ['pretty' => 1])
     {
-        $instance = $this->cluster
+        return $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
@@ -187,9 +187,24 @@ trait RunsClusterOperations
                 $query
             );
 
-        $this->syncWith($instance->toArray());
-
         return $this;
+    }
+
+    /**
+     * Check if the current resource exists.
+     *
+     * @param  array  $query
+     * @return bool
+     */
+    public function exists(array $query = ['pretty' => 1]): bool
+    {
+        try {
+            $this->get($query);
+        } catch (KubernetesAPIException $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
