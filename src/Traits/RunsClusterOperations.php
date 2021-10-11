@@ -454,7 +454,7 @@ trait RunsClusterOperations
                 KubernetesCluster::EXEC_OP,
                 $this->resourceExecPath(),
                 '',
-                ['command' => $command, 'container' => $container] + $query
+                ['command' => array_map('urlencode', $command), 'container' => $container] + $query
             );
     }
 
