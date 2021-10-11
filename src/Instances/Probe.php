@@ -44,7 +44,7 @@ class Probe extends Instance
      *
      * @param  string  $path
      * @param  int  $port
-     * @param  array   $headers
+     * @param  array  $headers
      * @param  string  $scheme
      * @return $this
      */

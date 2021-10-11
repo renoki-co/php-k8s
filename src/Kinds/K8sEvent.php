@@ -48,6 +48,7 @@ class K8sEvent extends K8sResource implements InteractsWithK8sCluster, Watchable
      *
      * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function emitOrUpdate(array $query = ['pretty' => 1])

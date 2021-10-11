@@ -153,6 +153,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      */
     public function watchByName(string $name, Closure $callback, array $query = ['pretty' => 1])
@@ -166,6 +167,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string  $container
      * @param  array  $query
      * @return string
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -181,6 +183,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return string
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -197,6 +200,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return string
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -212,6 +216,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
@@ -226,6 +231,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
@@ -242,6 +248,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  Closure  $callback
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
      */
