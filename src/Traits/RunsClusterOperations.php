@@ -178,7 +178,7 @@ trait RunsClusterOperations
      */
     public function get(array $query = ['pretty' => 1])
     {
-        return $this->cluster
+        $instance = $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::GET_OP,
@@ -186,6 +186,10 @@ trait RunsClusterOperations
                 $this->toJsonPayload(),
                 $query
             );
+
+        $this->syncWith($instance->toArray());
+
+        return $this;
     }
 
     /**
@@ -198,7 +202,7 @@ trait RunsClusterOperations
      */
     public function create(array $query = ['pretty' => 1])
     {
-        return $this->cluster
+        $instance = $this->cluster
             ->setResourceClass(get_class($this))
             ->runOperation(
                 KubernetesCluster::CREATE_OP,
@@ -206,6 +210,10 @@ trait RunsClusterOperations
                 $this->toJsonPayload(),
                 $query
             );
+
+        $this->syncWith($instance->toArray());
+
+        return $this;
     }
 
     /**
