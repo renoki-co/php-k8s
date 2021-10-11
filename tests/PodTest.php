@@ -126,10 +126,12 @@ class PodTest extends TestCase
             $pod->refresh();
         }
 
-        $messages = $pod->exec(['/bin/sh', '-c', 'ls -al'], 'busybox');
+        $messages = $pod->exec(['/bin/sh', '-c', 'echo 1 && echo 2 && echo 3'], 'busybox');
 
         $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
-            return Str::contains($message['output'], '.dockerenv');
+            return Str::contains($message['output'], '1')
+                && Str::contains($message['output'], '2')
+                && Str::contains($message['output'], '3');
         })->isNotEmpty();
 
         $this->assertTrue($hasDesiredOutput);
