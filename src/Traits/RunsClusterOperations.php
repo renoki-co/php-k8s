@@ -96,6 +96,21 @@ trait RunsClusterOperations
     }
 
     /**
+     * Make sure to sync the resource version with the original.
+     *
+     * @return $this
+     */
+    public function refreshResourceVersion()
+    {
+        $this->setAttribute(
+            'metadata.resourceVersion',
+            $this->original['metadata']['resourceVersion']
+        );
+
+        return $this;
+    }
+
+    /**
      * Create or update the resource, wether the resource exists
      * or not within the cluster.
      *
@@ -219,6 +234,7 @@ trait RunsClusterOperations
     public function update(array $query = ['pretty' => 1]): bool
     {
         $this->refreshOriginal();
+        $this->refreshResourceVersion();
 
         // If it didn't change, no way to trigger the change.
         if (! $this->hasChanged()) {
