@@ -255,14 +255,14 @@ trait RunsClusterOperations
             return true;
         }
 
+        $this->refresh();
+
         $this->setAttribute('preconditions', [
             'resourceVersion' => $this->getResourceVersion(),
             'uid' => $this->getResourceUid(),
             'propagationPolicy' => $propagationPolicy,
             'gracePeriodSeconds' => $gracePeriod,
         ]);
-
-        $this->refresh();
 
         $this->cluster
             ->setResourceClass(get_class($this))
