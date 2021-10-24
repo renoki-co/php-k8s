@@ -18,7 +18,6 @@ class SealedSecret extends K8sResource implements InteractsWithK8sCluster
     use HasStatusConditions;
     use HasTemplate;
 
-
     /**
      * The resource Kind parameter.
      *
