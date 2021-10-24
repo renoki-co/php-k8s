@@ -80,6 +80,10 @@ jobs:
         echo "some-namespace" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
         sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
 
+    - name: Setting CRDs for testing
+      run: |
+        kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/sealedsecret-crd.yaml
+
     - name: Run tests
       run: |
         vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml

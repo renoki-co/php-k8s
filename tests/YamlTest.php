@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Test\Kinds\IstioGateway;
 use RenokiCo\PhpK8s\Test\Kinds\IstioGatewayNoNamespacedVersion;
+use RenokiCo\PhpK8s\Test\Kinds\SealedSecret;
 
 class YamlTest extends TestCase
 {
@@ -118,5 +119,21 @@ class YamlTest extends TestCase
         $gateway = $this->cluster->fromYaml($gatewayYaml);
 
         $this->assertInstanceOf(IstioGatewayNoNamespacedVersion::class, $gateway);
+    }
+
+    public function test_creation_and_update_from_yaml_file()
+    {
+        SealedSecret::register('sealedSecret');
+
+        $ss = $this->cluster->fromYamlFile(__DIR__.'/yaml/sealedsecret.yaml');
+        $ss->createOrUpdate();
+
+        $ss = $this->cluster->fromYamlFile(__DIR__.'/yaml/sealedsecret.yaml');
+        $ss->createOrUpdate();
+
+        $this->assertInstanceOf(SealedSecret::class, $ss);
+        $this->assertTrue($ss->exists());
+
+        $ss->delete();
     }
 }
