@@ -185,7 +185,7 @@ class KubernetesCluster
      *
      * @param  string  $operation
      * @param  string  $path
-     * @param  string|Closure  $payload
+     * @param  string|null|Closure  $payload
      * @param  array  $query
      * @return mixed
      *

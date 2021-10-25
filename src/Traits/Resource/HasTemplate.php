@@ -32,7 +32,7 @@ trait HasTemplate
         $template = $this->getSpec('template', []);
 
         if ($asInstance) {
-            $template = new K8sPod($this->cluster ?? null, $template);
+            $template = new K8sPod($this->cluster, $template);
         }
 
         return $template;

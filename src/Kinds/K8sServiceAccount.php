@@ -24,7 +24,7 @@ class K8sServiceAccount extends K8sResource implements InteractsWithK8sCluster, 
     /**
      * Attach a new secret to the secrets list.
      *
-     * @param  string|\RenokiCo\PhpK8s\Kings\K8sSecret  $secret
+     * @param  \RenokiCo\PhpK8s\Kinds\K8sSecret|string  $secret
      * @return $this
      */
     public function addSecret($secret)

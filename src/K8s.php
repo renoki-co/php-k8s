@@ -52,7 +52,7 @@ class K8s
     /**
      * Load Kind configuration from an YAML file.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\KubernetesCluster|null  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  string  $path
      * @param  Closure|null  $callback
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
@@ -73,7 +73,7 @@ class K8s
      * replace all variables in curly braces with the values from
      * the given array.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\KubernetesCluster|null  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  string  $path
      * @param  array  $replace
      * @param  \Closure|null  $callback

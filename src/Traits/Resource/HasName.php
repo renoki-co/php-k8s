@@ -33,10 +33,10 @@ trait HasName
     /**
      * Get the name.
      *
-     * @return string|null
+     * @return string
      */
     public function getName()
     {
-        return $this->getAttribute('metadata.name', null);
+        return $this->getAttribute('metadata.name');
     }
 }

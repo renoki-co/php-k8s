@@ -35,7 +35,7 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Create a new resource.
      *
-     * @param  null|RenokiCo\PhpK8s\KubernetesCluster  $cluster
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
      * @param  array  $attributes
      * @return void
      */
@@ -80,7 +80,7 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get the plural resource name.
      *
-     * @return string|null
+     * @return string
      */
     public static function getPlural()
     {

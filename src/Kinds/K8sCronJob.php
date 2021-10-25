@@ -61,7 +61,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
         $template = $this->getSpec('jobTemplate', []);
 
         if ($asInstance) {
-            $template = new K8sJob($this->cluster ?? null, $template);
+            $template = new K8sJob($this->cluster, $template);
         }
 
         return $template;
@@ -70,7 +70,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the schedule for the cronjob.
      *
-     * @param  string|\Cron\CronExpression  $schedule
+     * @param  \Cron\CronExpression|string  $schedule
      * @return $this
      */
     public function setSchedule($schedule)
@@ -86,7 +86,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
      * Retrieve the schedule.
      *
      * @param  bool  $asInstance
-     * @return string|\Cron\CronExpression
+     * @return \Cron\CronExpression|string
      */
     public function getSchedule(bool $asInstance = true)
     {

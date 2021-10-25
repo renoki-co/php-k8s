@@ -11,7 +11,7 @@ trait ChecksClusterVersion
     /**
      * The Kubernetes cluster version.
      *
-     * @var \vierbergenlars\SemVer\version
+     * @var \vierbergenlars\SemVer\version|null
      */
     protected $kubernetesVersion;
 
