@@ -84,6 +84,10 @@ jobs:
       run: |
         kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/sealedsecret-crd.yaml
 
+    - name: Run static analysis
+      run: |
+        vendor/bin/psalm
+
     - name: Run tests
       run: |
         vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml

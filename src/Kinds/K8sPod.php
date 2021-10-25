@@ -349,7 +349,7 @@ class K8sPod extends K8sResource implements
     /**
      * Get the pod host IP.
      *
-     * @return string\null
+     * @return string|null
      */
     public function getHostIp()
     {

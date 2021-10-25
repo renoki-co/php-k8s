@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use Closure;
+use Exception;
 use Illuminate\Support\Str;
 use Ratchet\Client\Connector as WebSocketConnector;
 use React\EventLoop\Factory as ReactFactory;
@@ -183,7 +184,7 @@ trait MakesWebsocketCalls
                         'output' => $message,
                     ];
                 });
-            }, function ($e) {
+            }, function (Exception $e) {
                 throw $e;
             });
         }

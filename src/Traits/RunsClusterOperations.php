@@ -477,7 +477,7 @@ trait RunsClusterOperations
     /**
      * Attach to the current resource.
      *
-     * @param
+     * @param  \Closure|null  $callback
      * @param  string|null  $container
      * @param  array  $query
      * @return string
