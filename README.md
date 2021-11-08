@@ -23,11 +23,9 @@ For Laravel projects, you might want to use [renoki-co/laravel-php-k8s](https://
 
 ## 🤝 Supporting
 
+**If you are using one or more Renoki Co. open-source packages in your production apps, in presentation demos, hobby projects, school projects or so, sponsor our work with [Github Sponsors](https://github.com/sponsors/rennokki). 📦**
+
 [<img src="https://github-content.s3.fr-par.scw.cloud/static/36.jpg" height="210" width="418" />](https://github-content.renoki.org/github-repo/36)
-
-If you are using one or more Renoki Co. open-source packages in your production apps, in presentation demos, hobby projects, school projects or so, spread some kind words about our work or sponsor our work via Patreon. 📦
-
-[<img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="41" width="175" />](https://www.patreon.com/bePatron?u=10965171)
 
 ## 📃 Documentation
 
