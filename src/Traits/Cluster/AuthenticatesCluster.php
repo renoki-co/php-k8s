@@ -151,8 +151,8 @@ trait AuthenticatesCluster
     /**
      * Load the in-cluster configuration to run the code
      * under a Pod in a cluster.
-     * 
-     * @param  string $url
+     *
+     * @param  string  $url
      * @return $this
      */
     public static function inClusterConfiguration(string $url = 'https://kubernetes.default.svc')
