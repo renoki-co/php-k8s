@@ -151,12 +151,13 @@ trait AuthenticatesCluster
     /**
      * Load the in-cluster configuration to run the code
      * under a Pod in a cluster.
-     *
+     * 
+     * @param  string $url
      * @return $this
      */
-    public static function inClusterConfiguration()
+    public static function inClusterConfiguration(string $url = 'https://kubernetes.default.svc')
     {
-        $cluster = new static('https://kubernetes.default.svc');
+        $cluster = new static($url);
 
         if (file_exists($tokenPath = '/var/run/secrets/kubernetes.io/serviceaccount/token')) {
             $cluster->loadTokenFromFile($tokenPath);
