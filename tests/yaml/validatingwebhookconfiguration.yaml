@@ -1,0 +1,21 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: "ingress-validation-webhook"
+  labels:
+    tier: webhook
+  annotations:
+    webhook/annotation: "yes"
+webhooks:
+  - name: "v1.webhook.com"
+    rules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE"]
+        resources: ["pods"]
+        scope: "Namespaced"
+    clientConfig:
+      url: "https://my-webhook.example.com:9443/my-webhook-path"
+    admissionReviewVersions: ["v1", "v1beta1"]
+    sideEffects: None
+    timeoutSeconds: 5
