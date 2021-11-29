@@ -140,7 +140,7 @@ class Webhook extends Instance
      *
      * @return int
      */
-    public function getTimeoutSeconds(): int 
+    public function getTimeoutSeconds(): int
     {
         return $this->getAttribute('timeoutSeconds');
     }

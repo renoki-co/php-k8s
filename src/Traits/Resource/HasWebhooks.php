@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Traits\Resource;
 
-use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Webhook;
 
 trait HasWebhooks

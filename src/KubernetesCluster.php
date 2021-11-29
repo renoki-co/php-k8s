@@ -235,7 +235,7 @@ class KubernetesCluster
                 new $resourceClass($this, $attributes)
             );
 
-            if (!is_null($call)) {
+            if (! is_null($call)) {
                 fclose($sock);
 
                 unset($data);
@@ -262,7 +262,7 @@ class KubernetesCluster
         while (($data = fgets($sock)) == true) {
             $call = call_user_func($callback, $data);
 
-            if (!is_null($call)) {
+            if (! is_null($call)) {
                 fclose($sock);
 
                 unset($data);

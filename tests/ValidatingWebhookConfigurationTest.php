@@ -13,17 +13,17 @@ class ValidatingWebhookConfigurationTest extends TestCase
     public function test_validation_webhook_build()
     {
         $webhook = K8s::webhook()
-            ->setName("v1.webhook.com")
+            ->setName('v1.webhook.com')
             ->addRule([
-                "apiGroups" => [""],
-                "apiVersions" => ["v1"],
-                "operations" => ["CREATE"],
-                "resources" => ["pods"],
-                "scope" => "Namespaced",
+                'apiGroups' => [''],
+                'apiVersions' => ['v1'],
+                'operations' => ['CREATE'],
+                'resources' => ['pods'],
+                'scope' => 'Namespaced',
             ])
-            ->setClientConfig(["url" => "https://my-webhook.example.com:9443/my-webhook-path"])
-            ->setAdmissionReviewVersions(["v1", "v1beta"])
-            ->setSideEffects("None")
+            ->setClientConfig(['url' => 'https://my-webhook.example.com:9443/my-webhook-path'])
+            ->setAdmissionReviewVersions(['v1', 'v1beta'])
+            ->setSideEffects('None')
             ->setTimeoutSeconds(5);
 
         $validatingWebhookConfiguration = $this->cluster->validatingWebhookConfiguration()
@@ -41,7 +41,7 @@ class ValidatingWebhookConfigurationTest extends TestCase
 
     public function test_validation_webhook_from_yaml()
     {
-        $validatingWebhookConfiguration = $this->cluster->fromYamlFile(__DIR__ . '/yaml/validatingwebhookconfiguration.yaml');
+        $validatingWebhookConfiguration = $this->cluster->fromYamlFile(__DIR__.'/yaml/validatingwebhookconfiguration.yaml');
 
         $this->assertEquals('admissionregistration.k8s.io/v1', $validatingWebhookConfiguration->getApiVersion());
         $this->assertEquals('ingress-validation-webhook', $validatingWebhookConfiguration->getName());
@@ -63,17 +63,17 @@ class ValidatingWebhookConfigurationTest extends TestCase
     public function runCreationTests()
     {
         $webhook = K8s::webhook()
-            ->setName("v1.webhook.com")
+            ->setName('v1.webhook.com')
             ->addRule([
-                "apiGroups" => [""],
-                "apiVersions" => ["v1"],
-                "operations" => ["CREATE"],
-                "resources" => ["pods"],
-                "scope" => "Namespaced",
+                'apiGroups' => [''],
+                'apiVersions' => ['v1'],
+                'operations' => ['CREATE'],
+                'resources' => ['pods'],
+                'scope' => 'Namespaced',
             ])
-            ->setClientConfig(["url" => "https://my-webhook.example.com:9443/my-webhook-path"])
-            ->setAdmissionReviewVersions(["v1", "v1beta1"])
-            ->setSideEffects("None")
+            ->setClientConfig(['url' => 'https://my-webhook.example.com:9443/my-webhook-path'])
+            ->setAdmissionReviewVersions(['v1', 'v1beta'])
+            ->setSideEffects('None')
             ->setTimeoutSeconds(5);
 
         $validatingWebhookConfiguration = $this->cluster->validatingWebhookConfiguration()
