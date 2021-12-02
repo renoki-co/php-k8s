@@ -64,12 +64,14 @@ class ValidatingWebhookConfigurationTest extends TestCase
     {
         $webhook = K8s::webhook()
             ->setName('v1.webhook.com')
-            ->addRule([
-                'apiGroups' => [''],
-                'apiVersions' => ['v1'],
-                'operations' => ['CREATE'],
-                'resources' => ['pods'],
-                'scope' => 'Namespaced',
+            ->addRules([
+                [
+                    'apiGroups' => [''],
+                    'apiVersions' => ['v1'],
+                    'operations' => ['CREATE'],
+                    'resources' => ['pods'],
+                    'scope' => 'Namespaced',
+                ]
             ])
             ->setClientConfig(['url' => 'https://my-webhook.example.com:9443/my-webhook-path'])
             ->setAdmissionReviewVersions(['v1', 'v1beta'])
