@@ -71,7 +71,7 @@ class ValidatingWebhookConfigurationTest extends TestCase
                     'operations' => ['CREATE'],
                     'resources' => ['pods'],
                     'scope' => 'Namespaced',
-                ]
+                ],
             ])
             ->setClientConfig(['url' => 'https://my-webhook.example.com:9443/my-webhook-path'])
             ->setAdmissionReviewVersions(['v1', 'v1beta'])
