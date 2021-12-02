@@ -403,13 +403,13 @@ class K8sPod extends K8sResource implements
      */
     public function getContainer(string $containerName, bool $asInstance = true)
     {
-        return collect($this->getContainerStatuses($asInstance))->filter(function ($container) use ($containerName) {
+        return collect($this->getContainerStatuses($asInstance))->first(function ($container) use ($containerName) {
             $name = $container instanceof Container
                 ? $container->getName()
                 : $container['name'];
 
             return $name === $containerName;
-        })->first();
+        });
     }
 
     /**
@@ -421,13 +421,13 @@ class K8sPod extends K8sResource implements
      */
     public function getInitContainer(string $containerName, bool $asInstance = true)
     {
-        return collect($this->getInitContainerStatuses($asInstance))->filter(function ($container) use ($containerName) {
+        return collect($this->getInitContainerStatuses($asInstance))->first(function ($container) use ($containerName) {
             $name = $container instanceof Container
                 ? $container->getName()
                 : $container['name'];
 
             return $name === $containerName;
-        })->first();
+        });
     }
 
     /**
