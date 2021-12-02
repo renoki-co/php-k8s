@@ -11,6 +11,7 @@ use RenokiCo\PhpK8s\Instances\ResourceObject;
 use RenokiCo\PhpK8s\Instances\Rule;
 use RenokiCo\PhpK8s\Instances\Subject;
 use RenokiCo\PhpK8s\Instances\Volume;
+use RenokiCo\PhpK8s\Instances\Webhook;
 
 trait InitializesInstances
 {
@@ -111,5 +112,16 @@ trait InitializesInstances
     public static function expression(array $attributes = [])
     {
         return new Expression($attributes);
+    }
+
+    /**
+     * Create a new webhook instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Webhook
+     */
+    public static function webhook(array $attributes = [])
+    {
+        return new Webhook($attributes);
     }
 }
