@@ -98,13 +98,13 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
  * @method \RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget getPodDisruptionBudgetByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllPodDisruptionBudgetsFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllPodDisruptionBudgets(string $namespace = 'default', array $query = ['pretty' => 1])
- * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYaml(string $yaml)
- * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYamlFile(string $path, \Closure $callback = null)
- * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromTemplatedYamlFile(string $path, array $replace, \Closure $callback = null)
  * @method \RenokiCo\PhpK8s\Kinds\K8sValidatingWebhookConfiguration validatingWebhookConfiguration(array $attributes = [])
  * @method \RenokiCo\PhpK8s\Kinds\K8sValidatingWebhookConfiguration getValidatingWebhookConfigurationByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllValidatingWebhookConfigurationsFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllValidatingWebhookConfiguration(string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYaml(string $yaml)
+ * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYamlFile(string $path, \Closure $callback = null)
+ * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromTemplatedYamlFile(string $path, array $replace, \Closure $callback = null)
  * @method static void registerCrd(string $class, string $name = null)
  *
  * @see \RenokiCo\PhpK8s\K8s
