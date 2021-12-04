@@ -12,6 +12,7 @@ use RenokiCo\PhpK8s\Kinds\K8sEvent;
 use RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler;
 use RenokiCo\PhpK8s\Kinds\K8sIngress;
 use RenokiCo\PhpK8s\Kinds\K8sJob;
+use RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
 use RenokiCo\PhpK8s\Kinds\K8sNode;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
@@ -315,5 +316,17 @@ trait InitializesResources
     public static function validatingWebhookConfiguration($cluster = null, array $attributes = [])
     {
         return new K8sValidatingWebhookConfiguration($cluster, $attributes);
+    }
+
+    /**
+     * Create a new MutatingWebhookConfiguration kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration
+     */
+    public static function mutatingWebhookConfiguration($cluster = null, array $attributes = [])
+    {
+        return new K8sMutatingWebhookConfiguration($cluster, $attributes);
     }
 }
