@@ -103,7 +103,7 @@ class ValidatingWebhookConfigurationTest extends TestCase
         foreach ($validatingWebhookConfiguration->getWebhooks() as $vw) {
             $this->assertEquals($webhook->getName(), $vw->getName());
             $this->assertEquals($webhook->getSideEffects(), $vw->getSideEffects());
-            //$this->assertEquals($webhook->getTimeoutSeconds(), $vw->getTimeoutSeconds());
+            $this->assertEquals($webhook->getTimeoutSeconds(), $vw->getTimeoutSeconds());
             $this->assertEquals($webhook->getAdmissionReviewVersions(), $vw->getAdmissionReviewVersions());
             $this->assertEquals($webhook->getClientConfig(), $vw->getClientConfig());
             $this->assertEquals($webhook->getRules(), $vw->getRules());
@@ -178,7 +178,7 @@ class ValidatingWebhookConfigurationTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getDeploymentByName('ingress-validation-webhook');
+        $this->cluster->getValidatingWebhookConfigurationByName('ingress-validation-webhook');
     }
 
     public function runWatchAllTests()

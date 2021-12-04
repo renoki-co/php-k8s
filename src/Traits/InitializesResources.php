@@ -26,6 +26,7 @@ use RenokiCo\PhpK8s\Kinds\K8sServiceAccount;
 use RenokiCo\PhpK8s\Kinds\K8sStatefulSet;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
 use RenokiCo\PhpK8s\Kinds\K8sValidatingWebhookConfiguration;
+use RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration;
 
 trait InitializesResources
 {
@@ -315,5 +316,17 @@ trait InitializesResources
     public static function validatingWebhookConfiguration($cluster = null, array $attributes = [])
     {
         return new K8sValidatingWebhookConfiguration($cluster, $attributes);
+    }
+
+    /**
+     * Create a new MutatingWebhookConfiguration kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration
+     */
+    public static function mutatingWebhookConfiguration($cluster = null, array $attributes = [])
+    {
+        return new K8sMutatingWebhookConfiguration($cluster, $attributes);
     }
 }
