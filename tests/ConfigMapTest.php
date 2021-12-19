@@ -49,10 +49,6 @@ class ConfigMapTest extends TestCase
 
     public function test_immutability()
     {
-        if ($this->cluster->olderThan('1.21.0')) {
-            $this->markTestSkipped('Configmaps do not support immutability earlier than v1.21.0');
-        }
-
         $cm = $this->cluster->configmap()
             ->setName('settings')
             ->setLabels(['tier' => 'backend'])
