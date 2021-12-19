@@ -108,7 +108,13 @@ class JobTest extends TestCase
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
-        $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+
+        if ($this->cluster->olderThan('1.23.0')) {
+            $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
+        } else {
+            $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+        }
+
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
@@ -179,7 +185,12 @@ class JobTest extends TestCase
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
-        $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+
+        if ($this->cluster->olderThan('1.23.0')) {
+            $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
+        } else {
+            $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+        }
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
     }
