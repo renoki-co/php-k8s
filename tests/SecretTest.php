@@ -51,10 +51,6 @@ class SecretTest extends TestCase
 
     public function test_immutability()
     {
-        if ($this->cluster->olderThan('1.21.0')) {
-            $this->markTestSkipped('Secrets do not support immutability earlier than v1.21.0');
-        }
-
         $secret = $this->cluster->secret()
             ->setName('passwords')
             ->setLabels(['tier' => 'backend'])
