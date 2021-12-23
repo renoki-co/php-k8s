@@ -44,6 +44,7 @@ trait LoadsFromKubeConfig
      */
     public static function fromKubeConfigVariable(string $context = null)
     {
+        /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $cluster = new static;
 
         if (! isset($_SERVER['KUBECONFIG'])) {
@@ -81,6 +82,7 @@ trait LoadsFromKubeConfig
      */
     public static function fromKubeConfigYaml(string $yaml, string $context = null)
     {
+        /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $cluster = new static;
 
         return $cluster->loadKubeConfigFromArray(yaml_parse($yaml), $context);
@@ -112,6 +114,8 @@ trait LoadsFromKubeConfig
      */
     protected function loadKubeConfigFromArray(array $kubeconfig, string $context = null)
     {
+        /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
+
         // Compute the context from the method, or in case it is passed as null
         // try to find it from the current kubeconfig's "current-context" field.
         $context = $context ?: ($kubeconfig['current-context'] ?? null);
@@ -144,6 +148,10 @@ trait LoadsFromKubeConfig
             $this->withCaCertificate(
                 $this->writeTempFileForContext($context, 'ca-cert.pem', $clusterConfig['cluster']['certificate-authority-data'])
             );
+        }
+
+        if (isset($clusterConfig['cluster']['insecure-skip-tls-verify']) && $clusterConfig['cluster']['insecure-skip-tls-verify']) {
+            $this->withoutSslChecks();
         }
 
         $this->url = $clusterConfig['cluster']['server'];
@@ -188,6 +196,7 @@ trait LoadsFromKubeConfig
      */
     protected function writeTempFileForContext(string $context, string $fileName, string $contents)
     {
+        /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $tempFolder = static::$tempFolder ?: sys_get_temp_dir();
 
         $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR."ctx-{$context}-{$fileName}";
@@ -212,6 +221,7 @@ trait LoadsFromKubeConfig
      */
     protected static function mergeKubeconfigContents(array $kubeconfig1, array $kubeconfig2): array
     {
+        /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $kubeconfig1 += $kubeconfig2;
 
         foreach ($kubeconfig1 as $key => $value) {
