@@ -150,10 +150,6 @@ trait LoadsFromKubeConfig
             );
         }
 
-        if (isset($clusterConfig['cluster']['insecure-skip-tls-verify']) && $clusterConfig['cluster']['insecure-skip-tls-verify']) {
-            $this->withoutSslChecks();
-        }
-
         $this->url = $clusterConfig['cluster']['server'];
 
         if (isset($userConfig['user']['client-certificate'])) {
@@ -178,6 +174,10 @@ trait LoadsFromKubeConfig
 
         if (isset($userConfig['user']['token'])) {
             $this->withToken($userConfig['user']['token']);
+        }
+
+        if (isset($clusterConfig['cluster']['insecure-skip-tls-verify']) && $clusterConfig['cluster']['insecure-skip-tls-verify']) {
+            $this->withoutSslChecks();
         }
 
         return $this;
