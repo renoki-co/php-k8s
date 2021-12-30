@@ -194,4 +194,19 @@ class KubeConfigTest extends TestCase
         yield ['minikube-2', 'minikube-2'];
         yield ['minikube-3', 'minikube-3'];
     }
+
+    public function test_kube_config_from_array_with_base64_encoded_ssl()
+    {
+        $cluster = KubernetesCluster::fromKubeConfigArray(yaml_parse_file(__DIR__.'/cluster/kubeconfig.yaml'), 'minikube');
+
+        [
+            'verify' => $caPath,
+            'cert' => $certPath,
+            'ssl_key' => $keyPath,
+        ] = $cluster->getClient()->getConfig();
+
+        $this->assertEquals("some-ca\n", file_get_contents($caPath));
+        $this->assertEquals("some-cert\n", file_get_contents($certPath));
+        $this->assertEquals("some-key\n", file_get_contents($keyPath));
+    }
 }
