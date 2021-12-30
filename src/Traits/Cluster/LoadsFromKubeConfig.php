@@ -99,6 +99,20 @@ trait LoadsFromKubeConfig
     }
 
     /**
+     * Load configuration from an Array.
+     *
+     * @param  array  $kubeConfigArray
+     * @param  string|null  $context
+     * @return \RenokiCo\PhpK8s\KubernetesCluster
+     */
+    public static function fromKubeConfigArray(array $kubeConfigArray, string $context = null)
+    {
+        $cluster = new static;
+
+        return $cluster->loadKubeConfigFromArray($kubeConfigArray, $context);
+    }
+
+    /**
      * Load the Kube Config configuration from an array,
      * coming from a Kube Config file.
      *
