@@ -60,6 +60,21 @@ class KubeConfigTest extends TestCase
         $this->assertEquals('/path/to/.minikube/client.key', $keyPath);
     }
 
+    public function test_kube_config_from_yaml_file_with_skip_tols()
+    {
+        $cluster = KubernetesCluster::fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'minikube-skip-tls');
+
+        [
+            'verify' => $verify,
+            'cert' => $certPath,
+            'ssl_key' => $keyPath,
+        ] = $cluster->getClient()->getConfig();
+
+        $this->assertFalse($verify);
+        $this->assertEquals('/path/to/.minikube/client3.crt', $certPath);
+        $this->assertEquals('/path/to/.minikube/client3.key', $keyPath);
+    }
+
     public function test_cluster_can_get_correct_config_for_token_socket_connection()
     {
         $cluster = KubernetesCluster::fromUrl('http://127.0.0.1:8080')->loadTokenFromFile(__DIR__.'/cluster/token.txt');
