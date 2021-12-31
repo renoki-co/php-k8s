@@ -205,7 +205,7 @@ trait LoadsFromKubeConfig
                     $url,
                     'client-key.pem',
                     $userConfig['user']['client-key-data']
-                );
+                )
             );
         }
 
