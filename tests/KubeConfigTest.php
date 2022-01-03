@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Exceptions\KubeConfigBaseEncodedDataInvalid;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
@@ -155,6 +156,13 @@ class KubeConfigTest extends TestCase
         $this->expectException(KubeConfigContextNotFound::class);
 
         KubernetesCluster::fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'inexistent-context');
+    }
+
+    public function test_kube_config_from_yaml_invalid_base64_ca()
+    {
+        $this->expectException(KubeConfigBaseEncodedDataInvalid::class);
+
+        KubernetesCluster::fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig.yaml', 'minikube-invalid-base64-ca');
     }
 
     public function test_http_authentication()

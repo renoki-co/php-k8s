@@ -37,7 +37,7 @@
     "require-dev": {
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^5.0|^6.0",
-        "vimeo/psalm": "4.16.1"
+        "vimeo/psalm": "4.17.0"
     },
     "config": {
         "sort-packages": true

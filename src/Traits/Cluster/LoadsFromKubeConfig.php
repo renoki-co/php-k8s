@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Traits\Cluster;
 use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use RenokiCo\PhpK8s\Exceptions\KubeConfigBaseEncodedDataInvalid;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound;
@@ -249,7 +250,13 @@ trait LoadsFromKubeConfig
             return $tempFilePath;
         }
 
-        if (file_put_contents($tempFilePath, base64_decode($contents, true)) === false) {
+        $decodedContents = base64_decode($contents, true);
+
+        if ($decodedContents === false) {
+            throw new KubeConfigBaseEncodedDataInvalid("Failed to decode base64-encoded data for: {$fileName}");
+        }
+
+        if (file_put_contents($tempFilePath, $decodedContents) === false) {
             throw new Exception("Failed to write content to temp file: {$tempFilePath}");
         }
 
