@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigBaseEncodedDataInvalid;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
@@ -151,9 +152,13 @@ trait LoadsFromKubeConfig
             throw new KubeConfigClusterNotFound("The cluster {$cluster} does not exist in the provided Kube Config file.");
         }
 
+        $url = $clusterConfig['cluster']['server'];
+
         if (! $userConfig = collect($kubeconfig['users'] ?? [])->where('name', $user)->first()) {
             throw new KubeConfigUserNotFound("The user {$user} does not exist in the provided Kube Config file.");
         }
+
+        $userName = $userConfig['name'];
 
         if (isset($clusterConfig['cluster']['certificate-authority'])) {
             $this->withCaCertificate($clusterConfig['cluster']['certificate-authority']);
@@ -161,11 +166,17 @@ trait LoadsFromKubeConfig
 
         if (isset($clusterConfig['cluster']['certificate-authority-data'])) {
             $this->withCaCertificate(
-                $this->writeTempFileForContext($context, 'ca-cert.pem', $clusterConfig['cluster']['certificate-authority-data'])
+                $this->writeTempFileForContext(
+                    $context,
+                    $userName,
+                    $url,
+                    'ca-cert.pem',
+                    $clusterConfig['cluster']['certificate-authority-data']
+                )
             );
         }
 
-        $this->url = $clusterConfig['cluster']['server'];
+        $this->url = $url;
 
         if (isset($userConfig['user']['client-certificate'])) {
             $this->withCertificate($userConfig['user']['client-certificate']);
@@ -173,7 +184,13 @@ trait LoadsFromKubeConfig
 
         if (isset($userConfig['user']['client-certificate-data'])) {
             $this->withCertificate(
-                $this->writeTempFileForContext($context, 'client-cert.pem', $userConfig['user']['client-certificate-data'])
+                $this->writeTempFileForContext(
+                    $context,
+                    $userName,
+                    $url,
+                    'client-cert.pem',
+                    $userConfig['user']['client-certificate-data']
+                )
             );
         }
 
@@ -183,7 +200,13 @@ trait LoadsFromKubeConfig
 
         if (isset($userConfig['user']['client-key-data'])) {
             $this->withPrivateKey(
-                $this->writeTempFileForContext($context, 'client-key.pem', $userConfig['user']['client-key-data'])
+                $this->writeTempFileForContext(
+                    $context,
+                    $userName,
+                    $url,
+                    'client-key.pem',
+                    $userConfig['user']['client-key-data']
+                )
             );
         }
 
@@ -203,18 +226,25 @@ trait LoadsFromKubeConfig
      * coming from the KubeConfig file.
      *
      * @param  string  $context
+     * @param  string  $userName
+     * @param  string  $url
      * @param  string  $fileName
      * @param  string  $contents
      * @return string
      *
      * @throws \Exception
      */
-    protected function writeTempFileForContext(string $context, string $fileName, string $contents)
-    {
+    protected function writeTempFileForContext(
+        string $context,
+        string $userName,
+        string $url,
+        string $fileName,
+        string $contents
+    ) {
         /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $tempFolder = static::$tempFolder ?: sys_get_temp_dir();
 
-        $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR."ctx-{$context}-{$fileName}";
+        $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR.Str::slug("ctx-{$context}-{$userName}-{$url}-{$fileName}");
 
         if (file_exists($tempFilePath)) {
             return $tempFilePath;
