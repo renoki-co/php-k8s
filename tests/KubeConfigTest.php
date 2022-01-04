@@ -11,6 +11,8 @@ use RenokiCo\PhpK8s\KubernetesCluster;
 
 class KubeConfigTest extends TestCase
 {
+    private $tempFolder;
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,8 @@ class KubeConfigTest extends TestCase
     {
         parent::setUp();
 
-        KubernetesCluster::setTempFolder(__DIR__.DIRECTORY_SEPARATOR.'temp');
+        $this->tempFolder = __DIR__.DIRECTORY_SEPARATOR.'temp';
+        KubernetesCluster::setTempFolder($this->tempFolder);
     }
 
     /**
@@ -40,6 +43,12 @@ class KubeConfigTest extends TestCase
             'cert' => $certPath,
             'ssl_key' => $keyPath,
         ] = $cluster->getClient()->getConfig();
+
+        $tempFilePath = $this->tempFolder.DIRECTORY_SEPARATOR.'ctx-minikube-minikube-httpsminikube8443-';
+
+        $this->assertSame($tempFilePath.'ca-cert.pem', $caPath);
+        $this->assertSame($tempFilePath.'client-cert.pem', $certPath);
+        $this->assertSame($tempFilePath.'client-key.pem', $keyPath);
 
         $this->assertEquals("some-ca\n", file_get_contents($caPath));
         $this->assertEquals("some-cert\n", file_get_contents($certPath));
