@@ -98,9 +98,10 @@ class K8sResource implements Arrayable, Jsonable
         try {
             $this->get($query);
         } catch (KubernetesAPIException $e) {
-            if ($e->getCode() == 404) {
+            if ($e->getCode() === 404) {
                 return false;
             }
+
             throw $e;
         }
 
