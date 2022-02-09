@@ -39,7 +39,7 @@
         "orchestra/testbench": "^6.28|^7.0",
         "orchestra/testbench-core": "^6.28|^7.0",
         "phpunit/phpunit": "^9.5.13",
-        "vimeo/psalm": "^4.18"
+        "vimeo/psalm": "^4.20"
     },
     "config": {
         "sort-packages": true
