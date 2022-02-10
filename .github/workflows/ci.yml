@@ -20,23 +20,23 @@ jobs:
       fail-fast: false
       matrix:
         php:
-          - '7.4'
           - '8.0'
+          - '8.1'
         kubernetes:
           - '1.21.8'
           - '1.22.5'
           - '1.23.1'
         laravel:
-          # - 7.*
           - 8.*
+          - 9.*
         prefer:
           - 'prefer-lowest'
           - 'prefer-stable'
         include:
-          # - laravel: 7.*
-          #   testbench: 5.*
           - laravel: 8.*
             testbench: 6.*
+          - laravel: 9.*
+            testbench: 7.*
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
 
@@ -84,9 +84,9 @@ jobs:
       run: |
         kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/sealedsecret-crd.yaml
 
-    - name: Run static analysis
-      run: |
-        vendor/bin/psalm
+    # - name: Run static analysis
+    #   run: |
+    #     vendor/bin/psalm
 
     - name: Run tests
       run: |
