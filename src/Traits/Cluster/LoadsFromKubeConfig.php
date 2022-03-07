@@ -218,6 +218,16 @@ trait LoadsFromKubeConfig
             $this->withToken($userConfig['user']['auth-provider']['config']['access-token']);
         }
 
+        if (isset($userConfig['user']['auth-provider']['config']['cmd-path'])) {
+            $authProviderConfig = $userConfig['user']['auth-provider']['config'];
+
+            $this->withTokenFromCommandProvider(
+                $authProviderConfig['cmd-path'],
+                $authProviderConfig['cmd-args'] ?? null,
+                $authProviderConfig['token-key'] ?? null,
+            );
+        }
+
         if (isset($clusterConfig['cluster']['insecure-skip-tls-verify']) && $clusterConfig['cluster']['insecure-skip-tls-verify']) {
             $this->withoutSslChecks();
         }

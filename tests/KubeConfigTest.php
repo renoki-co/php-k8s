@@ -241,4 +241,22 @@ class KubeConfigTest extends TestCase
         $this->assertEquals("some-cert\n", file_get_contents($certPath));
         $this->assertEquals("some-key\n", file_get_contents($keyPath));
     }
+
+    public function test_kube_config_from_yaml_file_with_cmd_auth_as_json()
+    {
+        $cluster = KubernetesCluster::fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig-command.yaml', 'minikube');
+
+        ['headers' => ['authorization' => $token]] = $cluster->getClient()->getConfig();
+
+        $this->assertEquals('Bearer some-token', $token);
+    }
+
+    public function test_kube_config_from_yaml_file_with_cmd_auth_as_string()
+    {
+        $cluster = KubernetesCluster::fromKubeConfigYamlFile(__DIR__.'/cluster/kubeconfig-command.yaml', 'minikube-2');
+
+        ['headers' => ['authorization' => $token]] = $cluster->getClient()->getConfig();
+
+        $this->assertEquals('Bearer some-token', $token);
+    }
 }

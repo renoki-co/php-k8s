@@ -38,6 +38,7 @@ trait MakesHttpCalls
         $options = [
             RequestOptions::HEADERS => [
                 'Content-Type' => 'application/json',
+                'Accept-Encoding' => 'gzip, deflate',
             ],
             RequestOptions::VERIFY => true,
         ];

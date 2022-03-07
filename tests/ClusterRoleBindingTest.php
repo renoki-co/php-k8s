@@ -19,7 +19,7 @@ class ClusterRoleBindingTest extends TestCase
             ->addVerbs(['get', 'list', 'watch']);
 
         $cr = $this->cluster->clusterRole()
-            ->setName('admin-cr')
+            ->setName('admin-cr-for-binding')
             ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
 
@@ -39,7 +39,7 @@ class ClusterRoleBindingTest extends TestCase
         $this->assertEquals('user-binding', $crb->getName());
         $this->assertEquals(['tier' => 'backend'], $crb->getLabels());
         $this->assertEquals([$subject], $crb->getSubjects());
-        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr'], $crb->getRole());
+        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr-for-binding'], $crb->getRole());
     }
 
     public function test_cluster_role_binding_from_yaml()
@@ -51,7 +51,7 @@ class ClusterRoleBindingTest extends TestCase
             ->addVerbs(['get', 'list', 'watch']);
 
         $cr = $this->cluster->clusterRole()
-            ->setName('admin-cr')
+            ->setName('admin-cr-for-binding')
             ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
 
@@ -66,7 +66,7 @@ class ClusterRoleBindingTest extends TestCase
         $this->assertEquals('user-binding', $crb->getName());
         $this->assertEquals(['tier' => 'backend'], $crb->getLabels());
         $this->assertEquals([$subject], $crb->getSubjects());
-        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr'], $crb->getRole());
+        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr-for-binding'], $crb->getRole());
     }
 
     public function test_cluster_role_binding_api_interaction()
@@ -89,7 +89,7 @@ class ClusterRoleBindingTest extends TestCase
             ->addVerbs(['get', 'list', 'watch']);
 
         $cr = $this->cluster->clusterRole()
-            ->setName('admin-cr')
+            ->setName('admin-cr-for-binding')
             ->setLabels(['tier' => 'backend'])
             ->addRules([$rule]);
 
@@ -120,7 +120,7 @@ class ClusterRoleBindingTest extends TestCase
         $this->assertEquals('user-binding', $crb->getName());
         $this->assertEquals(['tier' => 'backend'], $crb->getLabels());
         $this->assertEquals([$subject], $crb->getSubjects());
-        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr'], $crb->getRole());
+        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr-for-binding'], $crb->getRole());
     }
 
     public function runGetAllTests()
@@ -143,7 +143,7 @@ class ClusterRoleBindingTest extends TestCase
             ->setKind('User')
             ->setName('user-1');
 
-        $cr = $this->cluster->getClusterRoleByName('admin-cr');
+        $cr = $this->cluster->getClusterRoleByName('admin-cr-for-binding');
         $crb = $this->cluster->getClusterRoleBindingByName('user-binding');
 
         $this->assertInstanceOf(K8sClusterRoleBinding::class, $crb);
@@ -154,12 +154,12 @@ class ClusterRoleBindingTest extends TestCase
         $this->assertEquals('user-binding', $crb->getName());
         $this->assertEquals(['tier' => 'backend'], $crb->getLabels());
         $this->assertEquals([$subject], $crb->getSubjects());
-        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr'], $crb->getRole());
+        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr-for-binding'], $crb->getRole());
     }
 
     public function runUpdateTests()
     {
-        $cr = $this->cluster->getClusterRoleByName('admin-cr');
+        $cr = $this->cluster->getClusterRoleByName('admin-cr-for-binding');
         $crb = $this->cluster->getClusterRoleBindingByName('user-binding');
 
         $subject = K8s::subject()
@@ -179,12 +179,12 @@ class ClusterRoleBindingTest extends TestCase
         $this->assertEquals('user-binding', $crb->getName());
         $this->assertEquals(['tier' => 'backend'], $crb->getLabels());
         $this->assertEquals([$subject], $crb->getSubjects());
-        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr'], $crb->getRole());
+        $this->assertEquals(['apiGroup' => 'rbac.authorization.k8s.io', 'kind' => 'ClusterRole', 'name' => 'admin-cr-for-binding'], $crb->getRole());
     }
 
     public function runDeletionTests()
     {
-        $cr = $this->cluster->getClusterRoleByName('admin-cr');
+        $cr = $this->cluster->getClusterRoleByName('admin-cr-for-binding');
         $crb = $this->cluster->getClusterRoleBindingByName('user-binding');
 
         $this->assertTrue($cr->delete());
@@ -200,7 +200,7 @@ class ClusterRoleBindingTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getClusterRoleByName('admin-cr');
+        $this->cluster->getClusterRoleByName('admin-cr-for-binding');
         $this->cluster->getClusterRoleBindingByName('user-binding');
     }
 
