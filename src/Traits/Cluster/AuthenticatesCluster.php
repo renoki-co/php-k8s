@@ -2,7 +2,9 @@
 
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
+use Illuminate\Support\Arr;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
+use Symfony\Component\Process\Process;
 
 trait AuthenticatesCluster
 {
@@ -68,6 +70,37 @@ trait AuthenticatesCluster
         $this->token = $this->normalize($token);
 
         return $this;
+    }
+
+    /**
+     * Load the token from provider command line.
+     *
+     * @param  string  $cmdPath
+     * @param  string|nll  $cmdArgs
+     * @param  string|null  $tokenPath
+     * @return $this
+     */
+    public function withTokenFromCommandProvider(string $cmdPath, string $cmdArgs = null, string $tokenPath = null)
+    {
+        $process = Process::fromShellCommandline("{$cmdPath} {$cmdArgs}");
+
+        $process->run();
+
+        if ($process->getErrorOutput()) {
+            return $this;
+        }
+
+        $output = $process->getOutput();
+
+        if (! $tokenPath) {
+            return $this->withToken(trim($output));
+        }
+
+        $json = json_decode($output, true);
+
+        return $this->withToken(
+            trim(Arr::get($json, str_replace(['{.', '}'], '', $tokenPath)))
+        );
     }
 
     /**
