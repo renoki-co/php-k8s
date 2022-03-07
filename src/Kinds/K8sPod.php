@@ -399,7 +399,7 @@ class K8sPod extends K8sResource implements
      *
      * @param  string  $containerName
      * @param  bool  $asInstance
-     * @return array|null
+     * @return \RenokiCo\PhpK8s\Instances\Container|array|null
      */
     public function getContainer(string $containerName, bool $asInstance = true)
     {

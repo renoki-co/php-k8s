@@ -111,7 +111,7 @@ class PodTest extends TestCase
     public function test_pod_exec()
     {
         $busybox = K8s::container()
-            ->setName('busybox')
+            ->setName('busybox-exec')
             ->setImage('busybox')
             ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
 
@@ -126,7 +126,7 @@ class PodTest extends TestCase
             $pod->refresh();
         }
 
-        $messages = $pod->exec(['/bin/sh', '-c', 'echo 1 && echo 2 && echo 3'], 'busybox');
+        $messages = $pod->exec(['/bin/sh', '-c', 'echo 1 && echo 2 && echo 3'], 'busybox-exec');
 
         $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
             return Str::contains($message['output'], '1')
@@ -142,7 +142,7 @@ class PodTest extends TestCase
     public function test_pod_attach()
     {
         $mysql = K8s::container()
-            ->setName('mysql')
+            ->setName('mysql-attach')
             ->setImage('mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
@@ -150,7 +150,7 @@ class PodTest extends TestCase
             ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
 
         $pod = $this->cluster->pod()
-            ->setName('mysql-exec')
+            ->setName('mysql-attach')
             ->setContainers([$mysql])
             ->createOrUpdate();
 
