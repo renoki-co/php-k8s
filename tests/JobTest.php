@@ -109,7 +109,7 @@ class JobTest extends TestCase
         $this->assertEquals('pi', $job->getName());
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
 
-        if ($this->cluster->olderThan('1.23.0')) {
+        if ($this->cluster->olderThan('1.23.0') || $this->cluster->newerThan('1.24.0')) {
             $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         } else {
             $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
