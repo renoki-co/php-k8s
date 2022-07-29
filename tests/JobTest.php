@@ -85,6 +85,7 @@ class JobTest extends TestCase
 
         $pod = $this->cluster->pod()
             ->setName('perl')
+            ->setLabels(['tier' => 'backend'])
             ->setContainers([$pi])
             ->neverRestart();
 
