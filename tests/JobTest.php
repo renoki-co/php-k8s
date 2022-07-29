@@ -80,7 +80,7 @@ class JobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl')
+            ->setImage('perl', '5.34.0')
             ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
 
         $pod = $this->cluster->pod()

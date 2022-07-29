@@ -62,13 +62,6 @@ class CronCronJobTest extends TestCase
             ->restartOnFailure()
             ->neverRestart();
 
-        $job = $this->cluster->job()
-            ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['perl/annotation' => 'yes'])
-            ->setTTL(3600)
-            ->setTemplate($pod);
-
         $cronjob = $this->cluster->fromYamlFile(__DIR__.'/yaml/cronjob.yaml');
 
         $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
@@ -96,7 +89,7 @@ class CronCronJobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl')
+            ->setImage('perl', '5.34.0')
             ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
 
         $pod = $this->cluster->pod()
