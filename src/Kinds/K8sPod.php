@@ -10,6 +10,7 @@ use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
+use RenokiCo\PhpK8s\Instances\HostAlias;
 use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
@@ -482,5 +483,41 @@ class K8sPod extends K8sResource implements
     public function isSuccessful(): bool
     {
         return $this->getPhase() === 'Succeeded';
+    }
+
+    /**
+     * Set the host aliases.
+     *
+     * @param  array  $hostAliases
+     * @return $this
+     */
+    public function setHostAliases(array $hostAliases)
+    {
+        foreach ($hostAliases as &$hostAlias) {
+            if ($hostAlias instanceof HostAlias) {
+                $hostAlias = $hostAlias->toArray();
+            }
+        }
+
+        return $this->setSpec('hostAliases', $hostAliases);
+    }
+
+    /**
+     * Get the volumes.
+     *
+     * @param  bool  $asInstance
+     * @return array
+     */
+    public function getHostAliases(bool $asInstance = true)
+    {
+        $hostAliases = $this->getSpec('hostAliases', []);
+
+        if ($asInstance) {
+            foreach ($hostAliases as &$hostAlias) {
+                $hostAlias = new HostAlias($hostAlias);
+            }
+        }
+
+        return $hostAliases;
     }
 }

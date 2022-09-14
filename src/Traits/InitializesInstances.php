@@ -5,6 +5,7 @@ namespace RenokiCo\PhpK8s\Traits;
 use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Expression;
+use RenokiCo\PhpK8s\Instances\HostAlias;
 use RenokiCo\PhpK8s\Instances\Probe;
 use RenokiCo\PhpK8s\Instances\ResourceMetric;
 use RenokiCo\PhpK8s\Instances\ResourceObject;
@@ -123,5 +124,16 @@ trait InitializesInstances
     public static function webhook(array $attributes = [])
     {
         return new Webhook($attributes);
+    }
+
+    /**
+     * Create a new webhook instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\HostAlias
+     */
+    public static function hostAlias(array $attributes = [])
+    {
+        return new HostAlias($attributes);
     }
 }
