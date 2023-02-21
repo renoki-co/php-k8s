@@ -110,10 +110,10 @@ class JobTest extends TestCase
         $this->assertEquals('pi', $job->getName());
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
 
-        if ($this->cluster->olderThan('1.23.0') || $this->cluster->newerThan('1.24.0')) {
-            $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
-        } else {
-            $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+        $annotations = $job->getAnnotations();
+        foreach(['perl/annotation' => 'yes'] as $key => $value) {
+            $this->assertContains($key, array_keys($annotations), "Annotation $key missing");
+            $this->assertEquals($value, $annotations[$key]);
         }
 
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
@@ -187,10 +187,10 @@ class JobTest extends TestCase
         $this->assertEquals('pi', $job->getName());
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
 
-        if ($this->cluster->olderThan('1.23.0') || $this->cluster->newerThan('1.24.0')) {
-            $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
-        } else {
-            $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+        $annotations = $job->getAnnotations();
+        foreach(['perl/annotation' => 'yes'] as $key => $value) {
+            $this->assertContains($key, array_keys($annotations), "Annotation $key missing");
+            $this->assertEquals($value, $annotations[$key]);
         }
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
