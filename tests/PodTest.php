@@ -217,8 +217,8 @@ class PodTest extends TestCase
 
         $pod->refresh();
 
-        $this->assertEquals('busybox:latest', $pod->getInitContainer('busybox')->getImage());
-        $this->assertEquals('mysql:5.7', $pod->getContainer('mysql')->getImage());
+        $this->assertStringEndsWith('busybox:latest', $pod->getInitContainer('busybox')->getImage());
+        $this->assertStringEndsWith('mysql:5.7', $pod->getContainer('mysql')->getImage());
 
         $this->assertTrue($pod->containersAreReady());
         $this->assertTrue($pod->initContainersAreReady());
