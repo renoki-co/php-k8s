@@ -1,4 +1,4 @@
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: pi
@@ -12,8 +12,6 @@ spec:
     spec:
       ttlSecondsAfterFinished: 3600
       template:
-        apiVersion: batch/v1
-        kind: Job
         metadata:
           name: pi
           labels:
@@ -29,7 +27,3 @@ spec:
                 - Mbignum=bpi
                 - -wle
                 - print bpi(2000)
-          kind: Pod
-          apiVersion: v1
-    apiVersion: batch/v1
-    kind: Job

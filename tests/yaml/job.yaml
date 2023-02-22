@@ -20,5 +20,3 @@ spec:
             - Mbignum=bpi
             - -wle
             - print bpi(2000)
-    kind: Pod
-    apiVersion: v1

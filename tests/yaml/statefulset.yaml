@@ -7,11 +7,16 @@ metadata:
   annotations:
     mysql/annotation: "yes"
 spec:
+  selector:
+    matchLabels:
+      name: mysql-statefulset
   replicas: 3
   serviceName: mysql
   template:
     metadata:
       name: mysql
+      labels:
+        name: mysql-statefulset
     spec:
       containers:
         - name: mysql

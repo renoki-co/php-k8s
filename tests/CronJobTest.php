@@ -39,7 +39,7 @@ class CronCronJobTest extends TestCase
             ->setJobTemplate($job)
             ->setSchedule(CronExpression::factory('* * * * *'));
 
-        $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
+        $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
@@ -64,7 +64,7 @@ class CronCronJobTest extends TestCase
 
         $cronjob = $this->cluster->fromYamlFile(__DIR__.'/yaml/cronjob.yaml');
 
-        $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
+        $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
@@ -122,7 +122,7 @@ class CronCronJobTest extends TestCase
 
         $this->assertInstanceOf(K8sCronJob::class, $cronjob);
 
-        $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
+        $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
@@ -175,7 +175,7 @@ class CronCronJobTest extends TestCase
 
         $this->assertTrue($cronjob->isSynced());
 
-        $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
+        $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
@@ -195,7 +195,7 @@ class CronCronJobTest extends TestCase
 
         $this->assertTrue($cronjob->isSynced());
 
-        $this->assertEquals('batch/v1beta1', $cronjob->getApiVersion());
+        $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals([], $cronjob->getAnnotations());

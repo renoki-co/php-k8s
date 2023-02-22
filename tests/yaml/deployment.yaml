@@ -7,10 +7,15 @@ metadata:
   annotations:
     mysql/annotation: "yes"
 spec:
+  selector:
+    matchLabels:
+      name: mysql-deployment
   replicas: 3
   template:
     metadata:
       name: mysql
+      labels:
+        name: mysql-deployment
     spec:
       containers:
         - name: mysql
@@ -19,5 +24,3 @@ spec:
             - name: mysql
               protocol: TCP
               containerPort: 3306
-    kind: Pod
-    apiVersion: v1

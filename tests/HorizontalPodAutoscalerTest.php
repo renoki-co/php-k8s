@@ -42,7 +42,7 @@ class HorizontalPodAutoscalerTest extends TestCase
             ->min(1)
             ->max(10);
 
-        $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
+        $this->assertEquals('autoscaling/v2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
         $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
@@ -74,7 +74,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $hpa = $this->cluster->fromYamlFile(__DIR__.'/yaml/hpa.yaml');
 
-        $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
+        $this->assertEquals('autoscaling/v2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
         $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
@@ -141,7 +141,7 @@ class HorizontalPodAutoscalerTest extends TestCase
         $this->assertInstanceOf(K8sDeployment::class, $dep);
         $this->assertInstanceOf(K8sHorizontalPodAutoscaler::class, $hpa);
 
-        $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
+        $this->assertEquals('autoscaling/v2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
         $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
@@ -203,7 +203,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
 
-        $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
+        $this->assertEquals('autoscaling/v2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
         $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());
@@ -231,7 +231,7 @@ class HorizontalPodAutoscalerTest extends TestCase
 
         $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
 
-        $this->assertEquals('autoscaling/v2beta2', $hpa->getApiVersion());
+        $this->assertEquals('autoscaling/v2', $hpa->getApiVersion());
         $this->assertEquals('mysql-hpa', $hpa->getName());
         $this->assertEquals(['tier' => 'backend'], $hpa->getLabels());
         $this->assertEquals([$cpuMetric->toArray()], $hpa->getMetrics());

@@ -72,7 +72,7 @@ class K8sStatefulSet extends K8sResource implements
     /**
      * Set the statefulset service.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sService|string  $service
+     * @param K8sService|string  $service
      * @return $this
      */
     public function setService($service)
@@ -97,7 +97,7 @@ class K8sStatefulSet extends K8sResource implements
     /**
      * Get the K8sService instance.
      *
-     * @return null|\RenokiCo\PhpK8s\Kinds\K8sService
+     * @return null|K8sService
      */
     public function getServiceInstance()
     {

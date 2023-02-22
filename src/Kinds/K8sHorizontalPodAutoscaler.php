@@ -28,7 +28,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
      *
      * @var string
      */
-    protected static $defaultVersion = 'autoscaling/v2beta2';
+    protected static $defaultVersion = 'autoscaling/v2';
 
     /**
      * Wether the resource has a namespace.
@@ -40,7 +40,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Set the reference to the scaling resource.
      *
-     * @param  \RenokiCo\PhpK8s\Contracts\Scalable  $resource
+     * @param Scalable $resource
      * @return $this
      */
     public function setResource(Scalable $resource)
@@ -55,7 +55,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Add a new metric.
      *
-     * @param  \RenokiCo\PhpK8s\Instances\ResourceMetric  $metric
+     * @param ResourceMetric $metric
      * @return $this
      */
     public function addMetric(ResourceMetric $metric)

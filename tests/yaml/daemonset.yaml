@@ -5,9 +5,14 @@ metadata:
   labels:
     tier: backend
 spec:
+  selector:
+    matchLabels:
+      name: mysql-daemonset
   template:
     metadata:
       name: mysql
+      labels:
+        name: mysql-daemonset
     spec:
       containers:
         - name: mysql
@@ -15,6 +20,3 @@ spec:
           ports:
             - name: mysql
               protocol: TCP
-              containerPort: 3306
-    kind: Pod
-    apiVersion: v1
