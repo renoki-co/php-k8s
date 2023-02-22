@@ -72,7 +72,7 @@ class K8sStatefulSet extends K8sResource implements
     /**
      * Set the statefulset service.
      *
-     * @param K8sService|string  $service
+     * @param  K8sService|string  $service
      * @return $this
      */
     public function setService($service)

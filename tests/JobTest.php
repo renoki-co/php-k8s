@@ -111,7 +111,7 @@ class JobTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
 
         $annotations = $job->getAnnotations();
-        foreach(['perl/annotation' => 'yes'] as $key => $value) {
+        foreach (['perl/annotation' => 'yes'] as $key => $value) {
             $this->assertContains($key, array_keys($annotations), "Annotation $key missing");
             $this->assertEquals($value, $annotations[$key]);
         }
@@ -188,7 +188,7 @@ class JobTest extends TestCase
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
 
         $annotations = $job->getAnnotations();
-        foreach(['perl/annotation' => 'yes'] as $key => $value) {
+        foreach (['perl/annotation' => 'yes'] as $key => $value) {
             $this->assertContains($key, array_keys($annotations), "Annotation $key missing");
             $this->assertEquals($value, $annotations[$key]);
         }

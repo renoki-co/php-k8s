@@ -40,7 +40,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Set the reference to the scaling resource.
      *
-     * @param Scalable $resource
+     * @param  Scalable  $resource
      * @return $this
      */
     public function setResource(Scalable $resource)
@@ -55,7 +55,7 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Add a new metric.
      *
-     * @param ResourceMetric $metric
+     * @param  ResourceMetric  $metric
      * @return $this
      */
     public function addMetric(ResourceMetric $metric)

@@ -40,7 +40,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the job template.
      *
-     * @param  array|K8sJob $job
+     * @param  array|K8sJob  $job
      * @return $this
      */
     public function setJobTemplate($job)
@@ -72,7 +72,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the schedule for the cronjob.
      *
-     * @param CronExpression|string  $schedule
+     * @param  CronExpression|string  $schedule
      * @return $this
      */
     public function setSchedule($schedule)
