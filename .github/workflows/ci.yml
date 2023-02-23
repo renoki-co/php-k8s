@@ -77,7 +77,7 @@ jobs:
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
+        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction
 
     - name: Setup in-cluster config
       run: |
