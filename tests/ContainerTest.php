@@ -14,7 +14,7 @@ class ContainerTest extends TestCase
 
         $volume = K8s::volume()->awsEbs('vol-1234', 'ext3');
 
-        $container->setImage('nginx', '1.4')
+        $container->setImage('public.ecr.aws/docker/library/nginx', '1.23')
             ->setEnv(['key' => 'value'])
             ->addEnvs(['key2' => 'value2'])
             ->addSecretKeyRefs(['SECRET_ONE' => ['secret_ref_name', 'secret_ref_key']])
@@ -55,7 +55,7 @@ class ContainerTest extends TestCase
                 ->setSuccessThreshold(2)
         );
 
-        $this->assertEquals('nginx:1.4', $container->getImage());
+        $this->assertStringEndsWith('nginx:1.23', $container->getImage());
         $this->assertEquals([
             ['name' => 'key', 'value' => 'value'],
             ['name' => 'key2', 'value' => 'value2'],
@@ -95,7 +95,7 @@ class ContainerTest extends TestCase
         $container->removeEnv();
 
         $this->assertFalse($container->isReady());
-        $this->assertEquals('nginx:1.4', $container->getImage());
+        $this->assertStringEndsWith('nginx:1.23', $container->getImage());
         $this->assertEquals([], $container->getEnv([]));
         $this->assertEquals(['--test'], $container->getArgs());
         $this->assertEquals([

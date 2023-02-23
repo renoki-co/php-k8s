@@ -15,7 +15,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -24,7 +24,7 @@ class PodTest extends TestCase
 
         $busybox = K8s::container()
             ->setName('busybox')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh']);
 
         $pod = $this->cluster->pod()
@@ -65,7 +65,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -74,7 +74,7 @@ class PodTest extends TestCase
 
         $busybox = K8s::container()
             ->setName('busybox')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh']);
 
         $pod = $this->cluster->fromYamlFile(__DIR__.'/yaml/pod.yaml');
@@ -112,7 +112,7 @@ class PodTest extends TestCase
     {
         $busybox = K8s::container()
             ->setName('busybox-exec')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
 
         $pod = $this->cluster->pod()
@@ -143,7 +143,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql-attach')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -174,7 +174,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -183,7 +183,7 @@ class PodTest extends TestCase
 
         $busybox = K8s::container()
             ->setName('busybox')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh']);
 
         $pod = $this->cluster->pod()

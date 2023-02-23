@@ -21,7 +21,7 @@ spec:
         spec:
           containers:
             - name: pi
-              image: perl:latest
+              image: public.ecr.aws/docker/library/perl:latest
               command:
                 - perl
                 - Mbignum=bpi

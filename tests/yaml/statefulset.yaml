@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:5.7
+          image: public.ecr.aws/docker/library/mysql:5.7
           ports:
             - name: mysql
               protocol: TCP

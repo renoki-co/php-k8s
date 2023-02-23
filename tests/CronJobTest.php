@@ -16,7 +16,7 @@ class CronCronJobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl')
+            ->setImage('public.ecr.aws/docker/library/perl')
             ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
 
         $pod = $this->cluster->pod()
@@ -53,7 +53,7 @@ class CronCronJobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl')
+            ->setImage('public.ecr.aws/docker/library/perl')
             ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
 
         $pod = $this->cluster->pod()
@@ -89,7 +89,7 @@ class CronCronJobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl', '5.34.0')
+            ->setImage('public.ecr.aws/docker/library/perl', '5.36.0')
             ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
 
         $pod = $this->cluster->pod()
