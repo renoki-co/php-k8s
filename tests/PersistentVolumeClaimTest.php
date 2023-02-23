@@ -78,14 +78,16 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals(['ReadWriteOnce'], $pvc->getAccessModes());
         $this->assertEquals('standard', $pvc->getStorageClass());
 
-        while (! $pvc->isBound()) {
-            dump("Waiting for PVC {$pvc->getName()} to be bound...");
-            sleep(1);
-            $pvc->refresh();
-        }
+        if ($standard->getVolumeBindingMode() == 'Immediate') {
+            while (!$pvc->isBound()) {
+                dump("Waiting for PVC {$pvc->getName()} to be bound...");
+                sleep(1);
+                $pvc->refresh();
+            }
 
-        $this->assertFalse($pvc->isAvailable());
-        $this->assertTrue($pvc->isBound());
+            $this->assertFalse($pvc->isAvailable());
+            $this->assertTrue($pvc->isBound());
+        }
     }
 
     public function runGetAllTests()
