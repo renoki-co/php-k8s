@@ -15,7 +15,7 @@ class JobTest extends TestCase
         $pi = K8s::container()
             ->setName('pi')
             ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
+            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -45,7 +45,7 @@ class JobTest extends TestCase
         $pi = K8s::container()
             ->setName('pi')
             ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
+            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -80,8 +80,8 @@ class JobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl', '5.36.0')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
+            ->setImage('public.ecr.aws/docker/library/perl', '5.36')
+            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
 
         $pod = $this->cluster->pod()
             ->setName('perl')

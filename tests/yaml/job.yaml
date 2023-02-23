@@ -19,4 +19,4 @@ spec:
             - perl
             - Mbignum=bpi
             - -wle
-            - print bpi(2000)
+            - print bpi(200)
