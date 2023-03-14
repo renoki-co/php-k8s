@@ -43,6 +43,7 @@ class NodeTest extends TestCase
         $this->assertTrue(is_array($node->getImages()));
         $this->assertNotEquals([], $node->getCapacity());
         $this->assertNotEquals([], $node->getAllocatableInfo());
+        $this->assertEquals([], $node->getTaints());
     }
 
     public function runWatchAllTests()

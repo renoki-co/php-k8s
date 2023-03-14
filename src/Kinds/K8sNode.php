@@ -5,10 +5,12 @@ namespace RenokiCo\PhpK8s\Kinds;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
+use RenokiCo\PhpK8s\Traits\Resource\HasTaints;
 
 class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasStatus;
+    use HasTaints;
 
     /**
      * The resource Kind parameter.

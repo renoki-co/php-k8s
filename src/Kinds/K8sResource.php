@@ -176,6 +176,7 @@ class K8sResource implements Arrayable, Jsonable
         $attributes = str_replace('"allowedTopologies": {}', '"allowedTopologies": []', $attributes);
         $attributes = str_replace('"mountOptions": {}', '"mountOptions": []', $attributes);
         $attributes = str_replace('"accessModes": {}', '"accessModes": []', $attributes);
+        $attributes = str_replace('"taints": {}', '"taints": []', $attributes);
 
         return $attributes;
     }

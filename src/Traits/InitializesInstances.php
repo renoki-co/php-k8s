@@ -10,6 +10,7 @@ use RenokiCo\PhpK8s\Instances\ResourceMetric;
 use RenokiCo\PhpK8s\Instances\ResourceObject;
 use RenokiCo\PhpK8s\Instances\Rule;
 use RenokiCo\PhpK8s\Instances\Subject;
+use RenokiCo\PhpK8s\Instances\Taint;
 use RenokiCo\PhpK8s\Instances\Volume;
 use RenokiCo\PhpK8s\Instances\Webhook;
 
@@ -123,5 +124,16 @@ trait InitializesInstances
     public static function webhook(array $attributes = [])
     {
         return new Webhook($attributes);
+    }
+
+    /**
+     * Create a new Taint instance.
+     *
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Instances\Taint
+     */
+    public static function taint(array $attributes = [])
+    {
+        return new Taint($attributes);
     }
 }
