@@ -151,6 +151,6 @@ class K8sJob extends K8sResource implements
      */
     public function hasCompleted(): bool
     {
-        return $this->getActivePodsCount() === 0;
+        return !is_null($this->getCompletionTime());
     }
 }

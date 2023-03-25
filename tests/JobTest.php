@@ -25,14 +25,14 @@ class JobTest extends TestCase
 
         $job = $this->cluster->job()
             ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'compute'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setTTL(3600)
             ->setTemplate($pod);
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
         $this->assertEquals('Never', $pod->getRestartPolicy());
@@ -57,7 +57,7 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
         $this->assertEquals('Never', $pod->getRestartPolicy());
@@ -85,13 +85,13 @@ class JobTest extends TestCase
 
         $pod = $this->cluster->pod()
             ->setName('perl')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'compute'])
             ->setContainers([$pi])
             ->neverRestart();
 
         $job = $this->cluster->job()
             ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'compute'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setTTL(3600)
             ->setTemplate($pod);
@@ -108,7 +108,7 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
 
         $annotations = $job->getAnnotations();
         foreach (['perl/annotation' => 'yes'] as $key => $value) {
@@ -130,8 +130,7 @@ class JobTest extends TestCase
 
         K8sJob::selectPods(function ($job) {
             $this->assertInstanceOf(K8sJob::class, $job);
-
-            return ['tier' => 'backend'];
+            return ['tier' => 'compute'];
         });
 
         $pods = $job->getPods();
@@ -149,7 +148,7 @@ class JobTest extends TestCase
         $job->refresh();
 
         while (! $completionTime = $job->getCompletionTime()) {
-            dump("Waiting for the competion time report of {$job->getName()}...");
+            dump("Waiting for the completion time report of {$job->getName()}...");
             sleep(1);
             $job->refresh();
         }
@@ -185,7 +184,7 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
 
         $annotations = $job->getAnnotations();
         foreach (['perl/annotation' => 'yes'] as $key => $value) {
@@ -210,7 +209,7 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
     }

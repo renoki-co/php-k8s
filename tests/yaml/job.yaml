@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: pi
   labels:
-    tier: backend
+    tier: compute
   annotations:
     perl/annotation: "yes"
 spec:
