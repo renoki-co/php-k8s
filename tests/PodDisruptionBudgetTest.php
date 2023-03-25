@@ -153,13 +153,21 @@ class PodDisruptionBudgetTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pdb = $this->cluster->getPodDisruptionBudgetByName('mysql-pdb');
-
-        $this->assertTrue($pdb->isSynced());
-
-        $pdb->setMinAvailable('25%');
-
-        $pdb->createOrUpdate();
+        $backoff = 0;
+        do {
+            try {
+                $pdb = $this->cluster->getPodDisruptionBudgetByName('mysql-pdb')->setMinAvailable('25%')->createOrUpdate();
+            } catch (KubernetesAPIException $e) {
+                if ($e->getCode() == 409) {
+                    sleep(2*$backoff);
+                    $backoff++;
+                } else {
+                    throw $e;
+                }
+                if ($backoff > 3)
+                    break;
+            }
+        } while (!isset($pdb));
 
         $this->assertTrue($pdb->isSynced());
 
