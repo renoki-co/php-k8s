@@ -25,9 +25,9 @@ jobs:
           - '8.1'
           - '8.2'
         kubernetes:
-          - '1.23.16'
-          - '1.24.10'
-          - '1.25.6'
+          - '1.24.12'
+          - '1.25.8'
+          - '1.26.3'
         laravel:
           - 9.*
           - 10.*
@@ -63,12 +63,12 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - uses: manusa/actions-setup-minikube@v2.7.2
+    - uses: medyagh/setup-minikube@latest
       name: Setup Minikube
       with:
-        minikube version: v1.29.0
-        kubernetes version: "v${{ matrix.kubernetes }}"
-        github token: "${{ secrets.GITHUB_TOKEN }}"
+        minikube-version: 1.29.0
+        container-runtime: containerd
+        kubernetes-version: "v${{ matrix.kubernetes }}"
 
     - name: Run Kubernetes Proxy
       run: |
