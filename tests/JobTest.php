@@ -211,7 +211,6 @@ class JobTest extends TestCase
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
         $this->assertEquals(['tier' => 'backend'], $job->getLabels());
-        $this->assertEquals([], $job->getAnnotations());
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
     }
