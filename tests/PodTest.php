@@ -127,14 +127,10 @@ class PodTest extends TestCase
         }
 
         $messages = $pod->exec(['/bin/sh', '-c', 'echo 1 && echo 2 && echo 3'], 'busybox-exec');
-
-        $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
-            return Str::contains($message['output'], '1')
-                && Str::contains($message['output'], '2')
-                && Str::contains($message['output'], '3');
-        })->isNotEmpty();
-
-        $this->assertTrue($hasDesiredOutput);
+        $desiredOutput = collect($messages)->where('channel', 'stdout')->reduce(function(?string $carry, array $message) {
+           return $carry .= preg_replace('/\s+/', '', $message['output']);
+        });
+        $this->assertEquals("123", $desiredOutput);
 
         $pod->delete();
     }
