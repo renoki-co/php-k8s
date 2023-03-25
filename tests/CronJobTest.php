@@ -10,7 +10,7 @@ use RenokiCo\PhpK8s\Kinds\K8sCronJob;
 use RenokiCo\PhpK8s\Kinds\K8sJob;
 use RenokiCo\PhpK8s\ResourcesList;
 
-class CronCronJobTest extends TestCase
+class CronJobTest extends TestCase
 {
     public function test_cronjob_build()
     {
@@ -87,28 +87,28 @@ class CronCronJobTest extends TestCase
 
     public function runCreationTests()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl', '5.36.0')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
+        $busybox = K8s::container()
+            ->setName('busybox-exec')
+            ->setImage('public.ecr.aws/docker/library/busybox')
+            ->setCommand(['/bin/sh', '-c', 'sleep 30']);
 
         $pod = $this->cluster->pod()
-            ->setName('perl')
-            ->setContainers([$pi])
+            ->setName('sleep')
+            ->setContainers([$busybox])
             ->restartOnFailure()
             ->neverRestart();
 
         $job = $this->cluster->job()
-            ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['perl/annotation' => 'yes'])
+            ->setName('sleeper')
+            ->setLabels(['tier' => 'useless'])
+            ->setAnnotations(['perl/annotation' => 'no'])
             ->setTTL(3600)
             ->setTemplate($pod);
 
         $cronjob = $this->cluster->cronjob()
-            ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['perl/annotation' => 'yes'])
+            ->setName('periodic-sleep')
+            ->setLabels(['tier' => 'useless'])
+            ->setAnnotations(['perl/annotation' => 'no'])
             ->setJobTemplate($job)
             ->setSchedule(CronExpression::factory('* * * * *'));
 
@@ -123,9 +123,9 @@ class CronCronJobTest extends TestCase
         $this->assertInstanceOf(K8sCronJob::class, $cronjob);
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
-        $this->assertEquals('pi', $cronjob->getName());
-        $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
-        $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
+        $this->assertEquals('periodic-sleep', $cronjob->getName());
+        $this->assertEquals(['tier' => 'useless'], $cronjob->getLabels());
+        $this->assertEquals(['perl/annotation' => 'no'], $cronjob->getAnnotations());
         $this->assertEquals('Never', $pod->getRestartPolicy());
 
         $this->assertInstanceOf(K8sJob::class, $cronjob->getJobTemplate());
@@ -135,6 +135,7 @@ class CronCronJobTest extends TestCase
 
         $activeJobs = $cronjob->getActiveJobs();
 
+        // This check is sensitive to ensuring the jobs take some time to complete.
         while ($cronjob->getActiveJobs()->count() === 0) {
             dump("Waiting for the cronjob {$cronjob->getName()} to have active jobs...");
             sleep(1);
@@ -169,23 +170,23 @@ class CronCronJobTest extends TestCase
 
     public function runGetTests()
     {
-        $cronjob = $this->cluster->getCronJobByName('pi');
+        $cronjob = $this->cluster->getCronJobByName('periodic-sleep');
 
         $this->assertInstanceOf(K8sCronJob::class, $cronjob);
 
         $this->assertTrue($cronjob->isSynced());
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
-        $this->assertEquals('pi', $cronjob->getName());
-        $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
-        $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
+        $this->assertEquals('periodic-sleep', $cronjob->getName());
+        $this->assertEquals(['tier' => 'useless'], $cronjob->getLabels());
+        $this->assertEquals(['perl/annotation' => 'no'], $cronjob->getAnnotations());
 
         $this->assertInstanceOf(K8sJob::class, $cronjob->getJobTemplate());
     }
 
     public function runUpdateTests()
     {
-        $cronjob = $this->cluster->getCronJobByName('pi');
+        $cronjob = $this->cluster->getCronJobByName('periodic-sleep');
 
         $this->assertTrue($cronjob->isSynced());
 
@@ -196,8 +197,8 @@ class CronCronJobTest extends TestCase
         $this->assertTrue($cronjob->isSynced());
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
-        $this->assertEquals('pi', $cronjob->getName());
-        $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
+        $this->assertEquals('periodic-sleep', $cronjob->getName());
+        $this->assertEquals(['tier' => 'useless'], $cronjob->getLabels());
         $this->assertEquals([], $cronjob->getAnnotations());
 
         $this->assertInstanceOf(K8sJob::class, $cronjob->getJobTemplate());
@@ -205,7 +206,7 @@ class CronCronJobTest extends TestCase
 
     public function runDeletionTests()
     {
-        $cronjob = $this->cluster->getCronJobByName('pi');
+        $cronjob = $this->cluster->getCronJobByName('periodic-sleep');
 
         $this->assertTrue($cronjob->delete());
 
@@ -216,13 +217,13 @@ class CronCronJobTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getCronJobByName('pi');
+        $this->cluster->getCronJobByName('periodic-sleep');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->cronjob()->watchAll(function ($type, $cronjob) {
-            if ($cronjob->getName() === 'pi') {
+            if ($cronjob->getName() === 'periodic-sleep') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -232,8 +233,8 @@ class CronCronJobTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->cronjob()->watchByName('pi', function ($type, $cronjob) {
-            return $cronjob->getName() === 'pi';
+        $watch = $this->cluster->cronjob()->watchByName('periodic-sleep', function ($type, $cronjob) {
+            return $cronjob->getName() === 'periodic-sleep';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);

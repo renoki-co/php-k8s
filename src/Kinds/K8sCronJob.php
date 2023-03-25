@@ -123,7 +123,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     public function getActiveJobs()
     {
         return collect($this->getStatus('active', []))->map(function ($job) {
-            return $this->cluster->job($job)->refresh();
+            return $this->cluster->getJobByName($job['name'], $this->getNamespace());
         });
     }
 }
