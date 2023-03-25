@@ -79,7 +79,7 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertEquals('standard', $pvc->getStorageClass());
 
         if ($standard->getVolumeBindingMode() == 'Immediate') {
-            while (!$pvc->isBound()) {
+            while (! $pvc->isBound()) {
                 dump("Waiting for PVC {$pvc->getName()} to be bound...");
                 sleep(1);
                 $pvc->refresh();

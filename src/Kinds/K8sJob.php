@@ -151,6 +151,6 @@ class K8sJob extends K8sResource implements
      */
     public function hasCompleted(): bool
     {
-        return !is_null($this->getCompletionTime());
+        return ! is_null($this->getCompletionTime());
     }
 }

@@ -130,6 +130,7 @@ class JobTest extends TestCase
 
         K8sJob::selectPods(function ($job) {
             $this->assertInstanceOf(K8sJob::class, $job);
+
             return ['tier' => 'compute'];
         });
 
