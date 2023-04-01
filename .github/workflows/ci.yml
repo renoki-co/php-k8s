@@ -15,25 +15,29 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     strategy:
       fail-fast: false
       matrix:
         php:
-          - '8.0'
           - '8.1'
+          - '8.2'
         kubernetes:
-          - '1.22.9'
-          - '1.23.6'
-          - '1.24.0'
+          - '1.24.12'
+          - '1.25.8'
+          - '1.26.3'
         laravel:
           - 9.*
+          - 10.*
         prefer:
           - 'prefer-lowest'
           - 'prefer-stable'
         include:
           - laravel: 9.*
             testbench: 7.*
+          - laravel: 10.*
+            testbench: 8.*
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
 
@@ -53,12 +57,12 @@ jobs:
         path: ~/.composer/cache/files
         key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - uses: manusa/actions-setup-minikube@v2.6.1
+    - uses: medyagh/setup-minikube@latest
       name: Setup Minikube
       with:
-        minikube version: v1.25.2
-        kubernetes version: "v${{ matrix.kubernetes }}"
-        github token: "${{ secrets.GITHUB_TOKEN }}"
+        minikube-version: 1.29.0
+        container-runtime: containerd
+        kubernetes-version: "v${{ matrix.kubernetes }}"
 
     - name: Run Kubernetes Proxy
       run: |
@@ -67,7 +71,7 @@ jobs:
     - name: Install dependencies
       run: |
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction --no-suggest
+        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction
 
     - name: Setup in-cluster config
       run: |
@@ -79,7 +83,7 @@ jobs:
 
     - name: Setting CRDs for testing
       run: |
-        kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/sealedsecret-crd.yaml
+        kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
 
     # - name: Run static analysis
     #   run: |

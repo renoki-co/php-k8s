@@ -20,7 +20,7 @@ class PodDisruptionBudgetTest extends TestCase
             ->setMinAvailable(1)
             ->setMaxUnavailable('25%');
 
-        $this->assertEquals('policy/v1beta1', $pdb->getApiVersion());
+        $this->assertEquals('policy/v1', $pdb->getApiVersion());
         $this->assertEquals('mysql-pdb', $pdb->getName());
         $this->assertEquals(['matchLabels' => ['tier' => 'backend']], $pdb->getSelectors());
         $this->assertEquals(['tier' => 'backend'], $pdb->getLabels());
@@ -33,7 +33,7 @@ class PodDisruptionBudgetTest extends TestCase
     {
         [$pdb1, $pdb2] = $this->cluster->fromYamlFile(__DIR__.'/yaml/pdb.yaml');
 
-        $this->assertEquals('policy/v1beta1', $pdb1->getApiVersion());
+        $this->assertEquals('policy/v1', $pdb1->getApiVersion());
         $this->assertEquals('mysql-pdb', $pdb1->getName());
         $this->assertEquals(['matchLabels' => ['tier' => 'backend']], $pdb1->getSelectors());
         $this->assertEquals(['tier' => 'backend'], $pdb1->getLabels());
@@ -41,7 +41,7 @@ class PodDisruptionBudgetTest extends TestCase
         $this->assertEquals('25%', $pdb1->getMaxUnavailable());
         $this->assertEquals(null, $pdb1->getMinAvailable());
 
-        $this->assertEquals('policy/v1beta1', $pdb2->getApiVersion());
+        $this->assertEquals('policy/v1', $pdb2->getApiVersion());
         $this->assertEquals('mysql-pdb', $pdb2->getName());
         $this->assertEquals(['matchLabels' => ['tier' => 'backend']], $pdb2->getSelectors());
         $this->assertEquals(['tier' => 'backend'], $pdb2->getLabels());
@@ -65,7 +65,7 @@ class PodDisruptionBudgetTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -107,7 +107,7 @@ class PodDisruptionBudgetTest extends TestCase
         $this->assertInstanceOf(K8sDeployment::class, $dep);
         $this->assertInstanceOf(K8sPodDisruptionBudget::class, $pdb);
 
-        $this->assertEquals('policy/v1beta1', $pdb->getApiVersion());
+        $this->assertEquals('policy/v1', $pdb->getApiVersion());
         $this->assertEquals('mysql-pdb', $pdb->getName());
         $this->assertEquals(['matchLabels' => ['tier' => 'backend']], $pdb->getSelectors());
         $this->assertEquals(['tier' => 'backend'], $pdb->getLabels());
@@ -142,7 +142,7 @@ class PodDisruptionBudgetTest extends TestCase
 
         $this->assertTrue($pdb->isSynced());
 
-        $this->assertEquals('policy/v1beta1', $pdb->getApiVersion());
+        $this->assertEquals('policy/v1', $pdb->getApiVersion());
         $this->assertEquals('mysql-pdb', $pdb->getName());
         $this->assertEquals(['matchLabels' => ['tier' => 'backend']], $pdb->getSelectors());
         $this->assertEquals(['tier' => 'backend'], $pdb->getLabels());
@@ -153,17 +153,26 @@ class PodDisruptionBudgetTest extends TestCase
 
     public function runUpdateTests()
     {
-        $pdb = $this->cluster->getPodDisruptionBudgetByName('mysql-pdb');
+        $backoff = 0;
+        do {
+            try {
+                $pdb = $this->cluster->getPodDisruptionBudgetByName('mysql-pdb')->setMinAvailable('25%')->createOrUpdate();
+            } catch (KubernetesAPIException $e) {
+                if ($e->getCode() == 409) {
+                    sleep(2 * $backoff);
+                    $backoff++;
+                } else {
+                    throw $e;
+                }
+                if ($backoff > 3) {
+                    break;
+                }
+            }
+        } while (! isset($pdb));
 
         $this->assertTrue($pdb->isSynced());
 
-        $pdb->setMinAvailable('25%');
-
-        $pdb->createOrUpdate();
-
-        $this->assertTrue($pdb->isSynced());
-
-        $this->assertEquals('policy/v1beta1', $pdb->getApiVersion());
+        $this->assertEquals('policy/v1', $pdb->getApiVersion());
         $this->assertEquals('mysql-pdb', $pdb->getName());
         $this->assertEquals(['matchLabels' => ['tier' => 'backend']], $pdb->getSelectors());
         $this->assertEquals(['tier' => 'backend'], $pdb->getLabels());

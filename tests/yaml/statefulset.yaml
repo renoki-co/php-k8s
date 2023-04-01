@@ -7,15 +7,20 @@ metadata:
   annotations:
     mysql/annotation: "yes"
 spec:
+  selector:
+    matchLabels:
+      name: mysql-statefulset
   replicas: 3
   serviceName: mysql
   template:
     metadata:
       name: mysql
+      labels:
+        name: mysql-statefulset
     spec:
       containers:
         - name: mysql
-          image: mysql:5.7
+          image: public.ecr.aws/docker/library/mysql:5.7
           ports:
             - name: mysql
               protocol: TCP

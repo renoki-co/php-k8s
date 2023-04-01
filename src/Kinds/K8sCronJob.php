@@ -4,6 +4,8 @@ namespace RenokiCo\PhpK8s\Kinds;
 
 use Carbon\Carbon;
 use Cron\CronExpression;
+use DateTime;
+use Illuminate\Support\Collection;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
@@ -26,7 +28,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
      *
      * @var string
      */
-    protected static $defaultVersion = 'batch/v1beta1';
+    protected static $defaultVersion = 'batch/v1';
 
     /**
      * Wether the resource has a namespace.
@@ -38,7 +40,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the job template.
      *
-     * @param  array|\RenokiCo\PhpK8s\Kinds\K8sJob  $job
+     * @param  array|K8sJob  $job
      * @return $this
      */
     public function setJobTemplate($job)
@@ -54,7 +56,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
      * Get the template job.
      *
      * @param  bool  $asInstance
-     * @return array|\RenokiCo\PhpK8s\Kinds\K8sJob
+     * @return array|K8sJob
      */
     public function getJobTemplate(bool $asInstance = true)
     {
@@ -70,7 +72,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the schedule for the cronjob.
      *
-     * @param  \Cron\CronExpression|string  $schedule
+     * @param  CronExpression|string  $schedule
      * @return $this
      */
     public function setSchedule($schedule)
@@ -86,7 +88,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
      * Retrieve the schedule.
      *
      * @param  bool  $asInstance
-     * @return \Cron\CronExpression|string
+     * @return CronExpression|string
      */
     public function getSchedule(bool $asInstance = true)
     {
@@ -102,7 +104,7 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Get the last time a job was scheduled.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function getLastSchedule()
     {
@@ -116,12 +118,12 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Get the active jobs created by the cronjob.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getActiveJobs()
     {
         return collect($this->getStatus('active', []))->map(function ($job) {
-            return $this->cluster->job($job)->refresh();
+            return $this->cluster->getJobByName($job['name'], $this->getNamespace());
         });
     }
 }
