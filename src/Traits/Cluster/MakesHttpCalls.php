@@ -103,18 +103,23 @@ trait MakesHttpCalls
      * @param  string  $path
      * @param  string  $payload
      * @param  array  $query
-     * @param  array  $return_raw skip JSON parse and return raw data
+     * @param  array  $returnRaw  skip JSON parse and return raw data
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1], $return_raw = false)
-    {
+    protected function makeRequest(
+        string $method,
+        string $path,
+        string $payload = '',
+        array $query = ['pretty' => 1],
+        $returnRaw = false
+    ) {
         $resourceClass = $this->resourceClass;
 
         $response = $this->call($method, $path, $payload, $query);
 
-        if ($return_raw) {
+        if ($returnRaw) {
             return (string) $response->getBody();
         }
 

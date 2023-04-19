@@ -154,6 +154,13 @@ class JobTest extends TestCase
             $job->refresh();
         }
 
+        foreach ($job->getPods() as $pod) {
+            $log = $pod->logs();
+            // Long string so it fails if any stage wasn't parsed as string
+            $pi = '3.14159265358979323846264338327950288419716939937510582097494459230781640628620';
+            $this->assertStringStartsWith($pi, $log);
+        }
+
         $this->assertTrue($job->getDurationInSeconds() > 0);
         $this->assertEquals(0, $job->getActivePodsCount());
         $this->assertEquals(0, $job->getFailedPodsCount());

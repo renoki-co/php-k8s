@@ -202,12 +202,12 @@ class KubernetesCluster
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         /** @var bool Force makeRequest to return raw data instead of parsing JSON/object */
-        $return_raw = false;
+        $returnRaw = false;
 
         switch ($operation) {
             case static::WATCH_OP: return $this->watchPath($path, $payload, $query); break;
             case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query); break;
-            case static::LOG_OP: $return_raw = true; break;
+            case static::LOG_OP: $returnRaw = true; break;
             case static::EXEC_OP: return $this->execPath($path, $query); break;
             case static::ATTACH_OP: return $this->attachPath($path, $payload, $query); break;
             default: break;
@@ -215,7 +215,7 @@ class KubernetesCluster
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
 
-        return $this->makeRequest($method, $path, $payload, $query, $return_raw);
+        return $this->makeRequest($method, $path, $payload, $query, $returnRaw);
     }
 
     /**
