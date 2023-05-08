@@ -205,8 +205,13 @@ class KubernetesCluster
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1], array $options = [])
-    {
+    public function runOperation(
+        string $operation,
+        string $path,
+               $payload = '',
+        array  $query = ['pretty' => 1],
+        array  $options = []
+    ): mixed {
         switch ($operation) {
             case static::WATCH_OP:
                 return $this->watchPath($path, $payload, $query);

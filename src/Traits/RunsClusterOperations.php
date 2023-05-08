@@ -282,11 +282,11 @@ trait RunsClusterOperations
         return true;
     }
 
-    public function patchJSONType(string $op, string $path, ?string $value = null, array $query = ['pretty' => 1]): bool
+    public function patchJSONType(string $operation, string $path, ?string $value = null, array $query = ['pretty' => 1]): bool
     {
         $this->refreshResourceVersion();
 
-        $payload = [['op' => $op, 'path' => $path, 'value' => $value]];
+        $payload = [['op' => $operation, 'path' => $path, 'value' => $value]];
 
         $instance = $this->cluster
             ->setResourceClass(get_class($this))
