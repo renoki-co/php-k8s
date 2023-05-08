@@ -249,12 +249,12 @@ class DeploymentTest extends TestCase
 
         $this->assertTrue($dep->isSynced());
 
-        $dep->patchMergeType(["metadata" => ["annotations" => ["foo" => "bar"]]]);
-        $dep->pachJSONType("add", "/metadata/annotations/foo2", "bar2");
+        $dep->patchMergeType(['metadata' => ['annotations' => ['foo' => 'bar']]]);
+        $dep->pachJSONType('add', '/metadata/annotations/foo2', 'bar2');
 
         $this->assertTrue($dep->isSynced());
-        $this->assertTrue(($dep->getAnnotations()["foo"] ?? false) == "bar");
-        $this->assertTrue(($dep->getAnnotations()["foo2"] ?? false) == "bar2");
+        $this->assertTrue(($dep->getAnnotations()['foo'] ?? false) == 'bar');
+        $this->assertTrue(($dep->getAnnotations()['foo2'] ?? false) == 'bar2');
     }
 
     public function runDeletionTests()

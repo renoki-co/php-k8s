@@ -81,8 +81,8 @@ trait MakesHttpCalls
         string $method,
         string $path,
         string $payload = '',
-        array  $query = ['pretty' => 1],
-        array  $options = []
+        array $query = ['pretty' => 1],
+        array $options = []
     ): \Psr\Http\Message\ResponseInterface {
 
         if ($payload) {
@@ -120,8 +120,8 @@ trait MakesHttpCalls
         string $method,
         string $path,
         string $payload = '',
-        array  $query = ['pretty' => 1],
-        array  $options = []
+        array $query = ['pretty' => 1],
+        array $options = []
     ): mixed {
         $resourceClass = $this->resourceClass;
 

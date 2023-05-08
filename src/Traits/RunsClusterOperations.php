@@ -256,9 +256,9 @@ trait RunsClusterOperations
     }
 
     /**
-     * Issue a patch operation towards a cluster
+     * Issue a patch operation towards a cluster.
      *
-     * @param  array $payload JSON
+     * @param  array  $payload JSON
      * @param  array  $query
      * @return bool
      *
@@ -282,11 +282,11 @@ trait RunsClusterOperations
         return true;
     }
 
-    public function pachJSONType(string $op, string $path, ?string $value = null, array $query = ['pretty' => 1]): bool
+    public function patchJSONType(string $op, string $path, ?string $value = null, array $query = ['pretty' => 1]): bool
     {
         $this->refreshResourceVersion();
 
-        $payload = [["op" => $op, "path" => $path, "value" => $value]];
+        $payload = [['op' => $op, 'path' => $path, 'value' => $value]];
 
         $instance = $this->cluster
             ->setResourceClass(get_class($this))
@@ -492,7 +492,7 @@ trait RunsClusterOperations
     /**
      * Exec a command on the current resource.
      *
-     * @param array|string $command
+     * @param array|string  $command
      * @param  string|null  $container
      * @param  array  $query
      * @return string
@@ -502,8 +502,8 @@ trait RunsClusterOperations
      */
     public function exec(
         array|string $command,
-        string       $container = null,
-        array        $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
+        string $container = null,
+        array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
     ) {
         if (! $this instanceof Executable) {
             throw new KubernetesExecException(

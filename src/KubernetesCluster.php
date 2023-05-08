@@ -208,13 +208,26 @@ class KubernetesCluster
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1], array $options = [])
     {
         switch ($operation) {
-            case static::WATCH_OP: return $this->watchPath($path, $payload, $query); break;
-            case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query); break;
-            case static::EXEC_OP: return $this->execPath($path, $query); break;
-            case static::ATTACH_OP: return $this->attachPath($path, $payload, $query); break;
-            case static::MERGE_PATCH_OP: $options[RequestOptions::HEADERS]["Content-Type"] = "application/merge-patch+json"; break;
-            case static::JSON_PATCH_OP: $options[RequestOptions::HEADERS]["Content-Type"] = "application/json-patch+json"; break;
-            default: break;
+            case static::WATCH_OP:
+                return $this->watchPath($path, $payload, $query);
+                break;
+            case static::WATCH_LOGS_OP:
+                return $this->watchLogsPath($path, $payload, $query);
+                break;
+            case static::EXEC_OP:
+                return $this->execPath($path, $query);
+                break;
+            case static::ATTACH_OP:
+                return $this->attachPath($path, $payload, $query);
+                break;
+            case static::MERGE_PATCH_OP:
+                $options[RequestOptions::HEADERS]["Content-Type"] = "application/merge-patch+json";
+                break;
+            case static::JSON_PATCH_OP:
+                $options[RequestOptions::HEADERS]["Content-Type"] = "application/json-patch+json";
+                break;
+            default:
+                break;
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
