@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s;
 
 use Closure;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
@@ -146,6 +147,8 @@ class KubernetesCluster
         self::GET_OP => 'GET',
         self::CREATE_OP => 'POST',
         self::REPLACE_OP => 'PUT',
+        self::JSON_PATCH_OP => 'PATCH',
+        self::MERGE_PATCH_OP => 'PATCH',
         self::DELETE_OP => 'DELETE',
         self::LOG_OP => 'GET',
         self::WATCH_OP => 'GET',
@@ -158,6 +161,8 @@ class KubernetesCluster
     const CREATE_OP = 'create';
     const REPLACE_OP = 'replace';
     const DELETE_OP = 'delete';
+    const MERGE_PATCH_OP = 'merge_patch';
+    const JSON_PATCH_OP = 'json_patch';
     const LOG_OP = 'logs';
     const WATCH_OP = 'watch';
     const WATCH_LOGS_OP = 'watch_logs';
@@ -195,23 +200,26 @@ class KubernetesCluster
      * @param  string  $path
      * @param  string|null|Closure  $payload
      * @param  array  $query
+     * @param  array  $options
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
+    public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1], array $options = [])
     {
         switch ($operation) {
             case static::WATCH_OP: return $this->watchPath($path, $payload, $query); break;
             case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query); break;
             case static::EXEC_OP: return $this->execPath($path, $query); break;
             case static::ATTACH_OP: return $this->attachPath($path, $payload, $query); break;
+            case static::MERGE_PATCH_OP: $options[RequestOptions::HEADERS]["Content-Type"] = "application/merge-patch+json"; break;
+            case static::JSON_PATCH_OP: $options[RequestOptions::HEADERS]["Content-Type"] = "application/json-patch+json"; break;
             default: break;
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
 
-        return $this->makeRequest($method, $path, $payload, $query);
+        return $this->makeRequest($method, $path, $payload, $query, $options);
     }
 
     /**

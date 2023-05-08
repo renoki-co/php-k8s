@@ -75,6 +75,7 @@ class DeploymentTest extends TestCase
         $this->runUpdateTests();
         $this->runWatchAllTests();
         $this->runWatchTests();
+        $this->runPatchTests();
         $this->runDeletionTests();
     }
 
@@ -237,6 +238,23 @@ class DeploymentTest extends TestCase
         $this->assertEquals(2, $dep->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
+    }
+
+    /**
+     * @throws KubernetesAPIException
+     */
+    public function runPatchTests()
+    {
+        $dep = $this->cluster->getDeploymentByName('mysql');
+
+        $this->assertTrue($dep->isSynced());
+
+        $dep->patchMergeType(["metadata" => ["annotations" => ["foo" => "bar"]]]);
+        $dep->pachJSONType("add", "/metadata/annotations/foo2", "bar2");
+
+        $this->assertTrue($dep->isSynced());
+        $this->assertTrue(($dep->getAnnotations()["foo"] ?? false) == "bar");
+        $this->assertTrue(($dep->getAnnotations()["foo2"] ?? false) == "bar2");
     }
 
     public function runDeletionTests()
