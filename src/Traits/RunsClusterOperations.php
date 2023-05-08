@@ -258,7 +258,7 @@ trait RunsClusterOperations
     /**
      * Issue a patch operation towards a cluster.
      *
-     * @param  array  $payload JSON
+     * @param  array  $payload  JSON
      * @param  array  $query
      * @return bool
      *
@@ -282,8 +282,12 @@ trait RunsClusterOperations
         return true;
     }
 
-    public function patchJSONType(string $operation, string $path, ?string $value = null, array $query = ['pretty' => 1]): bool
-    {
+    public function patchJSONType(
+        string $operation,
+        string $path,
+        ?string $value = null,
+        array $query = ['pretty' => 1]
+    ): bool {
         $this->refreshResourceVersion();
 
         $payload = [['op' => $operation, 'path' => $path, 'value' => $value]];
@@ -492,7 +496,7 @@ trait RunsClusterOperations
     /**
      * Exec a command on the current resource.
      *
-     * @param array|string  $command
+     * @param  array|string  $command
      * @param  string|null  $container
      * @param  array  $query
      * @return string

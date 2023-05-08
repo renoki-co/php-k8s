@@ -208,9 +208,9 @@ class KubernetesCluster
     public function runOperation(
         string $operation,
         string $path,
-               $payload = '',
-        array  $query = ['pretty' => 1],
-        array  $options = []
+        string $payload = '',
+        array $query = ['pretty' => 1],
+        array $options = []
     ): mixed {
         switch ($operation) {
             case static::WATCH_OP:
@@ -226,10 +226,10 @@ class KubernetesCluster
                 return $this->attachPath($path, $payload, $query);
                 break;
             case static::MERGE_PATCH_OP:
-                $options[RequestOptions::HEADERS]["Content-Type"] = "application/merge-patch+json";
+                $options[RequestOptions::HEADERS]["Content-Type"] = 'application/merge-patch+json';
                 break;
             case static::JSON_PATCH_OP:
-                $options[RequestOptions::HEADERS]["Content-Type"] = "application/json-patch+json";
+                $options[RequestOptions::HEADERS]["Content-Type"] = 'application/json-patch+json';
                 break;
             default:
                 break;

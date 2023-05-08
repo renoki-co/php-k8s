@@ -84,7 +84,6 @@ trait MakesHttpCalls
         array $query = ['pretty' => 1],
         array $options = []
     ): \Psr\Http\Message\ResponseInterface {
-
         if ($payload) {
             $options[RequestOptions::BODY] = $payload;
         }
