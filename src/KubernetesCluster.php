@@ -226,10 +226,10 @@ class KubernetesCluster
                 return $this->attachPath($path, $payload, $query);
                 break;
             case static::MERGE_PATCH_OP:
-                $options[RequestOptions::HEADERS]["Content-Type"] = 'application/merge-patch+json';
+                $options[RequestOptions::HEADERS]['Content-Type'] = 'application/merge-patch+json';
                 break;
             case static::JSON_PATCH_OP:
-                $options[RequestOptions::HEADERS]["Content-Type"] = 'application/json-patch+json';
+                $options[RequestOptions::HEADERS]['Content-Type'] = 'application/json-patch+json';
                 break;
             default:
                 break;
