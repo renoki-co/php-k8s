@@ -228,6 +228,14 @@ trait LoadsFromKubeConfig
             );
         }
 
+        if (isset($userConfig['user']['exec'])) {
+            $this->withTokenFromCommandProvider(
+                $userConfig['user']['exec']['command'],
+                implode(' ', $userConfig['user']['exec']['args'] ?? []),
+                'status.token'
+            );
+        }
+
         if (isset($clusterConfig['cluster']['insecure-skip-tls-verify']) && $clusterConfig['cluster']['insecure-skip-tls-verify']) {
             $this->withoutSslChecks();
         }
