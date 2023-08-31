@@ -60,7 +60,7 @@ jobs:
     - uses: medyagh/setup-minikube@latest
       name: Setup Minikube
       with:
-        minikube-version: 1.29.0
+        minikube-version: 1.31.2
         container-runtime: containerd
         kubernetes-version: "v${{ matrix.kubernetes }}"
 
