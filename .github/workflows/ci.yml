@@ -58,6 +58,7 @@ jobs:
         name: Setup Minikube
         with:
           minikube-version: 1.32.0
+          driver: docker
           container-runtime: containerd
           kubernetes-version: v${{ matrix.kubernetes }}
 
