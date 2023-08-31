@@ -3,28 +3,28 @@
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use Composer\Semver\Comparator;
+use Composer\Semver\VersionParser;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 
 trait ChecksClusterVersion
 {
     /**
      * The Kubernetes cluster version.
-     *
-     * @var string|null
      */
-    protected $kubernetesVersion;
+    protected string $kubernetesVersion;
 
     /**
      * Load the cluster version.
      *
      * @return void
      *
-     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     * @throws KubernetesAPIException|GuzzleException
      */
     protected function loadClusterVersion(): void
     {
-        if ($this->kubernetesVersion) {
+        if (isset($this->kubernetesVersion)) {
             return;
         }
 
@@ -42,9 +42,10 @@ trait ChecksClusterVersion
             );
         }
 
-        $json = json_decode($response->getBody(), true);
+        $json = @json_decode($response->getBody(), true);
 
-        $this->kubernetesVersion = self::trimVersion($json['gitVersion']);
+        $parser = new VersionParser();
+        $this->kubernetesVersion = $parser->normalize($json['gitVersion']);
     }
 
     /**
@@ -53,14 +54,15 @@ trait ChecksClusterVersion
      *
      * @param  string  $kubernetesVersion
      * @return bool
+     *
+     * @throws KubernetesAPIException|GuzzleException
      */
     public function newerThan(string $kubernetesVersion): bool
     {
         $this->loadClusterVersion();
 
         return Comparator::greaterThanOrEqualTo(
-            $this->kubernetesVersion,
-            self::trimVersion($kubernetesVersion)
+            $this->kubernetesVersion, $kubernetesVersion
         );
     }
 
@@ -70,19 +72,15 @@ trait ChecksClusterVersion
      *
      * @param  string  $kubernetesVersion
      * @return bool
+     *
+     * @throws KubernetesAPIException|GuzzleException
      */
     public function olderThan(string $kubernetesVersion): bool
     {
         $this->loadClusterVersion();
 
         return Comparator::lessThan(
-            $this->kubernetesVersion,
-            self::trimVersion($kubernetesVersion)
+            $this->kubernetesVersion, $kubernetesVersion
         );
-    }
-
-    private static function trimVersion(string $version): string
-    {
-        return preg_replace('/^v/', '', $version);
     }
 }
