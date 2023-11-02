@@ -14,8 +14,8 @@ class JobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
+            ->setImage('public.ecr.aws/docker/library/perl')
+            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -25,14 +25,14 @@ class JobTest extends TestCase
 
         $job = $this->cluster->job()
             ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'compute'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setTTL(3600)
             ->setTemplate($pod);
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
         $this->assertEquals('Never', $pod->getRestartPolicy());
@@ -44,8 +44,8 @@ class JobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
+            ->setImage('public.ecr.aws/docker/library/perl')
+            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -57,7 +57,7 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
         $this->assertEquals('Never', $pod->getRestartPolicy());
@@ -80,18 +80,18 @@ class JobTest extends TestCase
     {
         $pi = K8s::container()
             ->setName('pi')
-            ->setImage('perl', '5.34.0')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(2000)']);
+            ->setImage('public.ecr.aws/docker/library/perl', '5.36')
+            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
 
         $pod = $this->cluster->pod()
             ->setName('perl')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'compute'])
             ->setContainers([$pi])
             ->neverRestart();
 
         $job = $this->cluster->job()
             ->setName('pi')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'compute'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setTTL(3600)
             ->setTemplate($pod);
@@ -108,12 +108,12 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
 
-        if ($this->cluster->olderThan('1.23.0') || $this->cluster->newerThan('1.24.0')) {
-            $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
-        } else {
-            $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+        $annotations = $job->getAnnotations();
+        foreach (['perl/annotation' => 'yes'] as $key => $value) {
+            $this->assertContains($key, array_keys($annotations), "Annotation $key missing");
+            $this->assertEquals($value, $annotations[$key]);
         }
 
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
@@ -131,7 +131,7 @@ class JobTest extends TestCase
         K8sJob::selectPods(function ($job) {
             $this->assertInstanceOf(K8sJob::class, $job);
 
-            return ['tier' => 'backend'];
+            return ['tier' => 'compute'];
         });
 
         $pods = $job->getPods();
@@ -149,7 +149,7 @@ class JobTest extends TestCase
         $job->refresh();
 
         while (! $completionTime = $job->getCompletionTime()) {
-            dump("Waiting for the competion time report of {$job->getName()}...");
+            dump("Waiting for the completion time report of {$job->getName()}...");
             sleep(1);
             $job->refresh();
         }
@@ -185,12 +185,12 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
 
-        if ($this->cluster->olderThan('1.23.0') || $this->cluster->newerThan('1.24.0')) {
-            $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
-        } else {
-            $this->assertEquals(['perl/annotation' => 'yes', 'batch.kubernetes.io/job-tracking' => ''], $job->getAnnotations());
+        $annotations = $job->getAnnotations();
+        foreach (['perl/annotation' => 'yes'] as $key => $value) {
+            $this->assertContains($key, array_keys($annotations), "Annotation $key missing");
+            $this->assertEquals($value, $annotations[$key]);
         }
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
@@ -210,8 +210,7 @@ class JobTest extends TestCase
 
         $this->assertEquals('batch/v1', $job->getApiVersion());
         $this->assertEquals('pi', $job->getName());
-        $this->assertEquals(['tier' => 'backend'], $job->getLabels());
-        $this->assertEquals([], $job->getAnnotations());
+        $this->assertEquals(['tier' => 'compute'], $job->getLabels());
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
     }

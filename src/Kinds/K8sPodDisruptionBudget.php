@@ -33,7 +33,7 @@ class K8sPodDisruptionBudget extends K8sResource implements InteractsWithK8sClus
      *
      * @var string
      */
-    protected static $defaultVersion = 'policy/v1beta1';
+    protected static $defaultVersion = 'policy/v1';
 
     /**
      * Set the maximum unavailable pod budget and

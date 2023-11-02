@@ -9,12 +9,12 @@ metadata:
 spec:
   initContainers:
     - name: busybox
-      image: busybox:latest
+      image: public.ecr.aws/docker/library/busybox:latest
       command:
         - /bin/sh
   containers:
     - name: mysql
-      image: mysql:5.7
+      image: public.ecr.aws/docker/library/mysql:5.7
       ports:
         - name: mysql
           protocol: TCP

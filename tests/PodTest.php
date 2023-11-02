@@ -15,7 +15,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -24,7 +24,7 @@ class PodTest extends TestCase
 
         $busybox = K8s::container()
             ->setName('busybox')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh']);
 
         $pod = $this->cluster->pod()
@@ -65,7 +65,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -74,7 +74,7 @@ class PodTest extends TestCase
 
         $busybox = K8s::container()
             ->setName('busybox')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh']);
 
         $pod = $this->cluster->fromYamlFile(__DIR__.'/yaml/pod.yaml');
@@ -112,7 +112,7 @@ class PodTest extends TestCase
     {
         $busybox = K8s::container()
             ->setName('busybox-exec')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
 
         $pod = $this->cluster->pod()
@@ -127,14 +127,10 @@ class PodTest extends TestCase
         }
 
         $messages = $pod->exec(['/bin/sh', '-c', 'echo 1 && echo 2 && echo 3'], 'busybox-exec');
-
-        $hasDesiredOutput = collect($messages)->where('channel', 'stdout')->filter(function ($message) {
-            return Str::contains($message['output'], '1')
-                && Str::contains($message['output'], '2')
-                && Str::contains($message['output'], '3');
-        })->isNotEmpty();
-
-        $this->assertTrue($hasDesiredOutput);
+        $desiredOutput = collect($messages)->where('channel', 'stdout')->reduce(function (?string $carry, array $message) {
+            return $carry .= preg_replace('/\s+/', '', $message['output']);
+        });
+        $this->assertEquals('123', $desiredOutput);
 
         $pod->delete();
     }
@@ -143,7 +139,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql-attach')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -174,7 +170,7 @@ class PodTest extends TestCase
     {
         $mysql = K8s::container()
             ->setName('mysql')
-            ->setImage('mysql', '5.7')
+            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
             ->setPorts([
                 ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
             ])
@@ -183,7 +179,7 @@ class PodTest extends TestCase
 
         $busybox = K8s::container()
             ->setName('busybox')
-            ->setImage('busybox')
+            ->setImage('public.ecr.aws/docker/library/busybox')
             ->setCommand(['/bin/sh']);
 
         $pod = $this->cluster->pod()
@@ -217,8 +213,8 @@ class PodTest extends TestCase
 
         $pod->refresh();
 
-        $this->assertEquals('busybox:latest', $pod->getInitContainer('busybox')->getImage());
-        $this->assertEquals('mysql:5.7', $pod->getContainer('mysql')->getImage());
+        $this->assertStringEndsWith('busybox:latest', $pod->getInitContainer('busybox')->getImage());
+        $this->assertStringEndsWith('mysql:5.7', $pod->getContainer('mysql')->getImage());
 
         $this->assertTrue($pod->containersAreReady());
         $this->assertTrue($pod->initContainersAreReady());
