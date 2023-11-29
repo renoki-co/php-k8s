@@ -11,7 +11,7 @@ class RequestException extends \RuntimeException implements KubernetesAPIExcepti
 {
     use WithPayload;
 
-    public function __construct(string $message = '', int $code = 0, array $payload = [], ?\Throwable $previous = null)
+    public function __construct(string $message = '', int $code = 0, $payload = null, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->payload = $payload;

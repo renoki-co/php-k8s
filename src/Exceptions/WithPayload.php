@@ -9,9 +9,9 @@ trait WithPayload
     /**
      * The payload coming from the Guzzle client.
      *
-     * @var array
+     * @var null|array
      */
-    protected $payload = [];
+    protected $payload = null;
 
     /**
      * Get the payload instance.

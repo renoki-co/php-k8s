@@ -6,7 +6,7 @@ namespace RenokiCo\PhpK8s\Exceptions\API;
 
 final class TooManyRequestsException extends RequestException
 {
-    public function __construct(string $message = '', array $payload = [], ?\Throwable $previous = null)
+    public function __construct(string $message = '', $payload = null, ?\Throwable $previous = null)
     {
         parent::__construct($message, 429, $payload, $previous);
     }
