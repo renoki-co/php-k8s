@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Exceptions;
 
-class KubernetesAPIException extends PhpK8sException
+interface KubernetesAPIException extends PhpK8sException
 {
-    //
 }

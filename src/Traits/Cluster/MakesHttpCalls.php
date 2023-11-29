@@ -4,8 +4,9 @@ namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\RequestOptions;
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
+use RenokiCo\PhpK8s\Exceptions;
 use RenokiCo\PhpK8s\ResourcesList;
 
 trait MakesHttpCalls
@@ -83,14 +84,27 @@ trait MakesHttpCalls
             $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), [
                 RequestOptions::BODY => $payload,
             ]);
-        } catch (ClientException $e) {
-            $errorPayload = json_decode((string) $e->getResponse()->getBody(), true);
+        } catch (ConnectException $exception) {
+            throw new Exceptions\API\ClusterNotReachableException('The cluster could not be reached.', 0, $exception);
+        } catch (ClientException $exception) {
+            $errorPayload = \json_decode((string) $exception->getResponse()->getBody(), true);
 
-            throw new KubernetesAPIException(
-                $e->getMessage(),
-                $errorPayload['code'] ?? 0,
-                $errorPayload
-            );
+            switch ($exception->getCode()) {
+                case 400:
+                    throw new Exceptions\API\BadRequestException('The server did not accept your request. You may check your cluster\'s API version compatibility.', $errorPayload, $exception);
+                case 401:
+                    throw new Exceptions\API\NotAuthorizedException('You are not authorized to access this resource with the current context.', $errorPayload, $exception);
+                case 403:
+                    throw new Exceptions\API\NotAuthenticatedException('You are not authenticated to the cluster.', $errorPayload, $exception);
+                case 404:
+                    throw new Exceptions\API\ResourceNotFoundException('The resource you are trying to access does not exist.', $errorPayload, $exception);
+                case 405:
+                    throw new Exceptions\API\MethodNotAllowedException('The operation is not allowed on this resource.', $errorPayload, $exception);
+                case 429:
+                    throw new Exceptions\API\TooManyRequestsException('You have sent too many requests to the cluster API. Please lower your API request rate.', $errorPayload, $exception);
+                default:
+                    throw new Exceptions\API\RequestException($exception->getMessage(), $exception->getCode(), $errorPayload, $exception);
+            }
         }
 
         return $response;

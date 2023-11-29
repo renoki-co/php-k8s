@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace RenokiCo\PhpK8s\Exceptions;
 
-class KubeConfigContextNotFound extends PhpK8sException
+class KubeConfigContextNotFound extends \RuntimeException implements PhpK8sException
 {
-    //
+    use WithPayload;
 }

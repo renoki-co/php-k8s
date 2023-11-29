@@ -12,6 +12,7 @@
         }
     ],
     "require": {
+        "ext-json": "*",
         "guzzlehttp/guzzle": "^6.5|^7.0",
         "illuminate/macroable": "^9.35|^10.1",
         "illuminate/support": "^9.35|^10.1",
