@@ -6,6 +6,7 @@ use Composer\Semver\Comparator;
 use Composer\Semver\VersionParser;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 
 trait ChecksClusterVersion
@@ -21,6 +22,7 @@ trait ChecksClusterVersion
      * @return void
      *
      * @throws KubernetesAPIException|GuzzleException
+     * @throws JsonException
      */
     protected function loadClusterVersion(): void
     {
@@ -42,7 +44,7 @@ trait ChecksClusterVersion
             );
         }
 
-        $json = @json_decode($response->getBody(), true);
+        $json = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $parser = new VersionParser();
         $this->kubernetesVersion = $parser->normalize($json['gitVersion']);
