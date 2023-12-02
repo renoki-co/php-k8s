@@ -103,9 +103,9 @@ jobs:
       run: |
         kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
 
-    # - name: Run static analysis
-    #   run: |
-    #     vendor/bin/psalm
+#    - name: Run static analysis
+#      run: |
+#        vendor/bin/psalm
 
     - name: Run tests
       env:
