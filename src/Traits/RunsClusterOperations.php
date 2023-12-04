@@ -256,6 +256,57 @@ trait RunsClusterOperations
     }
 
     /**
+     * Issue a patch operation towards a cluster.
+     *
+     * @param  array  $payload  JSON
+     * @param  array  $query
+     * @return bool
+     *
+     * @throws KubernetesAPIException
+     **/
+    public function patchMergeType(array $payload, array $query = ['pretty' => 1]): bool
+    {
+        $this->refreshResourceVersion();
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::MERGE_PATCH_OP,
+                $this->resourcePath(),
+                json_encode($payload),
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return true;
+    }
+
+    public function patchJSONType(
+        string $operation,
+        string $path,
+        ?string $value = null,
+        array $query = ['pretty' => 1]
+    ): bool {
+        $this->refreshResourceVersion();
+
+        $payload = [['op' => $operation, 'path' => $path, 'value' => $value]];
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::JSON_PATCH_OP,
+                $this->resourcePath(),
+                json_encode($payload),
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return true;
+    }
+
+    /**
      * Delete the resource.
      *
      * @param  array  $query
@@ -445,7 +496,7 @@ trait RunsClusterOperations
     /**
      * Exec a command on the current resource.
      *
-     * @param  string|array  $command
+     * @param  array|string  $command
      * @param  string|null  $container
      * @param  array  $query
      * @return string
@@ -454,7 +505,7 @@ trait RunsClusterOperations
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function exec(
-        $command,
+        array|string $command,
         string $container = null,
         array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
     ) {
