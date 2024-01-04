@@ -107,6 +107,8 @@ trait MakesHttpCalls
                     throw new Exceptions\API\ResourceNotFoundException('The resource you are trying to access does not exist.', $errorPayload, $exception);
                 case 405:
                     throw new Exceptions\API\MethodNotAllowedException('The operation is not allowed on this resource.', $errorPayload, $exception);
+                case 409:
+                    throw new Exceptions\API\ConflictException('A resource with the same name or identifier already exists. You should prefer updating tis resource.', $errorPayload, $exception);
                 case 429:
                     throw new Exceptions\API\TooManyRequestsException('You have sent too many requests to the cluster API. Please lower your API request rate.', $errorPayload, $exception);
                 default:
