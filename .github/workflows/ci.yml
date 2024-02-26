@@ -3,96 +3,89 @@ name: CI
 on:
   push:
     branches:
-      - '*'
+      - *
     tags:
-      - '*'
+      - *
   pull_request:
     branches:
-      - '*'
+      - *
 
 jobs:
   build:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     runs-on: ubuntu-latest
+
     timeout-minutes: 15
 
     strategy:
       fail-fast: false
       matrix:
-        php:
-          - '8.1'
-          - '8.2'
-        kubernetes:
-          - '1.24.12'
-          - '1.25.8'
-          - '1.26.3'
-        laravel:
-          - 9.*
-          - 10.*
-        prefer:
-          - 'prefer-lowest'
-          - 'prefer-stable'
+        php: ['8.1', '8.2']
+        kubernetes: [1.24.12, 1.25.8, 1.26.3]
+        laravel: ['9.*', '10.*', '11.*']
+        prefer: [prefer-lowest, prefer-stable]
         include:
           - laravel: 9.*
             testbench: 7.*
           - laravel: 10.*
             testbench: 8.*
+          - laravel: 11.*
+            testbench: 9.*
+        exclude:
+          - laravel: 11.*
+            php: '8.1'
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, yaml
-        coverage: pcov
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, yaml
+          coverage: pcov
 
-    - uses: actions/cache@v3.0.5
-      name: Cache dependencies
-      with:
-        path: ~/.composer/cache/files
-        key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+      - uses: actions/cache@v3.0.5
+        name: Cache dependencies
+        with:
+          path: ~/.composer/cache/files
+          key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
 
-    - uses: medyagh/setup-minikube@latest
-      name: Setup Minikube
-      with:
-        minikube-version: 1.29.0
-        container-runtime: containerd
-        kubernetes-version: "v${{ matrix.kubernetes }}"
+      - uses: medyagh/setup-minikube@latest
+        name: Setup Minikube
+        with:
+          minikube-version: 1.29.0
+          container-runtime: containerd
+          kubernetes-version: v${{ matrix.kubernetes }}
 
-    - name: Run Kubernetes Proxy
-      run: |
-        kubectl proxy --port=8080 --reject-paths="^/non-existent-path" &
+      - name: Run Kubernetes Proxy
+        run: |
+          kubectl proxy --port=8080 --reject-paths="^/non-existent-path" &
 
-    - name: Install dependencies
-      run: |
-        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --${{ matrix.prefer }} --prefer-dist --no-interaction
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.prefer }} --prefer-dist --no-interaction
 
-    - name: Setup in-cluster config
-      run: |
-        sudo mkdir -p /var/run/secrets/kubernetes.io/serviceaccount
-        echo "some-token" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/token
-        echo "c29tZS1jZXJ0Cg==" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        echo "some-namespace" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
-        sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
+      - name: Setup in-cluster config
+        run: |
+          sudo mkdir -p /var/run/secrets/kubernetes.io/serviceaccount
+          echo "some-token" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/token
+          echo "c29tZS1jZXJ0Cg==" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          echo "some-namespace" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
+          sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
 
-    - name: Setting CRDs for testing
-      run: |
-        kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
+      - name: Setting CRDs for testing
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
 
-    # - name: Run static analysis
-    #   run: |
-    #     vendor/bin/psalm
+      - name: Run tests
+        run: |
+          vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
-    - name: Run tests
-      run: |
-        vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
-
-    - uses: codecov/codecov-action@v3.1.0
-      with:
-        fail_ci_if_error: false
+      - uses: codecov/codecov-action@v3.1.0
+        with:
+          fail_ci_if_error: false
