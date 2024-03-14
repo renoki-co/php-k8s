@@ -6,7 +6,7 @@ use Closure;
 use Exception;
 use Illuminate\Support\Str;
 use Ratchet\Client\Connector as WebSocketConnector;
-use React\EventLoop\Factory as ReactFactory;
+use React\EventLoop\Loop as ReactLoop;
 use React\Socket\Connector as ReactSocketConnector;
 
 trait MakesWebsocketCalls
@@ -65,7 +65,7 @@ trait MakesWebsocketCalls
             $options['tls']['local_pk'] = $this->sslKey;
         }
 
-        $loop = ReactFactory::create();
+        $loop = ReactLoop::get();
         $socketConnector = new ReactSocketConnector($loop, $options);
         $wsConnector = new WebSocketConnector($loop, $socketConnector);
 
