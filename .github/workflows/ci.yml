@@ -83,6 +83,8 @@ jobs:
           kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
 
       - name: Run tests
+        env:
+          KUBERNETES_VERSION: ${{ matrix.kubernetes }}
         run: |
           vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
