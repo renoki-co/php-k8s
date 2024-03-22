@@ -52,17 +52,17 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-    - name: Prepare cache key
-      id: prep
-      run: |
-        PHP_VERSION=${{ matrix.php }}
-        LARAVEL_VERSION=${{ matrix.laravel }}
-        PREFER_VERSION=${{ matrix.prefer }}
+      - name: Prepare cache key
+        id: prep
+        run: |
+          PHP_VERSION=${{ matrix.php }}
+          LARAVEL_VERSION=${{ matrix.laravel }}
+          PREFER_VERSION=${{ matrix.prefer }}
 
-        # Remove any .* from the versions
-        LARAVEL_VERSION=${LARAVEL_VERSION//.*}
+          # Remove any .* from the versions
+          LARAVEL_VERSION=${LARAVEL_VERSION//.*}
 
-        echo "cache-key=composer-php-$PHP_VERSION-$LARAVEL_VERSION-$PREFER_VERSION-${{ hashFiles('composer.json') }}" >> $GITHUB_OUTPUT
+          echo "cache-key=composer-php-$PHP_VERSION-$LARAVEL_VERSION-$PREFER_VERSION-${{ hashFiles('composer.json') }}" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         name: Cache dependencies
@@ -95,14 +95,14 @@ jobs:
           echo "some-namespace" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
           sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
 
-        - name: Setting CRDs for testing
-          run: |
-            kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
+      - name: Setting CRDs for testing
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
 
-        - name: Run tests
-          run: |
-            vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+      - name: Run tests
+        run: |
+          vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
-        - uses: codecov/codecov-action@v3.1.0
-          with:
-            fail_ci_if_error: false
+      - uses: codecov/codecov-action@v3.1.0
+        with:
+          fail_ci_if_error: false
