@@ -209,7 +209,6 @@ class KubernetesCluster
             case static::EXEC_OP: return $this->execPath($path, $query);
                 break;
             case static::ATTACH_OP: return $this->attachPath($path, $payload, $query);
-
                 break;
             default: break;
         }
