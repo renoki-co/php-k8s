@@ -1,7 +1,19 @@
 {
     "name": "renoki-co/php-k8s",
     "description": "Control your Kubernetes clusters with this PHP-based Kubernetes client. It supports any form of authentication, the exec API, and it has an easy implementation for CRDs.",
-    "keywords": ["laravel", "php", "kubernetes", "k8s", "k3s", "k0s", "cluster", "api", "kubeadm", "kubeapi", "kube"],
+    "keywords": [
+        "laravel",
+        "php",
+        "kubernetes",
+        "k8s",
+        "k3s",
+        "k0s",
+        "cluster",
+        "api",
+        "kubeadm",
+        "kubeapi",
+        "kube"
+    ],
     "license": "Apache-2.0",
     "homepage": "https://github.com/renoki-co/php-k8s",
     "authors": [
@@ -13,11 +25,12 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^6.5|^7.0",
-        "illuminate/macroable": "^9.35|^10.1",
-        "illuminate/support": "^9.35|^10.1",
+        "illuminate/macroable": "^9.35|^10.1|^11.0",
+        "illuminate/support": "^9.35|^10.1|^11.0",
         "ratchet/pawl": "^0.4.1",
-        "symfony/process": "^5.4|^6.0",
+        "symfony/process": "^5.4|^6.0|^7.0",
         "composer/semver": "^3.0"
+
     },
     "suggest": {
         "ext-yaml": "YAML extension is used to read or generate YAML from PHP K8s internal classes."
@@ -37,9 +50,9 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
-        "orchestra/testbench": "^8.15.0",
+        "orchestra/testbench": "^7.23|^8.1|^9.0",
         "phpunit/phpunit": "^9.5.20|^10.0",
-        "vimeo/psalm": "^5.16"
+        "vimeo/psalm": "^4.20|^5.22"
     },
     "config": {
         "sort-packages": true
