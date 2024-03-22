@@ -57,7 +57,7 @@ trait ChecksClusterVersion
      * @param  string  $kubernetesVersion
      * @return bool
      *
-     * @throws KubernetesAPIException|GuzzleException
+     * @throws KubernetesAPIException|GuzzleException|JsonException
      */
     public function newerThan(string $kubernetesVersion): bool
     {
@@ -75,7 +75,7 @@ trait ChecksClusterVersion
      * @param  string  $kubernetesVersion
      * @return bool
      *
-     * @throws KubernetesAPIException|GuzzleException
+     * @throws KubernetesAPIException|GuzzleException|JsonException
      */
     public function olderThan(string $kubernetesVersion): bool
     {
