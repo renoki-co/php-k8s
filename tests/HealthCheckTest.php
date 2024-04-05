@@ -1,13 +1,11 @@
 <?php
 
-use RenokiCo\PhpK8s\KubernetesCluster;
 use RenokiCo\PhpK8s\Test\TestCase;
 
 class HealthCheckTest extends TestCase
 {
     /**
      * @group health-check
-     *
      */
     public function testIsLive()
     {
@@ -16,7 +14,6 @@ class HealthCheckTest extends TestCase
 
     /**
      * @group health-check
-     *
      */
     public function testIsReady()
     {
