@@ -219,6 +219,27 @@ class KubernetesCluster
     }
 
     /**
+     * Check if the cluster is ready.
+     * 
+     * @return bool
+     */
+    public function isReady()
+    {
+        return $this->runOperation(static::GET_OP, '/readyz') === 'ok';
+    }
+
+    /**
+     * Check if the cluster is live.
+     * 
+     * @return bool
+     */
+    public function isLive()
+    {
+        return $this->runOperation(static::GET_OP, '/livez') === 'ok';
+    }
+
+
+    /**
      * Watch for the current resource or a resource list.
      *
      * @param  string  $path
