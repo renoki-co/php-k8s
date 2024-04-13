@@ -76,7 +76,7 @@ trait AuthenticatesCluster
      * Load the token from provider command line.
      *
      * @param  string  $cmdPath
-     * @param  string|nll  $cmdArgs
+     * @param  string|null  $cmdArgs
      * @param  string|null  $tokenPath
      * @return $this
      */
