@@ -51,7 +51,7 @@
         "mockery/mockery": "^1.5",
         "orchestra/testbench": "^7.23|^8.1|^9.0",
         "phpunit/phpunit": "^9.5.20|^10.0",
-        "vimeo/psalm": "^4.20|^5.22"
+        "vimeo/psalm": "^5.24.0"
     },
     "config": {
         "sort-packages": true
