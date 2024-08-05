@@ -1,5 +1,5 @@
 {
-    "name": "renoki-co/php-k8s",
+    "name": "septeo-opensource/php-k8s",
     "description": "Control your Kubernetes clusters with this PHP-based Kubernetes client. It supports any form of authentication, the exec API, and it has an easy implementation for CRDs.",
     "keywords": [
         "laravel",
