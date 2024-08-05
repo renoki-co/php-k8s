@@ -1,7 +1,8 @@
 <?php
 
 namespace RenokiCo\PhpK8s\Traits;
-
+use RenokiCo\PhpK8s\Kinds\K8sResourceQuota;
+use RenokiCo\PhpK8s\Kinds\K8squota;
 use RenokiCo\PhpK8s\Kinds\K8sClusterRole;
 use RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding;
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
@@ -77,7 +78,15 @@ trait InitializesResources
     {
         return new K8sConfigMap($cluster, $attributes);
     }
+    public static function quota($cluster = null, array $attributes = [])
+    {
+        return new K8squota($cluster, $attributes);
+    }
 
+    public static function ResourceQuota($cluster = null, array $attributes = [])
+    {
+        return new K8sResourceQuota($cluster, $attributes);
+    }
     /**
      * Create a new Secret kind.
      *
