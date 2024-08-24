@@ -24,12 +24,12 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.5|^7.0",
-        "illuminate/macroable": "^9.35|^10.1|^11.0",
-        "illuminate/support": "^9.35|^10.1|^11.0",
+        "guzzlehttp/guzzle": "^7.9",
+        "illuminate/macroable": "^10.1|^11.0",
+        "illuminate/support": "^10.1|^11.0",
         "ratchet/pawl": "^0.4.1",
-        "symfony/process": "^6.0|^7.0",
-        "composer/semver": "^3.0",
+        "symfony/process": "^7.0",
+        "composer/semver": "^3.4",
         "ext-json": "*"
     },
     "suggest": {
@@ -49,10 +49,10 @@
         "test": "vendor/bin/phpunit"
     },
     "require-dev": {
-        "mockery/mockery": "^1.5",
-        "orchestra/testbench": "^8.1|^9.0",
-        "phpunit/phpunit": "^9.5.20|^10.0",
-        "vimeo/psalm": "^4.20|^5.22"
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^10.0|^11.0",
+        "vimeo/psalm": "^5.25"
     },
     "config": {
         "sort-packages": true
