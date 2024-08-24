@@ -29,7 +29,8 @@
         "illuminate/support": "^9.35|^10.1|^11.0",
         "ratchet/pawl": "^0.4.1",
         "symfony/process": "^6.0|^7.0",
-        "composer/semver": "^3.0"
+        "composer/semver": "^3.0",
+        "ext-json": "*"
     },
     "suggest": {
         "ext-yaml": "YAML extension is used to read or generate YAML from PHP K8s internal classes."
