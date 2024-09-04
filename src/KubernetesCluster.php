@@ -106,9 +106,9 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
  * @method \RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration getMutatingWebhookConfigurationByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllMutatingWebhookConfigurationsFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllMutatingWebhookConfiguration(string $namespace = 'default', array $query = ['pretty' => 1])
- * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYaml(string $yaml)
- * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYamlFile(string $path, \Closure $callback = null)
- * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromTemplatedYamlFile(string $path, array $replace, \Closure $callback = null)
+ * @method \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\Kinds\K8sResource[] fromYaml(string $yaml)
+ * @method \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\Kinds\K8sResource[] fromYamlFile(string $path, \Closure $callback = null)
+ * @method \RenokiCo\PhpK8s\Kinds\K8sResource|\RenokiCo\PhpK8s\Kinds\K8sResource[] fromTemplatedYamlFile(string $path, array $replace, \Closure $callback = null)
  * @method static void registerCrd(string $class, string $name = null)
  *
  * @see \RenokiCo\PhpK8s\K8s
