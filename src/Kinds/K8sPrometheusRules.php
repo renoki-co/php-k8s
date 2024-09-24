@@ -22,7 +22,7 @@ class K8sPrometheusRules extends K8sResource implements InteractsWithK8sCluster,
     protected static $defaultVersion = 'monitoring.coreos.com/v1';
 
     /**
-     * Wether the resource has a namespace.
+     * Wether the resource has a namespaces.
      *
      * @var bool
      */
