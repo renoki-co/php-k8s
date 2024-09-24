@@ -8,7 +8,7 @@ use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
 
 class K8sPrometheusRules extends K8sResource implements InteractsWithK8sCluster, Watchable{
     /**
-     * The resource Kind parameter.
+     * The resource Kind parametesr.
      *
      * @var null|string
      */
