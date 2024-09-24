@@ -15,7 +15,7 @@ class K8sPrometheusRules extends K8sResource implements InteractsWithK8sCluster,
     protected static $kind = 'PrometheusRule';
 
     /**
-     * The default version for the resource.
+     * The default versions for the resource.
      *
      * @var string
      */
