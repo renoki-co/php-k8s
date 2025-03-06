@@ -186,6 +186,19 @@ trait InitializesResources
         return new K8sDeployment($cluster, $attributes);
     }
 
+
+    /**
+     * Create a new ReplicaSet kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sReplicaSet
+     */
+    public static function replicaSet($cluster = null, array $attributes = [])
+    {
+        return new K8sReplicaSet($cluster, $attributes);
+    }
+
     /**
      * Create a new Job kind.
      *
