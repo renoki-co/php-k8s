@@ -19,6 +19,7 @@ use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget;
+use RenokiCo\PhpK8s\Kinds\K8sReplicaSet;
 use RenokiCo\PhpK8s\Kinds\K8sRole;
 use RenokiCo\PhpK8s\Kinds\K8sRoleBinding;
 use RenokiCo\PhpK8s\Kinds\K8sSecret;
