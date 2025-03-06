@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: RecpliaSet
+metadata:
+  name: mysql
+  labels:
+    tier: backend
+  annotations:
+    mysql/annotation: "yes"
+spec:
+  selector:
+    matchLabels:
+      name: mysql-deployment
+  replicas: 3
+  template:
+    metadata:
+      name: mysql
+      labels:
+        name: mysql-deployment
+    spec:
+      containers:
+        - name: mysql
+          image: public.ecr.aws/docker/library/mysql:5.7
+          ports:
+            - name: mysql
+              protocol: TCP
+              containerPort: 3306
