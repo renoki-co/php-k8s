@@ -54,6 +54,24 @@ class K8sReplicaSet extends K8sResource implements
     protected static $namespaceable = true;
 
     /**
+     * Get the pods owned by this resource.
+     *
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\ResourcesList
+     */
+    public function getPods(array $query = ['pretty' => 1])
+    {
+        // FIXME: this worls only for matchLabels and not for matchExpression
+        $labelSelector = urldecode(http_build_query(
+            $this->getSelectors()["matchLabels"] ?? []
+        ));
+
+        return $this->cluster->pod()->setNamespace($this->getNamespace())->all(
+            ['labelSelector' =>  $labelSelector] + $query
+        );
+    }
+
+    /**
      * Get the available replicas.
      *
      * @return int
