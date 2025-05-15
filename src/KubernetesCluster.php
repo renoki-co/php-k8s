@@ -13,6 +13,7 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
  * @method \RenokiCo\PhpK8s\ResourcesList getAllNodes(string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\Kinds\K8sEvent event(array $attributes = [])
  * @method \RenokiCo\PhpK8s\Kinds\K8sEvent getEventByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sEviction eviction(array $attributes = [])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllEventsFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllEvents(string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\Kinds\K8sNamespace namespace(array $attributes = [])
