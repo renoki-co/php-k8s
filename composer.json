@@ -1,5 +1,5 @@
 {
-    "name": "renoki-co/php-k8s",
+    "name": "omergy/php-k8s",
     "description": "Control your Kubernetes clusters with this PHP-based Kubernetes client. It supports any form of authentication, the exec API, and it has an easy implementation for CRDs.",
     "keywords": [
         "laravel",
@@ -24,9 +24,10 @@
         }
     ],
     "require": {
+        "php": "^8.0",
         "guzzlehttp/guzzle": "^6.5|^7.0",
-        "illuminate/macroable": "^9.35|^10.1|^11.0",
-        "illuminate/support": "^9.35|^10.1|^11.0",
+        "illuminate/macroable": "^9.35|^10.1|^11.0|^12.0",
+        "illuminate/support": "^9.35|^10.1|^11.0|^12.0",
         "ratchet/pawl": "^0.4.1",
         "symfony/process": "^5.4|^6.0|^7.0",
         "vierbergenlars/php-semver": "^2.1|^3.0"
