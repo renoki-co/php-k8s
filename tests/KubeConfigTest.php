@@ -220,7 +220,7 @@ class KubeConfigTest extends TestCase
         $this->assertSame("https://{$expectedDomain}:8443/?", $cluster->getCallableUrl('/', []));
     }
 
-    public function environmentVariableContextProvider(): iterable
+    public static function environmentVariableContextProvider(): iterable
     {
         yield [null, 'minikube'];
         yield ['minikube-2', 'minikube-2'];
