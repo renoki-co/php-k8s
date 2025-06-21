@@ -66,26 +66,26 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Create a standard MySQL container with common configuration.
+     * Create a standard mariadb container with common configuration.
      *
      * @param array $options Override options for customization
      * @return Container
      */
-    protected function createMysqlContainer(array $options = []): Container
+    protected function createMariadbContainer(array $options = []): Container
     {
         $container = K8s::container()
-            ->setName($options['name'] ?? 'mysql')
-            ->setImage($options['image'] ?? 'public.ecr.aws/docker/library/mysql', $options['tag'] ?? '5.7')
+            ->setName($options['name'] ?? 'mariadb')
+            ->setImage($options['image'] ?? 'public.ecr.aws/docker/library/mariadb', $options['tag'] ?? '11.8')
             ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+                ['name' => 'mariadb', 'protocol' => 'TCP', 'containerPort' => 3306],
             ]);
 
         if (isset($options['env']) || isset($options['includeEnv']) && $options['includeEnv']) {
-            $container->setEnv($options['env'] ?? ['MYSQL_ROOT_PASSWORD' => 'test']);
+            $container->setEnv($options['env'] ?? ['MARIADB_ROOT_PASSWORD' => 'test']);
         }
 
         if (isset($options['additionalPort'])) {
-            $container->addPort($options['additionalPort'], 'TCP', 'mysql-alt');
+            $container->addPort($options['additionalPort'], 'TCP', 'mariadb-alt');
         }
 
         return $container;
@@ -157,19 +157,19 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Create a standard MySQL pod with common configuration.
+     * Create a standard mariadb pod with common configuration.
      *
      * @param array $options Override options for customization
      * @return K8sPod
      */
-    protected function createMysqlPod(array $options = []): K8sPod
+    protected function createMariadbPod(array $options = []): K8sPod
     {
-        $mysql = $this->createMysqlContainer($options['container'] ?? []);
+        $mariadb = $this->createMariadbContainer($options['container'] ?? []);
 
         return $this->cluster->pod()
-            ->setName($options['name'] ?? 'mysql')
+            ->setName($options['name'] ?? 'mariadb')
             ->setLabels($options['labels'] ?? ['tier' => 'backend'])
-            ->setContainers([$mysql]);
+            ->setContainers([$mariadb]);
     }
 
     /**

@@ -3,7 +3,7 @@ kind: ClusterRole
 metadata:
   name: admin-cr
   annotations:
-    mysql/annotation: "yes"
+    mariadb/annotation: "yes"
 rules:
   - apiGroups: [""]
     resources:

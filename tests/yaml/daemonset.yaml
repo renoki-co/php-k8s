@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: mysql
+  name: mariadb
   labels:
     tier: backend
 spec:
   selector:
     matchLabels:
-      name: mysql-daemonset
+      name: mariadb-daemonset
   template:
     metadata:
-      name: mysql
+      name: mariadb
       labels:
-        name: mysql-daemonset
+        name: mariadb-daemonset
     spec:
       containers:
-        - name: mysql
-          image: public.ecr.aws/docker/library/mysql:5.7
+        - name: mariadb
+          image: public.ecr.aws/docker/library/mariadb:11.8
           ports:
-            - name: mysql
+            - name: mariadb
               protocol: TCP
+              containerPort: 3306
