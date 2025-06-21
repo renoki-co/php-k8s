@@ -20,20 +20,20 @@ class EventTest extends TestCase
 
     public function runCreationTests()
     {
-        $pod = $this->createMysqlPod([
-            'name' => 'mysql',
-            'labels' => ['tier' => 'backend', 'deployment-name' => 'mysql'],
+        $pod = $this->createMariadbPod([
+            'name' => 'mariadb',
+            'labels' => ['tier' => 'backend', 'deployment-name' => 'mariadb'],
             'container' => [
-                'name' => 'mysql',
+                'name' => 'mariadb',
                 'additionalPort' => 3307,
                 'includeEnv' => true,
             ]
         ]);
 
         $dep = $this->cluster->deployment()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['tier' => 'backend']])
             ->setReplicas(1)
             ->setUpdateStrategy('RollingUpdate')
@@ -46,7 +46,7 @@ class EventTest extends TestCase
             ->setMessage('This is a test message for events.')
             ->setReason('SomeReason')
             ->setType('Normal')
-            ->setName('mysql-test');
+            ->setName('mariadb-test');
 
         $this->assertFalse($event->isSynced());
         $this->assertFalse($event->exists());
@@ -81,7 +81,7 @@ class EventTest extends TestCase
 
     public function runGetTests()
     {
-        $event = $this->cluster->getEventByName('mysql-test');
+        $event = $this->cluster->getEventByName('mariadb-test');
 
         $this->assertInstanceOf(K8sEvent::class, $event);
 
@@ -90,7 +90,7 @@ class EventTest extends TestCase
 
     public function runDeletionTests()
     {
-        $event = $this->cluster->getEventByName('mysql-test');
+        $event = $this->cluster->getEventByName('mariadb-test');
 
         $this->assertTrue($event->delete());
 
@@ -106,13 +106,13 @@ class EventTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getEventByName('mysql-test');
+        $this->cluster->getEventByName('mariadb-test');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->event()->watchAll(function ($type, $event) {
-            if ($event->getName() === 'mysql-test') {
+            if ($event->getName() === 'mariadb-test') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -122,8 +122,8 @@ class EventTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->event()->watchByName('mysql-test', function ($type, $event) {
-            return $event->getName() === 'mysql-test';
+        $watch = $this->cluster->event()->watchByName('mariadb-test', function ($type, $event) {
+            return $event->getName() === 'mariadb-test';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);

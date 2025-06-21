@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: mysql-hpa
+  name: mariadb-hpa
   labels:
     tier: backend
 spec:
   scaleTargetRef:
     kind: Deployment
-    name: mysql
+    name: mariadb
     apiVersion: apps/v1
   metrics:
     - resource:

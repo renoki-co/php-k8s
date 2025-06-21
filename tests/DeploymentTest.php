@@ -12,23 +12,23 @@ class DeploymentTest extends TestCase
 {
     public function test_deployment_build()
     {
-        $mysql = $this->createMysqlContainer();
+        $mariadb = $this->createMariadbContainer();
 
         $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+            ->setName('mariadb')
+            ->setContainers([$mariadb]);
 
         $dep = $this->cluster->deployment()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setReplicas(3)
             ->setTemplate($pod);
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(3, $dep->getReplicas());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
 
@@ -37,18 +37,18 @@ class DeploymentTest extends TestCase
 
     public function test_deployment_from_yaml()
     {
-        $mysql = $this->createMysqlContainer();
+        $mariadb = $this->createMariadbContainer();
 
         $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+            ->setName('mariadb')
+            ->setContainers([$mariadb]);
 
         $dep = $this->cluster->fromYamlFile(__DIR__.'/yaml/deployment.yaml');
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(3, $dep->getReplicas());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
 
@@ -70,24 +70,24 @@ class DeploymentTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = $this->createMysqlContainer([
+        $mariadb = $this->createMariadbContainer([
             'includeEnv' => true,
             'additionalPort' => 3307
         ]);
 
-        $pod = $this->createMysqlPod([
-            'labels' => ['tier' => 'backend', 'deployment-name' => 'mysql'],
+        $pod = $this->createMariadbPod([
+            'labels' => ['tier' => 'backend', 'deployment-name' => 'mariadb'],
             'container' => [
                 'includeEnv' => true,
                 'additionalPort' => 3307
             ]
         ])
-            ->setAnnotations(['mysql/annotation' => 'yes']);
+            ->setAnnotations(['mariadb/annotation' => 'yes']);
 
         $dep = $this->cluster->deployment()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['tier' => 'backend']])
             ->setReplicas(1)
             ->setUpdateStrategy('RollingUpdate')
@@ -105,9 +105,9 @@ class DeploymentTest extends TestCase
         $this->assertInstanceOf(K8sDeployment::class, $dep);
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(1, $dep->getReplicas());
         $this->assertEquals(0, $dep->getMinReadySeconds());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
@@ -168,16 +168,16 @@ class DeploymentTest extends TestCase
 
     public function runGetTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $this->assertInstanceOf(K8sDeployment::class, $dep);
 
         $this->assertTrue($dep->isSynced());
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes', 'deployment.kubernetes.io/revision' => '1'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes', 'deployment.kubernetes.io/revision' => '1'], $dep->getAnnotations());
         $this->assertEquals(1, $dep->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
@@ -185,12 +185,12 @@ class DeploymentTest extends TestCase
 
     public function attachPodAutoscaler()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
 
         $hpa = $this->cluster->horizontalPodAutoscaler()
-            ->setName('deploy-mysql')
+            ->setName('deploy-mariadb')
             ->setResource($dep)
             ->addMetrics([$cpuMetric])
             ->setMetrics([$cpuMetric])
@@ -209,7 +209,7 @@ class DeploymentTest extends TestCase
 
     public function runUpdateTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $this->assertTrue($dep->isSynced());
 
@@ -220,7 +220,7 @@ class DeploymentTest extends TestCase
         $this->assertTrue($dep->isSynced());
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
         $this->assertEquals([], $dep->getAnnotations());
         $this->assertEquals(2, $dep->getReplicas());
@@ -230,8 +230,8 @@ class DeploymentTest extends TestCase
 
     public function runDeletionTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
-        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
+        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mariadb');
 
         $this->assertTrue($dep->delete());
         $this->assertTrue($hpa->delete());
@@ -253,14 +253,14 @@ class DeploymentTest extends TestCase
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getDeploymentByName('mysql');
-        $this->cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
+        $this->cluster->getDeploymentByName('mariadb');
+        $this->cluster->getHorizontalPodAutoscalerByName('deploy-mariadb');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->deployment()->watchAll(function ($type, $dep) {
-            if ($dep->getName() === 'mysql') {
+            if ($dep->getName() === 'mariadb') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -270,8 +270,8 @@ class DeploymentTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->deployment()->watchByName('mysql', function ($type, $dep) {
-            return $dep->getName() === 'mysql';
+        $watch = $this->cluster->deployment()->watchByName('mariadb', function ($type, $dep) {
+            return $dep->getName() === 'mariadb';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
@@ -279,7 +279,7 @@ class DeploymentTest extends TestCase
 
     public function runScalingTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $scaler = $dep->scale(2);
 
