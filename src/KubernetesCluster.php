@@ -152,6 +152,7 @@ class KubernetesCluster
         self::WATCH_LOGS_OP => 'GET',
         self::EXEC_OP => 'POST',
         self::ATTACH_OP => 'POST',
+        self::APPLY_OP => 'PATCH',
     ];
 
     const GET_OP = 'get';
@@ -163,6 +164,7 @@ class KubernetesCluster
     const WATCH_LOGS_OP = 'watch_logs';
     const EXEC_OP = 'exec';
     const ATTACH_OP = 'attach';
+    const APPLY_OP = 'apply';
 
     /**
      * Create a new class instance.
@@ -202,15 +204,18 @@ class KubernetesCluster
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         switch ($operation) {
-            case static::WATCH_OP: return $this->watchPath($path, $payload, $query);
+            case static::WATCH_OP:
+                return $this->watchPath($path, $payload, $query);
+            case static::WATCH_LOGS_OP:
+                return $this->watchLogsPath($path, $payload, $query);
+            case static::EXEC_OP:
+                return $this->execPath($path, $query);
+            case static::ATTACH_OP:
+                return $this->attachPath($path, $payload, $query);
+            case static::APPLY_OP:
+                return $this->applyPath($path, $payload, $query);
+            default:
                 break;
-            case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query);
-                break;
-            case static::EXEC_OP: return $this->execPath($path, $query);
-                break;
-            case static::ATTACH_OP: return $this->attachPath($path, $payload, $query);
-                break;
-            default: break;
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
@@ -342,6 +347,27 @@ class KubernetesCluster
 
             throw $e;
         }
+    }
+
+    /**
+     * Apply server-side apply to the resource.
+     *
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
+     * @return mixed
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function applyPath(string $path, string $payload, array $query = ['pretty' => 1])
+    {
+        $options = [
+            'headers' => [
+                'Content-Type' => 'application/apply-patch+yaml',
+            ],
+        ];
+
+        return $this->makeRequest(static::$operations[static::APPLY_OP], $path, $payload, $query, $options);
     }
 
     /**
