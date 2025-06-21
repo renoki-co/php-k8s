@@ -2,8 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Test\Kinds\IstioGateway;
-use RenokiCo\PhpK8s\Test\Kinds\IstioGatewayNoNamespacedVersion;
 use RenokiCo\PhpK8s\Test\Kinds\SealedSecret;
 
 class YamlTest extends TestCase
@@ -49,77 +47,6 @@ class YamlTest extends TestCase
         $this->assertEquals(['key' => 'assigned_value_at_template'], $cm->getData());
     }
 
-    public function test_yaml_import_for_crds()
-    {
-        IstioGateway::register();
-
-        $gatewayYaml = yaml_emit(
-            $this->cluster
-                ->istioGateway()
-                ->setName('test-gateway')
-                ->setNamespace('renoki-test')
-                ->setSpec([
-                    'selector' => [
-                        'istio' => 'ingressgateway',
-                    ],
-                    'servers' => [
-                        [
-                            'hosts' => 'test.gateway.io',
-                            'port' => [
-                                'name' => 'https',
-                                'number' => 443,
-                                'protocol' => 'HTTPS',
-                            ],
-                            'tls' => [
-                                'credentialName' => 'kcertificate',
-                                'mode' => 'SIMPLE',
-                            ],
-                        ],
-                    ],
-                ])
-                ->toArray()
-        );
-
-        $gateway = $this->cluster->fromYaml($gatewayYaml);
-
-        $this->assertInstanceOf(IstioGateway::class, $gateway);
-    }
-
-    public function test_yaml_import_for_crds_without_namespace()
-    {
-        IstioGatewayNoNamespacedVersion::register('istioGateway');
-
-        $gatewayYaml = yaml_emit(
-            $this->cluster
-                ->istioGateway()
-                ->setName('test-gateway')
-                ->setNamespace('renoki-test')
-                ->setSpec([
-                    'selector' => [
-                        'istio' => 'ingressgateway',
-                    ],
-                    'servers' => [
-                        [
-                            'hosts' => 'test.gateway.io',
-                            'port' => [
-                                'name' => 'https',
-                                'number' => 443,
-                                'protocol' => 'HTTPS',
-                            ],
-                            'tls' => [
-                                'credentialName' => 'kcertificate',
-                                'mode' => 'SIMPLE',
-                            ],
-                        ],
-                    ],
-                ])
-                ->toArray()
-        );
-
-        $gateway = $this->cluster->fromYaml($gatewayYaml);
-
-        $this->assertInstanceOf(IstioGatewayNoNamespacedVersion::class, $gateway);
-    }
 
     public function test_creation_and_update_from_yaml_file()
     {

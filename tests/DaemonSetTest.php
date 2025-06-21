@@ -91,7 +91,6 @@ class DaemonSetTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $ds->getTemplate());
 
         while (! $ds->allPodsAreRunning()) {
-            dump("Waiting for pods of {$ds->getName()} to be up and running...");
             sleep(1);
         }
 
@@ -116,13 +115,11 @@ class DaemonSetTest extends TestCase
         $ds->refresh();
 
         while ($ds->getReadyReplicasCount() === 0) {
-            dump("Waiting for pods of {$ds->getName()} to have ready replicas...");
             sleep(1);
             $ds->refresh();
         }
 
         while ($ds->getNodesCount() === 0) {
-            dump("Waiting for pods of {$ds->getName()} to get detected...");
             sleep(1);
             $ds->refresh();
         }
@@ -189,12 +186,10 @@ class DaemonSetTest extends TestCase
         $this->assertTrue($ds->delete());
 
         while ($ds->exists()) {
-            dump("Awaiting for daemonSet {$ds->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($ds->getPods()->count() > 0) {
-            dump("Awaiting for daemonset {$ds->getName()}'s pods to be deleted...");
             sleep(1);
         }
 

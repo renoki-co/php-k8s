@@ -1,0 +1,23 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: example-grpc-route
+  labels:
+    tier: grpc
+  annotations:
+    route/type: grpc
+spec:
+  parentRefs:
+    - name: example-gateway
+      namespace: default
+  hostnames:
+    - grpc.example.com
+  rules:
+    - matches:
+        - method:
+            service: example.service
+            method: GetUser
+      backendRefs:
+        - name: grpc-service
+          port: 9090
+          weight: 100

@@ -97,7 +97,6 @@ class PersistentVolumeTest extends TestCase
         $this->assertEquals('sc1', $pv->getStorageClass());
 
         while (! $pv->isAvailable()) {
-            dump("Waiting for PV {$pv->getName()} to be available...");
             sleep(1);
             $pv->refresh();
         }
@@ -166,7 +165,6 @@ class PersistentVolumeTest extends TestCase
         $this->assertTrue($pv->delete());
 
         while ($pv->exists()) {
-            dump("Awaiting for PV {$pv->getName()} to be deleted...");
             sleep(1);
         }
 
