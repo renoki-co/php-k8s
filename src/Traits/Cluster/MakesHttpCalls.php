@@ -73,16 +73,23 @@ trait MakesHttpCalls
      * @param  string  $path
      * @param  string  $payload
      * @param  array  $query
+     * @param  array  $options
      * @return \Psr\Http\Message\ResponseInterface
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function call(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    public function call(string $method, string $path, string $payload = '', array $query = ['pretty' => 1], array $options = [])
     {
         try {
-            $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), [
+            $requestOptions = [
                 RequestOptions::BODY => $payload,
-            ]);
+            ];
+
+            if (isset($options['headers'])) {
+                $requestOptions[RequestOptions::HEADERS] = $options['headers'];
+            }
+
+            $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), $requestOptions);
         } catch (ClientException $e) {
             $errorPayload = json_decode((string) $e->getResponse()->getBody(), true);
 
@@ -103,15 +110,16 @@ trait MakesHttpCalls
      * @param  string  $path
      * @param  string  $payload
      * @param  array  $query
+     * @param  array  $options
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1], array $options = [])
     {
         $resourceClass = $this->resourceClass;
 
-        $response = $this->call($method, $path, $payload, $query);
+        $response = $this->call($method, $path, $payload, $query, $options);
 
         $json = @json_decode($response->getBody(), true);
 
