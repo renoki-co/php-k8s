@@ -295,6 +295,40 @@ trait RunsClusterOperations
     }
 
     /**
+     * Apply the resource using server-side apply.
+     *
+     * @param  string  $fieldManager
+     * @param  bool  $force
+     * @param  array  $query
+     * @return $this
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function apply(string $fieldManager, bool $force = false, array $query = ['pretty' => 1])
+    {
+        $query = array_merge($query, [
+            'fieldManager' => $fieldManager,
+        ]);
+
+        if ($force) {
+            $query['force'] = 'true';
+        }
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::APPLY_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return $this;
+    }
+
+    /**
      * Watch the resources list until the closure returns true or false.
      *
      * @param  Closure  $callback
