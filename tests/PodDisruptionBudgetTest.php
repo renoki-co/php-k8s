@@ -111,7 +111,6 @@ class PodDisruptionBudgetTest extends TestCase
         $this->assertEquals(null, $pdb->getMinAvailable());
 
         while (! $dep->allPodsAreRunning()) {
-            dump("Waiting for pods of {$dep->getName()} to be up and running...");
             sleep(1);
         }
     }
@@ -183,7 +182,6 @@ class PodDisruptionBudgetTest extends TestCase
         $this->assertTrue($pdb->delete());
 
         while ($pdb->exists()) {
-            dump("Awaiting for pod disruption budget {$pdb->getName()} to be deleted...");
             sleep(1);
         }
 

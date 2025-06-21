@@ -342,4 +342,5 @@ trait InitializesResources
     {
         return new K8sEndpointSlice($cluster, $attributes);
     }
+
 }

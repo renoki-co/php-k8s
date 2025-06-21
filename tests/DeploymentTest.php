@@ -115,7 +115,6 @@ class DeploymentTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
 
         while (! $dep->allPodsAreRunning()) {
-            dump("Waiting for pods of {$dep->getName()} to be up and running...");
             sleep(1);
         }
 
@@ -140,7 +139,6 @@ class DeploymentTest extends TestCase
         $dep->refresh();
 
         while ($dep->getReadyReplicasCount() === 0) {
-            dump("Waiting for pods of {$dep->getName()} to have ready replicas...");
             sleep(1);
             $dep->refresh();
         }
@@ -200,7 +198,6 @@ class DeploymentTest extends TestCase
 
         while ($hpa->getCurrentReplicasCount() < 1) {
             $hpa->refresh();
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
             sleep(1);
         }
 
@@ -237,17 +234,14 @@ class DeploymentTest extends TestCase
         $this->assertTrue($hpa->delete());
 
         while ($hpa->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($dep->exists()) {
-            dump("Awaiting for deployment {$dep->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($dep->getPods()->count() > 0) {
-            dump("Awaiting for deployment {$dep->getName()}'s pods to be deleted...");
             sleep(1);
         }
 
@@ -284,7 +278,6 @@ class DeploymentTest extends TestCase
         $scaler = $dep->scale(2);
 
         while ($dep->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
-            dump("Awaiting for deployment {$dep->getName()} to scale to 2 replicas...");
             $scaler->refresh();
             $dep->refresh();
             sleep(1);

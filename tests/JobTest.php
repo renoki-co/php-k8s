@@ -102,7 +102,6 @@ class JobTest extends TestCase
         $job->refresh();
 
         while (! $job->hasCompleted()) {
-            dump("Waiting for pods of {$job->getName()} to finish executing...");
             sleep(1);
             $job->refresh();
         }
@@ -128,7 +127,6 @@ class JobTest extends TestCase
         $job->refresh();
 
         while (! $completionTime = $job->getCompletionTime()) {
-            dump("Waiting for the completion time report of {$job->getName()}...");
             sleep(1);
             $job->refresh();
         }
@@ -201,7 +199,6 @@ class JobTest extends TestCase
         $this->assertTrue($job->delete());
 
         while ($job->exists()) {
-            dump("Awaiting for job {$job->getName()} to be deleted...");
             sleep(1);
         }
 

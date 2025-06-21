@@ -157,7 +157,6 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
 
         while (! $sts->allPodsAreRunning()) {
-            dump("Waiting for pods of {$sts->getName()} to be up and running...");
             sleep(1);
         }
 
@@ -182,7 +181,6 @@ class StatefulSetTest extends TestCase
         $sts->refresh();
 
         while ($sts->getReadyReplicasCount() === 0) {
-            dump("Waiting for pods of {$sts->getName()} to have ready replicas...");
             sleep(1);
             $sts->refresh();
         }
@@ -246,7 +244,6 @@ class StatefulSetTest extends TestCase
 
         while ($hpa->getCurrentReplicasCount() < 1) {
             $hpa->refresh();
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
             sleep(1);
         }
 
@@ -284,17 +281,14 @@ class StatefulSetTest extends TestCase
         $this->assertTrue($hpa->delete());
 
         while ($hpa->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($sts->exists()) {
-            dump("Awaiting for statefulset {$sts->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($sts->getPods()->count() > 0) {
-            dump("Awaiting for statefulset {$sts->getName()}'s pods to be deleted...");
             sleep(1);
         }
 
@@ -331,7 +325,6 @@ class StatefulSetTest extends TestCase
         $scaler = $sts->scale(2);
 
         while ($sts->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
-            dump("Awaiting for statefulset {$sts->getName()} to scale to 2 replicas...");
             $scaler->refresh();
             $sts->refresh();
             sleep(1);

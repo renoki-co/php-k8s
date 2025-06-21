@@ -131,7 +131,6 @@ class CronJobTest extends TestCase
 
         // This check is sensitive to ensuring the jobs take some time to complete.
         while ($cronjob->getActiveJobs()->count() === 0) {
-            dump("Waiting for the cronjob {$cronjob->getName()} to have active jobs...");
             sleep(1);
             $cronjob->refresh();
             $activeJobs = $cronjob->getActiveJobs();
@@ -140,7 +139,6 @@ class CronJobTest extends TestCase
         $job = $activeJobs->first();
 
         while (! $job->hasCompleted()) {
-            dump("Waiting for pods of {$job->getName()} to finish executing...");
             sleep(1);
             $job->refresh();
         }
@@ -205,7 +203,6 @@ class CronJobTest extends TestCase
         $this->assertTrue($cronjob->delete());
 
         while ($cronjob->exists()) {
-            dump("Awaiting for cronjob {$cronjob->getName()} to be deleted...");
             sleep(1);
         }
 

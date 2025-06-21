@@ -115,7 +115,6 @@ class NamespaceTest extends TestCase
         $this->assertTrue($ns->delete());
 
         while ($ns->exists()) {
-            dump("Awaiting for namespace {$ns->getName()} to be deleted...");
             sleep(1);
         }
 

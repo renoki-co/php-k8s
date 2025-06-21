@@ -172,7 +172,6 @@ class MutatingWebhookConfigurationTest extends TestCase
         $this->assertTrue($mutatingWebhookConfiguration->delete());
 
         while ($mutatingWebhookConfiguration->exists()) {
-            dump("Awaiting for mutation webhook configuration {$mutatingWebhookConfiguration->getName()} to be deleted...");
             sleep(1);
         }
 

@@ -80,7 +80,6 @@ class PersistentVolumeClaimTest extends TestCase
 
         if ($standard->getVolumeBindingMode() == 'Immediate') {
             while (! $pvc->isBound()) {
-                dump("Waiting for PVC {$pvc->getName()} to be bound...");
                 sleep(1);
                 $pvc->refresh();
             }
@@ -144,7 +143,6 @@ class PersistentVolumeClaimTest extends TestCase
         $this->assertTrue($pvc->delete());
 
         while ($pvc->exists()) {
-            dump("Awaiting for PVC {$pvc->getName()} to be deleted...");
             sleep(1);
         }
 

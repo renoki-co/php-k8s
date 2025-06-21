@@ -106,7 +106,6 @@ class PodTest extends TestCase
             ->createOrUpdate();
 
         while (! $pod->isRunning()) {
-            dump("Waiting for pod {$pod->getName()} to be up and running...");
             sleep(1);
             $pod->refresh();
         }
@@ -133,7 +132,6 @@ class PodTest extends TestCase
             ->createOrUpdate();
 
         while (! $pod->isRunning()) {
-            dump("Waiting for pod {$pod->getName()} to be up and running...");
             sleep(1);
             $pod->refresh();
         }
@@ -181,7 +179,6 @@ class PodTest extends TestCase
         $this->assertEquals(['mariadb/annotation' => 'yes'], $pod->getAnnotations());
 
         while (! $pod->isRunning()) {
-            dump("Waiting for pod {$pod->getName()} to be up and running...");
             sleep(1);
             $pod->refresh();
         }
@@ -256,7 +253,6 @@ class PodTest extends TestCase
         $this->assertTrue($pod->delete());
 
         while ($pod->exists()) {
-            dump("Awaiting for pod {$pod->getName()} to be deleted...");
             sleep(1);
         }
 
@@ -288,9 +284,6 @@ class PodTest extends TestCase
     public function runWatchLogsTests()
     {
         $this->cluster->pod()->watchContainerLogsByName('mariadb', 'mariadb', function ($data) {
-            // Debugging data to CI. :D
-            dump($data);
-
             if (Str::contains($data, 'InnoDB')) {
                 return true;
             }
@@ -300,10 +293,6 @@ class PodTest extends TestCase
     public function runGetLogsTests()
     {
         $logs = $this->cluster->pod()->containerLogsByName('mariadb', 'mariadb');
-
-        // Debugging data to CI. :D
-        dump($logs);
-
         $this->assertTrue(strlen($logs) > 0);
     }
 }

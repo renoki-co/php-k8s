@@ -95,12 +95,10 @@ class EventTest extends TestCase
         $this->assertTrue($event->delete());
 
         while ($event->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$event->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($event->exists()) {
-            dump("Awaiting for event {$event->getName()} to be deleted...");
             sleep(1);
         }
 

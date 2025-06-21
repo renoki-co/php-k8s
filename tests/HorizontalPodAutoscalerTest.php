@@ -135,13 +135,11 @@ class HorizontalPodAutoscalerTest extends TestCase
         $this->assertEquals(10, $hpa->getMaxReplicas());
 
         while (! $dep->allPodsAreRunning()) {
-            dump("Waiting for pods of {$dep->getName()} to be up and running...");
             sleep(1);
         }
 
         while ($hpa->getCurrentReplicasCount() < 1) {
             $hpa->refresh();
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
             sleep(1);
         }
 
@@ -156,7 +154,6 @@ class HorizontalPodAutoscalerTest extends TestCase
         $dep->refresh();
 
         while ($dep->getReadyReplicasCount() === 0) {
-            dump("Waiting for pods of {$dep->getName()} to have ready replicas...");
             sleep(1);
             $dep->refresh();
         }
@@ -210,7 +207,6 @@ class HorizontalPodAutoscalerTest extends TestCase
         $this->assertTrue($hpa->isSynced());
 
         while ($hpa->getMaxReplicas() < 6) {
-            dump("Waiting for pod autoscaler {$hpa->getName()} to get to 6 max replicas...");
             sleep(1);
             $hpa->refresh();
         }
@@ -232,7 +228,6 @@ class HorizontalPodAutoscalerTest extends TestCase
         $this->assertTrue($hpa->delete());
 
         while ($hpa->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
             sleep(1);
         }
 
