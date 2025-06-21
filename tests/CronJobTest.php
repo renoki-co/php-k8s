@@ -14,10 +14,7 @@ class CronJobTest extends TestCase
 {
     public function test_cronjob_build()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
+        $pi = $this->createPerlContainer();
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -37,7 +34,7 @@ class CronJobTest extends TestCase
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setJobTemplate($job)
-            ->setSchedule(CronExpression::factory('* * * * *'));
+            ->setSchedule(new CronExpression('* * * * *'));
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
@@ -51,10 +48,7 @@ class CronJobTest extends TestCase
 
     public function test_cronjob_from_yaml()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
+        $pi = $this->createPerlContainer();
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -110,7 +104,7 @@ class CronJobTest extends TestCase
             ->setLabels(['tier' => 'useless'])
             ->setAnnotations(['perl/annotation' => 'no'])
             ->setJobTemplate($job)
-            ->setSchedule(CronExpression::factory('* * * * *'));
+            ->setSchedule(new CronExpression('* * * * *'));
 
         $this->assertFalse($cronjob->isSynced());
         $this->assertFalse($cronjob->exists());

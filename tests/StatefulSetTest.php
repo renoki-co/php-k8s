@@ -13,16 +13,7 @@ class StatefulSetTest extends TestCase
 {
     public function test_stateful_set_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod();
 
         $svc = $this->cluster->service()
             ->setName('mysql')
@@ -63,16 +54,7 @@ class StatefulSetTest extends TestCase
 
     public function test_stateful_set_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod();
 
         $svc = $this->cluster->service()
             ->setName('mysql')
@@ -118,20 +100,14 @@ class StatefulSetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setLabels(['tier' => 'backend', 'statefulset-name' => 'mysql'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod([
+            'labels' => ['tier' => 'backend', 'statefulset-name' => 'mysql'],
+            'container' => [
+                'includeEnv' => true,
+                'additionalPort' => 3307,
+            ],
+        ])
+            ->setAnnotations(['mysql/annotation' => 'yes']);
 
         $svc = $this->cluster->service()
             ->setName('mysql')

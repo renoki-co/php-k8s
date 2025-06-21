@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sDeployment;
 use RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -63,14 +62,10 @@ class PodDisruptionBudgetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mysql = $this->createMysqlContainer([
+            'env' => ['MYSQL_ROOT_PASSWORD' => 'test'],
+            'additionalPort' => 3307,
+        ]);
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
