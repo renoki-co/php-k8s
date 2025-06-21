@@ -5,6 +5,8 @@ namespace RenokiCo\PhpK8s\Test;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RenokiCo\PhpK8s\Exceptions\PhpK8sException;
 use RenokiCo\PhpK8s\K8s;
+use RenokiCo\PhpK8s\Instances\Container;
+use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 abstract class TestCase extends Orchestra
@@ -12,7 +14,7 @@ abstract class TestCase extends Orchestra
     /**
      * The cluster to the Kubernetes cluster.
      *
-     * @var \RenokiCo\PhpK8s\KubernetesCluster
+     * @var KubernetesCluster
      */
     protected $cluster;
 
@@ -61,5 +63,138 @@ abstract class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         //
+    }
+
+    /**
+     * Create a standard MySQL container with common configuration.
+     *
+     * @param array $options Override options for customization
+     * @return Container
+     */
+    protected function createMysqlContainer(array $options = []): Container
+    {
+        $container = K8s::container()
+            ->setName($options['name'] ?? 'mysql')
+            ->setImage($options['image'] ?? 'public.ecr.aws/docker/library/mysql', $options['tag'] ?? '5.7')
+            ->setPorts([
+                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
+            ]);
+
+        if (isset($options['env']) || isset($options['includeEnv']) && $options['includeEnv']) {
+            $container->setEnv($options['env'] ?? ['MYSQL_ROOT_PASSWORD' => 'test']);
+        }
+
+        if (isset($options['additionalPort'])) {
+            $container->addPort($options['additionalPort'], 'TCP', 'mysql-alt');
+        }
+
+        return $container;
+    }
+
+    /**
+     * Create a standard Perl container for computation tasks.
+     *
+     * @param array $options Override options for customization
+     * @return Container
+     */
+    protected function createPerlContainer(array $options = []): Container
+    {
+        $container = K8s::container()
+            ->setName($options['name'] ?? 'pi')
+            ->setCommand($options['command'] ?? ['perl', '-Mbignum=bpi', '-wle', 'print bpi(200)']);
+
+        if (isset($options['tag'])) {
+            $container->setImage($options['image'] ?? 'public.ecr.aws/docker/library/perl', $options['tag']);
+        } else {
+            $container->setImage($options['image'] ?? 'public.ecr.aws/docker/library/perl');
+        }
+
+        return $container;
+    }
+
+    /**
+     * Create a standard Busybox container.
+     *
+     * @param array $options Override options for customization
+     * @return Container
+     */
+    protected function createBusyboxContainer(array $options = []): Container
+    {
+        $container = K8s::container()
+            ->setName($options['name'] ?? 'busybox')
+            ->setCommand($options['command'] ?? ['/bin/sh']);
+
+        if (isset($options['tag'])) {
+            $container->setImage($options['image'] ?? 'public.ecr.aws/docker/library/busybox', $options['tag']);
+        } else {
+            $container->setImage($options['image'] ?? 'public.ecr.aws/docker/library/busybox');
+        }
+
+        return $container;
+    }
+
+    /**
+     * Create a standard Nginx container.
+     *
+     * @param array $options Override options for customization
+     * @return Container
+     */
+    protected function createNginxContainer(array $options = []): Container
+    {
+        $container = K8s::container()
+            ->setName($options['name'] ?? 'nginx')
+            ->setPorts([
+                ['name' => 'http', 'protocol' => 'TCP', 'containerPort' => 80],
+            ]);
+
+        if (isset($options['tag'])) {
+            $container->setImage($options['image'] ?? 'public.ecr.aws/docker/library/nginx', $options['tag']);
+        } else {
+            $container->setImage($options['image'] ?? 'public.ecr.aws/docker/library/nginx');
+        }
+
+        return $container;
+    }
+
+    /**
+     * Create a standard MySQL pod with common configuration.
+     *
+     * @param array $options Override options for customization
+     * @return K8sPod
+     */
+    protected function createMysqlPod(array $options = []): K8sPod
+    {
+        $mysql = $this->createMysqlContainer($options['container'] ?? []);
+
+        return $this->cluster->pod()
+            ->setName($options['name'] ?? 'mysql')
+            ->setLabels($options['labels'] ?? ['tier' => 'backend'])
+            ->setContainers([$mysql]);
+    }
+
+    /**
+     * Create a standard Perl pod for computation tasks.
+     *
+     * @param array $options Override options for customization
+     * @return K8sPod
+     */
+    protected function createPerlPod(array $options = []): K8sPod
+    {
+        $perl = $this->createPerlContainer($options['container'] ?? []);
+
+        $pod = $this->cluster->pod()
+            ->setName($options['name'] ?? 'perl')
+            ->setLabels($options['labels'] ?? ['tier' => 'compute'])
+            ->setContainers([$perl]);
+
+        if (isset($options['restartPolicy'])) {
+            if ($options['restartPolicy'] === 'Never') {
+                $pod->neverRestart();
+            } elseif ($options['restartPolicy'] === 'OnFailure') {
+                $pod->restartOnFailure();
+            }
+        }
+
+        return $pod;
     }
 }

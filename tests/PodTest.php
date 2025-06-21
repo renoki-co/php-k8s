@@ -5,7 +5,6 @@ namespace RenokiCo\PhpK8s\Test;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Instances\Container;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -13,19 +12,12 @@ class PodTest extends TestCase
 {
     public function test_pod_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mysql = $this->createMysqlContainer([
+            'additionalPort' => 3307,
+            'includeEnv' => true,
+        ]);
 
-        $busybox = K8s::container()
-            ->setName('busybox')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh']);
+        $busybox = $this->createBusyboxContainer();
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
@@ -63,19 +55,12 @@ class PodTest extends TestCase
 
     public function test_pod_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mysql = $this->createMysqlContainer([
+            'additionalPort' => 3307,
+            'includeEnv' => true,
+        ]);
 
-        $busybox = K8s::container()
-            ->setName('busybox')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh']);
+        $busybox = $this->createBusyboxContainer();
 
         $pod = $this->cluster->fromYamlFile(__DIR__.'/yaml/pod.yaml');
 
@@ -110,10 +95,10 @@ class PodTest extends TestCase
 
     public function test_pod_exec()
     {
-        $busybox = K8s::container()
-            ->setName('busybox-exec')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
+        $busybox = $this->createBusyboxContainer([
+            'name' => 'busybox-exec',
+            'command' => ['/bin/sh', '-c', 'sleep 7200'],
+        ]);
 
         $pod = $this->cluster->pod()
             ->setName('busybox-exec')
@@ -137,13 +122,10 @@ class PodTest extends TestCase
 
     public function test_pod_attach()
     {
-        $mysql = K8s::container()
-            ->setName('mysql-attach')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mysql = $this->createMysqlContainer([
+            'name' => 'mysql-attach',
+            'includeEnv' => true,
+        ]);
 
         $pod = $this->cluster->pod()
             ->setName('mysql-attach')
@@ -168,19 +150,12 @@ class PodTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mysql = $this->createMysqlContainer([
+            'additionalPort' => 3307,
+            'includeEnv' => true,
+        ]);
 
-        $busybox = K8s::container()
-            ->setName('busybox')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh']);
+        $busybox = $this->createBusyboxContainer();
 
         $pod = $this->cluster->pod()
             ->setName('mysql')

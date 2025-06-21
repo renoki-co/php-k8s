@@ -13,9 +13,7 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mysql = $this->createMysqlContainer()
             ->addMountedVolumes([$mountedVolume])
             ->setMountedVolumes([$mountedVolume]);
 
@@ -52,9 +50,7 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path', 'some-key');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mysql = $this->createMysqlContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
@@ -90,9 +86,7 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path', 'some-key');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mysql = $this->createMysqlContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
@@ -121,9 +115,7 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mysql = $this->createMysqlContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
@@ -154,9 +146,7 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mysql = $this->createMysqlContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()

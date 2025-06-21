@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sDaemonSet;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -12,16 +11,7 @@ class DaemonSetTest extends TestCase
 {
     public function test_daemon_set_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod();
 
         $ds = $this->cluster->daemonSet()
             ->setName('mysql')
@@ -41,16 +31,7 @@ class DaemonSetTest extends TestCase
 
     public function test_daemon_set_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod();
 
         $ds = $this->cluster->fromYamlFile(__DIR__.'/yaml/daemonset.yaml');
 
@@ -75,19 +56,13 @@ class DaemonSetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setLabels(['tier' => 'backend', 'daemonset-name' => 'mysql'])
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod([
+            'labels' => ['tier' => 'backend', 'daemonset-name' => 'mysql'],
+            'container' => [
+                'additionalPort' => 3307,
+                'includeEnv' => true,
+            ],
+        ]);
 
         $ds = $this->cluster->daemonSet()
             ->setName('mysql')

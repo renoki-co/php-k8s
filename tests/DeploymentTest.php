@@ -12,12 +12,7 @@ class DeploymentTest extends TestCase
 {
     public function test_deployment_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
+        $mysql = $this->createMysqlContainer();
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
@@ -42,12 +37,7 @@ class DeploymentTest extends TestCase
 
     public function test_deployment_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
+        $mysql = $this->createMysqlContainer();
 
         $pod = $this->cluster->pod()
             ->setName('mysql')
@@ -80,20 +70,19 @@ class DeploymentTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mysql = $this->createMysqlContainer([
+            'includeEnv' => true,
+            'additionalPort' => 3307
+        ]);
 
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setLabels(['tier' => 'backend', 'deployment-name' => 'mysql'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
-            ->setContainers([$mysql]);
+        $pod = $this->createMysqlPod([
+            'labels' => ['tier' => 'backend', 'deployment-name' => 'mysql'],
+            'container' => [
+                'includeEnv' => true,
+                'additionalPort' => 3307
+            ]
+        ])
+            ->setAnnotations(['mysql/annotation' => 'yes']);
 
         $dep = $this->cluster->deployment()
             ->setName('mysql')

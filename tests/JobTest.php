@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sJob;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -12,16 +11,9 @@ class JobTest extends TestCase
 {
     public function test_job_build()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
-
-        $pod = $this->cluster->pod()
-            ->setName('perl')
-            ->setContainers([$pi])
-            ->restartOnFailure()
-            ->neverRestart();
+        $pod = $this->createPerlPod([
+            'restartPolicy' => 'Never',
+        ]);
 
         $job = $this->cluster->job()
             ->setName('pi')
@@ -42,16 +34,9 @@ class JobTest extends TestCase
 
     public function test_job_from_yaml()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
-
-        $pod = $this->cluster->pod()
-            ->setName('perl')
-            ->setContainers([$pi])
-            ->restartOnFailure()
-            ->neverRestart();
+        $pod = $this->createPerlPod([
+            'restartPolicy' => 'Never',
+        ]);
 
         $job = $this->cluster->fromYamlFile(__DIR__.'/yaml/job.yaml');
 
@@ -78,16 +63,10 @@ class JobTest extends TestCase
 
     public function runCreationTests()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl', '5.36')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
-
-        $pod = $this->cluster->pod()
-            ->setName('perl')
-            ->setLabels(['tier' => 'compute'])
-            ->setContainers([$pi])
-            ->neverRestart();
+        $pod = $this->createPerlPod([
+            'container' => ['tag' => '5.36'],
+            'restartPolicy' => 'Never',
+        ]);
 
         $job = $this->cluster->job()
             ->setName('pi')
