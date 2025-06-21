@@ -8,6 +8,7 @@ use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
 use RenokiCo\PhpK8s\Kinds\K8sCronJob;
 use RenokiCo\PhpK8s\Kinds\K8sDaemonSet;
 use RenokiCo\PhpK8s\Kinds\K8sDeployment;
+use RenokiCo\PhpK8s\Kinds\K8sEndpointSlice;
 use RenokiCo\PhpK8s\Kinds\K8sEvent;
 use RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler;
 use RenokiCo\PhpK8s\Kinds\K8sIngress;
@@ -328,5 +329,17 @@ trait InitializesResources
     public static function mutatingWebhookConfiguration($cluster = null, array $attributes = [])
     {
         return new K8sMutatingWebhookConfiguration($cluster, $attributes);
+    }
+
+    /**
+     * Create a new EndpointSlice kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sEndpointSlice
+     */
+    public static function endpointSlice($cluster = null, array $attributes = [])
+    {
+        return new K8sEndpointSlice($cluster, $attributes);
     }
 }
