@@ -4,9 +4,56 @@ namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Patches\JsonPatch;
 use RenokiCo\PhpK8s\Patches\JsonMergePatch;
+use RenokiCo\PhpK8s\Kinds\K8sPod;
+use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 
 class PatchIntegrationTest extends TestCase
 {
+    private function generateTestPodName(): string
+    {
+        return 'patch-test-pod-' . uniqid();
+    }
+
+    private function createAndDeployTestPod(string $name, array $labels = []): K8sPod
+    {
+        $pod = $this->createMariadbPod([
+            'name' => $name,
+            'labels' => array_merge(['test' => 'patch-integration'], $labels),
+            'container' => ['includeEnv' => true]
+        ]);
+
+        $deployed = $pod->create();
+        
+        // Wait for pod to be ready
+        $this->waitForPodReady($deployed);
+        
+        return $deployed;
+    }
+
+    private function waitForPodReady(K8sPod $pod, int $timeoutSeconds = 30): void
+    {
+        $start = time();
+        
+        while (time() - $start < $timeoutSeconds) {
+            $current = $pod->refresh();
+            if ($current->getPhase() === 'Running' || $current->getPhase() === 'Succeeded') {
+                return;
+            }
+            sleep(1);
+        }
+        
+        $this->fail("Pod {$pod->getName()} did not become ready within {$timeoutSeconds} seconds");
+    }
+
+    private function cleanupTestPod(K8sPod $pod): void
+    {
+        try {
+            $pod->delete();
+        } catch (\Exception $e) {
+            // Pod might already be deleted
+        }
+    }
+
     public function test_json_patch_integration_with_pod()
     {
         $pod = $this->createMariadbPod([
@@ -200,5 +247,169 @@ class PatchIntegrationTest extends TestCase
         $this->assertEquals('500m', $patchData['spec']['template']['spec']['containers'][0]['resources']['limits']['cpu']);
         $this->assertEquals('2', $patchData['metadata']['annotations']['deployment.kubernetes.io/revision']);
         $this->assertNull($patchData['spec']['template']['spec']['containers'][0]['env']);
+    }
+
+    public function test_json_patch_against_live_pod()
+    {
+        $podName = $this->generateTestPodName();
+        $pod = $this->createAndDeployTestPod($podName, ['app' => 'mariadb', 'version' => 'v1.0']);
+
+        try {
+            // Create a JSON Patch to modify the live pod
+            $jsonPatch = new JsonPatch();
+            $jsonPatch
+                ->test('/metadata/name', $podName)
+                ->replace('/metadata/labels/version', 'v2.0')
+                ->add('/metadata/labels/environment', 'production')
+                ->remove('/metadata/labels/app');
+
+            // Apply the patch to the live pod
+            $patchedPod = $pod->jsonPatch($jsonPatch);
+
+            // The jsonPatch method should update the pod object itself
+            // Let's also verify by retrieving fresh from cluster
+            $livePod = $this->cluster->getPodByName($podName);
+
+            // Validate the changes were applied correctly in the patched object
+            $this->assertEquals('v2.0', $patchedPod->getLabels()['version']);
+            $this->assertEquals('production', $patchedPod->getLabels()['environment']);
+            $this->assertArrayNotHasKey('app', $patchedPod->getLabels());
+            $this->assertEquals($podName, $patchedPod->getName());
+
+            // Validate the changes are also present in the live cluster object
+            $this->assertEquals('v2.0', $livePod->getLabels()['version']);
+            $this->assertEquals('production', $livePod->getLabels()['environment']);
+            $this->assertArrayNotHasKey('app', $livePod->getLabels());
+
+            // Ensure the test label is still present
+            $this->assertEquals('patch-integration', $patchedPod->getLabels()['test']);
+            $this->assertEquals('patch-integration', $livePod->getLabels()['test']);
+
+        } finally {
+            $this->cleanupTestPod($pod);
+        }
+    }
+
+    public function test_json_merge_patch_against_live_pod()
+    {
+        $podName = $this->generateTestPodName();
+        $pod = $this->createAndDeployTestPod($podName, ['app' => 'mariadb', 'tier' => 'backend']);
+
+        try {
+            // Create a JSON Merge Patch to modify the live pod
+            $mergePatch = new JsonMergePatch();
+            $mergePatch
+                ->set('metadata.labels.version', 'v2.0')
+                ->set('metadata.labels.environment', 'staging')
+                ->set('metadata.annotations.description', 'Patched with JSON Merge Patch')
+                ->remove('metadata.labels.app');
+
+            // Apply the merge patch to the live pod
+            $patchedPod = $pod->jsonMergePatch($mergePatch);
+
+            // Retrieve the actual object from the cluster
+            $livePod = $this->cluster->getPodByName($podName);
+
+            // Validate the changes were applied correctly
+            $this->assertEquals('v2.0', $livePod->getLabels()['version']);
+            $this->assertEquals('staging', $livePod->getLabels()['environment']);
+            $this->assertEquals('Patched with JSON Merge Patch', $livePod->getAnnotations()['description']);
+            $this->assertArrayNotHasKey('app', $livePod->getLabels());
+
+            // Ensure existing labels are preserved
+            $this->assertEquals('backend', $livePod->getLabels()['tier']);
+            $this->assertEquals('patch-integration', $livePod->getLabels()['test']);
+
+        } finally {
+            $this->cleanupTestPod($pod);
+        }
+    }
+
+    public function test_multiple_patches_on_same_live_pod()
+    {
+        $podName = $this->generateTestPodName();
+        $pod = $this->createAndDeployTestPod($podName, ['app' => 'mariadb', 'version' => 'v1.0']);
+
+        try {
+            // First patch: Add labels with JSON Patch
+            $jsonPatch = new JsonPatch();
+            $jsonPatch
+                ->add('/metadata/labels/stage', 'development')
+                ->replace('/metadata/labels/version', 'v1.1');
+
+            $pod->jsonPatch($jsonPatch);
+
+            // Verify first patch
+            $livePod1 = $this->cluster->getPodByName($podName);
+            $this->assertEquals('development', $livePod1->getLabels()['stage']);
+            $this->assertEquals('v1.1', $livePod1->getLabels()['version']);
+
+            // Second patch: Add annotations with JSON Merge Patch
+            $mergePatch = new JsonMergePatch();
+            $mergePatch
+                ->set('metadata.annotations.owner', 'test-suite')
+                ->set('metadata.labels.version', 'v1.2')
+                ->set('metadata.labels.deployed-by', 'php-k8s');
+
+            $pod->jsonMergePatch($mergePatch);
+
+            // Verify final state
+            $livePod2 = $this->cluster->getPodByName($podName);
+            $this->assertEquals('test-suite', $livePod2->getAnnotations()['owner']);
+            $this->assertEquals('v1.2', $livePod2->getLabels()['version']);
+            $this->assertEquals('php-k8s', $livePod2->getLabels()['deployed-by']);
+            $this->assertEquals('development', $livePod2->getLabels()['stage']);
+
+        } finally {
+            $this->cleanupTestPod($pod);
+        }
+    }
+
+    public function test_patch_error_handling_with_live_pod()
+    {
+        $podName = $this->generateTestPodName();
+        $pod = $this->createAndDeployTestPod($podName);
+
+        try {
+            // Test patch with invalid test operation
+            $jsonPatch = new JsonPatch();
+            $jsonPatch->test('/metadata/name', 'wrong-name');
+
+            $this->expectException(KubernetesAPIException::class);
+            $pod->jsonPatch($jsonPatch);
+
+        } finally {
+            $this->cleanupTestPod($pod);
+        }
+    }
+
+    public function test_patch_complex_nested_changes_on_live_pod()
+    {
+        $podName = $this->generateTestPodName();
+        $pod = $this->createAndDeployTestPod($podName);
+
+        try {
+            // Apply complex nested changes using JSON Merge Patch
+            $mergePatch = new JsonMergePatch();
+            $mergePatch
+                ->set('metadata.labels.complex-test', 'true')
+                ->set('metadata.annotations.last-updated', date('c'))
+                ->set('metadata.annotations.test-description', 'Complex nested patch test');
+
+            $pod->jsonMergePatch($mergePatch);
+
+            // Retrieve and validate
+            $livePod = $this->cluster->getPodByName($podName);
+            
+            $this->assertEquals('true', $livePod->getLabels()['complex-test']);
+            $this->assertNotEmpty($livePod->getAnnotations()['last-updated']);
+            $this->assertEquals('Complex nested patch test', $livePod->getAnnotations()['test-description']);
+
+            // Verify original labels/annotations are preserved
+            $this->assertEquals('patch-integration', $livePod->getLabels()['test']);
+
+        } finally {
+            $this->cleanupTestPod($pod);
+        }
     }
 }
