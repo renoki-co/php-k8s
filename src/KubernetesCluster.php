@@ -157,6 +157,8 @@ class KubernetesCluster
         self::EXEC_OP => 'POST',
         self::ATTACH_OP => 'POST',
         self::APPLY_OP => 'PATCH',
+        self::JSON_PATCH_OP => 'PATCH',
+        self::JSON_MERGE_PATCH_OP => 'PATCH',
     ];
 
     const GET_OP = 'get';
@@ -169,6 +171,8 @@ class KubernetesCluster
     const EXEC_OP = 'exec';
     const ATTACH_OP = 'attach';
     const APPLY_OP = 'apply';
+    const JSON_PATCH_OP = 'json_patch';
+    const JSON_MERGE_PATCH_OP = 'json_merge_patch';
 
     /**
      * Create a new class instance.
@@ -218,6 +222,10 @@ class KubernetesCluster
                 return $this->attachPath($path, $payload, $query);
             case static::APPLY_OP:
                 return $this->applyPath($path, $payload, $query);
+            case static::JSON_PATCH_OP:
+                return $this->jsonPatchPath($path, $payload, $query);
+            case static::JSON_MERGE_PATCH_OP:
+                return $this->jsonMergePatchPath($path, $payload, $query);
             default:
                 break;
         }
@@ -372,6 +380,48 @@ class KubernetesCluster
         ];
 
         return $this->makeRequest(static::$operations[static::APPLY_OP], $path, $payload, $query, $options);
+    }
+
+    /**
+     * Apply JSON Patch (RFC 6902) to the resource.
+     *
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
+     * @return mixed
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function jsonPatchPath(string $path, string $payload, array $query = ['pretty' => 1])
+    {
+        $options = [
+            'headers' => [
+                'Content-Type' => 'application/json-patch+json',
+            ],
+        ];
+
+        return $this->makeRequest(static::$operations[static::JSON_PATCH_OP], $path, $payload, $query, $options);
+    }
+
+    /**
+     * Apply JSON Merge Patch (RFC 7396) to the resource.
+     *
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
+     * @return mixed
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function jsonMergePatchPath(string $path, string $payload, array $query = ['pretty' => 1])
+    {
+        $options = [
+            'headers' => [
+                'Content-Type' => 'application/merge-patch+json',
+            ],
+        ];
+
+        return $this->makeRequest(static::$operations[static::JSON_MERGE_PATCH_OP], $path, $payload, $query, $options);
     }
 
     /**
