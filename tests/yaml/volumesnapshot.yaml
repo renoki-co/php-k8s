@@ -1,0 +1,12 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: test-snapshot
+  namespace: default
+  labels:
+    app: test-app
+    tier: storage
+spec:
+  volumeSnapshotClassName: csi-hostpath-snapclass
+  source:
+    persistentVolumeClaimName: test-pvc
