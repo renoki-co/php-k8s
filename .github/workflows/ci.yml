@@ -73,6 +73,11 @@ jobs:
           container-runtime: containerd
           kubernetes-version: v${{ matrix.kubernetes }}
 
+      - name: Enable VolumeSnapshots and CSI hostpath driver
+        run: |
+          minikube addons enable volumesnapshots
+          minikube addons enable csi-hostpath-driver
+
       - name: Run Kubernetes Proxy
         run: |
           kubectl proxy --port=8080 --reject-paths="^/non-existent-path" &
