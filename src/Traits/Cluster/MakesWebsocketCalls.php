@@ -36,7 +36,7 @@ trait MakesWebsocketCalls
     public function getWsClient(string $url): array
     {
         $options = [
-            'timeout' => 20,
+            'timeout' => $this->timeout ?? 20.0,
             'tls' => [],
         ];
 
@@ -66,7 +66,7 @@ trait MakesWebsocketCalls
         }
 
         $loop = ReactFactory::create();
-        $socketConnector = new ReactSocketConnector($loop, $options);
+        $socketConnector = new ReactSocketConnector($options, $loop);
         $wsConnector = new WebSocketConnector($loop, $socketConnector);
 
         return [
