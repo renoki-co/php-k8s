@@ -11,6 +11,42 @@ use RenokiCo\PhpK8s\ResourcesList;
 trait MakesHttpCalls
 {
     /**
+     * Used with both HTTP and WS calls
+     */
+    private ?float $timeout = null;
+
+    /**
+     * Only used with HTTP calls
+     */
+    private ?float $readTimeout = null;
+
+    /**
+     * Only used with HTTP calls
+     */
+    private ?float $connectTimeout = null;
+
+    public function withTimeout(float $timeout): static
+    {
+        $this->timeout = $timeout;
+
+        return $this;
+    }
+
+    public function withReadTimeout(float $readTimeout): static
+    {
+        $this->readTimeout = $readTimeout;
+
+        return $this;
+    }
+
+    public function withConnectTimeout(float $connectTimeout): static
+    {
+        $this->connectTimeout = $connectTimeout;
+
+        return $this;
+    }
+
+    /**
      * Get the callable URL for a specific path.
      *
      * @param  string  $path
@@ -87,6 +123,18 @@ trait MakesHttpCalls
 
             if (isset($options['headers'])) {
                 $requestOptions[RequestOptions::HEADERS] = $options['headers'];
+            }
+
+            if ($this->timeout) {
+                $requestOptions[RequestOptions::TIMEOUT] = $this->timeout;
+            }
+
+            if ($this->readTimeout) {
+                $requestOptions[RequestOptions::READ_TIMEOUT] = $this->readTimeout;
+            }
+
+            if ($this->connectTimeout) {
+                $requestOptions[RequestOptions::CONNECT_TIMEOUT] = $this->connectTimeout;
             }
 
             $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), $requestOptions);
