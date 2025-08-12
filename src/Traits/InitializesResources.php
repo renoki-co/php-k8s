@@ -28,6 +28,7 @@ use RenokiCo\PhpK8s\Kinds\K8sServiceAccount;
 use RenokiCo\PhpK8s\Kinds\K8sStatefulSet;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
 use RenokiCo\PhpK8s\Kinds\K8sValidatingWebhookConfiguration;
+use RenokiCo\PhpK8s\Kinds\K8sVerticalPodAutoscaler;
 
 trait InitializesResources
 {
@@ -233,6 +234,18 @@ trait InitializesResources
     public static function horizontalPodAutoscaler($cluster = null, array $attributes = [])
     {
         return new K8sHorizontalPodAutoscaler($cluster, $attributes);
+    }
+
+    /**
+     * Create a new VerticalPodAutoscaler kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sVerticalPodAutoscaler
+     */
+    public static function verticalPodAutoscaler($cluster = null, array $attributes = [])
+    {
+        return new K8sVerticalPodAutoscaler($cluster, $attributes);
     }
 
     /**

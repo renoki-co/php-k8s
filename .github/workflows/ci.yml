@@ -73,10 +73,12 @@ jobs:
           container-runtime: containerd
           kubernetes-version: v${{ matrix.kubernetes }}
 
-      - name: Enable VolumeSnapshots and CSI hostpath driver
+      - name: Enable VolumeSnapshots, CSI hostpath driver, metrics-server, and VPA
         run: |
           minikube addons enable volumesnapshots
           minikube addons enable csi-hostpath-driver
+          minikube addons enable metrics-server
+          minikube addons enable vertical-pod-autoscaler
 
       - name: Run Kubernetes Proxy
         run: |
