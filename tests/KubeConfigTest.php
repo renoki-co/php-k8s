@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigBaseEncodedDataInvalid;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound;
 use RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound;
@@ -208,10 +209,8 @@ class KubeConfigTest extends TestCase
         K8sResource::setDefaultNamespace('default');
     }
 
-    /**
-     * @dataProvider environmentVariableContextProvider
-     */
-    public function test_from_environment_variable(string $context = null, string $expectedDomain)
+    #[DataProvider('environmentVariableContextProvider')]
+    public function test_from_environment_variable(?string $context, string $expectedDomain)
     {
         $_SERVER['KUBECONFIG'] = __DIR__.'/cluster/kubeconfig.yaml::'.__DIR__.'/cluster/kubeconfig-2.yaml';
 
@@ -220,7 +219,7 @@ class KubeConfigTest extends TestCase
         $this->assertSame("https://{$expectedDomain}:8443/?", $cluster->getCallableUrl('/', []));
     }
 
-    public function environmentVariableContextProvider(): iterable
+    public static function environmentVariableContextProvider(): iterable
     {
         yield [null, 'minikube'];
         yield ['minikube-2', 'minikube-2'];

@@ -21,25 +21,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1', '8.2']
-        kubernetes: ['1.24.12', '1.25.8', '1.26.3']
-        laravel: ['9.*', '10.*', '11.*']
+        php: [8.2, 8.3, 8.4]
+        kubernetes: [1.32.9, 1.33.5, 1.34.1]
+        laravel: [11, 12]
         prefer: [prefer-lowest, prefer-stable]
-        include:
-          - laravel: "9.*"
-            testbench: "7.*"
-          - laravel: "10.*"
-            testbench: "8.*"
-          - laravel: "11.*"
-            testbench: "9.*"
-        exclude:
-          - laravel: "11.*"
-            php: "8.1"
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -48,7 +38,7 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, yaml
           coverage: pcov
 
-      - uses: actions/cache@v3.0.5
+      - uses: actions/cache@v4
         name: Cache dependencies
         with:
           path: ~/.composer/cache/files
@@ -57,7 +47,7 @@ jobs:
       - uses: medyagh/setup-minikube@latest
         name: Setup Minikube
         with:
-          minikube-version: 1.29.0
+          minikube-version: 1.37.0
           container-runtime: containerd
           kubernetes-version: v${{ matrix.kubernetes }}
 
@@ -67,16 +57,21 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --${{ matrix.prefer }} --prefer-dist --no-interaction
+          composer require "laravel/framework:^${{ matrix.laravel }}.0" --dev "orchestra/testbench" --no-interaction --${{ matrix.prefer }} --prefer-dist
 
       - name: Setup in-cluster config
+        env:
+          TEST_TOKEN: some-token
+          TEST_CERT: c29tZS1jZXJ0Cg==
+          TEST_NAMESPACE: some-namespace
         run: |
           sudo mkdir -p /var/run/secrets/kubernetes.io/serviceaccount
-          echo "some-token" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/token
-          echo "c29tZS1jZXJ0Cg==" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-          echo "some-namespace" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
-          sudo chmod -R 777 /var/run/secrets/kubernetes.io/serviceaccount/
+          echo "$TEST_TOKEN" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/token
+          echo "$TEST_CERT" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          echo "$TEST_NAMESPACE" | sudo tee /var/run/secrets/kubernetes.io/serviceaccount/namespace
+          sudo chmod 644 /var/run/secrets/kubernetes.io/serviceaccount/token
+          sudo chmod 644 /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          sudo chmod 644 /var/run/secrets/kubernetes.io/serviceaccount/namespace
 
       - name: Setting CRDs for testing
         run: |
@@ -86,6 +81,6 @@ jobs:
         run: |
           vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
-      - uses: codecov/codecov-action@v3.1.0
+      - uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false
