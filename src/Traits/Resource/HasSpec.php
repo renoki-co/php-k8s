@@ -35,7 +35,7 @@ trait HasSpec
      * @param  mixed  $default
      * @return mixed
      */
-    public function getSpec(string $name, $default = null)
+    public function getSpec(string $name, mixed $default = null)
     {
         return $this->getAttribute("spec.{$name}", $default);
     }

@@ -87,7 +87,7 @@ trait HasAttributes
      * @param  mixed  $default
      * @return mixed
      */
-    public function getAttribute(string $name, $default = null)
+    public function getAttribute(string $name, mixed $default = null)
     {
         return Arr::get($this->attributes, $name, $default);
     }

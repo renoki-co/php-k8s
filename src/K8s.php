@@ -57,7 +57,7 @@ class K8s
      * @param  Closure|null  $callback
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
      */
-    public static function fromYamlFile($cluster, string $path, Closure $callback = null)
+    public static function fromYamlFile($cluster, string $path, ?Closure $callback = null)
     {
         $content = file_get_contents($path);
 
@@ -79,7 +79,7 @@ class K8s
      * @param  \Closure|null  $callback
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
      */
-    public static function fromTemplatedYamlFile($cluster, string $path, array $replace, Closure $callback = null)
+    public static function fromTemplatedYamlFile($cluster, string $path, array $replace, ?Closure $callback = null)
     {
         return static::fromYamlFile($cluster, $path, function ($content) use ($replace, $callback) {
             foreach ($replace as $search => $replacement) {
@@ -97,7 +97,7 @@ class K8s
      * @param  string|null  $name
      * @return void
      */
-    public static function registerCrd(string $class, string $name = null): void
+    public static function registerCrd(string $class, ?string $name = null): void
     {
         static::macro(
             Str::camel($name ?: substr($class, strrpos($class, '\\') + 1)),

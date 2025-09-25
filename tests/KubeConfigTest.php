@@ -208,7 +208,7 @@ class KubeConfigTest extends TestCase
     /**
      * @dataProvider environmentVariableContextProvider
      */
-    public function test_from_environment_variable(string $context = null, string $expectedDomain)
+    public function test_from_environment_variable(?string $context = null, ?string $expectedDomain = null)
     {
         $_SERVER['KUBECONFIG'] = __DIR__.'/cluster/kubeconfig.yaml::'.__DIR__.'/cluster/kubeconfig-2.yaml';
 

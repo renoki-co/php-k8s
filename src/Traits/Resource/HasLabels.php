@@ -32,7 +32,7 @@ trait HasLabels
      * @param  mixed  $default
      * @return mixed
      */
-    public function getLabel(string $name, $default = null)
+    public function getLabel(string $name, mixed $default = null)
     {
         return $this->getLabels()[$name] ?? $default;
     }

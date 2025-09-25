@@ -32,7 +32,7 @@ trait HasAnnotations
      * @param  mixed  $default
      * @return mixed
      */
-    public function getAnnotation(string $name, $default = null)
+    public function getAnnotation(string $name, mixed $default = null)
     {
         return $this->getAnnotations()[$name] ?? $default;
     }
