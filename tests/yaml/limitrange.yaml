@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: test-limitrange
+  namespace: default
+  labels:
+    tier: backend
+spec:
+  limits:
+    - type: Container
+      max:
+        cpu: "2"
+        memory: 4Gi
+      min:
+        cpu: 100m
+        memory: 128Mi
+      default:
+        cpu: 500m
+        memory: 512Mi
+      defaultRequest:
+        cpu: 200m
+        memory: 256Mi
+    - type: Pod
+      max:
+        cpu: "4"
+        memory: 8Gi

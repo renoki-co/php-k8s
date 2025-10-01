@@ -13,14 +13,18 @@ use RenokiCo\PhpK8s\Kinds\K8sEvent;
 use RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler;
 use RenokiCo\PhpK8s\Kinds\K8sIngress;
 use RenokiCo\PhpK8s\Kinds\K8sJob;
+use RenokiCo\PhpK8s\Kinds\K8sLimitRange;
 use RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration;
 use RenokiCo\PhpK8s\Kinds\K8sNamespace;
+use RenokiCo\PhpK8s\Kinds\K8sNetworkPolicy;
 use RenokiCo\PhpK8s\Kinds\K8sNode;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget;
+use RenokiCo\PhpK8s\Kinds\K8sPriorityClass;
 use RenokiCo\PhpK8s\Kinds\K8sReplicaSet;
+use RenokiCo\PhpK8s\Kinds\K8sResourceQuota;
 use RenokiCo\PhpK8s\Kinds\K8sRole;
 use RenokiCo\PhpK8s\Kinds\K8sRoleBinding;
 use RenokiCo\PhpK8s\Kinds\K8sSecret;
@@ -354,6 +358,54 @@ trait InitializesResources
     public static function endpointSlice($cluster = null, array $attributes = [])
     {
         return new K8sEndpointSlice($cluster, $attributes);
+    }
+
+    /**
+     * Create a new NetworkPolicy kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sNetworkPolicy
+     */
+    public static function networkPolicy($cluster = null, array $attributes = [])
+    {
+        return new K8sNetworkPolicy($cluster, $attributes);
+    }
+
+    /**
+     * Create a new ResourceQuota kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResourceQuota
+     */
+    public static function resourceQuota($cluster = null, array $attributes = [])
+    {
+        return new K8sResourceQuota($cluster, $attributes);
+    }
+
+    /**
+     * Create a new LimitRange kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sLimitRange
+     */
+    public static function limitRange($cluster = null, array $attributes = [])
+    {
+        return new K8sLimitRange($cluster, $attributes);
+    }
+
+    /**
+     * Create a new PriorityClass kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sPriorityClass
+     */
+    public static function priorityClass($cluster = null, array $attributes = [])
+    {
+        return new K8sPriorityClass($cluster, $attributes);
     }
 
 }
