@@ -21,7 +21,7 @@ class K8sPriorityClass extends K8sResource implements InteractsWithK8sCluster
     protected static $defaultVersion = 'scheduling.k8s.io/v1';
 
     /**
-     * Wether the resource has a namespace.
+     * Whether the resource has a namespace.
      *
      * @var bool
      */

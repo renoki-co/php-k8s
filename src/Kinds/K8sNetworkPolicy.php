@@ -25,7 +25,7 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     protected static $defaultVersion = 'networking.k8s.io/v1';
 
     /**
-     * Wether the resource has a namespace.
+     * Whether the resource has a namespace.
      *
      * @var bool
      */

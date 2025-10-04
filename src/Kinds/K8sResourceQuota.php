@@ -27,7 +27,7 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
     protected static $defaultVersion = 'v1';
 
     /**
-     * Wether the resource has a namespace.
+     * Whether the resource has a namespace.
      *
      * @var bool
      */
