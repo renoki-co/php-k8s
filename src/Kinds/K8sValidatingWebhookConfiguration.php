@@ -6,9 +6,7 @@ use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
 use RenokiCo\PhpK8s\Traits\Resource\HasWebhooks;
 
-class K8sValidatingWebhookConfiguration extends K8sResource implements
-    InteractsWithK8sCluster,
-    Watchable
+class K8sValidatingWebhookConfiguration extends K8sResource implements InteractsWithK8sCluster, Watchable
 {
     use HasWebhooks;
 

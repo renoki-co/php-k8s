@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Test\Kinds\HTTPRoute;
-use RenokiCo\PhpK8s\ResourcesList;
 
 class HTTPRouteTest extends TestCase
 {

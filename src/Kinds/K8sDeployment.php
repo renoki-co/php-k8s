@@ -16,11 +16,7 @@ use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\Resource\HasTemplate;
 
-class K8sDeployment extends K8sResource implements
-    InteractsWithK8sCluster,
-    Podable,
-    Scalable,
-    Watchable
+class K8sDeployment extends K8sResource implements InteractsWithK8sCluster, Podable, Scalable, Watchable
 {
     use CanScale;
     use HasMinimumSurge;
@@ -58,7 +54,6 @@ class K8sDeployment extends K8sResource implements
     /**
      * Set the updating strategy for the deployment.
      *
-     * @param  string  $strategy
      * @param  int|string  $maxUnavailable
      * @param  int|string  $maxSurge
      * @return $this
@@ -75,8 +70,6 @@ class K8sDeployment extends K8sResource implements
 
     /**
      * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
      */
     public function podsSelector(): array
     {
@@ -91,8 +84,6 @@ class K8sDeployment extends K8sResource implements
 
     /**
      * Get the available replicas.
-     *
-     * @return int
      */
     public function getAvailableReplicasCount(): int
     {
@@ -101,8 +92,6 @@ class K8sDeployment extends K8sResource implements
 
     /**
      * Get the ready replicas.
-     *
-     * @return int
      */
     public function getReadyReplicasCount(): int
     {
@@ -111,8 +100,6 @@ class K8sDeployment extends K8sResource implements
 
     /**
      * Get the total desired replicas.
-     *
-     * @return int
      */
     public function getDesiredReplicasCount(): int
     {
@@ -121,8 +108,6 @@ class K8sDeployment extends K8sResource implements
 
     /**
      * Get the total unavailable replicas.
-     *
-     * @return int
      */
     public function getUnavailableReplicasCount(): int
     {

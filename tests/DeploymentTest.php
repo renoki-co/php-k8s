@@ -108,15 +108,15 @@ class DeploymentTest extends TestCase
     {
         $mariadb = $this->createMariadbContainer([
             'includeEnv' => true,
-            'additionalPort' => 3307
+            'additionalPort' => 3307,
         ]);
 
         $pod = $this->createMariadbPod([
             'labels' => ['tier' => 'backend', 'deployment-name' => 'mariadb'],
             'container' => [
                 'includeEnv' => true,
-                'additionalPort' => 3307
-            ]
+                'additionalPort' => 3307,
+            ],
         ])
             ->setAnnotations(['mariadb/annotation' => 'yes']);
 

@@ -7,7 +7,6 @@ trait HasLabels
     /**
      * Set the labels.
      *
-     * @param  array  $labels
      * @return $this
      */
     public function setLabels(array $labels)
@@ -17,8 +16,6 @@ trait HasLabels
 
     /**
      * Get the labels.
-     *
-     * @return array
      */
     public function getLabels(): array
     {
@@ -28,8 +25,6 @@ trait HasLabels
     /**
      * Get the label value from the list.
      *
-     * @param  string  $name
-     * @param  mixed  $default
      * @return mixed
      */
     public function getLabel(string $name, mixed $default = null)
@@ -40,7 +35,6 @@ trait HasLabels
     /**
      * Set or update the given labels.
      *
-     * @param  array  $labels
      * @return $this
      */
     public function setOrUpdateLabels(array $labels = [])

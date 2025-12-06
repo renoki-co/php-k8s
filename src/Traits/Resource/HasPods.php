@@ -15,8 +15,6 @@ trait HasPods
 
     /**
      * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
      */
     public function podsSelector(): array
     {
@@ -31,8 +29,6 @@ trait HasPods
 
     /**
      * Reset the pods selector callback.
-     *
-     * @return void
      */
     public static function resetPodsSelector(): void
     {
@@ -41,9 +37,6 @@ trait HasPods
 
     /**
      * Dynamically select the pods based on selectors.
-     *
-     * @param  Closure  $callback
-     * @return void
      */
     public static function selectPods(Closure $callback): void
     {
@@ -53,7 +46,6 @@ trait HasPods
     /**
      * Get the pods owned by this resource.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
      */
     public function getPods(array $query = ['pretty' => 1])
@@ -69,8 +61,6 @@ trait HasPods
 
     /**
      * Check if all scheduled pods are running.
-     *
-     * @return bool
      */
     public function allPodsAreRunning(): bool
     {

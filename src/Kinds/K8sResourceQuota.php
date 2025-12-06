@@ -36,7 +36,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the hard limits for the resource quota.
      *
-     * @param  array  $limits
      * @return $this
      */
     public function setHardLimits(array $limits)
@@ -46,8 +45,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the hard limits.
-     *
-     * @return array
      */
     public function getHardLimits(): array
     {
@@ -57,7 +54,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the scopes for the resource quota.
      *
-     * @param  array  $scopes
      * @return $this
      */
     public function setScopes(array $scopes)
@@ -67,8 +63,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the scopes.
-     *
-     * @return array
      */
     public function getScopes(): array
     {
@@ -78,7 +72,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the scope selector for the resource quota.
      *
-     * @param  array  $scopeSelector
      * @return $this
      */
     public function setScopeSelector(array $scopeSelector)
@@ -98,8 +91,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the used resources from status.
-     *
-     * @return array
      */
     public function getUsed(): array
     {
@@ -108,8 +99,6 @@ class K8sResourceQuota extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the hard limits from status.
-     *
-     * @return array
      */
     public function getStatusHard(): array
     {

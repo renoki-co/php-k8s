@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use Closure;
 use Exception;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
 class WebsocketTest extends TestCase
@@ -12,9 +10,9 @@ class WebsocketTest extends TestCase
     public function test_websocket_client_creation()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
-        
+
         [$loop, $wsPromise] = $cluster->getWsClient('ws://127.0.0.1:8080/test');
-        
+
         $this->assertNotNull($loop);
         $this->assertNotNull($wsPromise);
     }
@@ -23,9 +21,9 @@ class WebsocketTest extends TestCase
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
         $cluster->withTimeout(30); // 30 seconds timeout
-        
+
         [$loop, $wsPromise] = $cluster->getWsClient('ws://127.0.0.1:8080/test');
-        
+
         $this->assertNotNull($loop);
         $this->assertNotNull($wsPromise);
     }
@@ -34,13 +32,13 @@ class WebsocketTest extends TestCase
     {
         $httpUrl = 'http://127.0.0.1:8080/api/v1/namespaces/default/pods/test/exec';
         $httpsUrl = 'https://127.0.0.1:8443/api/v1/namespaces/default/pods/test/exec';
-        
+
         // Test HTTP to WS conversion
         $this->assertEquals(
             'ws://127.0.0.1:8080/api/v1/namespaces/default/pods/test/exec',
             str_replace('http://', 'ws://', $httpUrl)
         );
-        
+
         // Test HTTPS to WSS conversion
         $this->assertEquals(
             'wss://127.0.0.1:8443/api/v1/namespaces/default/pods/test/exec',
@@ -70,12 +68,12 @@ class WebsocketTest extends TestCase
 
         try {
             $messages = $pod->exec(['/bin/sh', '-c', 'echo "test with timeout"'], 'busybox-ws-timeout');
-            
+
             $output = collect($messages)
                 ->where('channel', 'stdout')
                 ->pluck('output')
                 ->implode('');
-            
+
             $this->assertStringContainsString('test with timeout', $output);
         } finally {
             $pod->delete();
@@ -105,7 +103,7 @@ class WebsocketTest extends TestCase
         $messageReceived = false;
 
         try {
-            $pod->attach(function ($connection) use (&$messageReceived, $pod) {
+            $pod->attach(function ($connection) use (&$messageReceived) {
                 $connection->on('message', function ($message) use ($connection, &$messageReceived) {
                     $messageReceived = true;
                     $connection->close();
@@ -130,14 +128,14 @@ class WebsocketTest extends TestCase
         // Test with Bearer token
         $clusterWithToken = new KubernetesCluster('http://127.0.0.1:8080');
         $clusterWithToken->withToken('test-token');
-        
+
         [$loop, $wsPromise] = $clusterWithToken->getWsClient('ws://127.0.0.1:8080/test');
         $this->assertNotNull($wsPromise);
 
         // Test with Basic auth
         $clusterWithAuth = new KubernetesCluster('http://127.0.0.1:8080');
         $clusterWithAuth->httpAuthentication('user', 'pass');
-        
+
         [$loop, $wsPromise] = $clusterWithAuth->getWsClient('ws://127.0.0.1:8080/test');
         $this->assertNotNull($wsPromise);
     }
@@ -147,14 +145,14 @@ class WebsocketTest extends TestCase
         // Test with SSL verification disabled
         $clusterNoSsl = new KubernetesCluster('https://127.0.0.1:8443');
         $clusterNoSsl->withoutSslChecks();
-        
+
         [$loop, $wsPromise] = $clusterNoSsl->getWsClient('wss://127.0.0.1:8443/test');
         $this->assertNotNull($wsPromise);
 
         // Test with CA file
         $clusterWithCa = new KubernetesCluster('https://127.0.0.1:8443');
         $clusterWithCa->withCaCertificate('/path/to/ca.crt');
-        
+
         [$loop, $wsPromise] = $clusterWithCa->getWsClient('wss://127.0.0.1:8443/test');
         $this->assertNotNull($wsPromise);
 
@@ -162,7 +160,7 @@ class WebsocketTest extends TestCase
         $clusterWithCert = new KubernetesCluster('https://127.0.0.1:8443');
         $clusterWithCert->withClientCert('/path/to/client.crt');
         $clusterWithCert->withClientKey('/path/to/client.key');
-        
+
         [$loop, $wsPromise] = $clusterWithCert->getWsClient('wss://127.0.0.1:8443/test');
         $this->assertNotNull($wsPromise);
     }
@@ -170,7 +168,7 @@ class WebsocketTest extends TestCase
     public function test_stream_context_options_building()
     {
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
-        
+
         // Test empty options
         $options = $this->invokeMethod($cluster, 'buildStreamContextOptions');
         $this->assertEmpty($options);
@@ -186,7 +184,7 @@ class WebsocketTest extends TestCase
         $cluster = new KubernetesCluster('http://127.0.0.1:8080');
         $cluster->httpAuthentication('user', 'pass');
         $options = $this->invokeMethod($cluster, 'buildStreamContextOptions');
-        $expectedAuth = 'Authorization: Basic ' . base64_encode('user:pass');
+        $expectedAuth = 'Authorization: Basic '.base64_encode('user:pass');
         $this->assertContains($expectedAuth, $options['http']['header']);
 
         // Test with SSL options
@@ -233,14 +231,14 @@ class WebsocketTest extends TestCase
     public function test_websocket_connection_error_handling()
     {
         $cluster = new KubernetesCluster('http://invalid-host:8080');
-        
+
         try {
             [$loop, $wsPromise] = $cluster->getWsClient('ws://invalid-host:8080/test');
-            
+
             $wsPromise->then(null, function (Exception $e) {
                 $this->assertInstanceOf(Exception::class, $e);
             });
-            
+
             // The test passes if we can create the client without immediate exception
             $this->assertTrue(true);
         } catch (Exception $e) {
@@ -252,10 +250,9 @@ class WebsocketTest extends TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object $object    Instantiated object that we will run method on.
-     * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
-     *
+     * @param  object  $object  Instantiated object that we will run method on.
+     * @param  string  $methodName  Method name to call
+     * @param  array  $parameters  Array of parameters to pass into method.
      * @return mixed Method return.
      */
     protected function invokeMethod($object, $methodName, array $parameters = [])

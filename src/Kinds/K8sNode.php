@@ -26,8 +26,6 @@ class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
 
     /**
      * Get the node info.
-     *
-     * @return array
      */
     public function getInfo(): array
     {
@@ -36,8 +34,6 @@ class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
 
     /**
      * Get the images existing on the node.
-     *
-     * @return array
      */
     public function getImages(): array
     {
@@ -46,8 +42,6 @@ class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
 
     /**
      * Get the total capacity info for the node.
-     *
-     * @return array
      */
     public function getCapacity(): array
     {
@@ -56,8 +50,6 @@ class K8sNode extends K8sResource implements InteractsWithK8sCluster, Watchable
 
     /**
      * Get the allocatable info.
-     *
-     * @return array
      */
     public function getAllocatableInfo(): array
     {

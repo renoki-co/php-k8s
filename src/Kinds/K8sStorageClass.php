@@ -24,7 +24,6 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster, Wa
     /**
      * Set the mount options.
      *
-     * @param  array  $mountOptions
      * @return $this
      */
     public function setMountOptions(array $mountOptions)
@@ -34,8 +33,6 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster, Wa
 
     /**
      * Get the mount options.
-     *
-     * @return array
      */
     public function getMountOptions(): array
     {
@@ -44,8 +41,6 @@ class K8sStorageClass extends K8sResource implements InteractsWithK8sCluster, Wa
 
     /**
      * Get the parameters for the Storage Class.
-     *
-     * @return array
      */
     public function getParameters(): array
     {

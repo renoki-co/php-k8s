@@ -11,7 +11,6 @@ class Volume extends Instance
     /**
      * Create an empty directory volume.
      *
-     * @param  string  $name
      * @return $this
      */
     public function emptyDirectory(string $name)
@@ -23,7 +22,6 @@ class Volume extends Instance
     /**
      * Load a ConfigMap volume.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sConfigMap  $configmap
      * @return $this
      */
     public function fromConfigMap(K8sConfigMap $configmap)
@@ -35,7 +33,6 @@ class Volume extends Instance
     /**
      * Attach a volume from a secret file.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sSecret  $secret
      * @return $this
      */
     public function fromSecret(K8sSecret $secret)
@@ -47,8 +44,6 @@ class Volume extends Instance
     /**
      * Create a GCE Persistent Disk instance.
      *
-     * @param  string  $diskName
-     * @param  string  $fsType
      * @return $this
      */
     public function gcePersistentDisk(string $diskName, string $fsType = 'ext4')
@@ -60,8 +55,6 @@ class Volume extends Instance
     /**
      * Create a AWS EBS instance.
      *
-     * @param  string  $volumeId
-     * @param  string  $fsType
      * @return $this
      */
     public function awsEbs(string $volumeId, string $fsType = 'ext4')
@@ -73,8 +66,6 @@ class Volume extends Instance
     /**
      * Mount the volume to a specific path.
      *
-     * @param  string  $mountPath
-     * @param  string|null  $subPath
      * @return \RenokiCo\PhpK8s\Instances\MountedVolume
      */
     public function mountTo(string $mountPath, ?string $subPath = null)

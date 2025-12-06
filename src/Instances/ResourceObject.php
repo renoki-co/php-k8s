@@ -16,7 +16,6 @@ class ResourceObject extends ResourceMetric
     /**
      * Attach a resource to the object.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sResource  $resource
      * @return $this
      */
     public function setResource(K8sResource $resource)
@@ -96,8 +95,6 @@ class ResourceObject extends ResourceMetric
 
     /**
      * Get the resource target type.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -107,7 +104,6 @@ class ResourceObject extends ResourceMetric
     /**
      * Set the resource metric name.
      *
-     * @param  string  $name
      * @return $this
      */
     public function setName(string $name)

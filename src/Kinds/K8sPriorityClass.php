@@ -30,7 +30,6 @@ class K8sPriorityClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the priority value.
      *
-     * @param  int  $value
      * @return $this
      */
     public function setValue(int $value)
@@ -51,7 +50,6 @@ class K8sPriorityClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set whether this is a global default priority class.
      *
-     * @param  bool  $globalDefault
      * @return $this
      */
     public function setGlobalDefault(bool $globalDefault)
@@ -61,8 +59,6 @@ class K8sPriorityClass extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Check if this is a global default priority class.
-     *
-     * @return bool
      */
     public function isGlobalDefault(): bool
     {
@@ -72,7 +68,6 @@ class K8sPriorityClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the description.
      *
-     * @param  string  $description
      * @return $this
      */
     public function setDescription(string $description)
@@ -93,7 +88,6 @@ class K8sPriorityClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the preemption policy.
      *
-     * @param  string  $policy
      * @return $this
      */
     public function setPreemptionPolicy(string $policy)

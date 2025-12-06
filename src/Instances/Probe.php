@@ -7,7 +7,6 @@ class Probe extends Instance
     /**
      * Initialize the class.
      *
-     * @param  array  $attributes
      * @return void
      */
     public function __construct(array $attributes = [])
@@ -21,7 +20,6 @@ class Probe extends Instance
     /**
      * Attach a command to the probe.
      *
-     * @param  array  $command
      * @return $this
      */
     public function command(array $command)
@@ -42,10 +40,6 @@ class Probe extends Instance
     /**
      * Set the HTTP checks for given path and port.
      *
-     * @param  string  $path
-     * @param  int  $port
-     * @param  array  $headers
-     * @param  string  $scheme
      * @return $this
      */
     public function http(string $path = '/healthz', int $port = 8080, array $headers = [], string $scheme = 'HTTP')
@@ -68,8 +62,6 @@ class Probe extends Instance
     /**
      * Set the TCP checks for a given port.
      *
-     * @param  int  $port
-     * @param  string  $host
      * @return $this
      */
     public function tcp(int $port, ?string $host = null)

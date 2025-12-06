@@ -8,7 +8,7 @@ class JsonPatchTest extends TestCase
 {
     public function test_json_patch_creation()
     {
-        $patch = new JsonPatch();
+        $patch = new JsonPatch;
 
         $this->assertInstanceOf(JsonPatch::class, $patch);
         $this->assertTrue($patch->isEmpty());
@@ -19,8 +19,8 @@ class JsonPatchTest extends TestCase
 
     public function test_json_patch_add_operation()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch->add('/metadata/labels/app', 'test-app');
 
         $this->assertFalse($patch->isEmpty());
@@ -29,28 +29,28 @@ class JsonPatchTest extends TestCase
                 'op' => 'add',
                 'path' => '/metadata/labels/app',
                 'value' => 'test-app',
-            ]
+            ],
         ], $patch->getOperations());
     }
 
     public function test_json_patch_remove_operation()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch->remove('/metadata/labels/old-label');
 
         $this->assertEquals([
             [
                 'op' => 'remove',
                 'path' => '/metadata/labels/old-label',
-            ]
+            ],
         ], $patch->getOperations());
     }
 
     public function test_json_patch_replace_operation()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch->replace('/spec/replicas', 3);
 
         $this->assertEquals([
@@ -58,14 +58,14 @@ class JsonPatchTest extends TestCase
                 'op' => 'replace',
                 'path' => '/spec/replicas',
                 'value' => 3,
-            ]
+            ],
         ], $patch->getOperations());
     }
 
     public function test_json_patch_move_operation()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch->move('/metadata/labels/old-key', '/metadata/labels/new-key');
 
         $this->assertEquals([
@@ -73,14 +73,14 @@ class JsonPatchTest extends TestCase
                 'op' => 'move',
                 'from' => '/metadata/labels/old-key',
                 'path' => '/metadata/labels/new-key',
-            ]
+            ],
         ], $patch->getOperations());
     }
 
     public function test_json_patch_copy_operation()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch->copy('/metadata/labels/source', '/metadata/labels/target');
 
         $this->assertEquals([
@@ -88,14 +88,14 @@ class JsonPatchTest extends TestCase
                 'op' => 'copy',
                 'from' => '/metadata/labels/source',
                 'path' => '/metadata/labels/target',
-            ]
+            ],
         ], $patch->getOperations());
     }
 
     public function test_json_patch_test_operation()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch->test('/metadata/name', 'expected-name');
 
         $this->assertEquals([
@@ -103,14 +103,14 @@ class JsonPatchTest extends TestCase
                 'op' => 'test',
                 'path' => '/metadata/name',
                 'value' => 'expected-name',
-            ]
+            ],
         ], $patch->getOperations());
     }
 
     public function test_json_patch_multiple_operations()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch
             ->test('/metadata/name', 'test-pod')
             ->replace('/spec/replicas', 5)
@@ -136,7 +136,7 @@ class JsonPatchTest extends TestCase
             [
                 'op' => 'remove',
                 'path' => '/metadata/labels/deprecated',
-            ]
+            ],
         ];
 
         $this->assertEquals($expected, $patch->getOperations());
@@ -146,8 +146,8 @@ class JsonPatchTest extends TestCase
 
     public function test_json_patch_clear()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $patch
             ->add('/test', 'value')
             ->replace('/another', 'test');
@@ -163,8 +163,8 @@ class JsonPatchTest extends TestCase
 
     public function test_json_patch_fluent_interface()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $result = $patch
             ->add('/test1', 'value1')
             ->remove('/test2')
@@ -176,13 +176,13 @@ class JsonPatchTest extends TestCase
 
     public function test_json_patch_complex_values()
     {
-        $patch = new JsonPatch();
-        
+        $patch = new JsonPatch;
+
         $complexValue = [
             'nested' => [
                 'array' => [1, 2, 3],
-                'object' => ['key' => 'value']
-            ]
+                'object' => ['key' => 'value'],
+            ],
         ];
 
         $patch->add('/spec/template', $complexValue);

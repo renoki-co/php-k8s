@@ -99,8 +99,6 @@ class ResourceMetric extends Instance
 
     /**
      * Get the resource target type.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -110,7 +108,6 @@ class ResourceMetric extends Instance
     /**
      * Alias for ->setName().
      *
-     * @param  string  $name
      * @return $this
      */
     public function setMetric(string $name)
@@ -121,7 +118,6 @@ class ResourceMetric extends Instance
     /**
      * Set the resource metric name.
      *
-     * @param  string  $name
      * @return $this
      */
     public function setName(string $name)

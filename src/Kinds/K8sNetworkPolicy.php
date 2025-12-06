@@ -34,7 +34,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the pod selector for the network policy.
      *
-     * @param  array  $podSelector
      * @return $this
      */
     public function setPodSelector(array $podSelector = [])
@@ -44,8 +43,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the pod selector.
-     *
-     * @return array
      */
     public function getPodSelector(): array
     {
@@ -55,7 +52,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the policy types (Ingress, Egress).
      *
-     * @param  array  $policyTypes
      * @return $this
      */
     public function setPolicyTypes(array $policyTypes)
@@ -65,8 +61,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the policy types.
-     *
-     * @return array
      */
     public function getPolicyTypes(): array
     {
@@ -76,7 +70,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Add an ingress rule to the network policy.
      *
-     * @param  array  $rule
      * @return $this
      */
     public function addIngressRule(array $rule)
@@ -87,7 +80,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Add multiple ingress rules in one batch.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function addIngressRules(array $rules)
@@ -102,7 +94,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the ingress rules.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function setIngressRules(array $rules)
@@ -112,8 +103,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the ingress rules.
-     *
-     * @return array
      */
     public function getIngressRules(): array
     {
@@ -123,7 +112,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Add an egress rule to the network policy.
      *
-     * @param  array  $rule
      * @return $this
      */
     public function addEgressRule(array $rule)
@@ -134,7 +122,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Add multiple egress rules in one batch.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function addEgressRules(array $rules)
@@ -149,7 +136,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the egress rules.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function setEgressRules(array $rules)
@@ -159,8 +145,6 @@ class K8sNetworkPolicy extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the egress rules.
-     *
-     * @return array
      */
     public function getEgressRules(): array
     {

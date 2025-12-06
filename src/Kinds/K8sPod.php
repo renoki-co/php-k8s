@@ -17,13 +17,7 @@ use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusPhase;
 
-class K8sPod extends K8sResource implements
-    Attachable,
-    Dnsable,
-    Executable,
-    InteractsWithK8sCluster,
-    Watchable,
-    Loggable
+class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, InteractsWithK8sCluster, Loggable, Watchable
 {
     use HasSpec;
     use HasStatus;
@@ -59,7 +53,6 @@ class K8sPod extends K8sResource implements
     /**
      * Set the Pod containers.
      *
-     * @param  array  $containers
      * @return $this
      */
     public function setContainers(array $containers = [])
@@ -73,7 +66,6 @@ class K8sPod extends K8sResource implements
     /**
      * Set the Pod init containers.
      *
-     * @param  array  $containers
      * @return $this
      */
     public function setInitContainers(array $containers = [])
@@ -86,9 +78,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the Pod containers.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getContainers(bool $asInstance = true): array
     {
@@ -105,9 +94,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the Pod init containers.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getInitContainers(bool $asInstance = true): array
     {
@@ -125,7 +111,6 @@ class K8sPod extends K8sResource implements
     /**
      * Add a new pulled secret by the image.
      *
-     * @param  string  $name
      * @return $this
      */
     public function addPulledSecret(string $name)
@@ -136,7 +121,6 @@ class K8sPod extends K8sResource implements
     /**
      * Batch-add new pulled secrets by the image.
      *
-     * @param  array  $names
      * @return $this
      */
     public function addPulledSecrets(array $names)
@@ -150,8 +134,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the image pulling secrets.
-     *
-     * @return array
      */
     public function getPulledSecrets(): array
     {
@@ -176,7 +158,6 @@ class K8sPod extends K8sResource implements
     /**
      * Batch-add multiple volumes.
      *
-     * @param  array  $volumes
      * @return $this
      */
     public function addVolumes(array $volumes)
@@ -191,7 +172,6 @@ class K8sPod extends K8sResource implements
     /**
      * Set the volumes.
      *
-     * @param  array  $volumes
      * @return $this
      */
     public function setVolumes(array $volumes)
@@ -208,7 +188,6 @@ class K8sPod extends K8sResource implements
     /**
      * Get the volumes.
      *
-     * @param  bool  $asInstance
      * @return array
      */
     public function getVolumes(bool $asInstance = true)
@@ -273,7 +252,6 @@ class K8sPod extends K8sResource implements
     /**
      * Get the node affinity.
      *
-     * @param  bool  $asInstance
      * @return array|\RenokiCo\PhpK8s\Instances\Affinity
      */
     public function getNodeAffinity(bool $asInstance = true)
@@ -305,7 +283,6 @@ class K8sPod extends K8sResource implements
     /**
      * Get the pod affinity.
      *
-     * @param  bool  $asInstance
      * @return array|\RenokiCo\PhpK8s\Instances\Affinity
      */
     public function getPodAffinity(bool $asInstance = true)
@@ -321,9 +298,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Transform any Container instance to an array.
-     *
-     * @param  array  $containers
-     * @return array
      */
     protected static function transformContainersToArray(array $containers = []): array
     {
@@ -338,8 +312,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the assigned pod IPs.
-     *
-     * @return array
      */
     public function getPodIps(): array
     {
@@ -358,9 +330,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the statuses for each container.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getContainerStatuses(bool $asInstance = true): array
     {
@@ -377,9 +346,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the statuses for each init container.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getInitContainerStatuses(bool $asInstance = true): array
     {
@@ -397,8 +363,6 @@ class K8sPod extends K8sResource implements
     /**
      * Get the container status for a specific container.
      *
-     * @param  string  $containerName
-     * @param  bool  $asInstance
      * @return \RenokiCo\PhpK8s\Instances\Container|array|null
      */
     public function getContainer(string $containerName, bool $asInstance = true)
@@ -415,8 +379,6 @@ class K8sPod extends K8sResource implements
     /**
      * Get the container status for a specific init container.
      *
-     * @param  string  $containerName
-     * @param  bool  $asInstance
      * @return \RenokiCo\PhpK8s\Instances\Container|array|null
      */
     public function getInitContainer(string $containerName, bool $asInstance = true)
@@ -432,8 +394,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Check if all containers are ready.
-     *
-     * @return bool
      */
     public function containersAreReady(): bool
     {
@@ -444,8 +404,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Check if all init containers are ready.
-     *
-     * @return bool
      */
     public function initContainersAreReady(): bool
     {
@@ -456,8 +414,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Get the QOS class for the resource.
-     *
-     * @return string
      */
     public function getQos(): string
     {
@@ -466,8 +422,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Check if the pod is running.
-     *
-     * @return bool
      */
     public function isRunning(): bool
     {
@@ -476,8 +430,6 @@ class K8sPod extends K8sResource implements
 
     /**
      * Check if the pod completed successfully.
-     *
-     * @return bool
      */
     public function isSuccessful(): bool
     {

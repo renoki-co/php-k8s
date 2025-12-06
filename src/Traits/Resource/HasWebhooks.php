@@ -8,9 +8,6 @@ trait HasWebhooks
 {
     /**
      * Get the webhooks.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getWebhooks(bool $asInstance = true): array
     {
@@ -28,7 +25,6 @@ trait HasWebhooks
     /**
      * Set the new webhooks.
      *
-     * @param  array  $webhooks
      * @return $this
      */
     public function setWebhooks(array $webhooks = [])
@@ -42,8 +38,6 @@ trait HasWebhooks
     /**
      * Get webhook by name.
      *
-     * @param  string  $webhookName
-     * @param  bool  $asInstance
      * @return null|array|\RenokiCo\PhpK8s\Instances\Webhook
      */
     public function getWebhook(string $webhookName, bool $asInstance = true)
@@ -60,7 +54,6 @@ trait HasWebhooks
     /**
      * Set or update the given webhooks.
      *
-     * @param  array  $webhooks
      * @return $this
      */
     public function setOrUpdateWebhooks(array $webhooks = [])
@@ -72,9 +65,6 @@ trait HasWebhooks
 
     /**
      * Convert the webhooks to array instances.
-     *
-     * @param  array  $webhooks
-     * @return array
      */
     protected static function transformWebhooksToArray(array $webhooks = []): array
     {

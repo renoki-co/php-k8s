@@ -28,7 +28,6 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchabl
      * Get the data attribute.
      * Supports base64 decoding.
      *
-     * @param  bool  $decode
      * @return mixed
      */
     public function getData(bool $decode = false)
@@ -48,8 +47,6 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchabl
      * Set the data attribute.
      * Supports base64 encoding.
      *
-     * @param  array  $data
-     * @param  bool  $encode
      * @return $this
      */
     public function setData(array $data, bool $encode = true)
@@ -66,7 +63,6 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchabl
     /**
      * Add a new key-value pair to the data.
      *
-     * @param  string  $name
      * @param  mixed  $value
      * @param  bool  $encode
      * @return $this
@@ -83,7 +79,6 @@ class K8sSecret extends K8sResource implements InteractsWithK8sCluster, Watchabl
     /**
      * Remove a key from the data attribute.
      *
-     * @param  string  $name
      * @return $this
      */
     public function removeData(string $name)

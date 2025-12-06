@@ -34,7 +34,6 @@ class GatewayClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the controller name.
      *
-     * @param  string  $controllerName
      * @return $this
      */
     public function setControllerName(string $controllerName)
@@ -44,8 +43,6 @@ class GatewayClass extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the controller name.
-     *
-     * @return string|null
      */
     public function getControllerName(): ?string
     {
@@ -55,7 +52,6 @@ class GatewayClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the parameters reference.
      *
-     * @param  array  $parametersRef
      * @return $this
      */
     public function setParametersRef(array $parametersRef)
@@ -65,8 +61,6 @@ class GatewayClass extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the parameters reference.
-     *
-     * @return array|null
      */
     public function getParametersRef(): ?array
     {
@@ -76,7 +70,6 @@ class GatewayClass extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the description.
      *
-     * @param  string  $description
      * @return $this
      */
     public function setDescription(string $description)
@@ -86,8 +79,6 @@ class GatewayClass extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the description.
-     *
-     * @return string|null
      */
     public function getDescription(): ?string
     {

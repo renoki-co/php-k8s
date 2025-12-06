@@ -31,7 +31,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the address type for the endpoint slice.
      *
-     * @param  string  $addressType
      * @return $this
      */
     public function setAddressType(string $addressType)
@@ -52,7 +51,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the ports for the endpoint slice.
      *
-     * @param  array  $ports
      * @return $this
      */
     public function setPorts(array $ports = [])
@@ -63,7 +61,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Add a new port.
      *
-     * @param  array  $port
      * @return $this
      */
     public function addPort(array $port)
@@ -76,8 +73,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the ports.
-     *
-     * @return array
      */
     public function getPorts(): array
     {
@@ -87,7 +82,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Set the endpoints for the endpoint slice.
      *
-     * @param  array  $endpoints
      * @return $this
      */
     public function setEndpoints(array $endpoints = [])
@@ -98,7 +92,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
     /**
      * Add a new endpoint.
      *
-     * @param  array  $endpoint
      * @return $this
      */
     public function addEndpoint(array $endpoint)
@@ -111,8 +104,6 @@ class K8sEndpointSlice extends K8sResource implements InteractsWithK8sCluster, W
 
     /**
      * Get the endpoints.
-     *
-     * @return array
      */
     public function getEndpoints(): array
     {

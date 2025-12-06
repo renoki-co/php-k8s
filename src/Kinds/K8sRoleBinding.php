@@ -34,8 +34,6 @@ class K8sRoleBinding extends K8sResource implements InteractsWithK8sCluster, Wat
     /**
      * Attach a Role/ClusterRole to the binding.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sRole  $role
-     * @param  string  $apiGroup
      * @return $this
      */
     public function setRole(K8sRole $role, string $apiGroup = 'rbac.authorization.k8s.io')

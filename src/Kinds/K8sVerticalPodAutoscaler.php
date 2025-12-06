@@ -35,9 +35,6 @@ class K8sVerticalPodAutoscaler extends K8sResource implements InteractsWithK8sCl
     /**
      * Set the target resource reference.
      *
-     * @param  string  $apiVersion
-     * @param  string  $kind
-     * @param  string  $name
      * @return $this
      */
     public function setTarget(string $apiVersion, string $kind, string $name)

@@ -34,7 +34,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the parent references.
      *
-     * @param  array  $parentRefs
      * @return $this
      */
     public function setParentRefs(array $parentRefs = [])
@@ -45,7 +44,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Add a new parent reference to the list.
      *
-     * @param  array  $parentRef
      * @return $this
      */
     public function addParentRef(array $parentRef)
@@ -56,7 +54,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Batch-add multiple parent references to the list.
      *
-     * @param  array  $parentRefs
      * @return $this
      */
     public function addParentRefs(array $parentRefs)
@@ -70,8 +67,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the parent references.
-     *
-     * @return array
      */
     public function getParentRefs(): array
     {
@@ -81,7 +76,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the hostnames.
      *
-     * @param  array  $hostnames
      * @return $this
      */
     public function setHostnames(array $hostnames = [])
@@ -92,7 +86,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Add a new hostname to the list.
      *
-     * @param  string  $hostname
      * @return $this
      */
     public function addHostname(string $hostname)
@@ -102,8 +95,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the hostnames.
-     *
-     * @return array
      */
     public function getHostnames(): array
     {
@@ -113,7 +104,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the spec rules.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function setRules(array $rules = [])
@@ -124,7 +114,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Add a new rule to the list.
      *
-     * @param  array  $rule
      * @return $this
      */
     public function addRule(array $rule)
@@ -135,7 +124,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
     /**
      * Batch-add multiple rules to the list.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function addRules(array $rules)
@@ -149,8 +137,6 @@ class GRPCRoute extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the spec rules.
-     *
-     * @return array
      */
     public function getRules(): array
     {

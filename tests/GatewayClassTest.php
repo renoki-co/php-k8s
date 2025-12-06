@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Test\Kinds\GatewayClass;
-use RenokiCo\PhpK8s\ResourcesList;
 
 class GatewayClassTest extends TestCase
 {
@@ -118,5 +116,4 @@ class GatewayClassTest extends TestCase
         // Can't test actual deletion without cluster, but verify the object exists
         $this->assertEquals('delete-test', $gwc->getName());
     }
-
 }

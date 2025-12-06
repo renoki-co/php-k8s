@@ -38,7 +38,6 @@ class VolumeSnapshot extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the VolumeSnapshotClass name.
      *
-     * @param  string  $volumeSnapshotClassName
      * @return $this
      */
     public function setVolumeSnapshotClassName(string $volumeSnapshotClassName)
@@ -59,7 +58,6 @@ class VolumeSnapshot extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the source PVC name.
      *
-     * @param  string  $pvcName
      * @return $this
      */
     public function setSourcePvcName(string $pvcName)
@@ -79,8 +77,6 @@ class VolumeSnapshot extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Check if the VolumeSnapshot is ready to use.
-     *
-     * @return bool
      */
     public function isReady(): bool
     {
@@ -120,7 +116,6 @@ class VolumeSnapshot extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the source VolumeSnapshot name for cloning.
      *
-     * @param  string  $snapshotName
      * @return $this
      */
     public function setSourceVolumeSnapshotName(string $snapshotName)
@@ -170,11 +165,9 @@ class VolumeSnapshot extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Check if the snapshot creation has failed.
-     *
-     * @return bool
      */
     public function hasFailed(): bool
     {
-        return !is_null($this->getErrorMessage());
+        return ! is_null($this->getErrorMessage());
     }
 }

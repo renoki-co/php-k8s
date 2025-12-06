@@ -51,7 +51,6 @@ trait AuthenticatesCluster
     /**
      * Start the current cluster with URL.
      *
-     * @param  string  $url
      * @return \RenokiCo\PhpK8s\KubernetesCluster
      */
     public static function fromUrl(string $url)
@@ -62,7 +61,6 @@ trait AuthenticatesCluster
     /**
      * Pass a Bearer Token for authentication.
      *
-     * @param  string|null  $token
      * @return $this
      */
     public function withToken(?string $token = null)
@@ -75,9 +73,7 @@ trait AuthenticatesCluster
     /**
      * Load the token from provider command line.
      *
-     * @param  string  $cmdPath
      * @param  string|nll  $cmdArgs
-     * @param  string|null  $tokenPath
      * @return $this
      */
     public function withTokenFromCommandProvider(string $cmdPath, ?string $cmdArgs = null, ?string $tokenPath = null)
@@ -106,7 +102,6 @@ trait AuthenticatesCluster
     /**
      * Load a Bearer Token from file.
      *
-     * @param  string|null  $path
      * @return $this
      */
     public function loadTokenFromFile(?string $path = null)
@@ -117,8 +112,6 @@ trait AuthenticatesCluster
     /**
      * Pass the username and password used for HTTP authentication.
      *
-     * @param  string|null  $username
-     * @param  string|null  $password
      * @return $this
      */
     public function httpAuthentication(?string $username = null, ?string $password = null)
@@ -133,7 +126,6 @@ trait AuthenticatesCluster
     /**
      * Set the path to the certificate used for SSL.
      *
-     * @param  string|null  $path
      * @return $this
      */
     public function withCertificate(?string $path = null)
@@ -146,7 +138,6 @@ trait AuthenticatesCluster
     /**
      * Set the path to the private key used for SSL.
      *
-     * @param  string|null  $path
      * @return $this
      */
     public function withPrivateKey(?string $path = null)
@@ -159,7 +150,6 @@ trait AuthenticatesCluster
     /**
      * Set the CA certificate used for validation.
      *
-     * @param  string|null  $path
      * @return $this
      */
     public function withCaCertificate(?string $path = null)
@@ -185,7 +175,6 @@ trait AuthenticatesCluster
      * Load the in-cluster configuration to run the code
      * under a Pod in a cluster.
      *
-     * @param  string  $url
      * @return $this
      */
     public static function inClusterConfiguration(string $url = 'https://kubernetes.default.svc')
@@ -210,9 +199,6 @@ trait AuthenticatesCluster
     /**
      * Replace \r and \n with nothing. Used to read
      * strings from files that might contain extra chars.
-     *
-     * @param  string  $content
-     * @return string
      */
     protected function normalize(string $content): string
     {

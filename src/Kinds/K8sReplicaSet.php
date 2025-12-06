@@ -15,11 +15,7 @@ use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\Resource\HasTemplate;
 
-class K8sReplicaSet extends K8sResource implements
-    InteractsWithK8sCluster,
-    Podable,
-    Scalable,
-    Watchable
+class K8sReplicaSet extends K8sResource implements InteractsWithK8sCluster, Podable, Scalable, Watchable
 {
     use CanScale;
     use HasPods {
@@ -55,8 +51,6 @@ class K8sReplicaSet extends K8sResource implements
 
     /**
      * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
      */
     public function podsSelector(): array
     {
@@ -71,8 +65,6 @@ class K8sReplicaSet extends K8sResource implements
 
     /**
      * Get the available replicas.
-     *
-     * @return int
      */
     public function getAvailableReplicasCount(): int
     {
@@ -81,8 +73,6 @@ class K8sReplicaSet extends K8sResource implements
 
     /**
      * Get the ready replicas.
-     *
-     * @return int
      */
     public function getReadyReplicasCount(): int
     {
@@ -91,8 +81,6 @@ class K8sReplicaSet extends K8sResource implements
 
     /**
      * Get the fully labeled replicas.
-     *
-     * @return int
      */
     public function getFullyLabeledReplicasCount(): int
     {
@@ -101,8 +89,6 @@ class K8sReplicaSet extends K8sResource implements
 
     /**
      * Get the total desired replicas.
-     *
-     * @return int
      */
     public function getDesiredReplicasCount(): int
     {

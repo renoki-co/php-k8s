@@ -19,7 +19,6 @@ trait ChecksClusterVersion
     /**
      * Load the cluster version.
      *
-     * @return void
      *
      * @throws KubernetesAPIException|GuzzleException|JsonException
      */
@@ -45,7 +44,7 @@ trait ChecksClusterVersion
 
         $json = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
-        $parser = new VersionParser();
+        $parser = new VersionParser;
         $this->kubernetesVersion = $parser->normalize($json['gitVersion']);
     }
 
@@ -53,8 +52,6 @@ trait ChecksClusterVersion
      * Check if the cluster version is newer
      * than a specific version.
      *
-     * @param  string  $kubernetesVersion
-     * @return bool
      *
      * @throws KubernetesAPIException|GuzzleException|JsonException
      */
@@ -71,8 +68,6 @@ trait ChecksClusterVersion
      * Check if the cluster version is older
      * than a specific version.
      *
-     * @param  string  $kubernetesVersion
-     * @return bool
      *
      * @throws KubernetesAPIException|GuzzleException|JsonException
      */

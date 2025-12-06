@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Test\Kinds\GRPCRoute;
-use RenokiCo\PhpK8s\ResourcesList;
 
 class GRPCRouteTest extends TestCase
 {

@@ -8,7 +8,7 @@ class JsonMergePatchTest extends TestCase
 {
     public function test_json_merge_patch_creation()
     {
-        $patch = new JsonMergePatch();
+        $patch = new JsonMergePatch;
 
         $this->assertInstanceOf(JsonMergePatch::class, $patch);
         $this->assertTrue($patch->isEmpty());
@@ -29,39 +29,39 @@ class JsonMergePatchTest extends TestCase
 
     public function test_json_merge_patch_set_operation()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $patch->set('metadata.labels.app', 'test-app');
 
         $this->assertFalse($patch->isEmpty());
         $this->assertEquals([
             'metadata' => [
                 'labels' => [
-                    'app' => 'test-app'
-                ]
-            ]
+                    'app' => 'test-app',
+                ],
+            ],
         ], $patch->getPatch());
     }
 
     public function test_json_merge_patch_remove_operation()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $patch->remove('metadata.labels.deprecated');
 
         $this->assertEquals([
             'metadata' => [
                 'labels' => [
-                    'deprecated' => null
-                ]
-            ]
+                    'deprecated' => null,
+                ],
+            ],
         ], $patch->getPatch());
     }
 
     public function test_json_merge_patch_multiple_operations()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $patch
             ->set('spec.replicas', 5)
             ->set('metadata.labels.version', 'v2.0')
@@ -75,18 +75,18 @@ class JsonMergePatchTest extends TestCase
                     'spec' => [
                         'containers' => [
                             0 => [
-                                'image' => 'nginx:1.20'
-                            ]
-                        ]
-                    ]
-                ]
+                                'image' => 'nginx:1.20',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'metadata' => [
                 'labels' => [
                     'version' => 'v2.0',
-                    'deprecated' => null
-                ]
-            ]
+                    'deprecated' => null,
+                ],
+            ],
         ];
 
         $this->assertEquals($expected, $patch->getPatch());
@@ -96,12 +96,12 @@ class JsonMergePatchTest extends TestCase
     {
         $patch1 = new JsonMergePatch(['spec' => ['replicas' => 3]]);
         $patch2 = ['metadata' => ['labels' => ['app' => 'test']]];
-        
+
         $patch1->merge($patch2);
 
         $expected = [
             'spec' => ['replicas' => 3],
-            'metadata' => ['labels' => ['app' => 'test']]
+            'metadata' => ['labels' => ['app' => 'test']],
         ];
 
         $this->assertEquals($expected, $patch1->getPatch());
@@ -111,12 +111,12 @@ class JsonMergePatchTest extends TestCase
     {
         $patch1 = new JsonMergePatch(['spec' => ['replicas' => 3]]);
         $patch2 = new JsonMergePatch(['metadata' => ['labels' => ['app' => 'test']]]);
-        
+
         $patch1->merge($patch2);
 
         $expected = [
             'spec' => ['replicas' => 3],
-            'metadata' => ['labels' => ['app' => 'test']]
+            'metadata' => ['labels' => ['app' => 'test']],
         ];
 
         $this->assertEquals($expected, $patch1->getPatch());
@@ -125,7 +125,7 @@ class JsonMergePatchTest extends TestCase
     public function test_json_merge_patch_clear()
     {
         $patch = new JsonMergePatch(['spec' => ['replicas' => 3]]);
-        
+
         $this->assertFalse($patch->isEmpty());
 
         $patch->clear();
@@ -138,7 +138,7 @@ class JsonMergePatchTest extends TestCase
     {
         $data = [
             'spec' => ['replicas' => 5],
-            'metadata' => ['labels' => ['app' => 'test']]
+            'metadata' => ['labels' => ['app' => 'test']],
         ];
 
         $patch = JsonMergePatch::fromArray($data);
@@ -149,8 +149,8 @@ class JsonMergePatchTest extends TestCase
 
     public function test_json_merge_patch_fluent_interface()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $result = $patch
             ->set('spec.replicas', 3)
             ->set('metadata.name', 'test-pod')
@@ -162,8 +162,8 @@ class JsonMergePatchTest extends TestCase
 
     public function test_json_merge_patch_complex_nested_structure()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $patch->set('spec.template.spec.containers.0.env.0.name', 'DATABASE_URL');
         $patch->set('spec.template.spec.containers.0.env.0.value', 'postgres://localhost:5432/db');
 
@@ -176,14 +176,14 @@ class JsonMergePatchTest extends TestCase
                                 'env' => [
                                     0 => [
                                         'name' => 'DATABASE_URL',
-                                        'value' => 'postgres://localhost:5432/db'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                        'value' => 'postgres://localhost:5432/db',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $this->assertEquals($expected, $patch->getPatch());
@@ -191,8 +191,8 @@ class JsonMergePatchTest extends TestCase
 
     public function test_json_merge_patch_overwrite_values()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $patch->set('spec.replicas', 3);
         $patch->set('spec.replicas', 5); // Should overwrite
 
@@ -201,8 +201,8 @@ class JsonMergePatchTest extends TestCase
 
     public function test_json_merge_patch_json_serialization()
     {
-        $patch = new JsonMergePatch();
-        
+        $patch = new JsonMergePatch;
+
         $patch
             ->set('spec.replicas', 3)
             ->set('metadata.labels.app', 'test')

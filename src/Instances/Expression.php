@@ -7,7 +7,6 @@ class Expression extends Instance
     /**
      * Make the expression checks for "in".
      *
-     * @param  string  $name
      * @param  array  $value
      * @return $this
      */
@@ -21,7 +20,6 @@ class Expression extends Instance
     /**
      * Make the expression checks for "not in".
      *
-     * @param  string  $name
      * @param  array  $value
      * @return $this
      */
@@ -35,7 +33,6 @@ class Expression extends Instance
     /**
      * Make the expression checks for "exists".
      *
-     * @param  string  $name
      * @return $this
      */
     public function exists(string $name)
@@ -48,7 +45,6 @@ class Expression extends Instance
     /**
      * Make the expression checks for "does not exists".
      *
-     * @param  string  $name
      * @return $this
      */
     public function doesNotExist(string $name)
@@ -61,8 +57,6 @@ class Expression extends Instance
     /**
      * Make the expression checks for "greater than".
      *
-     * @param  string  $name
-     * @param  int  $value
      * @return $this
      */
     public function greaterThan(string $name, int $value)
@@ -75,8 +69,6 @@ class Expression extends Instance
     /**
      * Make the expression checks for "less than".
      *
-     * @param  string  $name
-     * @param  int  $value
      * @return $this
      */
     public function lessThan(string $name, int $value)

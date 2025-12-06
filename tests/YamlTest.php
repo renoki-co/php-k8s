@@ -47,7 +47,6 @@ class YamlTest extends TestCase
         $this->assertEquals(['key' => 'assigned_value_at_template'], $cm->getData());
     }
 
-
     public function test_creation_and_update_from_yaml_file()
     {
         SealedSecret::register('sealedSecret');

@@ -21,8 +21,6 @@ class K8sNamespace extends K8sResource implements InteractsWithK8sCluster, Watch
 
     /**
      * Check if the namespace is active.
-     *
-     * @return bool
      */
     public function isActive(): bool
     {
@@ -31,8 +29,6 @@ class K8sNamespace extends K8sResource implements InteractsWithK8sCluster, Watch
 
     /**
      * Check if the namespace is pending termination.
-     *
-     * @return bool
      */
     public function isTerminating(): bool
     {

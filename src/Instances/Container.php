@@ -7,8 +7,6 @@ class Container extends Instance
     /**
      * Set the image for the container.
      *
-     * @param  string  $image
-     * @param  string  $tag
      * @return $this
      */
     public function setImage(string $image, string $tag = 'latest')
@@ -19,9 +17,6 @@ class Container extends Instance
     /**
      * Add a new port to the container list.
      *
-     * @param  int  $containerPort
-     * @param  string  $protocol
-     * @param  string  $name
      * @return $this
      */
     public function addPort(int $containerPort, string $protocol = 'TCP', ?string $name = null)
@@ -51,7 +46,6 @@ class Container extends Instance
     /**
      * Batch-add multiple volume mounts.
      *
-     * @param  array  $volumes
      * @return $this
      */
     public function addMountedVolumes(array $volumes)
@@ -66,7 +60,6 @@ class Container extends Instance
     /**
      * Set the mounted volumes.
      *
-     * @param  array  $volumes
      * @return $this
      */
     public function setMountedVolumes(array $volumes)
@@ -83,7 +76,6 @@ class Container extends Instance
     /**
      * Get the mounted volumes.
      *
-     * @param  bool  $asInstance
      * @return array
      */
     public function getMountedVolumes(bool $asInstance = true)
@@ -102,9 +94,6 @@ class Container extends Instance
     /**
      * Add an env variable by using a secret reference to the container.
      *
-     * @param  string  $name
-     * @param  string  $secretName
-     * @param  string  $key
      * @return $this
      */
     public function addSecretKeyRef(string $name, string $secretName, string $key)
@@ -122,7 +111,6 @@ class Container extends Instance
     /**
      * Add multiple secret references to the container.
      *
-     * @param  array  $envsWithRefs
      * @return $this
      */
     public function addSecretKeyRefs(array $envsWithRefs)
@@ -137,9 +125,6 @@ class Container extends Instance
     /**
      * Add an env variable by using a configmap reference to the container.
      *
-     * @param  string  $name
-     * @param  string  $cmName
-     * @param  string  $key
      * @return $this
      */
     public function addConfigMapRef(string $name, string $cmName, string $key)
@@ -157,7 +142,6 @@ class Container extends Instance
     /**
      * Add multiple configmap references to the container.
      *
-     * @param  array  $envsWithRefs
      * @return $this
      */
     public function addConfigMapRefs(array $envsWithRefs)
@@ -172,7 +156,6 @@ class Container extends Instance
     /**
      * Add an env variable by using a field reference to the container.
      *
-     * @param  string  $name
      * @param  string  $cmName
      * @param  string  $key
      * @return $this
@@ -191,7 +174,6 @@ class Container extends Instance
     /**
      * Add multiple field references to the container.
      *
-     * @param  array  $envsWithRefs
      * @return $this
      */
     public function addFieldRefs(array $envsWithRefs)
@@ -206,7 +188,6 @@ class Container extends Instance
     /**
      * Add an env variable to the container.
      *
-     * @param  string  $name
      * @param  mixed  $value
      * @return $this
      */
@@ -223,7 +204,6 @@ class Container extends Instance
     /**
      * Batch-add a list of envs.
      *
-     * @param  array  $envs
      * @return $this
      */
     public function addEnvs(array $envs)
@@ -238,7 +218,6 @@ class Container extends Instance
     /**
      * Set the environments.
      *
-     * @param  array  $envs
      * @return $this
      */
     public function setEnv(array $envs)
@@ -258,8 +237,6 @@ class Container extends Instance
     /**
      * Requests minimum memory for the container.
      *
-     * @param  int  $size
-     * @param  string  $measure
      * @return $this
      */
     public function minMemory(int $size, string $measure = 'Gi')
@@ -280,7 +257,6 @@ class Container extends Instance
     /**
      * Requests minimum CPU for the container.
      *
-     * @param  string  $size
      * @return $this
      */
     public function minCpu(string $size)
@@ -301,8 +277,6 @@ class Container extends Instance
     /**
      * Sets max memory for the container.
      *
-     * @param  int  $size
-     * @param  string  $measure
      * @return $this
      */
     public function maxMemory(int $size, string $measure = 'Gi')
@@ -323,7 +297,6 @@ class Container extends Instance
     /**
      * Sets max CPU for the container.
      *
-     * @param  string  $size
      * @return $this
      */
     public function maxCpu(string $size)
@@ -344,7 +317,6 @@ class Container extends Instance
     /**
      * Set the readiness probe for the container.
      *
-     * @param  \RenokiCo\PhpK8s\Instances\Probe  $probe
      * @return $this
      */
     public function setReadinessProbe(Probe $probe)
@@ -355,7 +327,6 @@ class Container extends Instance
     /**
      * Get the readiness probe.
      *
-     * @param  bool  $asInstance
      * @return null|array|\RenokiCo\PhpK8s\Instances\Probe
      */
     public function getReadinessProbe(bool $asInstance = true)
@@ -372,7 +343,6 @@ class Container extends Instance
     /**
      * Set the liveness probe for the container.
      *
-     * @param  \RenokiCo\PhpK8s\Instances\Probe  $probe
      * @return $this
      */
     public function setLivenessProbe(Probe $probe)
@@ -383,7 +353,6 @@ class Container extends Instance
     /**
      * Get the liveness probe.
      *
-     * @param  bool  $asInstance
      * @return null|array|\RenokiCo\PhpK8s\Instances\Probe
      */
     public function getLivenessProbe(bool $asInstance = true)
@@ -400,7 +369,6 @@ class Container extends Instance
     /**
      * Set the startup probe for the container.
      *
-     * @param  \RenokiCo\PhpK8s\Instances\Probe  $probe
      * @return $this
      */
     public function setStartupProbe(Probe $probe)
@@ -411,7 +379,6 @@ class Container extends Instance
     /**
      * Get the startup probe.
      *
-     * @param  bool  $asInstance
      * @return null|array|\RenokiCo\PhpK8s\Instances\Probe
      */
     public function getStartupProbe(bool $asInstance = true)
@@ -427,8 +394,6 @@ class Container extends Instance
 
     /**
      * Check if the container is ready.
-     *
-     * @return bool
      */
     public function isReady(): bool
     {

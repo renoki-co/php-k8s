@@ -24,7 +24,6 @@ trait HasTemplate
     /**
      * Get the template pod.
      *
-     * @param  bool  $asInstance
      * @return array|\RenokiCo\PhpK8s\Kinds\K8sPod
      */
     public function getTemplate(bool $asInstance = true)

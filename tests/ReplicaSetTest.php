@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\Kinds\K8sReplicaSet;
 use RenokiCo\PhpK8s\ResourcesList;
@@ -71,15 +70,15 @@ class ReplicaSetTest extends TestCase
     {
         $mariadb = $this->createMariadbContainer([
             'includeEnv' => true,
-            'additionalPort' => 3307
+            'additionalPort' => 3307,
         ]);
 
         $pod = $this->createMariadbPod([
             'labels' => ['app' => 'mariadb-rs', 'replicaset-name' => 'mariadb-rs'],
             'container' => [
                 'includeEnv' => true,
-                'additionalPort' => 3307
-            ]
+                'additionalPort' => 3307,
+            ],
         ])
             ->setAnnotations(['mariadb/annotation' => 'yes']);
 

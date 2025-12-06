@@ -38,7 +38,7 @@ class NodeTest extends TestCase
 
         $this->assertTrue($node->isSynced());
 
-        //$this->assertEquals('minikube', $node->getName());
+        // $this->assertEquals('minikube', $node->getName());
         $this->assertNotEquals([], $node->getInfo());
         $this->assertTrue(is_array($node->getImages()));
         $this->assertNotEquals([], $node->getCapacity());

@@ -4,7 +4,6 @@ namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
-use RenokiCo\PhpK8s\Kinds\K8sDeployment;
 
 class ServerSideApplyConflictTest extends TestCase
 {

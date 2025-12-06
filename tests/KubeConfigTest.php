@@ -16,7 +16,7 @@ class KubeConfigTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -27,7 +27,7 @@ class KubeConfigTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 

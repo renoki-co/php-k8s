@@ -11,7 +11,7 @@ class VolumeSnapshotTest extends TestCase
     public function test_volume_snapshot_build()
     {
         VolumeSnapshot::register();
-        
+
         $vs = $this->cluster->volumeSnapshot()
             ->setName('test-snapshot')
             ->setNamespace('default')
@@ -30,7 +30,7 @@ class VolumeSnapshotTest extends TestCase
     public function test_volume_snapshot_from_yaml()
     {
         VolumeSnapshot::register();
-        
+
         $vs = $this->cluster->fromYamlFile(__DIR__.'/yaml/volumesnapshot.yaml');
 
         // Handle case where CRD registration returns array
@@ -83,9 +83,9 @@ class VolumeSnapshotTest extends TestCase
     public function test_volume_snapshot_source_types()
     {
         VolumeSnapshot::register();
-        
+
         $vs = $this->cluster->volumeSnapshot()->setName('test-snapshot');
-        
+
         // Test setting source PVC
         $vs->setSourcePvcName('source-pvc');
         $this->assertEquals('source-pvc', $vs->getSourcePvcName());
@@ -99,7 +99,7 @@ class VolumeSnapshotTest extends TestCase
     public function test_volume_snapshot_status_methods()
     {
         VolumeSnapshot::register();
-        
+
         $vs = $this->cluster->volumeSnapshot()
             ->setName('test-snapshot')
             ->setAttribute('status.readyToUse', true)
@@ -123,7 +123,7 @@ class VolumeSnapshotTest extends TestCase
     public function test_volume_snapshot_ready_status()
     {
         VolumeSnapshot::register();
-        
+
         $vs = $this->cluster->volumeSnapshot()
             ->setName('ready-snapshot')
             ->setAttribute('status.readyToUse', false);
@@ -140,7 +140,7 @@ class VolumeSnapshotTest extends TestCase
     public function test_volume_snapshot_api_interaction()
     {
         VolumeSnapshot::register();
-        
+
         $this->runCreationTests();
         $this->runGetAllTests();
         $this->runGetTests();
@@ -165,7 +165,7 @@ class VolumeSnapshotTest extends TestCase
         // Wait for PVC to be bound or available
         $timeout = 60; // 60 seconds timeout
         $start = time();
-        while (!$pvc->isBound() && (time() - $start) < $timeout) {
+        while (! $pvc->isBound() && (time() - $start) < $timeout) {
             sleep(2);
             $pvc->refresh();
         }
@@ -198,7 +198,7 @@ class VolumeSnapshotTest extends TestCase
         // Wait for snapshot to be ready (with timeout)
         $timeout = 120; // 2 minutes timeout for snapshot creation
         $start = time();
-        while (!$vs->isReady() && !$vs->hasFailed() && (time() - $start) < $timeout) {
+        while (! $vs->isReady() && ! $vs->hasFailed() && (time() - $start) < $timeout) {
             sleep(3);
             $vs->refresh();
         }
@@ -206,7 +206,7 @@ class VolumeSnapshotTest extends TestCase
         // Check if snapshot was created successfully or if it failed due to missing VolumeSnapshotClass
         if ($vs->hasFailed()) {
             // This is expected in test environments without proper CSI setup
-            $this->addWarning('VolumeSnapshot creation failed - this is expected in test environments without CSI driver: ' . $vs->getErrorMessage());
+            $this->addWarning('VolumeSnapshot creation failed - this is expected in test environments without CSI driver: '.$vs->getErrorMessage());
         } else {
             $this->assertTrue($vs->isReady());
         }
@@ -283,5 +283,4 @@ class VolumeSnapshotTest extends TestCase
         $pvc = $this->cluster->getPersistentVolumeClaimByName('test-pvc');
         $pvc->delete();
     }
-
 }

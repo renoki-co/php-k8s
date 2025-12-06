@@ -27,7 +27,7 @@ class EventTest extends TestCase
                 'name' => 'mariadb',
                 'additionalPort' => 3307,
                 'includeEnv' => true,
-            ]
+            ],
         ]);
 
         $dep = $this->cluster->deployment()

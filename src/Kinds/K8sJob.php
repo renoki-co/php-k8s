@@ -13,10 +13,7 @@ use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\Resource\HasTemplate;
 
-class K8sJob extends K8sResource implements
-    InteractsWithK8sCluster,
-    Podable,
-    Watchable
+class K8sJob extends K8sResource implements InteractsWithK8sCluster, Podable, Watchable
 {
     use HasPods {
         podsSelector as protected customPodsSelector;
@@ -51,7 +48,6 @@ class K8sJob extends K8sResource implements
     /**
      * Set the TTL for the job availability.
      *
-     * @param  int  $ttl
      * @return $this
      */
     public function setTTL(int $ttl = 100)
@@ -61,8 +57,6 @@ class K8sJob extends K8sResource implements
 
     /**
      * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
      */
     public function podsSelector(): array
     {
@@ -77,8 +71,6 @@ class K8sJob extends K8sResource implements
 
     /**
      * Get the amount of active pods.
-     *
-     * @return int
      */
     public function getActivePodsCount(): int
     {
@@ -87,8 +79,6 @@ class K8sJob extends K8sResource implements
 
     /**
      * Get the amount of failed pods.
-     *
-     * @return int
      */
     public function getFailedPodsCount(): int
     {
@@ -97,8 +87,6 @@ class K8sJob extends K8sResource implements
 
     /**
      * Get the amount of succeded pods.
-     *
-     * @return int
      */
     public function getSuccededPodsCount(): int
     {
@@ -131,8 +119,6 @@ class K8sJob extends K8sResource implements
 
     /**
      * Get the total run time, in seconds.
-     *
-     * @return int
      */
     public function getDurationInSeconds(): int
     {
@@ -146,8 +132,6 @@ class K8sJob extends K8sResource implements
 
     /**
      * Check if the job has completed.
-     *
-     * @return bool
      */
     public function hasCompleted(): bool
     {

@@ -18,7 +18,6 @@ trait InitializesInstances
     /**
      * Create a new container instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Container
      */
     public static function container(array $attributes = [])
@@ -29,7 +28,6 @@ trait InitializesInstances
     /**
      * Create a new probe instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Probe
      */
     public static function probe(array $attributes = [])
@@ -40,7 +38,6 @@ trait InitializesInstances
     /**
      * Create a new metric instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\ResourceMetric
      */
     public static function metric(array $attributes = [])
@@ -51,7 +48,6 @@ trait InitializesInstances
     /**
      * Create a new object instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\ResourceObject
      */
     public static function object(array $attributes = [])
@@ -62,7 +58,6 @@ trait InitializesInstances
     /**
      * Create a new rule instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Rule
      */
     public static function rule(array $attributes = [])
@@ -73,7 +68,6 @@ trait InitializesInstances
     /**
      * Create a new subject instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Subject
      */
     public static function subject(array $attributes = [])
@@ -84,7 +78,6 @@ trait InitializesInstances
     /**
      * Create a new volume instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Volume
      */
     public static function volume(array $attributes = [])
@@ -95,7 +88,6 @@ trait InitializesInstances
     /**
      * Create a new affinity instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Affinity
      */
     public static function affinity(array $attributes = [])
@@ -106,7 +98,6 @@ trait InitializesInstances
     /**
      * Create a new expression instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Expression
      */
     public static function expression(array $attributes = [])
@@ -117,7 +108,6 @@ trait InitializesInstances
     /**
      * Create a new webhook instance.
      *
-     * @param  array  $attributes
      * @return \RenokiCo\PhpK8s\Instances\Webhook
      */
     public static function webhook(array $attributes = [])

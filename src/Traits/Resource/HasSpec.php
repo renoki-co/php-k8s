@@ -7,7 +7,6 @@ trait HasSpec
     /**
      * Set the spec parameter.
      *
-     * @param  string  $name
      * @param  mixed  $value
      * @return $this
      */
@@ -19,7 +18,6 @@ trait HasSpec
     /**
      * Append a value to the spec parameter, if array.
      *
-     * @param  string  $name
      * @param  mixed  $value
      * @return $this
      */
@@ -31,8 +29,6 @@ trait HasSpec
     /**
      * Get the spec parameter with default.
      *
-     * @param  string  $name
-     * @param  mixed  $default
      * @return mixed
      */
     public function getSpec(string $name, mixed $default = null)
@@ -43,7 +39,6 @@ trait HasSpec
     /**
      * Remove a given spec parameter.
      *
-     * @param  string  $name
      * @return mixed
      */
     public function removeSpec(string $name)

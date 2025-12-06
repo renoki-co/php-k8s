@@ -34,7 +34,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the gateway class name.
      *
-     * @param  string  $gatewayClassName
      * @return $this
      */
     public function setGatewayClassName(string $gatewayClassName)
@@ -44,8 +43,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the gateway class name.
-     *
-     * @return string|null
      */
     public function getGatewayClassName(): ?string
     {
@@ -55,7 +52,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the spec listeners.
      *
-     * @param  array  $listeners
      * @return $this
      */
     public function setListeners(array $listeners = [])
@@ -66,7 +62,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Add a new listener to the list.
      *
-     * @param  array  $listener
      * @return $this
      */
     public function addListener(array $listener)
@@ -77,7 +72,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Batch-add multiple listeners to the list.
      *
-     * @param  array  $listeners
      * @return $this
      */
     public function addListeners(array $listeners)
@@ -91,8 +85,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the spec listeners.
-     *
-     * @return array
      */
     public function getListeners(): array
     {
@@ -102,7 +94,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the spec addresses.
      *
-     * @param  array  $addresses
      * @return $this
      */
     public function setAddresses(array $addresses = [])
@@ -113,7 +104,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Add a new address to the list.
      *
-     * @param  array  $address
      * @return $this
      */
     public function addAddress(array $address)
@@ -123,8 +113,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the spec addresses.
-     *
-     * @return array
      */
     public function getAddresses(): array
     {
@@ -134,7 +122,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the infrastructure configuration.
      *
-     * @param  array  $infrastructure
      * @return $this
      */
     public function setInfrastructure(array $infrastructure)
@@ -144,8 +131,6 @@ class Gateway extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the infrastructure configuration.
-     *
-     * @return array|null
      */
     public function getInfrastructure(): ?array
     {

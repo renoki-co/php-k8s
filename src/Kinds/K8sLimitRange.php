@@ -34,7 +34,6 @@ class K8sLimitRange extends K8sResource implements InteractsWithK8sCluster, Watc
     /**
      * Add a limit to the LimitRange.
      *
-     * @param  array  $limit
      * @return $this
      */
     public function addLimit(array $limit)
@@ -45,7 +44,6 @@ class K8sLimitRange extends K8sResource implements InteractsWithK8sCluster, Watc
     /**
      * Add multiple limits in one batch.
      *
-     * @param  array  $limits
      * @return $this
      */
     public function addLimits(array $limits)
@@ -60,7 +58,6 @@ class K8sLimitRange extends K8sResource implements InteractsWithK8sCluster, Watc
     /**
      * Set the limits.
      *
-     * @param  array  $limits
      * @return $this
      */
     public function setLimits(array $limits)
@@ -70,8 +67,6 @@ class K8sLimitRange extends K8sResource implements InteractsWithK8sCluster, Watc
 
     /**
      * Get the limits.
-     *
-     * @return array
      */
     public function getLimits(): array
     {

@@ -40,15 +40,15 @@ class VerticalPodAutoscalerTest extends TestCase
                     [
                         'containerName' => 'test-container',
                         'maxAllowed' => ['cpu' => '1', 'memory' => '1Gi'],
-                        'minAllowed' => ['cpu' => '100m', 'memory' => '128Mi']
-                    ]
-                ]
+                        'minAllowed' => ['cpu' => '100m', 'memory' => '128Mi'],
+                    ],
+                ],
             ]);
 
         $this->assertInstanceOf(K8sVerticalPodAutoscaler::class, $vpa);
         $this->assertEquals('cluster-vpa', $vpa->getName());
         $this->assertEquals('default', $vpa->getNamespace());
-        
+
         $this->assertEquals('test-deployment', $vpa->getSpec('targetRef.name'));
         $this->assertEquals('Off', $vpa->getSpec('updatePolicy.updateMode'));
         $this->assertEquals('test-container', $vpa->getSpec('resourcePolicy.containerPolicies.0.containerName'));

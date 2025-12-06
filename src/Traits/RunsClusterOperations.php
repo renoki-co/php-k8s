@@ -33,7 +33,6 @@ trait RunsClusterOperations
     /**
      * Specify the cluster to attach to.
      *
-     * @param  \RenokiCo\PhpK8s\KubernetesCluster  $cluster
      * @return $this
      */
     public function onCluster(KubernetesCluster $cluster)
@@ -76,7 +75,6 @@ trait RunsClusterOperations
     /**
      * Make a call to the cluster to get a fresh instance.
      *
-     * @param  array  $query
      * @return $this
      */
     public function refresh(array $query = ['pretty' => 1])
@@ -87,7 +85,6 @@ trait RunsClusterOperations
     /**
      * Make a call to the cluster to get fresh original values.
      *
-     * @param  array  $query
      * @return $this
      */
     public function refreshOriginal(array $query = ['pretty' => 1])
@@ -114,7 +111,6 @@ trait RunsClusterOperations
      * Create or update the resource, wether the resource exists
      * or not within the cluster.
      *
-     * @param  array  $query
      * @return $this
      */
     public function syncWithCluster(array $query = ['pretty' => 1])
@@ -129,7 +125,6 @@ trait RunsClusterOperations
     /**
      * Create or update the app based on existence.
      *
-     * @param  array  $query
      * @return $this
      */
     public function createOrUpdate(array $query = ['pretty' => 1])
@@ -146,7 +141,6 @@ trait RunsClusterOperations
     /**
      * Get a list with all resources.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -166,7 +160,6 @@ trait RunsClusterOperations
     /**
      * Get a list with all resources from all namespaces.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\ResourcesList
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -186,7 +179,6 @@ trait RunsClusterOperations
     /**
      * Get a fresh instance from the cluster.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -206,7 +198,6 @@ trait RunsClusterOperations
     /**
      * Create the resource.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -226,8 +217,6 @@ trait RunsClusterOperations
     /**
      * Update the resource.
      *
-     * @param  array  $query
-     * @return bool
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -258,10 +247,7 @@ trait RunsClusterOperations
     /**
      * Delete the resource.
      *
-     * @param  array  $query
      * @param  null|int  $gracePeriod
-     * @param  string  $propagationPolicy
-     * @return bool
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -297,9 +283,6 @@ trait RunsClusterOperations
     /**
      * Apply the resource using server-side apply.
      *
-     * @param  string  $fieldManager
-     * @param  bool  $force
-     * @param  array  $query
      * @return $this
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -332,7 +315,6 @@ trait RunsClusterOperations
      * Apply JSON Patch (RFC 6902) operations to the resource.
      *
      * @param  \RenokiCo\PhpK8s\Patches\JsonPatch|array  $patch
-     * @param  array  $query
      * @return $this
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -363,7 +345,6 @@ trait RunsClusterOperations
      * Apply JSON Merge Patch (RFC 7396) to the resource.
      *
      * @param  \RenokiCo\PhpK8s\Patches\JsonMergePatch|array  $patch
-     * @param  array  $query
      * @return $this
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -393,8 +374,6 @@ trait RunsClusterOperations
     /**
      * Watch the resources list until the closure returns true or false.
      *
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
@@ -420,8 +399,6 @@ trait RunsClusterOperations
     /**
      * Watch the specific resource until the closure returns true or false.
      *
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
@@ -447,7 +424,6 @@ trait RunsClusterOperations
     /**
      * Get a specific resource's logs.
      *
-     * @param  array  $query
      * @return string
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
@@ -474,8 +450,6 @@ trait RunsClusterOperations
     /**
      * Watch the specific resource's logs until the closure returns true or false.
      *
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
@@ -511,7 +485,6 @@ trait RunsClusterOperations
     /**
      * Get a specific resource scaling data.
      *
-     * @return \RenokiCo\PhpK8s\Kinds\K8sScale
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesScalingException
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -542,8 +515,6 @@ trait RunsClusterOperations
      * Exec a command on the current resource.
      *
      * @param  string|array  $command
-     * @param  string|null  $container
-     * @param  array  $query
      * @return string
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesExecException
@@ -573,9 +544,6 @@ trait RunsClusterOperations
     /**
      * Attach to the current resource.
      *
-     * @param  \Closure|null  $callback
-     * @param  string|null  $container
-     * @param  array  $query
      * @return string
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAttachException
@@ -604,9 +572,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @param  bool  $withNamespace
-     * @return string
      */
     public function allResourcesPath(bool $withNamespace = true): string
     {
@@ -615,8 +580,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
      */
     public function resourcePath(): string
     {
@@ -625,8 +588,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the resource watch.
-     *
-     * @return string
      */
     public function allResourcesWatchPath(): string
     {
@@ -635,8 +596,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource to watch.
-     *
-     * @return string
      */
     public function resourceWatchPath(): string
     {
@@ -645,8 +604,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the resource scale.
-     *
-     * @return string
      */
     public function resourceScalePath(): string
     {
@@ -655,8 +612,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource to log.
-     *
-     * @return string
      */
     public function resourceLogPath(): string
     {
@@ -665,8 +620,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource to exec.
-     *
-     * @return string
      */
     public function resourceExecPath(): string
     {
@@ -675,8 +628,6 @@ trait RunsClusterOperations
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource to attach.
-     *
-     * @return string
      */
     public function resourceAttachPath(): string
     {
@@ -685,10 +636,6 @@ trait RunsClusterOperations
 
     /**
      * Get the prefix path for the resource.
-     *
-     * @param  bool  $withNamespace
-     * @param  string|null  $preNamespaceAction
-     * @return string
      */
     protected function getApiPathPrefix(bool $withNamespace = true, ?string $preNamespaceAction = null): string
     {

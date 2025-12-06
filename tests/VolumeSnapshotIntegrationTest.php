@@ -3,17 +3,16 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\Kinds\K8sVolumeSnapshot;
 use RenokiCo\PhpK8s\Test\Kinds\VolumeSnapshot;
 
 class VolumeSnapshotIntegrationTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         // Skip tests if not in CI environment or if cluster is not available
-        if (!getenv('CI') && !$this->isClusterAvailable()) {
+        if (! getenv('CI') && ! $this->isClusterAvailable()) {
             $this->markTestSkipped('Integration tests require a live Kubernetes cluster');
         }
     }
@@ -22,6 +21,7 @@ class VolumeSnapshotIntegrationTest extends TestCase
     {
         try {
             $this->cluster->getAllNamespaces();
+
             return true;
         } catch (KubernetesAPIException $e) {
             return false;
@@ -32,7 +32,7 @@ class VolumeSnapshotIntegrationTest extends TestCase
     {
         // Register the VolumeSnapshot CRD
         VolumeSnapshot::register();
-        
+
         // Test basic VolumeSnapshot resource creation and manipulation
         $vs = $this->cluster->volumeSnapshot()
             ->setName('test-lifecycle-snapshot')
@@ -49,12 +49,12 @@ class VolumeSnapshotIntegrationTest extends TestCase
 
         // Test that VolumeSnapshot CRD is properly registered
         $this->assertInstanceOf(VolumeSnapshot::class, $vs);
-        
+
         // Test basic CRD functionality through registered macro
         $this->assertTrue(method_exists($this->cluster, '__call'));
-        
+
         // Note: Cluster methods like getAllVolumeSnapshots() don't work with CRDs
-        // since they rely on core resource factory methods. CRDs work through 
+        // since they rely on core resource factory methods. CRDs work through
         // direct resource creation and the Kubernetes API.
     }
 
@@ -68,7 +68,7 @@ class VolumeSnapshotIntegrationTest extends TestCase
             ->setVolumeBindingMode('Immediate')
             ->setAllowVolumeExpansion(true);
 
-        if (!$sc->exists()) {
+        if (! $sc->exists()) {
             $sc->create();
         }
 
@@ -95,15 +95,15 @@ class VolumeSnapshotIntegrationTest extends TestCase
                 $this->createBusyboxContainer([
                     'name' => 'writer',
                     'command' => [
-                        'sh', '-c', 
-                        'echo "test data written at $(date)" > /data/test.txt && sleep 30'
-                    ]
+                        'sh', '-c',
+                        'echo "test data written at $(date)" > /data/test.txt && sleep 30',
+                    ],
                 ])->addVolume('/data', 'test-volume', 'persistentVolumeClaim', [
-                    'claimName' => 'test-data-pvc'
-                ])
+                    'claimName' => 'test-data-pvc',
+                ]),
             ])
             ->addVolume('test-volume', 'persistentVolumeClaim', [
-                'claimName' => 'test-data-pvc'
+                'claimName' => 'test-data-pvc',
             ])
             ->neverRestart();
 
@@ -149,7 +149,7 @@ class VolumeSnapshotIntegrationTest extends TestCase
                 ->setSpec('dataSource', [
                     'name' => 'test-data-snapshot',
                     'kind' => 'VolumeSnapshot',
-                    'apiGroup' => 'snapshot.storage.k8s.io'
+                    'apiGroup' => 'snapshot.storage.k8s.io',
                 ]);
 
             $restoredPvc = $restoredPvc->createOrUpdate();
@@ -168,14 +168,14 @@ class VolumeSnapshotIntegrationTest extends TestCase
                         'name' => 'verifier',
                         'command' => [
                             'sh', '-c',
-                            'if [ -f /data/test.txt ]; then echo "Data restored successfully: $(cat /data/test.txt)"; else echo "Data not found"; exit 1; fi'
-                        ]
+                            'if [ -f /data/test.txt ]; then echo "Data restored successfully: $(cat /data/test.txt)"; else echo "Data not found"; exit 1; fi',
+                        ],
                     ])->addVolume('/data', 'restored-volume', 'persistentVolumeClaim', [
-                        'claimName' => 'restored-pvc'
-                    ])
+                        'claimName' => 'restored-pvc',
+                    ]),
                 ])
                 ->addVolume('restored-volume', 'persistentVolumeClaim', [
-                    'claimName' => 'restored-pvc'
+                    'claimName' => 'restored-pvc',
                 ])
                 ->neverRestart();
 
@@ -226,7 +226,7 @@ class VolumeSnapshotIntegrationTest extends TestCase
         $this->assertTrue(method_exists($this->cluster, '__call') || method_exists($this->cluster, 'volumeSnapshot'));
 
         // Test YAML parsing with CRD
-        $yamlContent = "
+        $yamlContent = '
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshot
 metadata:
@@ -236,10 +236,10 @@ spec:
   volumeSnapshotClassName: csi-hostpath-snapclass
   source:
     persistentVolumeClaimName: yaml-test-pvc
-";
+';
 
         $vsFromYaml = $this->cluster->fromYaml($yamlContent);
-        
+
         // Handle case where both CRD and regular method exist (returns array)
         if (is_array($vsFromYaml)) {
             foreach ($vsFromYaml as $instance) {
@@ -249,7 +249,7 @@ spec:
                 }
             }
         }
-        
+
         $this->assertInstanceOf(VolumeSnapshot::class, $vsFromYaml);
         $this->assertEquals('yaml-test-snapshot', $vsFromYaml->getName());
     }
@@ -257,12 +257,12 @@ spec:
     private function waitForPvcToBeBound($pvc, int $timeoutSeconds = 120)
     {
         $start = time();
-        while (!$pvc->isBound() && (time() - $start) < $timeoutSeconds) {
+        while (! $pvc->isBound() && (time() - $start) < $timeoutSeconds) {
             sleep(3);
             $pvc->refresh();
         }
 
-        if (!$pvc->isBound()) {
+        if (! $pvc->isBound()) {
             $this->addWarning("PVC {$pvc->getName()} did not become bound within {$timeoutSeconds} seconds");
         }
     }
@@ -276,21 +276,21 @@ spec:
         }
 
         if ($pod->getPhase() === 'Failed') {
-            $this->addWarning("Pod {$pod->getName()} failed: " . $pod->logs());
+            $this->addWarning("Pod {$pod->getName()} failed: ".$pod->logs());
         }
     }
 
     private function waitForSnapshotToBeReady($vs, int $timeoutSeconds = 180)
     {
         $start = time();
-        while (!$vs->isReady() && !$vs->hasFailed() && (time() - $start) < $timeoutSeconds) {
+        while (! $vs->isReady() && ! $vs->hasFailed() && (time() - $start) < $timeoutSeconds) {
             sleep(5);
             $vs->refresh();
         }
 
         if ($vs->hasFailed()) {
-            $this->addWarning("VolumeSnapshot {$vs->getName()} failed: " . $vs->getErrorMessage());
-        } elseif (!$vs->isReady()) {
+            $this->addWarning("VolumeSnapshot {$vs->getName()} failed: ".$vs->getErrorMessage());
+        } elseif (! $vs->isReady()) {
             $this->addWarning("VolumeSnapshot {$vs->getName()} did not become ready within {$timeoutSeconds} seconds");
         }
     }

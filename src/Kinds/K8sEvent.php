@@ -24,7 +24,6 @@ class K8sEvent extends K8sResource implements InteractsWithK8sCluster, Watchable
     /**
      * Attach the given resource to the event.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sResource  $resource
      * @return $this
      */
     public function setResource(K8sResource $resource)
@@ -46,7 +45,6 @@ class K8sEvent extends K8sResource implements InteractsWithK8sCluster, Watchable
     /**
      * Emit or update the event with the given name.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException

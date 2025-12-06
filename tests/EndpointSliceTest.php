@@ -2,7 +2,6 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sEndpointSlice;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -20,7 +19,7 @@ class EndpointSliceTest extends TestCase
                     'protocol' => 'TCP',
                     'port' => 80,
                     'appProtocol' => 'http',
-                ]
+                ],
             ])
             ->setEndpoints([
                 [
@@ -32,7 +31,7 @@ class EndpointSliceTest extends TestCase
                     ],
                     'nodeName' => 'node-1',
                     'zone' => 'us-west2-a',
-                ]
+                ],
             ]);
 
         $this->assertEquals('discovery.k8s.io/v1', $eps->getApiVersion());
@@ -45,7 +44,7 @@ class EndpointSliceTest extends TestCase
                 'protocol' => 'TCP',
                 'port' => 80,
                 'appProtocol' => 'http',
-            ]
+            ],
         ], $eps->getPorts());
         $this->assertEquals([
             [
@@ -57,7 +56,7 @@ class EndpointSliceTest extends TestCase
                 ],
                 'nodeName' => 'node-1',
                 'zone' => 'us-west2-a',
-            ]
+            ],
         ], $eps->getEndpoints());
     }
 
@@ -75,7 +74,7 @@ class EndpointSliceTest extends TestCase
                 'protocol' => 'TCP',
                 'port' => 80,
                 'appProtocol' => 'http',
-            ]
+            ],
         ], $eps->getPorts());
         $this->assertEquals([
             [
@@ -97,7 +96,7 @@ class EndpointSliceTest extends TestCase
                 ],
                 'nodeName' => 'node-2',
                 'zone' => 'us-west2-a',
-            ]
+            ],
         ], $eps->getEndpoints());
     }
 
@@ -117,7 +116,7 @@ class EndpointSliceTest extends TestCase
                     'name' => 'http',
                     'protocol' => 'TCP',
                     'port' => 80,
-                ]
+                ],
             ])
             ->setEndpoints([
                 [
@@ -127,7 +126,7 @@ class EndpointSliceTest extends TestCase
                         'serving' => true,
                         'terminating' => false,
                     ],
-                ]
+                ],
             ]);
 
         $this->assertFalse($eps->isSynced());
@@ -235,7 +234,7 @@ class EndpointSliceTest extends TestCase
                 'name' => 'https',
                 'protocol' => 'TCP',
                 'port' => 443,
-            ]
+            ],
         ], $eps->getPorts());
     }
 
@@ -260,7 +259,7 @@ class EndpointSliceTest extends TestCase
             [
                 'addresses' => ['10.1.1.2'],
                 'conditions' => ['ready' => false],
-            ]
+            ],
         ], $eps->getEndpoints());
     }
 

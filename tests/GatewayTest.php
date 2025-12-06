@@ -2,9 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
-use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Test\Kinds\Gateway;
-use RenokiCo\PhpK8s\ResourcesList;
 
 class GatewayTest extends TestCase
 {
@@ -118,7 +116,6 @@ class GatewayTest extends TestCase
         $this->assertEquals('HTTP', $listeners[0]['protocol']);
         $this->assertEquals(self::$addresses, $gw->getAddresses());
     }
-
 
     public function runGetTests()
     {

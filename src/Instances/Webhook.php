@@ -7,7 +7,6 @@ class Webhook extends Instance
     /**
      * Add a new rule to the webook.
      *
-     * @param  array  $rule
      * @return $this
      */
     public function addRule(array $rule)
@@ -18,7 +17,6 @@ class Webhook extends Instance
     /**
      * Batch-add multiple rules to the webook.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function addRules(array $rules)

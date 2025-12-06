@@ -9,7 +9,6 @@ trait HasMinimumSurge
     /**
      * Set the minreadySeconds attribute.
      *
-     * @param  int  $seconds
      * @return $this
      */
     public function setMinReadySeconds(int $seconds)
@@ -19,8 +18,6 @@ trait HasMinimumSurge
 
     /**
      * Get the minimum ready seconds until it's considered ok.
-     *
-     * @return int
      */
     public function getMinReadySeconds(): int
     {

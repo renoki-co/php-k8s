@@ -49,8 +49,6 @@ trait MakesHttpCalls
     /**
      * Get the callable URL for a specific path.
      *
-     * @param  string  $path
-     * @param  array  $query
      * @return string
      */
     public function getCallableUrl(string $path, array $query = ['pretty' => 1])
@@ -105,11 +103,6 @@ trait MakesHttpCalls
     /**
      * Make a HTTP call to a given path with a method and payload.
      *
-     * @param  string  $method
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
-     * @param  array  $options
      * @return \Psr\Http\Message\ResponseInterface
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -154,11 +147,6 @@ trait MakesHttpCalls
     /**
      * Call the API with the specified method and path.
      *
-     * @param  string  $method
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
-     * @param  array  $options
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException

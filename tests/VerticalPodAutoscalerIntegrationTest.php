@@ -3,16 +3,15 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\Kinds\K8sVerticalPodAutoscaler;
 
 class VerticalPodAutoscalerIntegrationTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         // Skip tests if not in CI environment or if cluster is not available
-        if (!getenv('CI') && !$this->isClusterAvailable()) {
+        if (! getenv('CI') && ! $this->isClusterAvailable()) {
             $this->markTestSkipped('Integration tests require a live Kubernetes cluster');
         }
     }
@@ -21,6 +20,7 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
     {
         try {
             $this->cluster->getAllNamespaces();
+
             return true;
         } catch (KubernetesAPIException $e) {
             return false;
@@ -40,7 +40,7 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
         $this->assertEquals('default', $vpa->getNamespace());
         $this->assertEquals('VerticalPodAutoscaler', $vpa->getKind());
         $this->assertEquals('autoscaling.k8s.io/v1', $vpa->getApiVersion());
-        
+
         // Test spec properties
         $this->assertEquals('apps/v1', $vpa->getSpec('targetRef.apiVersion'));
         $this->assertEquals('Deployment', $vpa->getSpec('targetRef.kind'));
@@ -50,20 +50,20 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
     public function test_vpa_lifecycle_with_deployment()
     {
         $namespace = 'default';
-        
+
         // Step 1: Create a test deployment
         $container = $this->createBusyboxContainer([
             'name' => 'test-container',
-            'command' => ['sh', '-c', 'while true; do echo "Running..."; sleep 30; done']
+            'command' => ['sh', '-c', 'while true; do echo "Running..."; sleep 30; done'],
         ])->setResources([
             'requests' => [
                 'cpu' => '100m',
-                'memory' => '128Mi'
+                'memory' => '128Mi',
             ],
             'limits' => [
                 'cpu' => '200m',
-                'memory' => '256Mi'
-            ]
+                'memory' => '256Mi',
+            ],
         ]);
 
         $pod = $this->cluster->pod()
@@ -105,11 +105,11 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
         // Step 4: Verify VPA has status and recommendations
         $vpa->refresh();
         $status = $vpa->getAttribute('status');
-        
+
         if (isset($status['recommendation'])) {
             $this->assertArrayHasKey('containerRecommendations', $status['recommendation']);
             $containerRec = $status['recommendation']['containerRecommendations'][0] ?? null;
-            
+
             if ($containerRec) {
                 $this->assertEquals('test-container', $containerRec['containerName']);
                 $this->assertArrayHasKey('target', $containerRec);
@@ -119,7 +119,7 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
         // Step 5: Test VPA update modes
         $vpa->setUpdatePolicy(['updateMode' => 'Initial']);
         $vpa->update();
-        
+
         $this->assertEquals('Initial', $vpa->getSpec('updatePolicy.updateMode'));
 
         // Step 6: Clean up
@@ -134,12 +134,12 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
         // Create a simple deployment for testing
         $container = $this->createBusyboxContainer([
             'name' => 'policy-container',
-            'command' => ['sleep', '3600']
+            'command' => ['sleep', '3600'],
         ])->setResources([
             'requests' => [
                 'cpu' => '50m',
-                'memory' => '64Mi'
-            ]
+                'memory' => '64Mi',
+            ],
         ]);
 
         $pod = $this->cluster->pod()
@@ -162,12 +162,12 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
         $updatePolicies = [
             ['updateMode' => 'Off'],
             ['updateMode' => 'Initial'],
-            ['updateMode' => 'Auto']
+            ['updateMode' => 'Auto'],
         ];
 
         foreach ($updatePolicies as $index => $policy) {
             $vpaName = "vpa-policy-test-{$index}";
-            
+
             $vpa = $this->cluster->verticalPodAutoscaler()
                 ->setName($vpaName)
                 ->setNamespace($namespace)
@@ -203,15 +203,15 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
                         'containerName' => 'test-container',
                         'maxAllowed' => [
                             'cpu' => '1',
-                            'memory' => '1Gi'
+                            'memory' => '1Gi',
                         ],
                         'minAllowed' => [
                             'cpu' => '100m',
-                            'memory' => '128Mi'
+                            'memory' => '128Mi',
                         ],
-                        'controlledResources' => ['cpu', 'memory']
-                    ]
-                ]
+                        'controlledResources' => ['cpu', 'memory'],
+                    ],
+                ],
             ]);
 
         $vpa = $vpa->createOrUpdate();
@@ -266,8 +266,9 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
 
         // Test listing VPAs
         $allVpas = $this->cluster->getAllVerticalPodAutoscalers($namespace);
-        $testVpas = $allVpas->filter(function($vpa) {
+        $testVpas = $allVpas->filter(function ($vpa) {
             $labels = $vpa->getLabels();
+
             return isset($labels['test']) && $labels['test'] === 'vpa-listing';
         });
 
@@ -287,12 +288,12 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
     private function waitForDeploymentToBeReady($deployment, int $timeoutSeconds = 120)
     {
         $start = time();
-        while (!$deployment->isReady() && (time() - $start) < $timeoutSeconds) {
+        while (! $deployment->isReady() && (time() - $start) < $timeoutSeconds) {
             sleep(3);
             $deployment->refresh();
         }
 
-        if (!$deployment->isReady()) {
+        if (! $deployment->isReady()) {
             $this->addWarning("Deployment {$deployment->getName()} did not become ready within {$timeoutSeconds} seconds");
         }
     }
@@ -301,19 +302,19 @@ class VerticalPodAutoscalerIntegrationTest extends TestCase
     {
         $start = time();
         $hasRecommendations = false;
-        
-        while (!$hasRecommendations && (time() - $start) < $timeoutSeconds) {
+
+        while (! $hasRecommendations && (time() - $start) < $timeoutSeconds) {
             sleep(10);
             $vpa->refresh();
-            
+
             $status = $vpa->getAttribute('status');
-            if (isset($status['recommendation']['containerRecommendations']) && 
-                !empty($status['recommendation']['containerRecommendations'])) {
+            if (isset($status['recommendation']['containerRecommendations']) &&
+                ! empty($status['recommendation']['containerRecommendations'])) {
                 $hasRecommendations = true;
             }
         }
 
-        if (!$hasRecommendations) {
+        if (! $hasRecommendations) {
             $this->addWarning("VPA {$vpa->getName()} did not generate recommendations within {$timeoutSeconds} seconds");
         }
     }
