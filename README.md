@@ -11,9 +11,9 @@ PHP K8s
 [![Total Downloads](https://poser.pugx.org/renoki-co/php-k8s/downloads)](https://packagist.org/packages/renoki-co/php-k8s)
 [![Monthly Downloads](https://poser.pugx.org/renoki-co/php-k8s/d/monthly)](https://packagist.org/packages/renoki-co/php-k8s)
 
-![v1.31.10 K8s Version](https://img.shields.io/badge/K8s%20v1.31.10-Ready-%23326ce5?colorA=306CE8&colorB=green)
-![v1.32.6 K8s Version](https://img.shields.io/badge/K8s%20v1.32.6-Ready-%23326ce5?colorA=306CE8&colorB=green)
-![v1.33.1 K8s Version](https://img.shields.io/badge/K8s%20v1.33.1-Ready-%23326ce5?colorA=306CE8&colorB=green)
+![v1.32.9 K8s Version](https://img.shields.io/badge/K8s%20v1.32.9-Ready-%23326ce5?colorA=306CE8&colorB=green)
+![v1.33.5 K8s Version](https://img.shields.io/badge/K8s%20v1.33.5-Ready-%23326ce5?colorA=306CE8&colorB=green)
+![v1.34.1 K8s Version](https://img.shields.io/badge/K8s%20v1.34.1-Ready-%23326ce5?colorA=306CE8&colorB=green)
 
 [![Client Capabilities](https://img.shields.io/badge/Kubernetes%20Client-Silver-blue.svg?colorB=C0C0C0&colorA=306CE8)](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/csi-new-client-library-procedure.md#client-capabilities)
 [![Client Support Level](https://img.shields.io/badge/Kubernetes%20Client-stable-green.svg?colorA=306CE8)](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/csi-new-client-library-procedure.md#client-support-level)
