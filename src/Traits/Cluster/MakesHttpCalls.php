@@ -11,17 +11,17 @@ use RenokiCo\PhpK8s\ResourcesList;
 trait MakesHttpCalls
 {
     /**
-     * Used with both HTTP and WS calls
+     * Used with both HTTP and WS calls.
      */
     private ?float $timeout = null;
 
     /**
-     * Only used with HTTP calls
+     * Only used with HTTP calls.
      */
     private ?float $readTimeout = null;
 
     /**
-     * Only used with HTTP calls
+     * Only used with HTTP calls.
      */
     private ?float $connectTimeout = null;
 

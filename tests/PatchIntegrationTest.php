@@ -284,7 +284,6 @@ class PatchIntegrationTest extends TestCase
             // Ensure the test label is still present
             $this->assertEquals('patch-integration', $patchedPod->getLabels()['test']);
             $this->assertEquals('patch-integration', $livePod->getLabels()['test']);
-
         } finally {
             $this->cleanupTestPod($pod);
         }
@@ -319,7 +318,6 @@ class PatchIntegrationTest extends TestCase
             // Ensure existing labels are preserved
             $this->assertEquals('backend', $livePod->getLabels()['tier']);
             $this->assertEquals('patch-integration', $livePod->getLabels()['test']);
-
         } finally {
             $this->cleanupTestPod($pod);
         }
@@ -359,7 +357,6 @@ class PatchIntegrationTest extends TestCase
             $this->assertEquals('v1.2', $livePod2->getLabels()['version']);
             $this->assertEquals('php-k8s', $livePod2->getLabels()['deployed-by']);
             $this->assertEquals('development', $livePod2->getLabels()['stage']);
-
         } finally {
             $this->cleanupTestPod($pod);
         }
@@ -377,7 +374,6 @@ class PatchIntegrationTest extends TestCase
 
             $this->expectException(KubernetesAPIException::class);
             $pod->jsonPatch($jsonPatch);
-
         } finally {
             $this->cleanupTestPod($pod);
         }
@@ -407,7 +403,6 @@ class PatchIntegrationTest extends TestCase
 
             // Verify original labels/annotations are preserved
             $this->assertEquals('patch-integration', $livePod->getLabels()['test']);
-
         } finally {
             $this->cleanupTestPod($pod);
         }
