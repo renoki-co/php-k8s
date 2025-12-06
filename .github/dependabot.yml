@@ -11,3 +11,6 @@ updates:
     interval: weekly
   open-pull-requests-limit: 10
   versioning-strategy: increase
+  ignore:
+    - dependency-name: "phpunit/phpunit"
+      update-types: ["version-update:semver-major"]

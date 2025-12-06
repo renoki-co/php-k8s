@@ -17,6 +17,13 @@ abstract class TestCase extends Orchestra
      * @var KubernetesCluster
      */
     protected $cluster;
+    
+    /**
+     * Latest HTTP response (for compatibility with Orchestra Testbench 9.x).
+     *
+     * @var mixed
+     */
+    protected static $latestResponse;
 
     /**
      * Set up the tests.
