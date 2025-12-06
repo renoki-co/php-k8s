@@ -329,6 +329,68 @@ trait RunsClusterOperations
     }
 
     /**
+     * Apply JSON Patch (RFC 6902) operations to the resource.
+     *
+     * @param  \RenokiCo\PhpK8s\Patches\JsonPatch|array  $patch
+     * @param  array  $query
+     * @return $this
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function jsonPatch($patch, array $query = ['pretty' => 1])
+    {
+        if (is_array($patch)) {
+            $payload = json_encode($patch);
+        } else {
+            $payload = $patch->toJson();
+        }
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::JSON_PATCH_OP,
+                $this->resourcePath(),
+                $payload,
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return $this;
+    }
+
+    /**
+     * Apply JSON Merge Patch (RFC 7396) to the resource.
+     *
+     * @param  \RenokiCo\PhpK8s\Patches\JsonMergePatch|array  $patch
+     * @param  array  $query
+     * @return $this
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function jsonMergePatch($patch, array $query = ['pretty' => 1])
+    {
+        if (is_array($patch)) {
+            $payload = json_encode($patch);
+        } else {
+            $payload = $patch->toJson();
+        }
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                KubernetesCluster::JSON_MERGE_PATCH_OP,
+                $this->resourcePath(),
+                $payload,
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return $this;
+    }
+
+    /**
      * Watch the resources list until the closure returns true or false.
      *
      * @param  Closure  $callback
