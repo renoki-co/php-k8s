@@ -20,6 +20,7 @@ use RenokiCo\PhpK8s\Kinds\K8sPersistentVolume;
 use RenokiCo\PhpK8s\Kinds\K8sPersistentVolumeClaim;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\Kinds\K8sPodDisruptionBudget;
+use RenokiCo\PhpK8s\Kinds\K8sReplicaSet;
 use RenokiCo\PhpK8s\Kinds\K8sRole;
 use RenokiCo\PhpK8s\Kinds\K8sRoleBinding;
 use RenokiCo\PhpK8s\Kinds\K8sSecret;
@@ -185,6 +186,18 @@ trait InitializesResources
     public static function deployment($cluster = null, array $attributes = [])
     {
         return new K8sDeployment($cluster, $attributes);
+    }
+
+    /**
+     * Create a new ReplicaSet kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @param  array  $attributes
+     * @return \RenokiCo\PhpK8s\Kinds\K8sReplicaSet
+     */
+    public static function replicaSet($cluster = null, array $attributes = [])
+    {
+        return new K8sReplicaSet($cluster, $attributes);
     }
 
     /**

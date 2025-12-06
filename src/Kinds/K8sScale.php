@@ -87,4 +87,55 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
 
         return parent::refreshOriginal($query);
     }
+
+    /**
+     * Create the scale resource.
+     * Scale subresources should use replace (PUT) operations, not create (POST).
+     * Scale subresources don't support POST, so we use PUT to the scale subresource path.
+     *
+     * @param  array  $query
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function create(array $query = ['pretty' => 1])
+    {
+        return $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                \RenokiCo\PhpK8s\KubernetesCluster::REPLACE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
+    }
+
+    /**
+     * Update the scale resource.
+     * This is the correct operation for scale subresources.
+     * Scale is updated via PUT to the scale subresource path.
+     *
+     * @param  array  $query
+     * @return bool
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function update(array $query = ['pretty' => 1]): bool
+    {
+        $this->refreshOriginal();
+        $this->refreshResourceVersion();
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                \RenokiCo\PhpK8s\KubernetesCluster::REPLACE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return true;
+    }
 }

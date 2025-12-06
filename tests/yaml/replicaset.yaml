@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mariadb-rs
+  labels:
+    tier: backend
+  annotations:
+    mariadb/annotation: "yes"
+spec:
+  selector:
+    matchLabels:
+      app: mariadb-rs
+  replicas: 3
+  template:
+    metadata:
+      name: mariadb
+      labels:
+        app: mariadb-rs
+    spec:
+      containers:
+        - name: mariadb
+          image: public.ecr.aws/docker/library/mariadb:11.8
+          ports:
+            - name: mariadb
+              protocol: TCP
+              containerPort: 3306
