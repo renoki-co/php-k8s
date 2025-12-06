@@ -10,6 +10,42 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class DeploymentTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        // Clean up deployment and HPA if they exist
+        try {
+            $dep = $this->cluster->getDeploymentByName('mariadb');
+            if ($dep->exists()) {
+                $dep->delete();
+
+                $timeout = 30;
+                $start = time();
+                while ($dep->exists() && (time() - $start < $timeout)) {
+                    sleep(1);
+                }
+            }
+        } catch (\Exception $e) {
+            // Deployment doesn't exist, that's fine
+        }
+
+        try {
+            $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mariadb');
+            if ($hpa->exists()) {
+                $hpa->delete();
+
+                $timeout = 30;
+                $start = time();
+                while ($hpa->exists() && (time() - $start < $timeout)) {
+                    sleep(1);
+                }
+            }
+        } catch (\Exception $e) {
+            // HPA doesn't exist, that's fine
+        }
+
+        parent::tearDown();
+    }
+
     public function test_deployment_build()
     {
         $mariadb = $this->createMariadbContainer();
@@ -233,15 +269,32 @@ class DeploymentTest extends TestCase
         $this->assertTrue($dep->delete());
         $this->assertTrue($hpa->delete());
 
+        $timeout = 60; // 60 second timeout
+        $start = time();
+
         while ($hpa->exists()) {
+            if (time() - $start > $timeout) {
+                $this->fail('Timeout waiting for HPA to be deleted');
+            }
             sleep(1);
         }
 
+        $start = time();
         while ($dep->exists()) {
+            if (time() - $start > $timeout) {
+                $this->fail('Timeout waiting for Deployment to be deleted');
+            }
             sleep(1);
         }
 
+        $start = time();
         while ($dep->getPods()->count() > 0) {
+            if (time() - $start > $timeout) {
+                $this->fail(sprintf(
+                    'Timeout waiting for Deployment pods to be deleted. Remaining: %d',
+                    $dep->getPods()->count()
+                ));
+            }
             sleep(1);
         }
 
@@ -277,7 +330,17 @@ class DeploymentTest extends TestCase
 
         $scaler = $dep->scale(2);
 
+        $timeout = 60; // 60 second timeout
+        $start = time();
+
         while ($dep->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
+            if (time() - $start > $timeout) {
+                $this->fail(sprintf(
+                    'Timeout waiting for deployment to scale to 2. Current state: ready=%d, scaler=%d',
+                    $dep->getReadyReplicasCount(),
+                    $scaler->getReplicas()
+                ));
+            }
             $scaler->refresh();
             $dep->refresh();
             sleep(1);

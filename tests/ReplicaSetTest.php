@@ -27,7 +27,7 @@ class ReplicaSetTest extends TestCase
 
         $this->assertEquals('apps/v1', $rs->getApiVersion());
         $this->assertEquals('mariadb-rs', $rs->getName());
-        $this->assertEquals(['tier' => 'backend'], $rs->getLabels());
+        $this->assertEquals(['tier' => 'backend-rs'], $rs->getLabels());
         $this->assertEquals(['mariadb/annotation' => 'yes'], $rs->getAnnotations());
         $this->assertEquals(3, $rs->getReplicas());
         $this->assertEquals($pod->getName(), $rs->getTemplate()->getName());
@@ -47,7 +47,7 @@ class ReplicaSetTest extends TestCase
 
         $this->assertEquals('apps/v1', $rs->getApiVersion());
         $this->assertEquals('mariadb-rs', $rs->getName());
-        $this->assertEquals(['tier' => 'backend'], $rs->getLabels());
+        $this->assertEquals(['tier' => 'backend-rs'], $rs->getLabels());
         $this->assertEquals(['mariadb/annotation' => 'yes'], $rs->getAnnotations());
         $this->assertEquals(3, $rs->getReplicas());
         $this->assertEquals($pod->getName(), $rs->getTemplate()->getName());
@@ -85,7 +85,7 @@ class ReplicaSetTest extends TestCase
 
         $rs = $this->cluster->replicaSet()
             ->setName('mariadb-rs')
-            ->setLabels(['tier' => 'backend'])
+            ->setLabels(['tier' => 'backend-rs'])
             ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['app' => 'mariadb-rs']])
             ->setReplicas(1)
@@ -103,7 +103,7 @@ class ReplicaSetTest extends TestCase
 
         $this->assertEquals('apps/v1', $rs->getApiVersion());
         $this->assertEquals('mariadb-rs', $rs->getName());
-        $this->assertEquals(['tier' => 'backend'], $rs->getLabels());
+        $this->assertEquals(['tier' => 'backend-rs'], $rs->getLabels());
         $this->assertEquals(['mariadb/annotation' => 'yes'], $rs->getAnnotations());
         $this->assertEquals(1, $rs->getReplicas());
         $this->assertEquals($pod->getName(), $rs->getTemplate()->getName());
@@ -170,7 +170,7 @@ class ReplicaSetTest extends TestCase
 
         $this->assertEquals('apps/v1', $rs->getApiVersion());
         $this->assertEquals('mariadb-rs', $rs->getName());
-        $this->assertEquals(['tier' => 'backend'], $rs->getLabels());
+        $this->assertEquals(['tier' => 'backend-rs'], $rs->getLabels());
         $this->assertEquals(['mariadb/annotation' => 'yes'], $rs->getAnnotations());
         $this->assertEquals(1, $rs->getReplicas());
 
@@ -187,7 +187,18 @@ class ReplicaSetTest extends TestCase
 
         $this->assertTrue($rs->isSynced());
 
+        $timeout = 60; // 60 second timeout
+        $start = time();
+
         while ($rs->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
+            if (time() - $start > $timeout) {
+                $this->fail(sprintf(
+                    'Timeout waiting for replicas to scale to 2. Current state: ready=%d, scaler=%d',
+                    $rs->getReadyReplicasCount(),
+                    $scaler->getReplicas()
+                ));
+            }
+
             $scaler->refresh();
             $rs->refresh();
 
@@ -212,7 +223,7 @@ class ReplicaSetTest extends TestCase
 
         $this->assertEquals('apps/v1', $rs->getApiVersion());
         $this->assertEquals('mariadb-rs', $rs->getName());
-        $this->assertEquals(['tier' => 'backend'], $rs->getLabels());
+        $this->assertEquals(['tier' => 'backend-rs'], $rs->getLabels());
         $this->assertEquals([], $rs->getAnnotations());
         $this->assertEquals(2, $rs->getReplicas());
 

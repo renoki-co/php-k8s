@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: mariadb-rs
   labels:
-    tier: backend
+    tier: backend-rs
   annotations:
     mariadb/annotation: "yes"
 spec:

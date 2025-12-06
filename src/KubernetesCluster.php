@@ -255,27 +255,76 @@ class KubernetesCluster
     {
         $resourceClass = $this->resourceClass;
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
-        $data = null;
 
-        while (($data = fgets($sock)) == true) {
-            $data = @json_decode($data, true);
+        if ($sock === false) {
+            return null;
+        }
 
-            ['type' => $type, 'object' => $attributes] = $data;
+        // Set stream to non-blocking mode to allow timeout handling
+        stream_set_blocking($sock, false);
 
-            $call = call_user_func(
-                $callback,
-                $type,
-                new $resourceClass($this, $attributes)
-            );
+        // Calculate overall timeout: server timeout + buffer for network/processing
+        $timeout = ($query['timeoutSeconds'] ?? 30) + 5;
+        $endTime = time() + $timeout;
 
-            if (! is_null($call)) {
+        $buffer = '';
+
+        while (time() < $endTime) {
+            // Try to read data (non-blocking)
+            $chunk = fread($sock, 8192);
+
+            if ($chunk === false) {
+                // Error occurred
                 fclose($sock);
+                return null;
+            }
 
-                unset($data);
+            if ($chunk === '') {
+                // No data available, check if stream ended
+                if (feof($sock)) {
+                    break;
+                }
 
-                return $call;
+                // No data yet, sleep briefly and continue
+                usleep(100000); // 100ms
+                continue;
+            }
+
+            // Append chunk to buffer
+            $buffer .= $chunk;
+
+            // Process complete lines from buffer
+            while (($pos = strpos($buffer, "\n")) !== false) {
+                $line = substr($buffer, 0, $pos);
+                $buffer = substr($buffer, $pos + 1);
+
+                if (trim($line) === '') {
+                    continue;
+                }
+
+                $data = @json_decode($line, true);
+
+                if (!$data || !isset($data['type'], $data['object'])) {
+                    continue;
+                }
+
+                ['type' => $type, 'object' => $attributes] = $data;
+
+                $call = call_user_func(
+                    $callback,
+                    $type,
+                    new $resourceClass($this, $attributes)
+                );
+
+                if (! is_null($call)) {
+                    fclose($sock);
+                    return $call;
+                }
             }
         }
+
+        fclose($sock);
+        return null;
     }
 
     /**
@@ -290,19 +339,59 @@ class KubernetesCluster
     {
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
 
-        $data = null;
+        if ($sock === false) {
+            return null;
+        }
 
-        while (($data = fgets($sock)) == true) {
-            $call = call_user_func($callback, $data);
+        // Set stream to non-blocking mode to allow timeout handling
+        stream_set_blocking($sock, false);
 
-            if (! is_null($call)) {
+        // Calculate overall timeout: server timeout + buffer for network/processing
+        $timeout = ($query['timeoutSeconds'] ?? 30) + 5;
+        $endTime = time() + $timeout;
+
+        $buffer = '';
+
+        while (time() < $endTime) {
+            // Try to read data (non-blocking)
+            $chunk = fread($sock, 8192);
+
+            if ($chunk === false) {
+                // Error occurred
                 fclose($sock);
+                return null;
+            }
 
-                unset($data);
+            if ($chunk === '') {
+                // No data available, check if stream ended
+                if (feof($sock)) {
+                    break;
+                }
 
-                return $call;
+                // No data yet, sleep briefly and continue
+                usleep(100000); // 100ms
+                continue;
+            }
+
+            // Append chunk to buffer
+            $buffer .= $chunk;
+
+            // Process complete lines from buffer
+            while (($pos = strpos($buffer, "\n")) !== false) {
+                $line = substr($buffer, 0, $pos);
+                $buffer = substr($buffer, $pos + 1);
+
+                $call = call_user_func($callback, $line . "\n");
+
+                if (! is_null($call)) {
+                    fclose($sock);
+                    return $call;
+                }
             }
         }
+
+        fclose($sock);
+        return null;
     }
 
     /**
