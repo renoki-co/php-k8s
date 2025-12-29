@@ -3,6 +3,7 @@
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
 use Illuminate\Support\Arr;
+use RenokiCo\PhpK8s\Contracts\TokenProviderInterface;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
 use Symfony\Component\Process\Process;
 
@@ -14,6 +15,13 @@ trait AuthenticatesCluster
      * @var string|null
      */
     private $token;
+
+    /**
+     * The token provider for dynamic token management.
+     *
+     * @var TokenProviderInterface|null
+     */
+    private $tokenProvider;
 
     /**
      * The key pair of username & password used
@@ -194,6 +202,90 @@ trait AuthenticatesCluster
         }
 
         return $cluster;
+    }
+
+    /**
+     * Set a token provider for dynamic token management.
+     *
+     * @return $this
+     */
+    public function withTokenProvider(TokenProviderInterface $provider)
+    {
+        $this->tokenProvider = $provider;
+        $this->token = null; // Clear static token
+
+        return $this;
+    }
+
+    /**
+     * Get the current authentication token.
+     * Prioritizes token provider, falls back to static token.
+     */
+    public function getAuthToken(): ?string
+    {
+        if ($this->tokenProvider !== null) {
+            return $this->tokenProvider->getToken();
+        }
+
+        return $this->token;
+    }
+
+    /**
+     * Configure EKS authentication with AWS SDK.
+     *
+     * @return $this
+     */
+    public function withEksAuth(string $clusterName, string $region)
+    {
+        $provider = new \RenokiCo\PhpK8s\Auth\EksTokenProvider($clusterName, $region);
+
+        return $this->withTokenProvider($provider);
+    }
+
+    /**
+     * Configure OpenShift OAuth authentication.
+     *
+     * @return $this
+     */
+    public function withOpenShiftAuth(string $username, string $password)
+    {
+        $provider = new \RenokiCo\PhpK8s\Auth\OpenShiftOAuthProvider(
+            $this->url,
+            $username,
+            $password
+        );
+
+        if ($this->verify === false) {
+            $provider->withoutSslVerification();
+        }
+
+        return $this->withTokenProvider($provider);
+    }
+
+    /**
+     * Configure ServiceAccount token authentication via TokenRequest API.
+     *
+     * @return $this
+     */
+    public function withServiceAccountToken(
+        string $namespace,
+        string $serviceAccount,
+        int $expirationSeconds = 3600,
+        ?array $audiences = null
+    ) {
+        $provider = new \RenokiCo\PhpK8s\Auth\ServiceAccountTokenProvider(
+            $this,
+            $namespace,
+            $serviceAccount
+        );
+
+        $provider->withExpirationSeconds($expirationSeconds);
+
+        if ($audiences) {
+            $provider->withAudiences($audiences);
+        }
+
+        return $this->withTokenProvider($provider);
     }
 
     /**

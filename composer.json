@@ -25,16 +25,17 @@
     ],
     "require": {
         "php": "^8.2",
+        "ext-json": "*",
+        "composer/semver": "^3.4",
         "guzzlehttp/guzzle": "^7.10",
         "illuminate/macroable": "^11.0|^12.0",
         "illuminate/support": "^11.0|^12.0",
         "ratchet/pawl": "^0.4.1",
-        "symfony/process": "^7.3.4",
-        "composer/semver": "^3.4",
-        "ext-json": "*"
+        "symfony/process": "^7.3.4"
     },
     "suggest": {
-        "ext-yaml": "YAML extension is used to read or generate YAML from PHP K8s internal classes."
+        "ext-yaml": "YAML extension is used to read or generate YAML from PHP K8s internal classes.",
+        "aws/aws-sdk-php": "Required for native EKS token generation without AWS CLI."
     },
     "autoload": {
         "psr-4": {
@@ -50,10 +51,11 @@
         "test": "vendor/bin/phpunit"
     },
     "require-dev": {
+        "laravel/pint": "dev-main",
         "mockery/mockery": "^1.6",
-        "orchestra/testbench": "^9.0|^10.6.0",
+        "orchestra/testbench": "^10.8.0",
         "phpunit/phpunit": "^10.0|^11.5",
-        "vimeo/psalm": "^6.13.1"
+        "vimeo/psalm": "^6.14.2"
     },
     "config": {
         "sort-packages": true
