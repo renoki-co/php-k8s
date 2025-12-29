@@ -32,7 +32,7 @@ class MountedVolume extends Instance
      * @param  string|null  $subPath
      * @return $this
      */
-    public function mountTo(string $mountPath, string $subPath = null)
+    public function mountTo(string $mountPath, ?string $subPath = null)
     {
         $this->setMountPath($mountPath);
 

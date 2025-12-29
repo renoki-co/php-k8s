@@ -50,7 +50,7 @@ trait AuthenticatesCluster
      * @param  string|null  $token
      * @return $this
      */
-    public function withToken(string $token = null)
+    public function withToken(?string $token = null)
     {
         $this->token = str_replace(["\r", "\n"], '', $token);
 
@@ -63,7 +63,7 @@ trait AuthenticatesCluster
      * @param  string|null  $path
      * @return $this
      */
-    public function loadTokenFromFile(string $path = null)
+    public function loadTokenFromFile(?string $path = null)
     {
         return $this->withToken(file_get_contents($path));
     }
@@ -75,7 +75,7 @@ trait AuthenticatesCluster
      * @param  string|null  $password
      * @return $this
      */
-    public function httpAuthentication(string $username = null, string $password = null)
+    public function httpAuthentication(?string $username = null, ?string $password = null)
     {
         if (! is_null($username) || ! is_null($password)) {
             $this->auth = [$username, $password];
@@ -90,7 +90,7 @@ trait AuthenticatesCluster
      * @param  string|null  $path
      * @return $this
      */
-    public function withCertificate(string $path = null)
+    public function withCertificate(?string $path = null)
     {
         $this->cert = $path;
 
@@ -103,7 +103,7 @@ trait AuthenticatesCluster
      * @param  string|null  $path
      * @return $this
      */
-    public function withPrivateKey(string $path = null)
+    public function withPrivateKey(?string $path = null)
     {
         $this->sslKey = $path;
 
@@ -116,7 +116,7 @@ trait AuthenticatesCluster
      * @param  string|null  $path
      * @return $this
      */
-    public function withCaCertificate(string $path = null)
+    public function withCaCertificate(?string $path = null)
     {
         $this->verify = $path;
 

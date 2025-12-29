@@ -19,6 +19,7 @@ trait ChecksClusterVersion
      * Load the cluster version.
      *
      * @return void
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     protected function loadClusterVersion(): void

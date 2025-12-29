@@ -24,7 +24,7 @@ class Container extends Instance
      * @param  string  $name
      * @return $this
      */
-    public function addPort(int $containerPort, string $protocol = 'TCP', string $name = null)
+    public function addPort(int $containerPort, string $protocol = 'TCP', ?string $name = null)
     {
         return $this->addToAttribute('ports', [
             'name' => $name,

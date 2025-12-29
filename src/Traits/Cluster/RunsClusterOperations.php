@@ -95,6 +95,7 @@ trait RunsClusterOperations
      * @param  string  $payload
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
@@ -153,6 +154,7 @@ trait RunsClusterOperations
      * @param  string|Closure  $payload
      * @param  array  $query
      * @return mixed
+     *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
@@ -175,7 +177,7 @@ trait RunsClusterOperations
     /**
      * Watch for the current resource or a resource list.
      *
-     * @param  string   $path
+     * @param  string  $path
      * @param  Closure  $closure
      * @param  array  $query
      * @return bool
@@ -210,7 +212,7 @@ trait RunsClusterOperations
     /**
      * Watch for the logs for the resource.
      *
-     * @param  string   $path
+     * @param  string  $path
      * @param  Closure  $closure
      * @param  array  $query
      * @return bool

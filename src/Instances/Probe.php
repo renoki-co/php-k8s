@@ -44,7 +44,7 @@ class Probe extends Instance
      *
      * @param  string  $path
      * @param  int  $port
-     * @param  array   $headers
+     * @param  array  $headers
      * @param  string  $scheme
      * @return $this
      */
@@ -72,7 +72,7 @@ class Probe extends Instance
      * @param  string  $host
      * @return $this
      */
-    public function tcp(int $port, string $host = null)
+    public function tcp(int $port, ?string $host = null)
     {
         if ($host) {
             $this->setAttribute('tcpSocket.host', $host);
