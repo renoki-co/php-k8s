@@ -143,7 +143,7 @@ trait MakesWebsocketCalls
      * @param  array  $query
      * @return mixed
      */
-    protected function makeWsRequest(string $path, Closure $callback = null, array $query = ['pretty' => 1])
+    protected function makeWsRequest(string $path, ?Closure $callback = null, array $query = ['pretty' => 1])
     {
         $url = $this->getCallableUrl($path, $query);
 

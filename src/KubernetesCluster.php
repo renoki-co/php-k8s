@@ -170,7 +170,7 @@ class KubernetesCluster
      * @param  string|null  $url
      * @return void
      */
-    public function __construct(string $url = null)
+    public function __construct(?string $url = null)
     {
         $this->url = $url;
     }

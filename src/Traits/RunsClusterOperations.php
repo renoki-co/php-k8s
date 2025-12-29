@@ -455,7 +455,7 @@ trait RunsClusterOperations
      */
     public function exec(
         $command,
-        string $container = null,
+        ?string $container = null,
         array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
     ) {
         if (! $this instanceof Executable) {
@@ -486,8 +486,8 @@ trait RunsClusterOperations
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
     public function attach(
-        Closure $callback = null,
-        string $container = null,
+        ?Closure $callback = null,
+        ?string $container = null,
         array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
     ) {
         if (! $this instanceof Attachable) {
@@ -594,7 +594,7 @@ trait RunsClusterOperations
      * @param  string|null  $preNamespaceAction
      * @return string
      */
-    protected function getApiPathPrefix(bool $withNamespace = true, string $preNamespaceAction = null): string
+    protected function getApiPathPrefix(bool $withNamespace = true, ?string $preNamespaceAction = null): string
     {
         $version = $this->getApiVersion();
 

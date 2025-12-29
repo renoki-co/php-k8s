@@ -55,7 +55,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $name
      * @return void
      */
-    public static function register(string $name = null): void
+    public static function register(?string $name = null): void
     {
         K8s::registerCrd(static::class, $name);
     }
@@ -69,7 +69,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $defaultVersion
      * @return string
      */
-    public static function getUniqueCrdMacro(string $kind = null, string $defaultVersion = null): string
+    public static function getUniqueCrdMacro(?string $kind = null, ?string $defaultVersion = null): string
     {
         $kind = $kind ?: static::getKind();
         $defaultVersion = $defaultVersion ?: static::getDefaultVersion();
@@ -127,7 +127,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $kind
      * @return array
      */
-    public function toArray(string $kind = null)
+    public function toArray(?string $kind = null)
     {
         $attributes = $this->attributes;
 
@@ -154,7 +154,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $kind
      * @return string
      */
-    public function toJson($options = 0, string $kind = null)
+    public function toJson($options = 0, ?string $kind = null)
     {
         return json_encode($this->toArray($kind), $options);
     }
@@ -167,7 +167,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $kind
      * @return string
      */
-    public function toJsonPayload(string $kind = null)
+    public function toJsonPayload(?string $kind = null)
     {
         $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES, $kind);
 
