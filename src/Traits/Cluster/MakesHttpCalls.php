@@ -11,10 +11,44 @@ use RenokiCo\PhpK8s\ResourcesList;
 trait MakesHttpCalls
 {
     /**
+     * Used with both HTTP and WS calls.
+     */
+    private ?float $timeout = null;
+
+    /**
+     * Only used with HTTP calls.
+     */
+    private ?float $readTimeout = null;
+
+    /**
+     * Only used with HTTP calls.
+     */
+    private ?float $connectTimeout = null;
+
+    public function withTimeout(float $timeout): static
+    {
+        $this->timeout = $timeout;
+
+        return $this;
+    }
+
+    public function withReadTimeout(float $readTimeout): static
+    {
+        $this->readTimeout = $readTimeout;
+
+        return $this;
+    }
+
+    public function withConnectTimeout(float $connectTimeout): static
+    {
+        $this->connectTimeout = $connectTimeout;
+
+        return $this;
+    }
+
+    /**
      * Get the callable URL for a specific path.
      *
-     * @param  string  $path
-     * @param  array  $query
      * @return string
      */
     public function getCallableUrl(string $path, array $query = ['pretty' => 1])
@@ -69,20 +103,34 @@ trait MakesHttpCalls
     /**
      * Make a HTTP call to a given path with a method and payload.
      *
-     * @param  string  $method
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
      * @return \Psr\Http\Message\ResponseInterface
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function call(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    public function call(string $method, string $path, string $payload = '', array $query = ['pretty' => 1], array $options = [])
     {
         try {
-            $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), [
+            $requestOptions = [
                 RequestOptions::BODY => $payload,
-            ]);
+            ];
+
+            if (isset($options['headers'])) {
+                $requestOptions[RequestOptions::HEADERS] = $options['headers'];
+            }
+
+            if ($this->timeout) {
+                $requestOptions[RequestOptions::TIMEOUT] = $this->timeout;
+            }
+
+            if ($this->readTimeout) {
+                $requestOptions[RequestOptions::READ_TIMEOUT] = $this->readTimeout;
+            }
+
+            if ($this->connectTimeout) {
+                $requestOptions[RequestOptions::CONNECT_TIMEOUT] = $this->connectTimeout;
+            }
+
+            $response = $this->getClient()->request($method, $this->getCallableUrl($path, $query), $requestOptions);
         } catch (ClientException $e) {
             $errorPayload = json_decode((string) $e->getResponse()->getBody(), true);
 
@@ -99,19 +147,15 @@ trait MakesHttpCalls
     /**
      * Call the API with the specified method and path.
      *
-     * @param  string  $method
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1])
+    protected function makeRequest(string $method, string $path, string $payload = '', array $query = ['pretty' => 1], array $options = [])
     {
         $resourceClass = $this->resourceClass;
 
-        $response = $this->call($method, $path, $payload, $query);
+        $response = $this->call($method, $path, $payload, $query, $options);
 
         $json = @json_decode($response->getBody(), true);
 

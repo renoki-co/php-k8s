@@ -55,7 +55,6 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Get the template job.
      *
-     * @param  bool  $asInstance
      * @return array|K8sJob
      */
     public function getJobTemplate(bool $asInstance = true)
@@ -87,7 +86,6 @@ class K8sCronJob extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Retrieve the schedule.
      *
-     * @param  bool  $asInstance
      * @return CronExpression|string
      */
     public function getSchedule(bool $asInstance = true)

@@ -9,7 +9,6 @@ trait HasReplicas
     /**
      * Set the pod replicas.
      *
-     * @param  int  $replicas
      * @return $this
      */
     public function setReplicas(int $replicas = 1)
@@ -19,8 +18,6 @@ trait HasReplicas
 
     /**
      * Get pod replicas.
-     *
-     * @return int
      */
     public function getReplicas(): int
     {

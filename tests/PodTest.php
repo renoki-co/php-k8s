@@ -5,7 +5,6 @@ namespace RenokiCo\PhpK8s\Test;
 use Illuminate\Support\Str;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Instances\Container;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -13,42 +12,35 @@ class PodTest extends TestCase
 {
     public function test_pod_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mariadb = $this->createMariadbContainer([
+            'additionalPort' => 3307,
+            'includeEnv' => true,
+        ]);
 
-        $busybox = K8s::container()
-            ->setName('busybox')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh']);
+        $busybox = $this->createBusyboxContainer();
 
         $pod = $this->cluster->pod()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setOrUpdateLabels(['tier' => 'test'])
             ->setOrUpdateLabels(['tier' => 'backend', 'type' => 'test'])
-            ->setOrUpdateAnnotations(['mysql/annotation' => 'no'])
-            ->setOrUpdateAnnotations(['mysql/annotation' => 'yes', 'mongodb/annotation' => 'no'])
+            ->setOrUpdateAnnotations(['mariadb/annotation' => 'no'])
+            ->setOrUpdateAnnotations(['mariadb/annotation' => 'yes', 'mongodb/annotation' => 'no'])
             ->addPulledSecrets(['secret1', 'secret2'])
             ->setInitContainers([$busybox])
-            ->setContainers([$mysql]);
+            ->setContainers([$mariadb]);
 
         $this->assertEquals('v1', $pod->getApiVersion());
-        $this->assertEquals('mysql', $pod->getName());
+        $this->assertEquals('mariadb', $pod->getName());
         $this->assertEquals(['tier' => 'backend', 'type' => 'test'], $pod->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes', 'mongodb/annotation' => 'no'], $pod->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes', 'mongodb/annotation' => 'no'], $pod->getAnnotations());
         $this->assertEquals([['name' => 'secret1'], ['name' => 'secret2']], $pod->getPulledSecrets());
         $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
-        $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
+        $this->assertEquals([$mariadb->toArray()], $pod->getContainers(false));
 
         $this->assertEquals('backend', $pod->getLabel('tier'));
         $this->assertNull($pod->getLabel('inexistentLabel'));
 
-        $this->assertEquals('yes', $pod->getAnnotation('mysql/annotation'));
+        $this->assertEquals('yes', $pod->getAnnotation('mariadb/annotation'));
         $this->assertEquals('no', $pod->getAnnotation('mongodb/annotation'));
         $this->assertNull($pod->getAnnotation('inexistentAnnot'));
 
@@ -63,28 +55,21 @@ class PodTest extends TestCase
 
     public function test_pod_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mariadb = $this->createMariadbContainer([
+            'additionalPort' => 3307,
+            'includeEnv' => true,
+        ]);
 
-        $busybox = K8s::container()
-            ->setName('busybox')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh']);
+        $busybox = $this->createBusyboxContainer();
 
         $pod = $this->cluster->fromYamlFile(__DIR__.'/yaml/pod.yaml');
 
         $this->assertEquals('v1', $pod->getApiVersion());
-        $this->assertEquals('mysql', $pod->getName());
+        $this->assertEquals('mariadb', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $pod->getAnnotations());
         $this->assertEquals([$busybox->toArray()], $pod->getInitContainers(false));
-        $this->assertEquals([$mysql->toArray()], $pod->getContainers(false));
+        $this->assertEquals([$mariadb->toArray()], $pod->getContainers(false));
 
         foreach ($pod->getInitContainers() as $container) {
             $this->assertInstanceOf(Container::class, $container);
@@ -110,10 +95,10 @@ class PodTest extends TestCase
 
     public function test_pod_exec()
     {
-        $busybox = K8s::container()
-            ->setName('busybox-exec')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh', '-c', 'sleep 7200']);
+        $busybox = $this->createBusyboxContainer([
+            'name' => 'busybox-exec',
+            'command' => ['/bin/sh', '-c', 'sleep 7200'],
+        ]);
 
         $pod = $this->cluster->pod()
             ->setName('busybox-exec')
@@ -121,7 +106,6 @@ class PodTest extends TestCase
             ->createOrUpdate();
 
         while (! $pod->isRunning()) {
-            dump("Waiting for pod {$pod->getName()} to be up and running...");
             sleep(1);
             $pod->refresh();
         }
@@ -137,21 +121,17 @@ class PodTest extends TestCase
 
     public function test_pod_attach()
     {
-        $mysql = K8s::container()
-            ->setName('mysql-attach')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mariadb = $this->createMariadbContainer([
+            'name' => 'mariadb-attach',
+            'includeEnv' => true,
+        ]);
 
         $pod = $this->cluster->pod()
-            ->setName('mysql-attach')
-            ->setContainers([$mysql])
+            ->setName('mariadb-attach')
+            ->setContainers([$mariadb])
             ->createOrUpdate();
 
         while (! $pod->isRunning()) {
-            dump("Waiting for pod {$pod->getName()} to be up and running...");
             sleep(1);
             $pod->refresh();
         }
@@ -168,27 +148,20 @@ class PodTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mariadb = $this->createMariadbContainer([
+            'additionalPort' => 3307,
+            'includeEnv' => true,
+        ]);
 
-        $busybox = K8s::container()
-            ->setName('busybox')
-            ->setImage('public.ecr.aws/docker/library/busybox')
-            ->setCommand(['/bin/sh']);
+        $busybox = $this->createBusyboxContainer();
 
         $pod = $this->cluster->pod()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->addPulledSecrets(['secret1', 'secret2'])
             ->setInitContainers([$busybox])
-            ->setContainers([$mysql]);
+            ->setContainers([$mariadb]);
 
         $this->assertFalse($pod->isSynced());
         $this->assertFalse($pod->exists());
@@ -201,12 +174,11 @@ class PodTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $pod);
 
         $this->assertEquals('v1', $pod->getApiVersion());
-        $this->assertEquals('mysql', $pod->getName());
+        $this->assertEquals('mariadb', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $pod->getAnnotations());
 
         while (! $pod->isRunning()) {
-            dump("Waiting for pod {$pod->getName()} to be up and running...");
             sleep(1);
             $pod->refresh();
         }
@@ -214,7 +186,7 @@ class PodTest extends TestCase
         $pod->refresh();
 
         $this->assertStringEndsWith('busybox:latest', $pod->getInitContainer('busybox')->getImage());
-        $this->assertStringEndsWith('mysql:5.7', $pod->getContainer('mysql')->getImage());
+        $this->assertStringEndsWith('mariadb:11.8', $pod->getContainer('mariadb')->getImage());
 
         $this->assertTrue($pod->containersAreReady());
         $this->assertTrue($pod->initContainersAreReady());
@@ -243,21 +215,21 @@ class PodTest extends TestCase
 
     public function runGetTests()
     {
-        $pod = $this->cluster->getPodByName('mysql');
+        $pod = $this->cluster->getPodByName('mariadb');
 
         $this->assertInstanceOf(K8sPod::class, $pod);
 
         $this->assertTrue($pod->isSynced());
 
         $this->assertEquals('v1', $pod->getApiVersion());
-        $this->assertEquals('mysql', $pod->getName());
+        $this->assertEquals('mariadb', $pod->getName());
         $this->assertEquals(['tier' => 'backend'], $pod->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $pod->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $pod->getAnnotations());
     }
 
     public function runUpdateTests()
     {
-        $pod = $this->cluster->getPodByName('mysql');
+        $pod = $this->cluster->getPodByName('mariadb');
 
         $this->assertTrue($pod->isSynced());
 
@@ -269,31 +241,30 @@ class PodTest extends TestCase
         $this->assertTrue($pod->isSynced());
 
         $this->assertEquals('v1', $pod->getApiVersion());
-        $this->assertEquals('mysql', $pod->getName());
+        $this->assertEquals('mariadb', $pod->getName());
         $this->assertEquals([], $pod->getLabels());
         $this->assertEquals([], $pod->getAnnotations());
     }
 
     public function runDeletionTests()
     {
-        $pod = $this->cluster->getPodByName('mysql');
+        $pod = $this->cluster->getPodByName('mariadb');
 
         $this->assertTrue($pod->delete());
 
         while ($pod->exists()) {
-            dump("Awaiting for pod {$pod->getName()} to be deleted...");
             sleep(1);
         }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getPodByName('mysql');
+        $this->cluster->getPodByName('mariadb');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->pod()->watchAll(function ($type, $pod) {
-            if ($pod->getName() === 'mysql') {
+            if ($pod->getName() === 'mariadb') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -303,8 +274,8 @@ class PodTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->pod()->watchByName('mysql', function ($type, $pod) {
-            return $pod->getName() === 'mysql';
+        $watch = $this->cluster->pod()->watchByName('mariadb', function ($type, $pod) {
+            return $pod->getName() === 'mariadb';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
@@ -312,10 +283,7 @@ class PodTest extends TestCase
 
     public function runWatchLogsTests()
     {
-        $this->cluster->pod()->watchContainerLogsByName('mysql', 'mysql', function ($data) {
-            // Debugging data to CI. :D
-            dump($data);
-
+        $this->cluster->pod()->watchContainerLogsByName('mariadb', 'mariadb', function ($data) {
             if (Str::contains($data, 'InnoDB')) {
                 return true;
             }
@@ -324,11 +292,7 @@ class PodTest extends TestCase
 
     public function runGetLogsTests()
     {
-        $logs = $this->cluster->pod()->containerLogsByName('mysql', 'mysql');
-
-        // Debugging data to CI. :D
-        dump($logs);
-
+        $logs = $this->cluster->pod()->containerLogsByName('mariadb', 'mariadb');
         $this->assertTrue(strlen($logs) > 0);
     }
 }

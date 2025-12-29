@@ -3,7 +3,6 @@
 namespace RenokiCo\PhpK8s\Test;
 
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sEvent;
 use RenokiCo\PhpK8s\ResourcesList;
 
@@ -21,24 +20,20 @@ class EventTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setLabels(['tier' => 'backend', 'deployment-name' => 'mysql'])
-            ->setContainers([$mysql]);
+        $pod = $this->createMariadbPod([
+            'name' => 'mariadb',
+            'labels' => ['tier' => 'backend', 'deployment-name' => 'mariadb'],
+            'container' => [
+                'name' => 'mariadb',
+                'additionalPort' => 3307,
+                'includeEnv' => true,
+            ],
+        ]);
 
         $dep = $this->cluster->deployment()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['tier' => 'backend']])
             ->setReplicas(1)
             ->setUpdateStrategy('RollingUpdate')
@@ -51,7 +46,7 @@ class EventTest extends TestCase
             ->setMessage('This is a test message for events.')
             ->setReason('SomeReason')
             ->setType('Normal')
-            ->setName('mysql-test');
+            ->setName('mariadb-test');
 
         $this->assertFalse($event->isSynced());
         $this->assertFalse($event->exists());
@@ -86,7 +81,7 @@ class EventTest extends TestCase
 
     public function runGetTests()
     {
-        $event = $this->cluster->getEventByName('mysql-test');
+        $event = $this->cluster->getEventByName('mariadb-test');
 
         $this->assertInstanceOf(K8sEvent::class, $event);
 
@@ -95,29 +90,27 @@ class EventTest extends TestCase
 
     public function runDeletionTests()
     {
-        $event = $this->cluster->getEventByName('mysql-test');
+        $event = $this->cluster->getEventByName('mariadb-test');
 
         $this->assertTrue($event->delete());
 
         while ($event->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$event->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($event->exists()) {
-            dump("Awaiting for event {$event->getName()} to be deleted...");
             sleep(1);
         }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getEventByName('mysql-test');
+        $this->cluster->getEventByName('mariadb-test');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->event()->watchAll(function ($type, $event) {
-            if ($event->getName() === 'mysql-test') {
+            if ($event->getName() === 'mariadb-test') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -127,8 +120,8 @@ class EventTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->event()->watchByName('mysql-test', function ($type, $event) {
-            return $event->getName() === 'mysql-test';
+        $watch = $this->cluster->event()->watchByName('mariadb-test', function ($type, $event) {
+            return $event->getName() === 'mariadb-test';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);

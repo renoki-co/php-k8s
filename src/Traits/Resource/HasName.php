@@ -9,7 +9,6 @@ trait HasName
     /**
      * Set the name.
      *
-     * @param  string  $name
      * @return $this
      */
     public function setName(string $name)
@@ -22,7 +21,6 @@ trait HasName
     /**
      * Alias for ->setName().
      *
-     * @param  string  $name
      * @return $this
      */
     public function whereName(string $name)

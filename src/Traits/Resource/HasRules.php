@@ -25,7 +25,6 @@ trait HasRules
     /**
      * Batch-add multiple roles.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function addRules(array $rules)
@@ -40,7 +39,6 @@ trait HasRules
     /**
      * Set the rules for the resource.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function setRules(array $rules)
@@ -56,9 +54,6 @@ trait HasRules
 
     /**
      * Get the rules from the resource.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getRules(bool $asInstance = true): array
     {

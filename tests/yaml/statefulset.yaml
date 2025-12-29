@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql
+  name: mariadb
   labels:
     tier: backend
   annotations:
-    mysql/annotation: "yes"
+    mariadb/annotation: "yes"
 spec:
   selector:
     matchLabels:
-      name: mysql-statefulset
+      name: mariadb-statefulset
   replicas: 3
-  serviceName: mysql
+  serviceName: mariadb
   template:
     metadata:
-      name: mysql
+      name: mariadb
       labels:
-        name: mysql-statefulset
+        name: mariadb-statefulset
     spec:
       containers:
-        - name: mysql
-          image: public.ecr.aws/docker/library/mysql:5.7
+        - name: mariadb
+          image: public.ecr.aws/docker/library/mariadb:11.8
           ports:
-            - name: mysql
+            - name: mariadb
               protocol: TCP
               containerPort: 3306
   volumeClaimTemplates:
     - metadata:
-        name: mysql-pvc
+        name: mariadb-pvc
       spec:
         resources:
           requests:

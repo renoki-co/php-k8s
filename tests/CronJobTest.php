@@ -14,10 +14,7 @@ class CronJobTest extends TestCase
 {
     public function test_cronjob_build()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
+        $pi = $this->createPerlContainer();
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -37,7 +34,7 @@ class CronJobTest extends TestCase
             ->setLabels(['tier' => 'backend'])
             ->setAnnotations(['perl/annotation' => 'yes'])
             ->setJobTemplate($job)
-            ->setSchedule(CronExpression::factory('* * * * *'));
+            ->setSchedule(new CronExpression('* * * * *'));
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
@@ -51,10 +48,7 @@ class CronJobTest extends TestCase
 
     public function test_cronjob_from_yaml()
     {
-        $pi = K8s::container()
-            ->setName('pi')
-            ->setImage('public.ecr.aws/docker/library/perl')
-            ->setCommand(['perl',  '-Mbignum=bpi', '-wle', 'print bpi(200)']);
+        $pi = $this->createPerlContainer();
 
         $pod = $this->cluster->pod()
             ->setName('perl')
@@ -62,7 +56,7 @@ class CronJobTest extends TestCase
             ->restartOnFailure()
             ->neverRestart();
 
-        $cronjob = $this->cluster->fromYamlFile(__DIR__.'/yaml/cronjob.yaml');
+        $cronjob = $this->cluster->fromYamlFile(__DIR__ . '/yaml/cronjob.yaml');
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());
@@ -110,7 +104,7 @@ class CronJobTest extends TestCase
             ->setLabels(['tier' => 'useless'])
             ->setAnnotations(['perl/annotation' => 'no'])
             ->setJobTemplate($job)
-            ->setSchedule(CronExpression::factory('* * * * *'));
+            ->setSchedule(new CronExpression('* * * * *'));
 
         $this->assertFalse($cronjob->isSynced());
         $this->assertFalse($cronjob->exists());
@@ -137,7 +131,6 @@ class CronJobTest extends TestCase
 
         // This check is sensitive to ensuring the jobs take some time to complete.
         while ($cronjob->getActiveJobs()->count() === 0) {
-            dump("Waiting for the cronjob {$cronjob->getName()} to have active jobs...");
             sleep(1);
             $cronjob->refresh();
             $activeJobs = $cronjob->getActiveJobs();
@@ -146,7 +139,6 @@ class CronJobTest extends TestCase
         $job = $activeJobs->first();
 
         while (! $job->hasCompleted()) {
-            dump("Waiting for pods of {$job->getName()} to finish executing...");
             sleep(1);
             $job->refresh();
         }
@@ -211,7 +203,6 @@ class CronJobTest extends TestCase
         $this->assertTrue($cronjob->delete());
 
         while ($cronjob->exists()) {
-            dump("Awaiting for cronjob {$cronjob->getName()} to be deleted...");
             sleep(1);
         }
 

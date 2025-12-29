@@ -25,7 +25,6 @@ trait HasSubjects
     /**
      * Batch-add multiple roles.
      *
-     * @param  array  $subjects
      * @return $this
      */
     public function addSubjects(array $subjects)
@@ -40,7 +39,6 @@ trait HasSubjects
     /**
      * Set the subjects for the resource.
      *
-     * @param  array  $subjects
      * @return $this
      */
     public function setSubjects(array $subjects)
@@ -56,9 +54,6 @@ trait HasSubjects
 
     /**
      * Get the subjects from the resource.
-     *
-     * @param  bool  $asInstance
-     * @return array
      */
     public function getSubjects(bool $asInstance = true): array
     {

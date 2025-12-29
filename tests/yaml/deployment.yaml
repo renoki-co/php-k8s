@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: mariadb
   labels:
     tier: backend
   annotations:
-    mysql/annotation: "yes"
+    mariadb/annotation: "yes"
 spec:
   selector:
     matchLabels:
-      name: mysql-deployment
+      name: mariadb-deployment
   replicas: 3
   template:
     metadata:
-      name: mysql
+      name: mariadb
       labels:
-        name: mysql-deployment
+        name: mariadb-deployment
     spec:
       containers:
-        - name: mysql
-          image: public.ecr.aws/docker/library/mysql:5.7
+        - name: mariadb
+          image: public.ecr.aws/docker/library/mariadb:11.8
           ports:
-            - name: mysql
+            - name: mariadb
               protocol: TCP
               containerPort: 3306

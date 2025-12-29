@@ -7,7 +7,6 @@ class Rule extends Instance
     /**
      * Add a new API Group.
      *
-     * @param  string  $apiGroup
      * @return $this
      */
     public function addApiGroup(string $apiGroup)
@@ -18,7 +17,6 @@ class Rule extends Instance
     /**
      * Batch-add multiple API groups.
      *
-     * @param  array  $apiGroups
      * @return $this
      */
     public function addApiGroups(array $apiGroups)
@@ -43,7 +41,6 @@ class Rule extends Instance
     /**
      * Add a new resource to the list.
      *
-     * @param  string  $resource
      * @return $this
      */
     public function addResource(string $resource)
@@ -58,7 +55,6 @@ class Rule extends Instance
     /**
      * Batch-add multiple resources.
      *
-     * @param  array  $resources
      * @return $this
      */
     public function addResources(array $resources)
@@ -73,7 +69,6 @@ class Rule extends Instance
     /**
      * Add a new resource name to the list.
      *
-     * @param  string  $name
      * @return $this
      */
     public function addResourceName(string $name)
@@ -99,7 +94,6 @@ class Rule extends Instance
     /**
      * Add a new verb to the list.
      *
-     * @param  string  $verb
      * @return $this
      */
     public function addVerb(string $verb)
@@ -110,7 +104,6 @@ class Rule extends Instance
     /**
      * Batch-add multiple verbs.
      *
-     * @param  array  $verbs
      * @return $this
      */
     public function addVerbs(array $verbs)

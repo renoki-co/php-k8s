@@ -9,7 +9,6 @@ trait HasAccessModes
     /**
      * Set the access modes.
      *
-     * @param  array  $accessModes
      * @return $this
      */
     public function setAccessModes(array $accessModes)
@@ -19,8 +18,6 @@ trait HasAccessModes
 
     /**
      * Get the access modes.
-     *
-     * @return array
      */
     public function getAccessModes(): array
     {

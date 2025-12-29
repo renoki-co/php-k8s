@@ -7,9 +7,6 @@ class Affinity extends Instance
     /**
      * Add a preference affinity.
      *
-     * @param  array  $expressions
-     * @param  array  $fieldsExpressions
-     * @param  int  $weight
      * @return $this
      */
     public function addPreference(array $expressions, array $fieldsExpressions, int $weight = 1)
@@ -43,9 +40,6 @@ class Affinity extends Instance
     /**
      * Add a preference affinity for nodeSelector.
      *
-     * @param  array  $expressions
-     * @param  array  $fieldsExpressions
-     * @param  int  $weight
      * @return $this
      */
     public function addNodeSelectorPreference(array $expressions, array $fieldsExpressions, int $weight = 1)
@@ -79,8 +73,6 @@ class Affinity extends Instance
     /**
      * Add a required affinity for nodeSelector.
      *
-     * @param  array  $expressions
-     * @param  array  $fieldsExpressions
      * @return $this
      */
     public function addNodeRequirement(array $expressions, array $fieldsExpressions)
@@ -111,9 +103,6 @@ class Affinity extends Instance
     /**
      * Add a required affinity for nodeSelector.
      *
-     * @param  array  $expressions
-     * @param  array  $fieldsExpressions
-     * @param  string  $topologyKey
      * @return $this
      */
     public function addLabelSelectorRequirement(array $expressions, array $fieldsExpressions, string $topologyKey)

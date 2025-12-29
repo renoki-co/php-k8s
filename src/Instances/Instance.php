@@ -12,7 +12,6 @@ class Instance implements Arrayable
     /**
      * Initialize the class.
      *
-     * @param  array  $attributes
      * @return void
      */
     public function __construct(array $attributes = [])

@@ -2,29 +2,29 @@
 
 namespace RenokiCo\PhpK8s\Traits\Cluster;
 
+use Composer\Semver\Comparator;
+use Composer\Semver\VersionParser;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
+use JsonException;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
-use vierbergenlars\SemVer\version as Semver;
 
 trait ChecksClusterVersion
 {
     /**
      * The Kubernetes cluster version.
-     *
-     * @var \vierbergenlars\SemVer\version|null
      */
-    protected $kubernetesVersion;
+    protected string $kubernetesVersion;
 
     /**
      * Load the cluster version.
      *
-     * @return void
      *
-     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     * @throws KubernetesAPIException|GuzzleException|JsonException
      */
     protected function loadClusterVersion(): void
     {
-        if ($this->kubernetesVersion) {
+        if (isset($this->kubernetesVersion)) {
             return;
         }
 
@@ -42,23 +42,24 @@ trait ChecksClusterVersion
             );
         }
 
-        $json = @json_decode($response->getBody(), true);
+        $json = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
-        $this->kubernetesVersion = new Semver($json['gitVersion']);
+        $parser = new VersionParser;
+        $this->kubernetesVersion = $parser->normalize($json['gitVersion']);
     }
 
     /**
      * Check if the cluster version is newer
      * than a specific version.
      *
-     * @param  string  $kubernetesVersion
-     * @return bool
+     *
+     * @throws KubernetesAPIException|GuzzleException|JsonException
      */
     public function newerThan(string $kubernetesVersion): bool
     {
         $this->loadClusterVersion();
 
-        return Semver::gte(
+        return Comparator::greaterThanOrEqualTo(
             $this->kubernetesVersion, $kubernetesVersion
         );
     }
@@ -67,14 +68,14 @@ trait ChecksClusterVersion
      * Check if the cluster version is older
      * than a specific version.
      *
-     * @param  string  $kubernetesVersion
-     * @return bool
+     *
+     * @throws KubernetesAPIException|GuzzleException|JsonException
      */
     public function olderThan(string $kubernetesVersion): bool
     {
         $this->loadClusterVersion();
 
-        return Semver::lt(
+        return Comparator::lessThan(
             $this->kubernetesVersion, $kubernetesVersion
         );
     }

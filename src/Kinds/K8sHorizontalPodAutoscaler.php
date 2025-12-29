@@ -40,7 +40,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Set the reference to the scaling resource.
      *
-     * @param  Scalable  $resource
      * @return $this
      */
     public function setResource(Scalable $resource)
@@ -55,7 +54,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Add a new metric.
      *
-     * @param  ResourceMetric  $metric
      * @return $this
      */
     public function addMetric(ResourceMetric $metric)
@@ -66,7 +64,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Add multiple metrics in one batch.
      *
-     * @param  array  $metrics
      * @return $this
      */
     public function addMetrics(array $metrics)
@@ -81,7 +78,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Set the metrics of the resource.
      *
-     * @param  array  $metrics
      * @return $this
      */
     public function setMetrics(array $metrics)
@@ -97,8 +93,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
 
     /**
      * Get the attached metrics.
-     *
-     * @return array
      */
     public function getMetrics(): array
     {
@@ -108,7 +102,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Set the minimum pod count.
      *
-     * @param  int  $replicas
      * @return $this
      */
     public function min(int $replicas)
@@ -118,8 +111,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
 
     /**
      * Get the min replicas amount.
-     *
-     * @return int
      */
     public function getMinReplicas(): int
     {
@@ -129,7 +120,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
     /**
      * Set the maximum pod count.
      *
-     * @param  int  $replicas
      * @return $this
      */
     public function max(int $replicas)
@@ -139,8 +129,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
 
     /**
      * Get the max replicas amount.
-     *
-     * @return int
      */
     public function getMaxReplicas(): int
     {
@@ -149,8 +137,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
 
     /**
      * Get the current replicas read by the HPA.
-     *
-     * @return int
      */
     public function getCurrentReplicasCount(): int
     {
@@ -159,8 +145,6 @@ class K8sHorizontalPodAutoscaler extends K8sResource implements InteractsWithK8s
 
     /**
      * Get the desired replicas count.
-     *
-     * @return int
      */
     public function getDesiredReplicasCount(): int
     {

@@ -58,6 +58,10 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
  * @method \RenokiCo\PhpK8s\Kinds\K8sDeployment getDeploymentByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllDeploymentsFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllDeployments(string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sReplicaSet replicaSet(array $attributes = [])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sReplicaSet getReplicaSetByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\ResourcesList getAllReplicaSetsFromAllNamespaces(array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\ResourcesList getAllReplicaSets(string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\Kinds\K8sJob job(array $attributes = [])
  * @method \RenokiCo\PhpK8s\Kinds\K8sJob getJobByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllJobsFromAllNamespaces(array $query = ['pretty' => 1])
@@ -74,6 +78,10 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
  * @method \RenokiCo\PhpK8s\Kinds\K8sHorizontalPodAutoscaler getHorizontalPodAutoscalerByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllHorizontalPodAutoscalersFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllHorizontalPodAutoscalers(string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sVerticalPodAutoscaler verticalPodAutoscaler(array $attributes = [])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sVerticalPodAutoscaler getVerticalPodAutoscalerByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\ResourcesList getAllVerticalPodAutoscalersFromAllNamespaces(array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\ResourcesList getAllVerticalPodAutoscalers(string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\Kinds\K8sServiceAccount serviceAccount(array $attributes = [])
  * @method \RenokiCo\PhpK8s\Kinds\K8sServiceAccount getServiceAccountByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllServiceAccountsFromAllNamespaces(array $query = ['pretty' => 1])
@@ -106,6 +114,10 @@ use RenokiCo\PhpK8s\Kinds\K8sResource;
  * @method \RenokiCo\PhpK8s\Kinds\K8sMutatingWebhookConfiguration getMutatingWebhookConfigurationByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllMutatingWebhookConfigurationsFromAllNamespaces(array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\ResourcesList getAllMutatingWebhookConfiguration(string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sEndpointSlice endpointSlice(array $attributes = [])
+ * @method \RenokiCo\PhpK8s\Kinds\K8sEndpointSlice getEndpointSliceByName(string $name, string $namespace = 'default', array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\ResourcesList getAllEndpointSlicesFromAllNamespaces(array $query = ['pretty' => 1])
+ * @method \RenokiCo\PhpK8s\ResourcesList getAllEndpointSlices(string $namespace = 'default', array $query = ['pretty' => 1])
  * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYaml(string $yaml)
  * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromYamlFile(string $path, \Closure $callback = null)
  * @method \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource] fromTemplatedYamlFile(string $path, array $replace, \Closure $callback = null)
@@ -152,25 +164,41 @@ class KubernetesCluster
         self::WATCH_LOGS_OP => 'GET',
         self::EXEC_OP => 'POST',
         self::ATTACH_OP => 'POST',
+        self::APPLY_OP => 'PATCH',
+        self::JSON_PATCH_OP => 'PATCH',
+        self::JSON_MERGE_PATCH_OP => 'PATCH',
     ];
 
     const GET_OP = 'get';
+
     const CREATE_OP = 'create';
+
     const REPLACE_OP = 'replace';
+
     const DELETE_OP = 'delete';
+
     const LOG_OP = 'logs';
+
     const WATCH_OP = 'watch';
+
     const WATCH_LOGS_OP = 'watch_logs';
+
     const EXEC_OP = 'exec';
+
     const ATTACH_OP = 'attach';
+
+    const APPLY_OP = 'apply';
+
+    const JSON_PATCH_OP = 'json_patch';
+
+    const JSON_MERGE_PATCH_OP = 'json_merge_patch';
 
     /**
      * Create a new class instance.
      *
-     * @param  string|null  $url
      * @return void
      */
-    public function __construct(string $url = null)
+    public function __construct(?string $url = null)
     {
         $this->url = $url;
     }
@@ -178,7 +206,6 @@ class KubernetesCluster
     /**
      * Set the K8s resource class.
      *
-     * @param  string  $resourceClass
      * @return $this
      */
     public function setResourceClass(string $resourceClass)
@@ -191,10 +218,7 @@ class KubernetesCluster
     /**
      * Run a specific operation for the API path with a specific payload.
      *
-     * @param  string  $operation
-     * @param  string  $path
      * @param  string|null|Closure  $payload
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -202,15 +226,22 @@ class KubernetesCluster
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         switch ($operation) {
-            case static::WATCH_OP: return $this->watchPath($path, $payload, $query);
+            case static::WATCH_OP:
+                return $this->watchPath($path, $payload, $query);
+            case static::WATCH_LOGS_OP:
+                return $this->watchLogsPath($path, $payload, $query);
+            case static::EXEC_OP:
+                return $this->execPath($path, $query);
+            case static::ATTACH_OP:
+                return $this->attachPath($path, $payload, $query);
+            case static::APPLY_OP:
+                return $this->applyPath($path, $payload, $query);
+            case static::JSON_PATCH_OP:
+                return $this->jsonPatchPath($path, $payload, $query);
+            case static::JSON_MERGE_PATCH_OP:
+                return $this->jsonMergePatchPath($path, $payload, $query);
+            default:
                 break;
-            case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query);
-                break;
-            case static::EXEC_OP: return $this->execPath($path, $query);
-                break;
-            case static::ATTACH_OP: return $this->attachPath($path, $payload, $query);
-                break;
-            default: break;
         }
 
         $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
@@ -221,70 +252,159 @@ class KubernetesCluster
     /**
      * Watch for the current resource or a resource list.
      *
-     * @param  string  $path
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return bool
      */
     protected function watchPath(string $path, Closure $callback, array $query = ['pretty' => 1])
     {
         $resourceClass = $this->resourceClass;
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
-        $data = null;
 
-        while (($data = fgets($sock)) == true) {
-            $data = @json_decode($data, true);
+        if ($sock === false) {
+            return null;
+        }
 
-            ['type' => $type, 'object' => $attributes] = $data;
+        // Set stream to non-blocking mode to allow timeout handling
+        stream_set_blocking($sock, false);
 
-            $call = call_user_func(
-                $callback,
-                $type,
-                new $resourceClass($this, $attributes)
-            );
+        // Calculate overall timeout: server timeout + buffer for network/processing
+        $timeout = ($query['timeoutSeconds'] ?? 30) + 5;
+        $endTime = time() + $timeout;
 
-            if (! is_null($call)) {
+        $buffer = '';
+
+        while (time() < $endTime) {
+            // Try to read data (non-blocking)
+            $chunk = fread($sock, 8192);
+
+            if ($chunk === false) {
+                // Error occurred
                 fclose($sock);
 
-                unset($data);
+                return null;
+            }
 
-                return $call;
+            if ($chunk === '') {
+                // No data available, check if stream ended
+                if (feof($sock)) {
+                    break;
+                }
+
+                // No data yet, sleep briefly and continue
+                usleep(100000); // 100ms
+
+                continue;
+            }
+
+            // Append chunk to buffer
+            $buffer .= $chunk;
+
+            // Process complete lines from buffer
+            while (($pos = strpos($buffer, "\n")) !== false) {
+                $line = substr($buffer, 0, $pos);
+                $buffer = substr($buffer, $pos + 1);
+
+                if (trim($line) === '') {
+                    continue;
+                }
+
+                $data = @json_decode($line, true);
+
+                if (! $data || ! isset($data['type'], $data['object'])) {
+                    continue;
+                }
+
+                ['type' => $type, 'object' => $attributes] = $data;
+
+                $call = call_user_func(
+                    $callback,
+                    $type,
+                    new $resourceClass($this, $attributes)
+                );
+
+                if (! is_null($call)) {
+                    fclose($sock);
+
+                    return $call;
+                }
             }
         }
+
+        fclose($sock);
+
+        return null;
     }
 
     /**
      * Watch for the logs for the resource.
      *
-     * @param  string  $path
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return bool
      */
     protected function watchLogsPath(string $path, Closure $callback, array $query = ['pretty' => 1])
     {
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
 
-        $data = null;
+        if ($sock === false) {
+            return null;
+        }
 
-        while (($data = fgets($sock)) == true) {
-            $call = call_user_func($callback, $data);
+        // Set stream to non-blocking mode to allow timeout handling
+        stream_set_blocking($sock, false);
 
-            if (! is_null($call)) {
+        // Calculate overall timeout: server timeout + buffer for network/processing
+        $timeout = ($query['timeoutSeconds'] ?? 30) + 5;
+        $endTime = time() + $timeout;
+
+        $buffer = '';
+
+        while (time() < $endTime) {
+            // Try to read data (non-blocking)
+            $chunk = fread($sock, 8192);
+
+            if ($chunk === false) {
+                // Error occurred
                 fclose($sock);
 
-                unset($data);
+                return null;
+            }
 
-                return $call;
+            if ($chunk === '') {
+                // No data available, check if stream ended
+                if (feof($sock)) {
+                    break;
+                }
+
+                // No data yet, sleep briefly and continue
+                usleep(100000); // 100ms
+
+                continue;
+            }
+
+            // Append chunk to buffer
+            $buffer .= $chunk;
+
+            // Process complete lines from buffer
+            while (($pos = strpos($buffer, "\n")) !== false) {
+                $line = substr($buffer, 0, $pos);
+                $buffer = substr($buffer, $pos + 1);
+
+                $call = call_user_func($callback, $line . "\n");
+
+                if (! is_null($call)) {
+                    fclose($sock);
+
+                    return $call;
+                }
             }
         }
+
+        fclose($sock);
+
+        return null;
     }
 
     /**
      * Call exec on the resource.
      *
-     * @param  string  $path
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -314,9 +434,6 @@ class KubernetesCluster
     /**
      * Call attach on the resource.
      *
-     * @param  string  $path
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -342,6 +459,60 @@ class KubernetesCluster
 
             throw $e;
         }
+    }
+
+    /**
+     * Apply server-side apply to the resource.
+     *
+     * @return mixed
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function applyPath(string $path, string $payload, array $query = ['pretty' => 1])
+    {
+        $options = [
+            'headers' => [
+                'Content-Type' => 'application/apply-patch+yaml',
+            ],
+        ];
+
+        return $this->makeRequest(static::$operations[static::APPLY_OP], $path, $payload, $query, $options);
+    }
+
+    /**
+     * Apply JSON Patch (RFC 6902) to the resource.
+     *
+     * @return mixed
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function jsonPatchPath(string $path, string $payload, array $query = ['pretty' => 1])
+    {
+        $options = [
+            'headers' => [
+                'Content-Type' => 'application/json-patch+json',
+            ],
+        ];
+
+        return $this->makeRequest(static::$operations[static::JSON_PATCH_OP], $path, $payload, $query, $options);
+    }
+
+    /**
+     * Apply JSON Merge Patch (RFC 7396) to the resource.
+     *
+     * @return mixed
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    protected function jsonMergePatchPath(string $path, string $payload, array $query = ['pretty' => 1])
+    {
+        $options = [
+            'headers' => [
+                'Content-Type' => 'application/merge-patch+json',
+            ],
+        ];
+
+        return $this->makeRequest(static::$operations[static::JSON_MERGE_PATCH_OP], $path, $payload, $query, $options);
     }
 
     /**

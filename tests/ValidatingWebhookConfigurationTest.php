@@ -172,7 +172,6 @@ class ValidatingWebhookConfigurationTest extends TestCase
         $this->assertTrue($validatingWebhookConfiguration->delete());
 
         while ($validatingWebhookConfiguration->exists()) {
-            dump("Awaiting for validation webhook configuration {$validatingWebhookConfiguration->getName()} to be deleted...");
             sleep(1);
         }
 

@@ -49,8 +49,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
     /**
      * Set the updating strategy for the set.
      *
-     * @param  string  $strategy
-     * @param  int  $maxUnavailable
      * @return $this
      */
     public function setUpdateStrategy(string $strategy, int $maxUnavailable = 1)
@@ -64,8 +62,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
      */
     public function podsSelector(): array
     {
@@ -80,8 +76,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the number of scheduled nodes that run the DaemonSet.
-     *
-     * @return int
      */
     public function getScheduledCount(): int
     {
@@ -90,8 +84,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the number of scheduled nodes that should not run the DaemonSet.
-     *
-     * @return int
      */
     public function getMisscheduledCount(): int
     {
@@ -100,8 +92,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the number of total nodes that should run the DaemonSet.
-     *
-     * @return int
      */
     public function getNodesCount(): int
     {
@@ -110,8 +100,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the total desired nodes that run the DaemonSet.
-     *
-     * @return int
      */
     public function getDesiredCount(): int
     {
@@ -120,8 +108,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the total nodes that are running the DaemonSet.
-     *
-     * @return int
      */
     public function getReadyCount(): int
     {
@@ -130,8 +116,6 @@ class K8sDaemonSet extends K8sResource implements InteractsWithK8sCluster, Podab
 
     /**
      * Get the total nodes that are unavailable to process the DaemonSet.
-     *
-     * @return int
      */
     public function getUnavailableClount(): int
     {

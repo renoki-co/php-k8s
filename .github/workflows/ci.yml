@@ -16,30 +16,56 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1', '8.2']
-        kubernetes: ['1.24.12', '1.25.8', '1.26.3']
-        laravel: ['9.*', '10.*', '11.*']
+        php: ["8.2", "8.3", "8.4"]
+        kubernetes: ["1.32.9", "1.33.5", "1.34.1"]
+        laravel: ["11.*", "12.*"]
         prefer: [prefer-lowest, prefer-stable]
         include:
-          - laravel: "9.*"
-            testbench: "7.*"
-          - laravel: "10.*"
-            testbench: "8.*"
           - laravel: "11.*"
             testbench: "9.*"
-        exclude:
-          - laravel: "11.*"
-            php: "8.1"
+          - laravel: "12.*"
+            testbench: "10.*"
+          # PHP 8.5 only for Laravel 12
+          - php: "8.5"
+            kubernetes: "1.32.9"
+            laravel: "12.*"
+            testbench: "10.*"
+            prefer: prefer-lowest
+          - php: "8.5"
+            kubernetes: "1.32.9"
+            laravel: "12.*"
+            testbench: "10.*"
+            prefer: prefer-stable
+          - php: "8.5"
+            kubernetes: "1.33.5"
+            laravel: "12.*"
+            testbench: "10.*"
+            prefer: prefer-lowest
+          - php: "8.5"
+            kubernetes: "1.33.5"
+            laravel: "12.*"
+            testbench: "10.*"
+            prefer: prefer-stable
+          - php: "8.5"
+            kubernetes: "1.34.1"
+            laravel: "12.*"
+            testbench: "10.*"
+            prefer: prefer-lowest
+          - php: "8.5"
+            kubernetes: "1.34.1"
+            laravel: "12.*"
+            testbench: "10.*"
+            prefer: prefer-stable
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -48,18 +74,47 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, yaml
           coverage: pcov
 
-      - uses: actions/cache@v3.0.5
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Prepare cache key
+        id: prep
+        run: |
+          PHP_VERSION=${{ matrix.php }}
+          LARAVEL_VERSION=${{ matrix.laravel }}
+          PREFER_VERSION=${{ matrix.prefer }}
+
+          # Remove any .* from the versions
+          LARAVEL_VERSION=${LARAVEL_VERSION//.*}
+
+          echo "cache-key=composer-php-$PHP_VERSION-$LARAVEL_VERSION-$PREFER_VERSION-${{ hashFiles('composer.json') }}" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
         name: Cache dependencies
         with:
-          path: ~/.composer/cache/files
-          key: composer-php-${{ matrix.php }}-${{ matrix.laravel }}-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ steps.prep.outputs.cache-key }}
 
       - uses: medyagh/setup-minikube@latest
         name: Setup Minikube
         with:
-          minikube-version: 1.29.0
+          minikube-version: 1.37.0
+          driver: docker
           container-runtime: containerd
           kubernetes-version: v${{ matrix.kubernetes }}
+
+      - name: Enable VolumeSnapshots, CSI hostpath driver, and metrics-server
+        run: |
+          minikube addons enable volumesnapshots
+          minikube addons enable csi-hostpath-driver
+          minikube addons enable metrics-server
+
+      - name: Install VPA (VerticalPodAutoscaler)
+        run: |
+          git clone https://github.com/kubernetes/autoscaler.git /tmp/autoscaler
+          cd /tmp/autoscaler/vertical-pod-autoscaler
+          ./hack/vpa-up.sh
 
       - name: Run Kubernetes Proxy
         run: |
@@ -81,11 +136,12 @@ jobs:
       - name: Setting CRDs for testing
         run: |
           kubectl apply -f https://raw.githubusercontent.com/bitnami-labs/sealed-secrets/main/helm/sealed-secrets/crds/bitnami.com_sealedsecrets.yaml
+          kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
 
       - name: Run tests
         run: |
           vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
-      - uses: codecov/codecov-action@v3.1.0
+      - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: false

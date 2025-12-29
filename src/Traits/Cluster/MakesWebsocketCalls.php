@@ -29,14 +29,11 @@ trait MakesWebsocketCalls
     /**
      * Get a WS-ready client for the Cluster.
      * Returns the React Event Loop and the WS connector as an array.
-     *
-     * @param  string  $url
-     * @return array
      */
     public function getWsClient(string $url): array
     {
         $options = [
-            'timeout' => 20,
+            'timeout' => $this->timeout ?? 20.0,
             'tls' => [],
         ];
 
@@ -66,7 +63,7 @@ trait MakesWebsocketCalls
         }
 
         $loop = ReactFactory::create();
-        $socketConnector = new ReactSocketConnector($loop, $options);
+        $socketConnector = new ReactSocketConnector($options, $loop);
         $wsConnector = new WebSocketConnector($loop, $socketConnector);
 
         return [
@@ -78,7 +75,6 @@ trait MakesWebsocketCalls
     /**
      * Create a new socket connection as stream context.
      *
-     * @param  string  $callableUrl
      * @return resource
      */
     protected function createSocketConnection(string $callableUrl)
@@ -94,8 +90,6 @@ trait MakesWebsocketCalls
 
     /**
      * Build the stream context options for socket connections.
-     *
-     * @return array
      */
     protected function buildStreamContextOptions(): array
     {
@@ -138,12 +132,9 @@ trait MakesWebsocketCalls
      * Send a WS request over upgraded connection.
      * Returns a list of messages received from the connection.
      *
-     * @param  string  $path
-     * @param  Closure|null  $callback
-     * @param  array  $query
      * @return mixed
      */
-    protected function makeWsRequest(string $path, Closure $callback = null, array $query = ['pretty' => 1])
+    protected function makeWsRequest(string $path, ?Closure $callback = null, array $query = ['pretty' => 1])
     {
         $url = $this->getCallableUrl($path, $query);
 

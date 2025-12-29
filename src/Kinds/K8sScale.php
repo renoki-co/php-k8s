@@ -41,8 +41,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
      */
     public function resourcePath(): string
     {
@@ -52,7 +50,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the original scalable resource for this scale.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sResource  $resource
      * @return $this
      */
     public function setScalableResource(K8sResource $resource)
@@ -65,7 +62,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     /**
      * Make a call to the cluster to get a fresh instance.
      *
-     * @param  array  $query
      * @return $this
      */
     public function refresh(array $query = ['pretty' => 1])
@@ -78,7 +74,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     /**
      * Make a call to the cluster to get fresh original values.
      *
-     * @param  array  $query
      * @return $this
      */
     public function refreshOriginal(array $query = ['pretty' => 1])
@@ -86,5 +81,53 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
         $this->resource->refreshOriginal($query);
 
         return parent::refreshOriginal($query);
+    }
+
+    /**
+     * Create the scale resource.
+     * Scale subresources should use replace (PUT) operations, not create (POST).
+     * Scale subresources don't support POST, so we use PUT to the scale subresource path.
+     *
+     * @return \RenokiCo\PhpK8s\Kinds\K8sResource
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function create(array $query = ['pretty' => 1])
+    {
+        return $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                \RenokiCo\PhpK8s\KubernetesCluster::REPLACE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
+    }
+
+    /**
+     * Update the scale resource.
+     * This is the correct operation for scale subresources.
+     * Scale is updated via PUT to the scale subresource path.
+     *
+     *
+     * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
+     */
+    public function update(array $query = ['pretty' => 1]): bool
+    {
+        $this->refreshOriginal();
+        $this->refreshResourceVersion();
+
+        $instance = $this->cluster
+            ->setResourceClass(get_class($this))
+            ->runOperation(
+                \RenokiCo\PhpK8s\KubernetesCluster::REPLACE_OP,
+                $this->resourcePath(),
+                $this->toJsonPayload(),
+                $query
+            );
+
+        $this->syncWith($instance->toArray());
+
+        return true;
     }
 }

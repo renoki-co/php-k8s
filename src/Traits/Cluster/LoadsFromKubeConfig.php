@@ -25,7 +25,6 @@ trait LoadsFromKubeConfig
     /**
      * Set the temporary folder for the writings.
      *
-     * @param  string  $tempFolder
      * @return void
      */
     public static function setTempFolder(string $tempFolder)
@@ -37,14 +36,13 @@ trait LoadsFromKubeConfig
      * Loads the configuration fro the KubernetesCluster instance
      * according to the current KUBECONFIG environment variable.
      *
-     * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
      */
-    public static function fromKubeConfigVariable(string $context = null)
+    public static function fromKubeConfigVariable(?string $context = null)
     {
         /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $cluster = new static;
@@ -78,11 +76,9 @@ trait LoadsFromKubeConfig
     /**
      * Load configuration from a Kube Config context.
      *
-     * @param  string  $yaml
-     * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
      */
-    public static function fromKubeConfigYaml(string $yaml, string $context = null)
+    public static function fromKubeConfigYaml(string $yaml, ?string $context = null)
     {
         /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $cluster = new static;
@@ -93,11 +89,9 @@ trait LoadsFromKubeConfig
     /**
      * Load configuration from a Kube Config file context.
      *
-     * @param  string  $path
-     * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
      */
-    public static function fromKubeConfigYamlFile(string $path = '/.kube/config', string $context = null)
+    public static function fromKubeConfigYamlFile(string $path = '/.kube/config', ?string $context = null)
     {
         return (new static)->fromKubeConfigYaml(file_get_contents($path), $context);
     }
@@ -105,11 +99,9 @@ trait LoadsFromKubeConfig
     /**
      * Load configuration from an Array.
      *
-     * @param  array  $kubeConfigArray
-     * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
      */
-    public static function fromKubeConfigArray(array $kubeConfigArray, string $context = null)
+    public static function fromKubeConfigArray(array $kubeConfigArray, ?string $context = null)
     {
         $cluster = new static;
 
@@ -120,15 +112,13 @@ trait LoadsFromKubeConfig
      * Load the Kube Config configuration from an array,
      * coming from a Kube Config file.
      *
-     * @param  array  $kubeconfig
-     * @param  string|null  $context
      * @return \RenokiCo\PhpK8s\KubernetesCluster
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigClusterNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
      */
-    protected function loadKubeConfigFromArray(array $kubeconfig, string $context = null)
+    protected function loadKubeConfigFromArray(array $kubeconfig, ?string $context = null)
     {
         /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
 
@@ -239,11 +229,6 @@ trait LoadsFromKubeConfig
      * Create a file in the temporary directory for base-encoded data
      * coming from the KubeConfig file.
      *
-     * @param  string  $context
-     * @param  string  $userName
-     * @param  string  $url
-     * @param  string  $fileName
-     * @param  string  $contents
      * @return string
      *
      * @throws \Exception
@@ -258,7 +243,7 @@ trait LoadsFromKubeConfig
         /** @var \RenokiCo\PhpK8s\KubernetesCluster $this */
         $tempFolder = static::$tempFolder ?: sys_get_temp_dir();
 
-        $tempFilePath = $tempFolder.DIRECTORY_SEPARATOR.Str::slug("ctx-{$context}-{$userName}-{$url}")."-{$fileName}";
+        $tempFilePath = $tempFolder . DIRECTORY_SEPARATOR . Str::slug("ctx-{$context}-{$userName}-{$url}") . "-{$fileName}";
 
         if (file_exists($tempFilePath)) {
             return $tempFilePath;
@@ -279,10 +264,6 @@ trait LoadsFromKubeConfig
 
     /**
      * Merge the two kubeconfig contents.
-     *
-     * @param  array  $kubeconfig1
-     * @param  array  $kubeconfig2
-     * @return array
      */
     protected static function mergeKubeconfigContents(array $kubeconfig1, array $kubeconfig2): array
     {

@@ -7,7 +7,6 @@ trait HasSelector
     /**
      * Set the selectors.
      *
-     * @param  array  $selectors
      * @return $this
      */
     public function setSelectors(array $selectors = [])
@@ -17,8 +16,6 @@ trait HasSelector
 
     /**
      * Get the selectors.
-     *
-     * @return array
      */
     public function getSelectors(): array
     {

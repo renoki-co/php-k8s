@@ -34,7 +34,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the spec rules.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function setRules(array $rules = [])
@@ -45,7 +44,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Add a new rule to the list.
      *
-     * @param  array  $rule
      * @return $this
      */
     public function addRule(array $rule)
@@ -56,7 +54,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Batch-add multiple rules to the list.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function addRules(array $rules)
@@ -70,8 +67,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
 
     /**
      * Get the spec rules.
-     *
-     * @return array
      */
     public function getRules(): array
     {
@@ -81,7 +76,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
     /**
      * Set the spec tls.
      *
-     * @param  array  $tlsData
      * @return $this
      */
     public function setTls(array $tlsData = [])
@@ -91,8 +85,6 @@ class K8sIngress extends K8sResource implements InteractsWithK8sCluster, Watchab
 
     /**
      * Get the tls spec.
-     *
-     * @return array
      */
     public function getTls(): array
     {

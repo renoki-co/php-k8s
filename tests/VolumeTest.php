@@ -13,15 +13,13 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mariadb = $this->createMariadbContainer()
             ->addMountedVolumes([$mountedVolume])
             ->setMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
-            ->setName('mysql')
-            ->setContainers([$mysql])
+            ->setName('mariadb')
+            ->setContainers([$mariadb])
             ->addVolumes([$volume])
             ->setVolumes([$volume]);
 
@@ -36,7 +34,7 @@ class VolumeTest extends TestCase
         ], $mountedVolume->toArray());
 
         $this->assertEquals($pod->getVolumes()[0]->toArray(), $volume->toArray());
-        $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
+        $this->assertEquals($mariadb->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
     }
 
     public function test_volume_config_map()
@@ -52,14 +50,12 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path', 'some-key');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mariadb = $this->createMariadbContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
-            ->setName('mysql')
-            ->setContainers([$mysql])
+            ->setName('mariadb')
+            ->setContainers([$mariadb])
             ->addVolumes([$volume]);
 
         $this->assertEquals([
@@ -74,7 +70,7 @@ class VolumeTest extends TestCase
         ], $mountedVolume->toArray());
 
         $this->assertEquals($pod->getVolumes()[0]->toArray(), $volume->toArray());
-        $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
+        $this->assertEquals($mariadb->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
     }
 
     public function test_volume_secret()
@@ -90,14 +86,12 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path', 'some-key');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mariadb = $this->createMariadbContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
-            ->setName('mysql')
-            ->setContainers([$mysql])
+            ->setName('mariadb')
+            ->setContainers([$mariadb])
             ->addVolumes([$volume]);
 
         $this->assertEquals([
@@ -112,7 +106,7 @@ class VolumeTest extends TestCase
         ], $mountedVolume->toArray());
 
         $this->assertEquals($pod->getVolumes()[0]->toArray(), $volume->toArray());
-        $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
+        $this->assertEquals($mariadb->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
     }
 
     public function test_volume_gce_pd()
@@ -121,14 +115,12 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mariadb = $this->createMariadbContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
-            ->setName('mysql')
-            ->setContainers([$mysql])
+            ->setName('mariadb')
+            ->setContainers([$mariadb])
             ->addVolumes([$volume]);
 
         $this->assertEquals([
@@ -145,7 +137,7 @@ class VolumeTest extends TestCase
         ], $mountedVolume->toArray());
 
         $this->assertEquals($pod->getVolumes()[0]->toArray(), $volume->toArray());
-        $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
+        $this->assertEquals($mariadb->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
     }
 
     public function test_volume_aws_ebs()
@@ -154,14 +146,12 @@ class VolumeTest extends TestCase
 
         $mountedVolume = $volume->mountTo('/some-path');
 
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
+        $mariadb = $this->createMariadbContainer()
             ->addMountedVolumes([$mountedVolume]);
 
         $pod = K8s::pod()
-            ->setName('mysql')
-            ->setContainers([$mysql])
+            ->setName('mariadb')
+            ->setContainers([$mariadb])
             ->addVolumes([$volume]);
 
         $this->assertEquals([
@@ -178,6 +168,6 @@ class VolumeTest extends TestCase
         ], $mountedVolume->toArray());
 
         $this->assertEquals($pod->getVolumes()[0]->toArray(), $volume->toArray());
-        $this->assertEquals($mysql->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
+        $this->assertEquals($mariadb->getMountedVolumes()[0]->toArray(), $mountedVolume->toArray());
     }
 }

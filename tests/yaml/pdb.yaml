@@ -1,11 +1,11 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: mysql-pdb
+  name: mariadb-pdb
   labels:
     tier: backend
   annotations:
-    mysql/annotation: "yes"
+    mariadb/annotation: "yes"
 spec:
   selector:
     matchLabels:
@@ -15,11 +15,11 @@ spec:
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: mysql-pdb
+  name: mariadb-pdb
   labels:
     tier: backend
   annotations:
-    mysql/annotation: "yes"
+    mariadb/annotation: "yes"
 spec:
   selector:
     matchLabels:

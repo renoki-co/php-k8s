@@ -16,8 +16,6 @@ trait IsImmutable
 
     /**
      * Check if the resource is immutable.
-     *
-     * @return bool
      */
     public function isImmutable(): bool
     {

@@ -13,19 +13,10 @@ class StatefulSetTest extends TestCase
 {
     public function test_stateful_set_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+        $pod = $this->createMariadbPod();
 
         $svc = $this->cluster->service()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ]);
@@ -33,15 +24,15 @@ class StatefulSetTest extends TestCase
         $standard = $this->cluster->getStorageClassByName('standard');
 
         $pvc = $this->cluster->persistentVolumeClaim()
-            ->setName('mysql-pvc')
+            ->setName('mariadb-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass($standard);
 
         $sts = $this->cluster->statefulSet()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setReplicas(3)
             ->setService($svc)
             ->setTemplate($pod)
@@ -49,9 +40,9 @@ class StatefulSetTest extends TestCase
             ->setVolumeClaims([$pvc]);
 
         $this->assertEquals('apps/v1', $sts->getApiVersion());
-        $this->assertEquals('mysql', $sts->getName());
+        $this->assertEquals('mariadb', $sts->getName());
         $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $sts->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $sts->getAnnotations());
         $this->assertEquals(3, $sts->getReplicas());
         $this->assertEquals($svc->getName(), $sts->getService());
         $this->assertEquals($pod->getName(), $sts->getTemplate()->getName());
@@ -63,19 +54,10 @@ class StatefulSetTest extends TestCase
 
     public function test_stateful_set_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+        $pod = $this->createMariadbPod();
 
         $svc = $this->cluster->service()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ]);
@@ -83,7 +65,7 @@ class StatefulSetTest extends TestCase
         $standard = $this->cluster->getStorageClassByName('standard');
 
         $pvc = $this->cluster->persistentVolumeClaim()
-            ->setName('mysql-pvc')
+            ->setName('mariadb-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass($standard);
@@ -91,9 +73,9 @@ class StatefulSetTest extends TestCase
         $sts = $this->cluster->fromYamlFile(__DIR__.'/yaml/statefulset.yaml');
 
         $this->assertEquals('apps/v1', $sts->getApiVersion());
-        $this->assertEquals('mysql', $sts->getName());
+        $this->assertEquals('mariadb', $sts->getName());
         $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $sts->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $sts->getAnnotations());
         $this->assertEquals(3, $sts->getReplicas());
         $this->assertEquals($svc->getName(), $sts->getService());
         $this->assertEquals($pod->getName(), $sts->getTemplate()->getName());
@@ -118,23 +100,17 @@ class StatefulSetTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
-
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setLabels(['tier' => 'backend', 'statefulset-name' => 'mysql'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
-            ->setContainers([$mysql]);
+        $pod = $this->createMariadbPod([
+            'labels' => ['tier' => 'backend', 'statefulset-name' => 'mariadb'],
+            'container' => [
+                'includeEnv' => true,
+                'additionalPort' => 3307,
+            ],
+        ])
+            ->setAnnotations(['mariadb/annotation' => 'yes']);
 
         $svc = $this->cluster->service()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setPorts([
                 ['protocol' => 'TCP', 'port' => 3306, 'targetPort' => 3306],
             ])
@@ -143,15 +119,15 @@ class StatefulSetTest extends TestCase
         $standard = $this->cluster->getStorageClassByName('standard');
 
         $pvc = $this->cluster->persistentVolumeClaim()
-            ->setName('mysql-pvc')
+            ->setName('mariadb-pvc')
             ->setCapacity(1, 'Gi')
             ->setAccessModes(['ReadWriteOnce'])
             ->setStorageClass($standard);
 
         $sts = $this->cluster->statefulSet()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['tier' => 'backend']])
             ->setReplicas(1)
             ->setService($svc)
@@ -169,9 +145,9 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sStatefulSet::class, $sts);
 
         $this->assertEquals('apps/v1', $sts->getApiVersion());
-        $this->assertEquals('mysql', $sts->getName());
+        $this->assertEquals('mariadb', $sts->getName());
         $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $sts->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $sts->getAnnotations());
         $this->assertEquals(1, $sts->getReplicas());
         $this->assertEquals($svc->getName(), $sts->getService());
         $this->assertEquals($pod->getName(), $sts->getTemplate()->getName());
@@ -181,7 +157,6 @@ class StatefulSetTest extends TestCase
         $this->assertInstanceOf(K8sPersistentVolumeClaim::class, $sts->getVolumeClaims()[0]);
 
         while (! $sts->allPodsAreRunning()) {
-            dump("Waiting for pods of {$sts->getName()} to be up and running...");
             sleep(1);
         }
 
@@ -206,7 +181,6 @@ class StatefulSetTest extends TestCase
         $sts->refresh();
 
         while ($sts->getReadyReplicasCount() === 0) {
-            dump("Waiting for pods of {$sts->getName()} to have ready replicas...");
             sleep(1);
             $sts->refresh();
         }
@@ -233,16 +207,16 @@ class StatefulSetTest extends TestCase
 
     public function runGetTests()
     {
-        $sts = $this->cluster->getStatefulSetByName('mysql');
+        $sts = $this->cluster->getStatefulSetByName('mariadb');
 
         $this->assertInstanceOf(K8sStatefulSet::class, $sts);
 
         $this->assertTrue($sts->isSynced());
 
         $this->assertEquals('apps/v1', $sts->getApiVersion());
-        $this->assertEquals('mysql', $sts->getName());
+        $this->assertEquals('mariadb', $sts->getName());
         $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $sts->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $sts->getAnnotations());
         $this->assertEquals(1, $sts->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $sts->getTemplate());
@@ -251,7 +225,7 @@ class StatefulSetTest extends TestCase
 
     public function attachPodAutoscaler()
     {
-        $sts = $this->cluster->getStatefulSetByName('mysql');
+        $sts = $this->cluster->getStatefulSetByName('mariadb');
 
         $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
 
@@ -261,7 +235,7 @@ class StatefulSetTest extends TestCase
             ->averageValue('1k');
 
         $hpa = $this->cluster->horizontalPodAutoscaler()
-            ->setName('sts-mysql')
+            ->setName('sts-mariadb')
             ->setResource($sts)
             ->addMetrics([$cpuMetric, $svcMetric])
             ->min(1)
@@ -270,7 +244,6 @@ class StatefulSetTest extends TestCase
 
         while ($hpa->getCurrentReplicasCount() < 1) {
             $hpa->refresh();
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
             sleep(1);
         }
 
@@ -279,7 +252,7 @@ class StatefulSetTest extends TestCase
 
     public function runUpdateTests()
     {
-        $sts = $this->cluster->getStatefulSetByName('mysql');
+        $sts = $this->cluster->getStatefulSetByName('mariadb');
 
         $this->assertTrue($sts->isSynced());
 
@@ -290,7 +263,7 @@ class StatefulSetTest extends TestCase
         $this->assertTrue($sts->isSynced());
 
         $this->assertEquals('apps/v1', $sts->getApiVersion());
-        $this->assertEquals('mysql', $sts->getName());
+        $this->assertEquals('mariadb', $sts->getName());
         $this->assertEquals(['tier' => 'backend'], $sts->getLabels());
         $this->assertEquals([], $sts->getAnnotations());
         $this->assertEquals(2, $sts->getReplicas());
@@ -301,37 +274,34 @@ class StatefulSetTest extends TestCase
 
     public function runDeletionTests()
     {
-        $sts = $this->cluster->getStatefulSetByName('mysql');
-        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('sts-mysql');
+        $sts = $this->cluster->getStatefulSetByName('mariadb');
+        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('sts-mariadb');
 
         $this->assertTrue($sts->delete());
         $this->assertTrue($hpa->delete());
 
         while ($hpa->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($sts->exists()) {
-            dump("Awaiting for statefulset {$sts->getName()} to be deleted...");
             sleep(1);
         }
 
         while ($sts->getPods()->count() > 0) {
-            dump("Awaiting for statefulset {$sts->getName()}'s pods to be deleted...");
             sleep(1);
         }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getStatefulSetByName('mysql');
-        $this->cluster->getHorizontalPodAutoscalerByName('sts-mysql');
+        $this->cluster->getStatefulSetByName('mariadb');
+        $this->cluster->getHorizontalPodAutoscalerByName('sts-mariadb');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->statefulSet()->watchAll(function ($type, $sts) {
-            if ($sts->getName() === 'mysql') {
+            if ($sts->getName() === 'mariadb') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -341,8 +311,8 @@ class StatefulSetTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->statefulSet()->watchByName('mysql', function ($type, $sts) {
-            return $sts->getName() === 'mysql';
+        $watch = $this->cluster->statefulSet()->watchByName('mariadb', function ($type, $sts) {
+            return $sts->getName() === 'mariadb';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
@@ -350,12 +320,11 @@ class StatefulSetTest extends TestCase
 
     public function runScalingTests()
     {
-        $sts = $this->cluster->getStatefulSetByName('mysql');
+        $sts = $this->cluster->getStatefulSetByName('mariadb');
 
         $scaler = $sts->scale(2);
 
         while ($sts->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
-            dump("Awaiting for statefulset {$sts->getName()} to scale to 2 replicas...");
             $scaler->refresh();
             $sts->refresh();
             sleep(1);

@@ -15,11 +15,7 @@ use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\Resource\HasTemplate;
 
-class K8sStatefulSet extends K8sResource implements
-    InteractsWithK8sCluster,
-    Podable,
-    Scalable,
-    Watchable
+class K8sStatefulSet extends K8sResource implements InteractsWithK8sCluster, Podable, Scalable, Watchable
 {
     use CanScale;
     use HasPods {
@@ -56,8 +52,6 @@ class K8sStatefulSet extends K8sResource implements
     /**
      * Set the updating strategy for the set.
      *
-     * @param  string  $strategy
-     * @param  int  $partition
      * @return $this
      */
     public function setUpdateStrategy(string $strategy, int $partition = 0)
@@ -109,7 +103,6 @@ class K8sStatefulSet extends K8sResource implements
     /**
      * Set the volume claims templates.
      *
-     * @param  array  $volumeClaims
      * @return $this
      */
     public function setVolumeClaims(array $volumeClaims = [])
@@ -126,7 +119,6 @@ class K8sStatefulSet extends K8sResource implements
     /**
      * Get the volume claims templates.
      *
-     * @param  bool  $asInstance
      * @return array
      */
     public function getVolumeClaims(bool $asInstance = true)
@@ -144,8 +136,6 @@ class K8sStatefulSet extends K8sResource implements
 
     /**
      * Get the selector for the pods that are owned by this resource.
-     *
-     * @return array
      */
     public function podsSelector(): array
     {
@@ -160,8 +150,6 @@ class K8sStatefulSet extends K8sResource implements
 
     /**
      * Get the current replicas.
-     *
-     * @return int
      */
     public function getCurrentReplicasCount(): int
     {
@@ -170,8 +158,6 @@ class K8sStatefulSet extends K8sResource implements
 
     /**
      * Get the ready replicas.
-     *
-     * @return int
      */
     public function getReadyReplicasCount(): int
     {
@@ -180,8 +166,6 @@ class K8sStatefulSet extends K8sResource implements
 
     /**
      * Get the total desired replicas.
-     *
-     * @return int
      */
     public function getDesiredReplicasCount(): int
     {

@@ -10,30 +10,61 @@ use RenokiCo\PhpK8s\ResourcesList;
 
 class DeploymentTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        // Clean up deployment and HPA if they exist
+        try {
+            $dep = $this->cluster->getDeploymentByName('mariadb');
+            if ($dep->exists()) {
+                $dep->delete();
+
+                $timeout = 30;
+                $start = time();
+                while ($dep->exists() && (time() - $start < $timeout)) {
+                    sleep(1);
+                }
+            }
+        } catch (\Exception $e) {
+            // Deployment doesn't exist, that's fine
+        }
+
+        try {
+            $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mariadb');
+            if ($hpa->exists()) {
+                $hpa->delete();
+
+                $timeout = 30;
+                $start = time();
+                while ($hpa->exists() && (time() - $start < $timeout)) {
+                    sleep(1);
+                }
+            }
+        } catch (\Exception $e) {
+            // HPA doesn't exist, that's fine
+        }
+
+        parent::tearDown();
+    }
+
     public function test_deployment_build()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
+        $mariadb = $this->createMariadbContainer();
 
         $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+            ->setName('mariadb')
+            ->setContainers([$mariadb]);
 
         $dep = $this->cluster->deployment()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setReplicas(3)
             ->setTemplate($pod);
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(3, $dep->getReplicas());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
 
@@ -42,23 +73,18 @@ class DeploymentTest extends TestCase
 
     public function test_deployment_from_yaml()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ]);
+        $mariadb = $this->createMariadbContainer();
 
         $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setContainers([$mysql]);
+            ->setName('mariadb')
+            ->setContainers([$mariadb]);
 
         $dep = $this->cluster->fromYamlFile(__DIR__.'/yaml/deployment.yaml');
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(3, $dep->getReplicas());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
 
@@ -80,25 +106,24 @@ class DeploymentTest extends TestCase
 
     public function runCreationTests()
     {
-        $mysql = K8s::container()
-            ->setName('mysql')
-            ->setImage('public.ecr.aws/docker/library/mysql', '5.7')
-            ->setPorts([
-                ['name' => 'mysql', 'protocol' => 'TCP', 'containerPort' => 3306],
-            ])
-            ->addPort(3307, 'TCP', 'mysql-alt')
-            ->setEnv(['MYSQL_ROOT_PASSWORD' => 'test']);
+        $mariadb = $this->createMariadbContainer([
+            'includeEnv' => true,
+            'additionalPort' => 3307,
+        ]);
 
-        $pod = $this->cluster->pod()
-            ->setName('mysql')
-            ->setLabels(['tier' => 'backend', 'deployment-name' => 'mysql'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
-            ->setContainers([$mysql]);
+        $pod = $this->createMariadbPod([
+            'labels' => ['tier' => 'backend', 'deployment-name' => 'mariadb'],
+            'container' => [
+                'includeEnv' => true,
+                'additionalPort' => 3307,
+            ],
+        ])
+            ->setAnnotations(['mariadb/annotation' => 'yes']);
 
         $dep = $this->cluster->deployment()
-            ->setName('mysql')
+            ->setName('mariadb')
             ->setLabels(['tier' => 'backend'])
-            ->setAnnotations(['mysql/annotation' => 'yes'])
+            ->setAnnotations(['mariadb/annotation' => 'yes'])
             ->setSelectors(['matchLabels' => ['tier' => 'backend']])
             ->setReplicas(1)
             ->setUpdateStrategy('RollingUpdate')
@@ -116,9 +141,9 @@ class DeploymentTest extends TestCase
         $this->assertInstanceOf(K8sDeployment::class, $dep);
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes'], $dep->getAnnotations());
         $this->assertEquals(1, $dep->getReplicas());
         $this->assertEquals(0, $dep->getMinReadySeconds());
         $this->assertEquals($pod->getName(), $dep->getTemplate()->getName());
@@ -126,7 +151,6 @@ class DeploymentTest extends TestCase
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
 
         while (! $dep->allPodsAreRunning()) {
-            dump("Waiting for pods of {$dep->getName()} to be up and running...");
             sleep(1);
         }
 
@@ -151,7 +175,6 @@ class DeploymentTest extends TestCase
         $dep->refresh();
 
         while ($dep->getReadyReplicasCount() === 0) {
-            dump("Waiting for pods of {$dep->getName()} to have ready replicas...");
             sleep(1);
             $dep->refresh();
         }
@@ -179,16 +202,16 @@ class DeploymentTest extends TestCase
 
     public function runGetTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $this->assertInstanceOf(K8sDeployment::class, $dep);
 
         $this->assertTrue($dep->isSynced());
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
-        $this->assertEquals(['mysql/annotation' => 'yes', 'deployment.kubernetes.io/revision' => '1'], $dep->getAnnotations());
+        $this->assertEquals(['mariadb/annotation' => 'yes', 'deployment.kubernetes.io/revision' => '1'], $dep->getAnnotations());
         $this->assertEquals(1, $dep->getReplicas());
 
         $this->assertInstanceOf(K8sPod::class, $dep->getTemplate());
@@ -196,12 +219,12 @@ class DeploymentTest extends TestCase
 
     public function attachPodAutoscaler()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $cpuMetric = K8s::metric()->cpu()->averageUtilization(70);
 
         $hpa = $this->cluster->horizontalPodAutoscaler()
-            ->setName('deploy-mysql')
+            ->setName('deploy-mariadb')
             ->setResource($dep)
             ->addMetrics([$cpuMetric])
             ->setMetrics([$cpuMetric])
@@ -211,7 +234,6 @@ class DeploymentTest extends TestCase
 
         while ($hpa->getCurrentReplicasCount() < 1) {
             $hpa->refresh();
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to read the current replicas...");
             sleep(1);
         }
 
@@ -220,7 +242,7 @@ class DeploymentTest extends TestCase
 
     public function runUpdateTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $this->assertTrue($dep->isSynced());
 
@@ -231,7 +253,7 @@ class DeploymentTest extends TestCase
         $this->assertTrue($dep->isSynced());
 
         $this->assertEquals('apps/v1', $dep->getApiVersion());
-        $this->assertEquals('mysql', $dep->getName());
+        $this->assertEquals('mariadb', $dep->getName());
         $this->assertEquals(['tier' => 'backend'], $dep->getLabels());
         $this->assertEquals([], $dep->getAnnotations());
         $this->assertEquals(2, $dep->getReplicas());
@@ -241,37 +263,51 @@ class DeploymentTest extends TestCase
 
     public function runDeletionTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
-        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
+        $hpa = $this->cluster->getHorizontalPodAutoscalerByName('deploy-mariadb');
 
         $this->assertTrue($dep->delete());
         $this->assertTrue($hpa->delete());
 
+        $timeout = 60; // 60 second timeout
+        $start = time();
+
         while ($hpa->exists()) {
-            dump("Awaiting for horizontal pod autoscaler {$hpa->getName()} to be deleted...");
+            if (time() - $start > $timeout) {
+                $this->fail('Timeout waiting for HPA to be deleted');
+            }
             sleep(1);
         }
 
+        $start = time();
         while ($dep->exists()) {
-            dump("Awaiting for deployment {$dep->getName()} to be deleted...");
+            if (time() - $start > $timeout) {
+                $this->fail('Timeout waiting for Deployment to be deleted');
+            }
             sleep(1);
         }
 
+        $start = time();
         while ($dep->getPods()->count() > 0) {
-            dump("Awaiting for deployment {$dep->getName()}'s pods to be deleted...");
+            if (time() - $start > $timeout) {
+                $this->fail(sprintf(
+                    'Timeout waiting for Deployment pods to be deleted. Remaining: %d',
+                    $dep->getPods()->count()
+                ));
+            }
             sleep(1);
         }
 
         $this->expectException(KubernetesAPIException::class);
 
-        $this->cluster->getDeploymentByName('mysql');
-        $this->cluster->getHorizontalPodAutoscalerByName('deploy-mysql');
+        $this->cluster->getDeploymentByName('mariadb');
+        $this->cluster->getHorizontalPodAutoscalerByName('deploy-mariadb');
     }
 
     public function runWatchAllTests()
     {
         $watch = $this->cluster->deployment()->watchAll(function ($type, $dep) {
-            if ($dep->getName() === 'mysql') {
+            if ($dep->getName() === 'mariadb') {
                 return true;
             }
         }, ['timeoutSeconds' => 10]);
@@ -281,8 +317,8 @@ class DeploymentTest extends TestCase
 
     public function runWatchTests()
     {
-        $watch = $this->cluster->deployment()->watchByName('mysql', function ($type, $dep) {
-            return $dep->getName() === 'mysql';
+        $watch = $this->cluster->deployment()->watchByName('mariadb', function ($type, $dep) {
+            return $dep->getName() === 'mariadb';
         }, ['timeoutSeconds' => 10]);
 
         $this->assertTrue($watch);
@@ -290,12 +326,21 @@ class DeploymentTest extends TestCase
 
     public function runScalingTests()
     {
-        $dep = $this->cluster->getDeploymentByName('mysql');
+        $dep = $this->cluster->getDeploymentByName('mariadb');
 
         $scaler = $dep->scale(2);
 
+        $timeout = 60; // 60 second timeout
+        $start = time();
+
         while ($dep->getReadyReplicasCount() < 2 || $scaler->getReplicas() < 2) {
-            dump("Awaiting for deployment {$dep->getName()} to scale to 2 replicas...");
+            if (time() - $start > $timeout) {
+                $this->fail(sprintf(
+                    'Timeout waiting for deployment to scale to 2. Current state: ready=%d, scaler=%d',
+                    $dep->getReadyReplicasCount(),
+                    $scaler->getReplicas()
+                ));
+            }
             $scaler->refresh();
             $dep->refresh();
             sleep(1);

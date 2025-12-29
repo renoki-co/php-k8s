@@ -9,7 +9,6 @@ trait HasMountOptions
     /**
      * Set the mount options.
      *
-     * @param  array  $mountOptions
      * @return $this
      */
     public function setMountOptions(array $mountOptions)
@@ -19,8 +18,6 @@ trait HasMountOptions
 
     /**
      * Get the mount options.
-     *
-     * @return array
      */
     public function getMountOptions(): array
     {

@@ -37,8 +37,6 @@ class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCl
     /**
      * Set the capacity of the PV.
      *
-     * @param  int  $size
-     * @param  string  $measure
      * @return $this
      */
     public function setCapacity(int $size, string $measure = 'Gi')
@@ -58,8 +56,6 @@ class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCl
 
     /**
      * Check if the PV is available to be used.
-     *
-     * @return bool
      */
     public function isAvailable(): bool
     {
@@ -68,8 +64,6 @@ class K8sPersistentVolumeClaim extends K8sResource implements InteractsWithK8sCl
 
     /**
      * Check if the PV is bound.
-     *
-     * @return bool
      */
     public function isBound(): bool
     {

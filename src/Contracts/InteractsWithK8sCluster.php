@@ -6,16 +6,11 @@ interface InteractsWithK8sCluster
 {
     /**
      * Get the path, prefixed by '/', that points to the resources list.
-     *
-     * @param  bool  $withNamespace
-     * @return string
      */
     public function allResourcesPath(bool $withNamespace = true): string;
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
      */
     public function resourcePath(): string;
 

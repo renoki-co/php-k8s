@@ -8,8 +8,6 @@ trait HasStatusConditions
 
     /**
      * Get the status conditions.
-     *
-     * @return array
      */
     public function getConditions(): array
     {
