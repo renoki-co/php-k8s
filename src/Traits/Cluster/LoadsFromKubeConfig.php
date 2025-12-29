@@ -42,7 +42,7 @@ trait LoadsFromKubeConfig
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigContextNotFound
      * @throws \RenokiCo\PhpK8s\Exceptions\KubeConfigUserNotFound
      */
-    public function fromKubeConfigVariable(string $context = null)
+    public function fromKubeConfigVariable(?string $context = null)
     {
         if (! isset($_SERVER['KUBECONFIG'])) {
             return $this;

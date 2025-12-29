@@ -419,7 +419,7 @@ class K8s
      * @param  Closure|null  $callback
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource|array[\RenokiCo\PhpK8s\Kinds\K8sResource]
      */
-    public static function fromYamlFile($cluster, string $path, Closure $callback = null)
+    public static function fromYamlFile($cluster, string $path, ?Closure $callback = null)
     {
         $content = file_get_contents($path);
 

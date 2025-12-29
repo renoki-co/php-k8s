@@ -94,7 +94,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $kind
      * @return array
      */
-    public function toArray(string $kind = null)
+    public function toArray(?string $kind = null)
     {
         $attributes = $this->attributes;
 
@@ -121,7 +121,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $kind
      * @return string
      */
-    public function toJson($options = 0, string $kind = null)
+    public function toJson($options = 0, ?string $kind = null)
     {
         return json_encode($this->toArray($kind), $options);
     }
@@ -134,7 +134,7 @@ class K8sResource implements Arrayable, Jsonable
      * @param  string|null  $kind
      * @return string
      */
-    public function toJsonPayload(string $kind = null)
+    public function toJsonPayload(?string $kind = null)
     {
         $attributes = $this->toJson(JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES, $kind);
 

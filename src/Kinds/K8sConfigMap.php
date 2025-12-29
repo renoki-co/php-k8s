@@ -30,7 +30,7 @@ class K8sConfigMap extends K8sResource implements InteractsWithK8sCluster, Watch
      * @param  string|null  $name
      * @return mixed
      */
-    public function getData(string $name = null)
+    public function getData(?string $name = null)
     {
         if ($name) {
             return $this->getAttribute("data.{$name}", '');

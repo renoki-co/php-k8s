@@ -348,7 +348,7 @@ class KubernetesCluster
      * @param  array  $query
      * @return mixed
      */
-    protected function makeWsRequest(string $path, Closure $callback = null, array $query = ['pretty' => 1])
+    protected function makeWsRequest(string $path, ?Closure $callback = null, array $query = ['pretty' => 1])
     {
         $url = $this->getCallableUrl($path, $query);
 
@@ -422,10 +422,14 @@ class KubernetesCluster
     public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
     {
         switch ($operation) {
-            case static::WATCH_OP: return $this->watchPath($path, $payload, $query); break;
-            case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query); break;
-            case static::EXEC_OP: return $this->execPath($path, $query); break;
-            case static::ATTACH_OP: return $this->attachPath($path, $payload, $query); break;
+            case static::WATCH_OP: return $this->watchPath($path, $payload, $query);
+                break;
+            case static::WATCH_LOGS_OP: return $this->watchLogsPath($path, $payload, $query);
+                break;
+            case static::EXEC_OP: return $this->execPath($path, $query);
+                break;
+            case static::ATTACH_OP: return $this->attachPath($path, $payload, $query);
+                break;
             default: break;
         }
 
