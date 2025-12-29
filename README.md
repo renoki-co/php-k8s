@@ -50,4 +50,3 @@ If you discover any security related issues, please email alex@renoki.org instea
 
 - [Alex Renoki](https://github.com/rennokki)
 - [All Contributors](../../contributors)
-

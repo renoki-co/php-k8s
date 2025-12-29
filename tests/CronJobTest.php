@@ -56,7 +56,7 @@ class CronJobTest extends TestCase
             ->restartOnFailure()
             ->neverRestart();
 
-        $cronjob = $this->cluster->fromYamlFile(__DIR__.'/yaml/cronjob.yaml');
+        $cronjob = $this->cluster->fromYamlFile(__DIR__ . '/yaml/cronjob.yaml');
 
         $this->assertEquals('batch/v1', $cronjob->getApiVersion());
         $this->assertEquals('pi', $cronjob->getName());

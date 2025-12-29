@@ -7,7 +7,7 @@ This library now supports both JSON Patch (RFC 6902) and JSON Merge Patch (RFC 7
 JSON Patch allows you to apply a series of operations to modify a resource. It supports the following operations:
 
 - `add` - Add a value at a specific path
-- `remove` - Remove a value at a specific path  
+- `remove` - Remove a value at a specific path
 - `replace` - Replace a value at a specific path
 - `move` - Move a value from one path to another
 - `copy` - Copy a value from one path to another
@@ -41,7 +41,7 @@ $deployment->jsonPatch($patchArray);
 
 JSON Merge Patch provides a simpler way to modify resources by merging a patch object with the target resource.
 
-### Usage
+### JSON Merge Path Usage
 
 ```php
 use RenokiCo\PhpK8s\Patches\JsonMergePatch;

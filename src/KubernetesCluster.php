@@ -387,7 +387,7 @@ class KubernetesCluster
                 $line = substr($buffer, 0, $pos);
                 $buffer = substr($buffer, $pos + 1);
 
-                $call = call_user_func($callback, $line."\n");
+                $call = call_user_func($callback, $line . "\n");
 
                 if (! is_null($call)) {
                     fclose($sock);

@@ -47,6 +47,9 @@ kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/downloa
 # Step 7: Start kubectl proxy (matching CI config)
 echo "🔌 Starting kubectl proxy on port 8080..."
 kubectl proxy --port=8080 --reject-paths="^/non-existent-path" &
+
+# The shell variable $! captures the PID of the most recently started background process.
+# shellcheck disable=SC2034
 PROXY_PID=$!
 
 # Wait for proxy to be ready
@@ -182,19 +185,19 @@ EOF
 echo "⏳ Waiting for VolumeSnapshot to be ready..."
 timeout=180
 counter=0
-while [ $counter -lt $timeout ]; do
+while [ "$counter" -lt "$timeout" ]; do
     ready=$(kubectl get volumesnapshot test-snapshot-manual -n volume-snapshot-manual-test -o jsonpath='{.status.readyToUse}' 2>/dev/null || echo "false")
     if [ "$ready" = "true" ]; then
         echo "✅ VolumeSnapshot is ready!"
         break
     fi
-    
+
     error=$(kubectl get volumesnapshot test-snapshot-manual -n volume-snapshot-manual-test -o jsonpath='{.status.error.message}' 2>/dev/null || echo "")
     if [ -n "$error" ]; then
         echo "❌ VolumeSnapshot failed: $error"
         break
     fi
-    
+
     sleep 5
     counter=$((counter + 5))
     echo "⏳ Waiting for snapshot (${counter}s/${timeout}s)..."
@@ -225,17 +228,17 @@ try {
         ->setNamespace('volume-snapshot-manual-test')
         ->setVolumeSnapshotClassName('csi-hostpath-snapclass')
         ->setSourcePvcName('test-pvc-manual');
-    
+
     echo \"✅ Successfully created VolumeSnapshot CRD object: \" . \$newSnapshot->getName() . \"\n\";
     echo \"  - Type: \" . get_class(\$newSnapshot) . \"\n\";
     echo \"  - API Version: \" . \$newSnapshot->getApiVersion() . \"\n\";
     echo \"  - Namespace: \" . \$newSnapshot->getNamespace() . \"\n\";
     echo \"  - Source PVC: \" . \$newSnapshot->getSourcePvcName() . \"\n\";
-    
+
     // Create it on the cluster
     \$createdSnapshot = \$newSnapshot->create();
     echo \"✅ Successfully created snapshot on cluster: \" . \$createdSnapshot->getName() . \"\n\";
-    
+
 } catch (Exception \$e) {
     echo \"❌ Failed to create snapshot via PHP SDK: \" . \$e->getMessage() . \"\n\";
 }
