@@ -81,7 +81,6 @@ trait AuthenticatesCluster
     /**
      * Load the token from provider command line.
      *
-     * @param  string|null  $cmdArgs
      * @return $this
      */
     public function withTokenFromCommandProvider(string $cmdPath, ?string $cmdArgs = null, ?string $tokenPath = null)

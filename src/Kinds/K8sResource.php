@@ -36,7 +36,6 @@ class K8sResource implements Arrayable, Jsonable
      * Create a new resource.
      *
      * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
-     * @param  array  $attributes
      * @return void
      */
     public function __construct($cluster = null, array $attributes = [])
@@ -51,9 +50,6 @@ class K8sResource implements Arrayable, Jsonable
 
     /**
      * Register the current resource in macros.
-     *
-     * @param  string|null  $name
-     * @return void
      */
     public static function register(?string $name = null): void
     {
@@ -64,10 +60,6 @@ class K8sResource implements Arrayable, Jsonable
      * This method should be used only for CRDs.
      * It returns an internal macro name to help transition from YAML to resource
      * when importing YAML.
-     *
-     * @param  string|null  $kind
-     * @param  string|null  $defaultVersion
-     * @return string
      */
     public static function getUniqueCrdMacro(?string $kind = null, ?string $defaultVersion = null): string
     {
@@ -89,9 +81,6 @@ class K8sResource implements Arrayable, Jsonable
 
     /**
      * Check if the current resource exists.
-     *
-     * @param  array  $query
-     * @return bool
      */
     public function exists(array $query = ['pretty' => 1]): bool
     {
@@ -111,8 +100,6 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get a resource by name.
      *
-     * @param  string  $name
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      */
     public function getByName(string $name, array $query = ['pretty' => 1])
@@ -124,7 +111,6 @@ class K8sResource implements Arrayable, Jsonable
      * Get the instance as an array.
      * Optionally, you can specify the Kind attribute to replace.
      *
-     * @param  string|null  $kind
      * @return array
      */
     public function toArray(?string $kind = null)
@@ -150,10 +136,7 @@ class K8sResource implements Arrayable, Jsonable
      * Convert the object to its JSON representation.
      * Optionally, you can specify the Kind attribute to replace.
      *
-     * @param int  $options
-     * @param string|null  $kind
-     *
-     * @return false|string
+     * @param  int  $options
      */
     public function toJson($options = 0, ?string $kind = null): string|false
     {
@@ -165,7 +148,6 @@ class K8sResource implements Arrayable, Jsonable
      * escaping [] for {}. Optionally, you can specify
      * the Kind attribute to replace.
      *
-     * @param  string|null  $kind
      * @return string
      */
     public function toJsonPayload(?string $kind = null)
@@ -184,8 +166,6 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource by name.
      *
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
@@ -198,8 +178,6 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Get logs for a specific container.
      *
-     * @param  string  $container
-     * @param  array  $query
      * @return string
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
@@ -213,9 +191,7 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource by name.
      *
-     * @param  string  $name
      * @param  Closure  $callback
-     * @param  array  $query
      * @return string
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
@@ -229,10 +205,7 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource by name.
      *
-     * @param  string  $name
-     * @param  string  $container
      * @param  Closure  $callback
-     * @param  array  $query
      * @return string
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesLogsException
@@ -246,9 +219,6 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource's container logs until the closure returns true or false.
      *
-     * @param  string  $container
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
@@ -262,8 +232,6 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource's logs by name.
      *
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException
@@ -277,10 +245,6 @@ class K8sResource implements Arrayable, Jsonable
     /**
      * Watch the specific resource's container logs by names.
      *
-     * @param  string  $name
-     * @param  string  $container
-     * @param  Closure  $callback
-     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesWatchException

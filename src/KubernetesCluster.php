@@ -165,11 +165,6 @@ class KubernetesCluster
     /**
      * Run a specific operation for the API path with a specific payload.
      *
-     * @param  Operation|string  $operation
-     * @param  string  $path
-     * @param  string|null|Closure  $payload
-     * @param  array  $query
-     * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -195,10 +190,7 @@ class KubernetesCluster
     /**
      * Watch for the current resource or a resource list.
      *
-     * @param  string  $path
-     * @param  Closure  $callback
-     * @param  array  $query
-     * @return bool
+     * @return mixed|null
      */
     protected function watchPath(string $path, Closure $callback, array $query = ['pretty' => 1]): mixed
     {
@@ -225,6 +217,7 @@ class KubernetesCluster
             if ($chunk === false) {
                 // Error occurred
                 fclose($sock);
+
                 return null;
             }
 
@@ -236,6 +229,7 @@ class KubernetesCluster
 
                 // No data yet, sleep briefly and continue
                 usleep(100000); // 100ms
+
                 continue;
             }
 
@@ -253,7 +247,7 @@ class KubernetesCluster
 
                 $data = @json_decode($line, true);
 
-                if (!$data || !isset($data['type'], $data['object'])) {
+                if (! $data || ! isset($data['type'], $data['object'])) {
                     continue;
                 }
 
@@ -267,22 +261,21 @@ class KubernetesCluster
 
                 if (! is_null($call)) {
                     fclose($sock);
+
                     return $call;
                 }
             }
         }
 
         fclose($sock);
+
         return null;
     }
 
     /**
      * Watch for the logs for the resource.
      *
-     * @param  string  $path
-     * @param  Closure  $callback
-     * @param  array  $query
-     * @return bool
+     * @return mixed|null
      */
     protected function watchLogsPath(string $path, Closure $callback, array $query = ['pretty' => 1]): mixed
     {
@@ -308,6 +301,7 @@ class KubernetesCluster
             if ($chunk === false) {
                 // Error occurred
                 fclose($sock);
+
                 return null;
             }
 
@@ -319,6 +313,7 @@ class KubernetesCluster
 
                 // No data yet, sleep briefly and continue
                 usleep(100000); // 100ms
+
                 continue;
             }
 
@@ -330,25 +325,24 @@ class KubernetesCluster
                 $line = substr($buffer, 0, $pos);
                 $buffer = substr($buffer, $pos + 1);
 
-                $call = call_user_func($callback, $line . "\n");
+                $call = call_user_func($callback, $line."\n");
 
                 if (! is_null($call)) {
                     fclose($sock);
+
                     return $call;
                 }
             }
         }
 
         fclose($sock);
+
         return null;
     }
 
     /**
      * Call exec on the resource.
      *
-     * @param  string  $path
-     * @param  array  $query
-     * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -377,10 +371,6 @@ class KubernetesCluster
     /**
      * Call attach on the resource.
      *
-     * @param  string  $path
-     * @param  Closure  $callback
-     * @param  array  $query
-     * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -410,10 +400,6 @@ class KubernetesCluster
     /**
      * Apply server-side apply to the resource.
      *
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
-     * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -431,10 +417,6 @@ class KubernetesCluster
     /**
      * Apply JSON Patch (RFC 6902) to the resource.
      *
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
-     * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -452,10 +434,6 @@ class KubernetesCluster
     /**
      * Apply JSON Merge Patch (RFC 7396) to the resource.
      *
-     * @param  string  $path
-     * @param  string  $payload
-     * @param  array  $query
-     * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
@@ -472,10 +450,6 @@ class KubernetesCluster
 
     /**
      * Proxy the custom method to the K8s class.
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
      */
     public function __call(string $method, array $parameters): mixed
     {

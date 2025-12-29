@@ -85,7 +85,7 @@ class EksLiveIntegrationTest extends TestCase
         $this->assertNotEmpty($namespaces);
 
         // Verify we can get system namespaces
-        $nsNames = array_map(fn($ns) => $ns->getName(), iterator_to_array($namespaces));
+        $nsNames = array_map(fn ($ns) => $ns->getName(), iterator_to_array($namespaces));
         $this->assertContains('kube-system', $nsNames);
         $this->assertContains('default', $nsNames);
     }

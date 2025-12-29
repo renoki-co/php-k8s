@@ -4,8 +4,8 @@ namespace RenokiCo\PhpK8s\Test;
 
 use Orchestra\Testbench\TestCase as Orchestra;
 use RenokiCo\PhpK8s\Exceptions\PhpK8sException;
-use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Instances\Container;
+use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
 use RenokiCo\PhpK8s\KubernetesCluster;
 
@@ -27,10 +27,8 @@ abstract class TestCase extends Orchestra
 
     /**
      * Set up the tests.
-     *
-     * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -75,8 +73,7 @@ abstract class TestCase extends Orchestra
     /**
      * Create a standard mariadb container with common configuration.
      *
-     * @param array $options Override options for customization
-     * @return Container
+     * @param  array  $options  Override options for customization
      */
     protected function createMariadbContainer(array $options = []): Container
     {
@@ -101,8 +98,7 @@ abstract class TestCase extends Orchestra
     /**
      * Create a standard Perl container for computation tasks.
      *
-     * @param array $options Override options for customization
-     * @return Container
+     * @param  array  $options  Override options for customization
      */
     protected function createPerlContainer(array $options = []): Container
     {
@@ -122,8 +118,7 @@ abstract class TestCase extends Orchestra
     /**
      * Create a standard Busybox container.
      *
-     * @param array $options Override options for customization
-     * @return Container
+     * @param  array  $options  Override options for customization
      */
     protected function createBusyboxContainer(array $options = []): Container
     {
@@ -143,8 +138,7 @@ abstract class TestCase extends Orchestra
     /**
      * Create a standard Nginx container.
      *
-     * @param array $options Override options for customization
-     * @return Container
+     * @param  array  $options  Override options for customization
      */
     protected function createNginxContainer(array $options = []): Container
     {
@@ -166,8 +160,7 @@ abstract class TestCase extends Orchestra
     /**
      * Create a standard mariadb pod with common configuration.
      *
-     * @param array $options Override options for customization
-     * @return K8sPod
+     * @param  array  $options  Override options for customization
      */
     protected function createMariadbPod(array $options = []): K8sPod
     {
@@ -182,8 +175,7 @@ abstract class TestCase extends Orchestra
     /**
      * Create a standard Perl pod for computation tasks.
      *
-     * @param array $options Override options for customization
-     * @return K8sPod
+     * @param  array  $options  Override options for customization
      */
     protected function createPerlPod(array $options = []): K8sPod
     {

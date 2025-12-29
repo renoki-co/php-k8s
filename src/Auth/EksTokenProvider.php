@@ -21,11 +21,11 @@ class EksTokenProvider extends TokenProvider
         if (trim($clusterName) === '') {
             throw new \InvalidArgumentException('Cluster name cannot be empty');
         }
-        
+
         if (trim($region) === '') {
             throw new \InvalidArgumentException('AWS region cannot be empty');
         }
-        
+
         $this->clusterName = $clusterName;
         $this->region = $region;
     }

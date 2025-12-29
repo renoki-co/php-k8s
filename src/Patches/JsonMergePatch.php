@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Jsonable;
 
 /**
  * JSON Merge Patch implementation following RFC 7396.
- * 
+ *
  * @see https://tools.ietf.org/html/rfc7396
  */
 class JsonMergePatch implements Arrayable, Jsonable
@@ -22,7 +22,6 @@ class JsonMergePatch implements Arrayable, Jsonable
     /**
      * Create a new JSON Merge Patch instance.
      *
-     * @param  array  $patch
      * @return void
      */
     public function __construct(array $patch = [])
@@ -33,7 +32,6 @@ class JsonMergePatch implements Arrayable, Jsonable
     /**
      * Set a value in the patch.
      *
-     * @param  string  $key
      * @param  mixed  $value
      * @return $this
      */
@@ -47,7 +45,6 @@ class JsonMergePatch implements Arrayable, Jsonable
     /**
      * Remove a value from the patch by setting it to null.
      *
-     * @param  string  $key
      * @return $this
      */
     public function remove(string $key)
@@ -90,8 +87,6 @@ class JsonMergePatch implements Arrayable, Jsonable
 
     /**
      * Get the patch data.
-     *
-     * @return array
      */
     public function getPatch(): array
     {
@@ -100,8 +95,6 @@ class JsonMergePatch implements Arrayable, Jsonable
 
     /**
      * Check if the patch is empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -111,7 +104,6 @@ class JsonMergePatch implements Arrayable, Jsonable
     /**
      * Create a new instance from an array.
      *
-     * @param  array  $patch
      * @return static
      */
     public static function fromArray(array $patch): self
@@ -132,12 +124,12 @@ class JsonMergePatch implements Arrayable, Jsonable
     /**
      * Convert the object to its JSON representation.
      *
-     * @param int  $options
+     * @param  int  $options
      *
-     * @return false|string
+     * @throws \JsonException
      */
-    public function toJson($options = 0): string|false
+    public function toJson($options = 0): string
     {
-        return json_encode($this->toArray(), $options);
+        return json_encode($this->toArray(), $options | JSON_THROW_ON_ERROR);
     }
 }

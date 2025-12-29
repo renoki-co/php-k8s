@@ -41,10 +41,8 @@ class K8sCSINode extends K8sResource implements InteractsWithK8sCluster, Watchab
 
     /**
      * Get a specific driver by name.
-     *
-     * @return array|null
      */
-    public function getDriverByName(string $driverName)
+    public function getDriverByName(string $driverName): ?array
     {
         $drivers = $this->getDrivers();
 
@@ -67,10 +65,8 @@ class K8sCSINode extends K8sResource implements InteractsWithK8sCluster, Watchab
 
     /**
      * Get the node ID for a specific driver.
-     *
-     * @return string|null
      */
-    public function getNodeIdForDriver(string $driverName)
+    public function getNodeIdForDriver(string $driverName): ?string
     {
         $driver = $this->getDriverByName($driverName);
 
@@ -89,10 +85,8 @@ class K8sCSINode extends K8sResource implements InteractsWithK8sCluster, Watchab
 
     /**
      * Get allocatable volume resources for a specific driver.
-     *
-     * @return array|null
      */
-    public function getAllocatableForDriver(string $driverName)
+    public function getAllocatableForDriver(string $driverName): ?array
     {
         $driver = $this->getDriverByName($driverName);
 

@@ -5,7 +5,6 @@ namespace RenokiCo\PhpK8s\Kinds;
 use RenokiCo\PhpK8s\Contracts\Dnsable;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Watchable;
-use RenokiCo\PhpK8s\Enums\Protocol;
 use RenokiCo\PhpK8s\Enums\ServiceType;
 use RenokiCo\PhpK8s\Traits\Resource\HasSelector;
 use RenokiCo\PhpK8s\Traits\Resource\HasSpec;
@@ -35,8 +34,9 @@ class K8sService extends K8sResource implements Dnsable, InteractsWithK8sCluster
     public function getClusterDns(): ?string
     {
         $name = $this->getName();
+        $namespace = $this->getNamespace();
 
-        return $name ? "{$name}.{$this->getNamespace()}.svc.cluster.local" : null;
+        return ($name && $namespace) ? "{$name}.{$namespace}.svc.cluster.local" : null;
     }
 
     /**

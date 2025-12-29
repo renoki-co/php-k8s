@@ -42,8 +42,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
 
     /**
      * Get the path, prefixed by '/', that points to the specific resource.
-     *
-     * @return string
      */
     public function resourcePath(): string
     {
@@ -53,7 +51,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     /**
      * Set the original scalable resource for this scale.
      *
-     * @param  \RenokiCo\PhpK8s\Kinds\K8sResource  $resource
      * @return $this
      */
     public function setScalableResource(K8sResource $resource)
@@ -66,7 +63,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     /**
      * Make a call to the cluster to get a fresh instance.
      *
-     * @param  array  $query
      * @return $this
      */
     public function refresh(array $query = ['pretty' => 1])
@@ -79,7 +75,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
     /**
      * Make a call to the cluster to get fresh original values.
      *
-     * @param  array  $query
      * @return $this
      */
     public function refreshOriginal(array $query = ['pretty' => 1])
@@ -94,7 +89,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
      * Scale subresources should use replace (PUT) operations, not create (POST).
      * Scale subresources don't support POST, so we use PUT to the scale subresource path.
      *
-     * @param  array  $query
      * @return \RenokiCo\PhpK8s\Kinds\K8sResource
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -116,8 +110,6 @@ class K8sScale extends K8sResource implements InteractsWithK8sCluster
      * This is the correct operation for scale subresources.
      * Scale is updated via PUT to the scale subresource path.
      *
-     * @param  array  $query
-     * @return bool
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */

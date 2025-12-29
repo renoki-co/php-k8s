@@ -115,10 +115,8 @@ class K8sCSIDriver extends K8sResource implements InteractsWithK8sCluster, Watch
 
     /**
      * Get the fsGroup policy.
-     *
-     * @return string|null
      */
-    public function getFsGroupPolicy()
+    public function getFsGroupPolicy(): ?string
     {
         return $this->getSpec('fsGroupPolicy');
     }
