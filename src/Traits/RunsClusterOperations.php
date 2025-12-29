@@ -382,7 +382,7 @@ trait RunsClusterOperations
     {
         if (! $this instanceof Watchable) {
             throw new KubernetesWatchException(
-                'The resource ' . get_class($this) . ' does not support watch actions.'
+                'The resource '.get_class($this).' does not support watch actions.'
             );
         }
 
@@ -407,7 +407,7 @@ trait RunsClusterOperations
     {
         if (! $this instanceof Watchable) {
             throw new KubernetesWatchException(
-                'The resource ' . get_class($this) . ' does not support watch actions.'
+                'The resource '.get_class($this).' does not support watch actions.'
             );
         }
 
@@ -433,7 +433,7 @@ trait RunsClusterOperations
     {
         if (! $this instanceof Loggable) {
             throw new KubernetesLogsException(
-                'The resource ' . get_class($this) . ' does not support logs.'
+                'The resource '.get_class($this).' does not support logs.'
             );
         }
 
@@ -459,13 +459,13 @@ trait RunsClusterOperations
     {
         if (! $this instanceof Loggable) {
             throw new KubernetesWatchException(
-                'The resource ' . get_class($this) . ' does not support logs.'
+                'The resource '.get_class($this).' does not support logs.'
             );
         }
 
         if (! $this instanceof Watchable) {
             throw new KubernetesLogsException(
-                'The resource ' . get_class($this) . ' does not support watch actions.'
+                'The resource '.get_class($this).' does not support watch actions.'
             );
         }
 
@@ -493,7 +493,7 @@ trait RunsClusterOperations
     {
         if (! $this instanceof Scalable) {
             throw new KubernetesScalingException(
-                'The resource ' . get_class($this) . ' does not support scaling.'
+                'The resource '.get_class($this).' does not support scaling.'
             );
         }
 
@@ -527,7 +527,7 @@ trait RunsClusterOperations
     ) {
         if (! $this instanceof Executable) {
             throw new KubernetesExecException(
-                'The resource ' . get_class($this) . ' does not support exec commands.'
+                'The resource '.get_class($this).' does not support exec commands.'
             );
         }
 
@@ -556,7 +556,7 @@ trait RunsClusterOperations
     ) {
         if (! $this instanceof Attachable) {
             throw new KubernetesAttachException(
-                'The resource ' . get_class($this) . ' does not support attach commands.'
+                'The resource '.get_class($this).' does not support attach commands.'
             );
         }
 
@@ -575,7 +575,7 @@ trait RunsClusterOperations
      */
     public function allResourcesPath(bool $withNamespace = true): string
     {
-        return "{$this->getApiPathPrefix($withNamespace)}/" . static::getPlural();
+        return "{$this->getApiPathPrefix($withNamespace)}/".static::getPlural();
     }
 
     /**
@@ -583,7 +583,7 @@ trait RunsClusterOperations
      */
     public function resourcePath(): string
     {
-        return "{$this->getApiPathPrefix()}/" . static::getPlural() . "/{$this->getIdentifier()}";
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}";
     }
 
     /**
@@ -591,7 +591,7 @@ trait RunsClusterOperations
      */
     public function allResourcesWatchPath(): string
     {
-        return "{$this->getApiPathPrefix(false)}/watch/" . static::getPlural();
+        return "{$this->getApiPathPrefix(false)}/watch/".static::getPlural();
     }
 
     /**
@@ -599,7 +599,7 @@ trait RunsClusterOperations
      */
     public function resourceWatchPath(): string
     {
-        return "{$this->getApiPathPrefix(true, 'watch')}/" . static::getPlural() . "/{$this->getIdentifier()}";
+        return "{$this->getApiPathPrefix(true, 'watch')}/".static::getPlural()."/{$this->getIdentifier()}";
     }
 
     /**
@@ -607,7 +607,7 @@ trait RunsClusterOperations
      */
     public function resourceScalePath(): string
     {
-        return "{$this->getApiPathPrefix()}/" . static::getPlural() . "/{$this->getIdentifier()}/scale";
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/scale";
     }
 
     /**
@@ -615,7 +615,7 @@ trait RunsClusterOperations
      */
     public function resourceLogPath(): string
     {
-        return "{$this->getApiPathPrefix()}/" . static::getPlural() . "/{$this->getIdentifier()}/log";
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/log";
     }
 
     /**
@@ -623,7 +623,7 @@ trait RunsClusterOperations
      */
     public function resourceExecPath(): string
     {
-        return "{$this->getApiPathPrefix()}/" . static::getPlural() . "/{$this->getIdentifier()}/exec";
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/exec";
     }
 
     /**
@@ -631,7 +631,7 @@ trait RunsClusterOperations
      */
     public function resourceAttachPath(): string
     {
-        return "{$this->getApiPathPrefix()}/" . static::getPlural() . "/{$this->getIdentifier()}/attach";
+        return "{$this->getApiPathPrefix()}/".static::getPlural()."/{$this->getIdentifier()}/attach";
     }
 
     /**
