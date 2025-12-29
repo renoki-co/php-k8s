@@ -66,7 +66,7 @@ class K8sResource implements Arrayable, Jsonable
         $kind = $kind ?: static::getKind();
         $defaultVersion = $defaultVersion ?: static::getDefaultVersion();
 
-        return Str::of($kind . explode('/', $defaultVersion)[0])->camel()->slug();
+        return Str::of($kind.explode('/', $defaultVersion)[0])->camel()->slug();
     }
 
     /**

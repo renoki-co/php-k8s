@@ -31,7 +31,7 @@ class VolumeSnapshotTest extends TestCase
     {
         VolumeSnapshot::register();
 
-        $vs = $this->cluster->fromYamlFile(__DIR__ . '/yaml/volumesnapshot.yaml');
+        $vs = $this->cluster->fromYamlFile(__DIR__.'/yaml/volumesnapshot.yaml');
 
         // Handle case where CRD registration returns array
         if (is_array($vs)) {
@@ -56,7 +56,7 @@ class VolumeSnapshotTest extends TestCase
     {
         VolumeSnapshot::register();
 
-        $vs = $this->cluster->fromYamlFile(__DIR__ . '/yaml/volumesnapshot.yaml');
+        $vs = $this->cluster->fromYamlFile(__DIR__.'/yaml/volumesnapshot.yaml');
 
         // When a CRD is registered AND a regular method exists, both are created
         // So we expect an array with 2 items
@@ -206,7 +206,7 @@ class VolumeSnapshotTest extends TestCase
         // Check if snapshot was created successfully or if it failed due to missing VolumeSnapshotClass
         if ($vs->hasFailed()) {
             // This is expected in test environments without proper CSI setup
-            $this->addWarning('VolumeSnapshot creation failed - this is expected in test environments without CSI driver: ' . $vs->getErrorMessage());
+            $this->addWarning('VolumeSnapshot creation failed - this is expected in test environments without CSI driver: '.$vs->getErrorMessage());
         } else {
             $this->assertTrue($vs->isReady());
         }
