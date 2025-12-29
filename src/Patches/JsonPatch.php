@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Jsonable;
 
 /**
  * JSON Patch implementation following RFC 6902.
- *
+ * 
  * @see https://tools.ietf.org/html/rfc6902
  */
 class JsonPatch implements Arrayable, Jsonable
@@ -22,6 +22,7 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Add an operation to add a value at the specified path.
      *
+     * @param  string  $path
      * @param  mixed  $value
      * @return $this
      */
@@ -39,6 +40,7 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Add an operation to remove a value at the specified path.
      *
+     * @param  string  $path
      * @return $this
      */
     public function remove(string $path)
@@ -54,6 +56,7 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Add an operation to replace a value at the specified path.
      *
+     * @param  string  $path
      * @param  mixed  $value
      * @return $this
      */
@@ -71,6 +74,8 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Add an operation to move a value from one path to another.
      *
+     * @param  string  $from
+     * @param  string  $path
      * @return $this
      */
     public function move(string $from, string $path)
@@ -87,6 +92,8 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Add an operation to copy a value from one path to another.
      *
+     * @param  string  $from
+     * @param  string  $path
      * @return $this
      */
     public function copy(string $from, string $path)
@@ -103,6 +110,7 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Add an operation to test a value at the specified path.
      *
+     * @param  string  $path
      * @param  mixed  $value
      * @return $this
      */
@@ -131,6 +139,8 @@ class JsonPatch implements Arrayable, Jsonable
 
     /**
      * Get the operations array.
+     *
+     * @return array
      */
     public function getOperations(): array
     {
@@ -139,6 +149,8 @@ class JsonPatch implements Arrayable, Jsonable
 
     /**
      * Check if the patch has any operations.
+     *
+     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -158,10 +170,11 @@ class JsonPatch implements Arrayable, Jsonable
     /**
      * Convert the object to its JSON representation.
      *
-     * @param  int  $options
-     * @return string
+     * @param int  $options
+     *
+     * @return false|string
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string|false
     {
         return json_encode($this->toArray(), $options);
     }

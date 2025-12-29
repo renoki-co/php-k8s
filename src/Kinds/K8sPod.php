@@ -8,6 +8,8 @@ use RenokiCo\PhpK8s\Contracts\Executable;
 use RenokiCo\PhpK8s\Contracts\InteractsWithK8sCluster;
 use RenokiCo\PhpK8s\Contracts\Loggable;
 use RenokiCo\PhpK8s\Contracts\Watchable;
+use RenokiCo\PhpK8s\Enums\PodPhase;
+use RenokiCo\PhpK8s\Enums\RestartPolicy;
 use RenokiCo\PhpK8s\Instances\Affinity;
 use RenokiCo\PhpK8s\Instances\Container;
 use RenokiCo\PhpK8s\Instances\Volume;
@@ -17,7 +19,13 @@ use RenokiCo\PhpK8s\Traits\Resource\HasStatus;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusConditions;
 use RenokiCo\PhpK8s\Traits\Resource\HasStatusPhase;
 
-class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, InteractsWithK8sCluster, Loggable, Watchable
+class K8sPod extends K8sResource implements
+    Attachable,
+    Dnsable,
+    Executable,
+    InteractsWithK8sCluster,
+    Watchable,
+    Loggable
 {
     use HasSpec;
     use HasStatus;
@@ -53,6 +61,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Set the Pod containers.
      *
+     * @param  array  $containers
      * @return $this
      */
     public function setContainers(array $containers = [])
@@ -66,6 +75,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Set the Pod init containers.
      *
+     * @param  array  $containers
      * @return $this
      */
     public function setInitContainers(array $containers = [])
@@ -78,6 +88,9 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the Pod containers.
+     *
+     * @param  bool  $asInstance
+     * @return array
      */
     public function getContainers(bool $asInstance = true): array
     {
@@ -94,6 +107,9 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the Pod init containers.
+     *
+     * @param  bool  $asInstance
+     * @return array
      */
     public function getInitContainers(bool $asInstance = true): array
     {
@@ -111,6 +127,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Add a new pulled secret by the image.
      *
+     * @param  string  $name
      * @return $this
      */
     public function addPulledSecret(string $name)
@@ -121,6 +138,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Batch-add new pulled secrets by the image.
      *
+     * @param  array  $names
      * @return $this
      */
     public function addPulledSecrets(array $names)
@@ -134,6 +152,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the image pulling secrets.
+     *
+     * @return array
      */
     public function getPulledSecrets(): array
     {
@@ -158,6 +178,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Batch-add multiple volumes.
      *
+     * @param  array  $volumes
      * @return $this
      */
     public function addVolumes(array $volumes)
@@ -172,6 +193,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Set the volumes.
      *
+     * @param  array  $volumes
      * @return $this
      */
     public function setVolumes(array $volumes)
@@ -188,6 +210,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Get the volumes.
      *
+     * @param  bool  $asInstance
      * @return array
      */
     public function getVolumes(bool $asInstance = true)
@@ -206,32 +229,34 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Specify the pod to be restarted on failure
      * for Job kinds only.
-     *
-     * @return $this
      */
-    public function restartOnFailure()
+    public function restartOnFailure(): static
     {
-        return $this->setSpec('restartPolicy', 'OnFailure');
+        return $this->setSpec('restartPolicy', RestartPolicy::ON_FAILURE->value);
     }
 
     /**
      * Specify the pod to never be restarted for Job kinds only.
-     *
-     * @return $this
      */
-    public function neverRestart()
+    public function neverRestart(): static
     {
-        return $this->setSpec('restartPolicy', 'Never');
+        return $this->setSpec('restartPolicy', RestartPolicy::NEVER->value);
     }
 
     /**
-     * Get the restart policy for this pod, for Job kinds only.
-     *
-     * @return string
+     * Set the restart policy for this pod.
      */
-    public function getRestartPolicy()
+    public function setRestartPolicy(RestartPolicy $policy): static
     {
-        return $this->getSpec('restartPolicy', 'Always');
+        return $this->setSpec('restartPolicy', $policy->value);
+    }
+
+    /**
+     * Get the restart policy for this pod.
+     */
+    public function getRestartPolicy(): RestartPolicy
+    {
+        return RestartPolicy::from($this->getSpec('restartPolicy', RestartPolicy::ALWAYS->value));
     }
 
     /**
@@ -252,6 +277,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Get the node affinity.
      *
+     * @param  bool  $asInstance
      * @return array|\RenokiCo\PhpK8s\Instances\Affinity
      */
     public function getNodeAffinity(bool $asInstance = true)
@@ -283,6 +309,7 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Get the pod affinity.
      *
+     * @param  bool  $asInstance
      * @return array|\RenokiCo\PhpK8s\Instances\Affinity
      */
     public function getPodAffinity(bool $asInstance = true)
@@ -298,6 +325,9 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Transform any Container instance to an array.
+     *
+     * @param  array  $containers
+     * @return array
      */
     protected static function transformContainersToArray(array $containers = []): array
     {
@@ -312,6 +342,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the assigned pod IPs.
+     *
+     * @return array
      */
     public function getPodIps(): array
     {
@@ -330,6 +362,9 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the statuses for each container.
+     *
+     * @param  bool  $asInstance
+     * @return array
      */
     public function getContainerStatuses(bool $asInstance = true): array
     {
@@ -346,6 +381,9 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the statuses for each init container.
+     *
+     * @param  bool  $asInstance
+     * @return array
      */
     public function getInitContainerStatuses(bool $asInstance = true): array
     {
@@ -363,6 +401,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Get the container status for a specific container.
      *
+     * @param  string  $containerName
+     * @param  bool  $asInstance
      * @return \RenokiCo\PhpK8s\Instances\Container|array|null
      */
     public function getContainer(string $containerName, bool $asInstance = true)
@@ -379,6 +419,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     /**
      * Get the container status for a specific init container.
      *
+     * @param  string  $containerName
+     * @param  bool  $asInstance
      * @return \RenokiCo\PhpK8s\Instances\Container|array|null
      */
     public function getInitContainer(string $containerName, bool $asInstance = true)
@@ -394,6 +436,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Check if all containers are ready.
+     *
+     * @return bool
      */
     public function containersAreReady(): bool
     {
@@ -404,6 +448,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Check if all init containers are ready.
+     *
+     * @return bool
      */
     public function initContainersAreReady(): bool
     {
@@ -414,6 +460,8 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
 
     /**
      * Get the QOS class for the resource.
+     *
+     * @return string
      */
     public function getQos(): string
     {
@@ -421,11 +469,20 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
     }
 
     /**
+     * Get the pod phase as an enum.
+     */
+    public function getPodPhase(): PodPhase
+    {
+        $phase = $this->getPhase();
+        return PodPhase::from($phase ?: PodPhase::UNKNOWN->value);
+    }
+
+    /**
      * Check if the pod is running.
      */
     public function isRunning(): bool
     {
-        return $this->getPhase() === 'Running';
+        return $this->getPodPhase() === PodPhase::RUNNING;
     }
 
     /**
@@ -433,6 +490,14 @@ class K8sPod extends K8sResource implements Attachable, Dnsable, Executable, Int
      */
     public function isSuccessful(): bool
     {
-        return $this->getPhase() === 'Succeeded';
+        return $this->getPodPhase() === PodPhase::SUCCEEDED;
+    }
+
+    /**
+     * Check if the pod is in a terminal state.
+     */
+    public function isTerminal(): bool
+    {
+        return $this->getPodPhase()->isTerminal();
     }
 }

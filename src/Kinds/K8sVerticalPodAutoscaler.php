@@ -35,6 +35,9 @@ class K8sVerticalPodAutoscaler extends K8sResource implements InteractsWithK8sCl
     /**
      * Set the target resource reference.
      *
+     * @param  string  $apiVersion
+     * @param  string  $kind
+     * @param  string  $name
      * @return $this
      */
     public function setTarget(string $apiVersion, string $kind, string $name)
@@ -49,7 +52,7 @@ class K8sVerticalPodAutoscaler extends K8sResource implements InteractsWithK8sCl
     /**
      * Set the update policy (e.g. "Auto").
      */
-    public function setUpdatePolicy(array $policy)
+    public function setUpdatePolicy(array $policy): static
     {
         return $this->setSpec('updatePolicy', $policy);
     }
@@ -57,7 +60,7 @@ class K8sVerticalPodAutoscaler extends K8sResource implements InteractsWithK8sCl
     /**
      * Set resource policy.
      */
-    public function setResourcePolicy(array $policy)
+    public function setResourcePolicy(array $policy): static
     {
         return $this->setSpec('resourcePolicy', $policy);
     }

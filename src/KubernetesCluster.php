@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s;
 
 use Closure;
 use Illuminate\Support\Str;
+use RenokiCo\PhpK8s\Enums\Operation;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sResource;
 
@@ -135,68 +136,16 @@ class KubernetesCluster
 
     /**
      * The Cluster API port.
-     *
-     * @var string
      */
-    protected $url;
+    protected ?string $url = null;
 
     /**
      * The class name for the K8s resource.
-     *
-     * @var string
      */
-    protected $resourceClass;
-
-    /**
-     * List all named operations with
-     * their respective methods for the
-     * HTTP request.
-     *
-     * @var array
-     */
-    protected static $operations = [
-        self::GET_OP => 'GET',
-        self::CREATE_OP => 'POST',
-        self::REPLACE_OP => 'PUT',
-        self::DELETE_OP => 'DELETE',
-        self::LOG_OP => 'GET',
-        self::WATCH_OP => 'GET',
-        self::WATCH_LOGS_OP => 'GET',
-        self::EXEC_OP => 'POST',
-        self::ATTACH_OP => 'POST',
-        self::APPLY_OP => 'PATCH',
-        self::JSON_PATCH_OP => 'PATCH',
-        self::JSON_MERGE_PATCH_OP => 'PATCH',
-    ];
-
-    const GET_OP = 'get';
-
-    const CREATE_OP = 'create';
-
-    const REPLACE_OP = 'replace';
-
-    const DELETE_OP = 'delete';
-
-    const LOG_OP = 'logs';
-
-    const WATCH_OP = 'watch';
-
-    const WATCH_LOGS_OP = 'watch_logs';
-
-    const EXEC_OP = 'exec';
-
-    const ATTACH_OP = 'attach';
-
-    const APPLY_OP = 'apply';
-
-    const JSON_PATCH_OP = 'json_patch';
-
-    const JSON_MERGE_PATCH_OP = 'json_merge_patch';
+    protected ?string $resourceClass = null;
 
     /**
      * Create a new class instance.
-     *
-     * @return void
      */
     public function __construct(?string $url = null)
     {
@@ -205,10 +154,8 @@ class KubernetesCluster
 
     /**
      * Set the K8s resource class.
-     *
-     * @return $this
      */
-    public function setResourceClass(string $resourceClass)
+    public function setResourceClass(string $resourceClass): static
     {
         $this->resourceClass = $resourceClass;
 
@@ -218,43 +165,42 @@ class KubernetesCluster
     /**
      * Run a specific operation for the API path with a specific payload.
      *
+     * @param  Operation|string  $operation
+     * @param  string  $path
      * @param  string|null|Closure  $payload
+     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    public function runOperation(string $operation, string $path, $payload = '', array $query = ['pretty' => 1])
+    public function runOperation(Operation|string $operation, string $path, string|null|Closure $payload = '', array $query = ['pretty' => 1]): mixed
     {
-        switch ($operation) {
-            case static::WATCH_OP:
-                return $this->watchPath($path, $payload, $query);
-            case static::WATCH_LOGS_OP:
-                return $this->watchLogsPath($path, $payload, $query);
-            case static::EXEC_OP:
-                return $this->execPath($path, $query);
-            case static::ATTACH_OP:
-                return $this->attachPath($path, $payload, $query);
-            case static::APPLY_OP:
-                return $this->applyPath($path, $payload, $query);
-            case static::JSON_PATCH_OP:
-                return $this->jsonPatchPath($path, $payload, $query);
-            case static::JSON_MERGE_PATCH_OP:
-                return $this->jsonMergePatchPath($path, $payload, $query);
-            default:
-                break;
+        // Convert string to Operation enum for backward compatibility
+        if (is_string($operation)) {
+            $operation = Operation::tryFrom($operation) ?? Operation::GET;
         }
 
-        $method = static::$operations[$operation] ?? static::$operations[static::GET_OP];
-
-        return $this->makeRequest($method, $path, $payload, $query);
+        return match ($operation) {
+            Operation::WATCH => $this->watchPath($path, $payload, $query),
+            Operation::WATCH_LOGS => $this->watchLogsPath($path, $payload, $query),
+            Operation::EXEC => $this->execPath($path, $query),
+            Operation::ATTACH => $this->attachPath($path, $payload, $query),
+            Operation::APPLY => $this->applyPath($path, $payload, $query),
+            Operation::JSON_PATCH => $this->jsonPatchPath($path, $payload, $query),
+            Operation::JSON_MERGE_PATCH => $this->jsonMergePatchPath($path, $payload, $query),
+            default => $this->makeRequest($operation->httpMethod(), $path, $payload, $query),
+        };
     }
 
     /**
      * Watch for the current resource or a resource list.
      *
+     * @param  string  $path
+     * @param  Closure  $callback
+     * @param  array  $query
      * @return bool
      */
-    protected function watchPath(string $path, Closure $callback, array $query = ['pretty' => 1])
+    protected function watchPath(string $path, Closure $callback, array $query = ['pretty' => 1]): mixed
     {
         $resourceClass = $this->resourceClass;
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
@@ -279,7 +225,6 @@ class KubernetesCluster
             if ($chunk === false) {
                 // Error occurred
                 fclose($sock);
-
                 return null;
             }
 
@@ -291,7 +236,6 @@ class KubernetesCluster
 
                 // No data yet, sleep briefly and continue
                 usleep(100000); // 100ms
-
                 continue;
             }
 
@@ -309,7 +253,7 @@ class KubernetesCluster
 
                 $data = @json_decode($line, true);
 
-                if (! $data || ! isset($data['type'], $data['object'])) {
+                if (!$data || !isset($data['type'], $data['object'])) {
                     continue;
                 }
 
@@ -323,23 +267,24 @@ class KubernetesCluster
 
                 if (! is_null($call)) {
                     fclose($sock);
-
                     return $call;
                 }
             }
         }
 
         fclose($sock);
-
         return null;
     }
 
     /**
      * Watch for the logs for the resource.
      *
+     * @param  string  $path
+     * @param  Closure  $callback
+     * @param  array  $query
      * @return bool
      */
-    protected function watchLogsPath(string $path, Closure $callback, array $query = ['pretty' => 1])
+    protected function watchLogsPath(string $path, Closure $callback, array $query = ['pretty' => 1]): mixed
     {
         $sock = $this->createSocketConnection($this->getCallableUrl($path, $query));
 
@@ -363,7 +308,6 @@ class KubernetesCluster
             if ($chunk === false) {
                 // Error occurred
                 fclose($sock);
-
                 return null;
             }
 
@@ -375,7 +319,6 @@ class KubernetesCluster
 
                 // No data yet, sleep briefly and continue
                 usleep(100000); // 100ms
-
                 continue;
             }
 
@@ -387,24 +330,24 @@ class KubernetesCluster
                 $line = substr($buffer, 0, $pos);
                 $buffer = substr($buffer, $pos + 1);
 
-                $call = call_user_func($callback, $line."\n");
+                $call = call_user_func($callback, $line . "\n");
 
                 if (! is_null($call)) {
                     fclose($sock);
-
                     return $call;
                 }
             }
         }
 
         fclose($sock);
-
         return null;
     }
 
     /**
      * Call exec on the resource.
      *
+     * @param  string  $path
+     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -412,9 +355,9 @@ class KubernetesCluster
     protected function execPath(
         string $path,
         array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
-    ) {
+    ): mixed {
         try {
-            return $this->makeRequest(static::$operations[static::EXEC_OP], $path, '', $query);
+            return $this->makeRequest(Operation::EXEC->httpMethod(), $path, '', $query);
         } catch (KubernetesAPIException $e) {
             $payload = $e->getPayload();
 
@@ -434,6 +377,9 @@ class KubernetesCluster
     /**
      * Call attach on the resource.
      *
+     * @param  string  $path
+     * @param  Closure  $callback
+     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
@@ -442,9 +388,9 @@ class KubernetesCluster
         string $path,
         Closure $callback,
         array $query = ['pretty' => 1, 'stdin' => 1, 'stdout' => 1, 'stderr' => 1, 'tty' => 1]
-    ) {
+    ): mixed {
         try {
-            return $this->makeRequest(static::$operations[static::ATTACH_OP], $path, '', $query);
+            return $this->makeRequest(Operation::ATTACH->httpMethod(), $path, '', $query);
         } catch (KubernetesAPIException $e) {
             $payload = $e->getPayload();
 
@@ -464,11 +410,14 @@ class KubernetesCluster
     /**
      * Apply server-side apply to the resource.
      *
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function applyPath(string $path, string $payload, array $query = ['pretty' => 1])
+    protected function applyPath(string $path, string $payload, array $query = ['pretty' => 1]): mixed
     {
         $options = [
             'headers' => [
@@ -476,17 +425,20 @@ class KubernetesCluster
             ],
         ];
 
-        return $this->makeRequest(static::$operations[static::APPLY_OP], $path, $payload, $query, $options);
+        return $this->makeRequest(Operation::APPLY->httpMethod(), $path, $payload, $query, $options);
     }
 
     /**
      * Apply JSON Patch (RFC 6902) to the resource.
      *
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function jsonPatchPath(string $path, string $payload, array $query = ['pretty' => 1])
+    protected function jsonPatchPath(string $path, string $payload, array $query = ['pretty' => 1]): mixed
     {
         $options = [
             'headers' => [
@@ -494,17 +446,20 @@ class KubernetesCluster
             ],
         ];
 
-        return $this->makeRequest(static::$operations[static::JSON_PATCH_OP], $path, $payload, $query, $options);
+        return $this->makeRequest(Operation::JSON_PATCH->httpMethod(), $path, $payload, $query, $options);
     }
 
     /**
      * Apply JSON Merge Patch (RFC 7396) to the resource.
      *
+     * @param  string  $path
+     * @param  string  $payload
+     * @param  array  $query
      * @return mixed
      *
      * @throws \RenokiCo\PhpK8s\Exceptions\KubernetesAPIException
      */
-    protected function jsonMergePatchPath(string $path, string $payload, array $query = ['pretty' => 1])
+    protected function jsonMergePatchPath(string $path, string $payload, array $query = ['pretty' => 1]): mixed
     {
         $options = [
             'headers' => [
@@ -512,7 +467,7 @@ class KubernetesCluster
             ],
         ];
 
-        return $this->makeRequest(static::$operations[static::JSON_MERGE_PATCH_OP], $path, $payload, $query, $options);
+        return $this->makeRequest(Operation::JSON_MERGE_PATCH->httpMethod(), $path, $payload, $query, $options);
     }
 
     /**
@@ -522,7 +477,7 @@ class KubernetesCluster
      * @param  array  $parameters
      * @return mixed
      */
-    public function __call($method, $parameters)
+    public function __call(string $method, array $parameters): mixed
     {
         // Proxy the ->get[Resource]ByName($name, $namespace = 'default')
         // For example, ->getConfigMapByName('settings')

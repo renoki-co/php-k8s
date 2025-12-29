@@ -4,6 +4,7 @@ namespace RenokiCo\PhpK8s\Test;
 
 use Carbon\Carbon;
 use Cron\CronExpression;
+use RenokiCo\PhpK8s\Enums\RestartPolicy;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\K8s;
 use RenokiCo\PhpK8s\Kinds\K8sCronJob;
@@ -40,7 +41,7 @@ class CronJobTest extends TestCase
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
-        $this->assertEquals('Never', $pod->getRestartPolicy());
+        $this->assertEquals(RestartPolicy::NEVER, $pod->getRestartPolicy());
 
         $this->assertInstanceOf(K8sJob::class, $cronjob->getJobTemplate());
         $this->assertInstanceOf(CronExpression::class, $cronjob->getSchedule());
@@ -62,7 +63,7 @@ class CronJobTest extends TestCase
         $this->assertEquals('pi', $cronjob->getName());
         $this->assertEquals(['tier' => 'backend'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $cronjob->getAnnotations());
-        $this->assertEquals('Never', $pod->getRestartPolicy());
+        $this->assertEquals(RestartPolicy::NEVER, $pod->getRestartPolicy());
 
         $this->assertInstanceOf(K8sJob::class, $cronjob->getJobTemplate());
         $this->assertInstanceOf(CronExpression::class, $cronjob->getSchedule());
@@ -120,7 +121,7 @@ class CronJobTest extends TestCase
         $this->assertEquals('periodic-sleep', $cronjob->getName());
         $this->assertEquals(['tier' => 'useless'], $cronjob->getLabels());
         $this->assertEquals(['perl/annotation' => 'no'], $cronjob->getAnnotations());
-        $this->assertEquals('Never', $pod->getRestartPolicy());
+        $this->assertEquals(RestartPolicy::NEVER, $pod->getRestartPolicy());
 
         $this->assertInstanceOf(K8sJob::class, $cronjob->getJobTemplate());
         $this->assertInstanceOf(CronExpression::class, $cronjob->getSchedule());

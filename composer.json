@@ -50,11 +50,10 @@
         "test": "vendor/bin/phpunit"
     },
     "require-dev": {
-        "laravel/pint": "dev-main",
         "mockery/mockery": "^1.6",
-        "orchestra/testbench": "^10.8.0",
+        "orchestra/testbench": "^9.0|^10.6.0",
         "phpunit/phpunit": "^10.0|^11.5",
-        "vimeo/psalm": "^6.14.2"
+        "vimeo/psalm": "^6.13.1"
     },
     "config": {
         "sort-packages": true
