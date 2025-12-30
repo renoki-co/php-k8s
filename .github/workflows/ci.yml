@@ -21,9 +21,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ["8.2", "8.3", "8.4"]
-        kubernetes: ["1.32.9", "1.33.5", "1.34.1"]
-        laravel: ["11.*", "12.*"]
+        php: ['8.2', '8.3', '8.4']
+        kubernetes: ['1.32.9', '1.33.5', '1.34.1']
+        laravel: ['11.*', '12.*']
         prefer: [prefer-lowest, prefer-stable]
         include:
           - laravel: "11.*"
@@ -31,34 +31,34 @@ jobs:
           - laravel: "12.*"
             testbench: "10.*"
           # PHP 8.5 only for Laravel 12
-          - php: "8.5"
-            kubernetes: "1.32.9"
-            laravel: "12.*"
+          - php: '8.5'
+            kubernetes: '1.32.9'
+            laravel: '12.*'
             testbench: "10.*"
             prefer: prefer-lowest
-          - php: "8.5"
-            kubernetes: "1.32.9"
-            laravel: "12.*"
+          - php: '8.5'
+            kubernetes: '1.32.9'
+            laravel: '12.*'
             testbench: "10.*"
             prefer: prefer-stable
-          - php: "8.5"
-            kubernetes: "1.33.5"
-            laravel: "12.*"
+          - php: '8.5'
+            kubernetes: '1.33.5'
+            laravel: '12.*'
             testbench: "10.*"
             prefer: prefer-lowest
-          - php: "8.5"
-            kubernetes: "1.33.5"
-            laravel: "12.*"
+          - php: '8.5'
+            kubernetes: '1.33.5'
+            laravel: '12.*'
             testbench: "10.*"
             prefer: prefer-stable
-          - php: "8.5"
-            kubernetes: "1.34.1"
-            laravel: "12.*"
+          - php: '8.5'
+            kubernetes: '1.34.1'
+            laravel: '12.*'
             testbench: "10.*"
             prefer: prefer-lowest
-          - php: "8.5"
-            kubernetes: "1.34.1"
-            laravel: "12.*"
+          - php: '8.5'
+            kubernetes: '1.34.1'
+            laravel: '12.*'
             testbench: "10.*"
             prefer: prefer-stable
 
@@ -90,7 +90,7 @@ jobs:
 
           echo "cache-key=composer-php-$PHP_VERSION-$LARAVEL_VERSION-$PREFER_VERSION-${{ hashFiles('composer.json') }}" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Cache dependencies
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
@@ -103,6 +103,8 @@ jobs:
           driver: docker
           container-runtime: containerd
           kubernetes-version: v${{ matrix.kubernetes }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Enable VolumeSnapshots, CSI hostpath driver, and metrics-server
         run: |

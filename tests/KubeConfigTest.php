@@ -99,7 +99,8 @@ class KubeConfigTest extends TestCase
                     'Authorization: Bearer some-token',
                 ],
             ],
-            'ssl' => [],
+            'ssl' => [
+            ],
         ], $options);
     }
 
@@ -117,7 +118,8 @@ class KubeConfigTest extends TestCase
                     'Authorization: Basic c29tZS11c2VyOnNvbWUtcGFzc3dvcmQ=',
                 ],
             ],
-            'ssl' => [],
+            'ssl' => [
+            ],
         ], $options);
     }
 
@@ -253,5 +255,70 @@ class KubeConfigTest extends TestCase
         ['headers' => ['authorization' => $token]] = $cluster->getClient()->getConfig();
 
         $this->assertEquals('Bearer some-token', $token);
+    }
+
+    public function test_kube_config_with_exec_provider()
+    {
+        $cluster = KubernetesCluster::fromKubeConfigYamlFile(__DIR__.'/yaml/kubeconfig-exec.yaml', 'exec-context');
+
+        // Verify token provider was created
+        $token = $cluster->getAuthToken();
+        $this->assertEquals('exec-test-token', $token);
+
+        // Verify token provider is instance of ExecCredentialProvider
+        $reflection = new \ReflectionClass($cluster);
+        $property = $reflection->getProperty('tokenProvider');
+        $property->setAccessible(true);
+        $tokenProvider = $property->getValue($cluster);
+
+        $this->assertInstanceOf(\RenokiCo\PhpK8s\Auth\ExecCredentialProvider::class, $tokenProvider);
+    }
+
+    public function test_kube_config_exec_provider_from_array()
+    {
+        $kubeconfig = [
+            'contexts' => [[
+                'name' => 'test',
+                'context' => ['cluster' => 'test', 'user' => 'test-user'],
+            ]],
+            'clusters' => [[
+                'name' => 'test',
+                'cluster' => ['server' => 'http://127.0.0.1:8080'],
+            ]],
+            'users' => [[
+                'name' => 'test-user',
+                'user' => [
+                    'exec' => [
+                        'apiVersion' => 'client.authentication.k8s.io/v1',
+                        'command' => 'echo',
+                        'args' => ['{"apiVersion":"client.authentication.k8s.io/v1","kind":"ExecCredential","status":{"token":"array-exec-token"}}'],
+                    ],
+                ],
+            ]],
+        ];
+
+        $cluster = KubernetesCluster::fromKubeConfigArray($kubeconfig, 'test');
+
+        $this->assertEquals('array-exec-token', $cluster->getAuthToken());
+    }
+
+    public function test_token_provider_get_auth_token_method()
+    {
+        // Test that getAuthToken() prioritizes token provider over static token
+        $cluster = new KubernetesCluster('http://127.0.0.1:8080');
+        $cluster->withToken('static-token');
+
+        $this->assertEquals('static-token', $cluster->getAuthToken());
+
+        // Now add a token provider
+        $provider = new \RenokiCo\PhpK8s\Auth\ExecCredentialProvider([
+            'command' => 'echo',
+            'args' => ['{"apiVersion":"client.authentication.k8s.io/v1","kind":"ExecCredential","status":{"token":"provider-token"}}'],
+        ]);
+
+        $cluster->withTokenProvider($provider);
+
+        // Should now return provider token, not static token
+        $this->assertEquals('provider-token', $cluster->getAuthToken());
     }
 }

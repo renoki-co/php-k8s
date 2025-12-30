@@ -2,6 +2,7 @@
 
 namespace RenokiCo\PhpK8s\Test;
 
+use RenokiCo\PhpK8s\Enums\RestartPolicy;
 use RenokiCo\PhpK8s\Exceptions\KubernetesAPIException;
 use RenokiCo\PhpK8s\Kinds\K8sJob;
 use RenokiCo\PhpK8s\Kinds\K8sPod;
@@ -27,7 +28,7 @@ class JobTest extends TestCase
         $this->assertEquals(['tier' => 'compute'], $job->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
-        $this->assertEquals('Never', $pod->getRestartPolicy());
+        $this->assertEquals(RestartPolicy::NEVER, $pod->getRestartPolicy());
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
     }
@@ -45,7 +46,7 @@ class JobTest extends TestCase
         $this->assertEquals(['tier' => 'compute'], $job->getLabels());
         $this->assertEquals(['perl/annotation' => 'yes'], $job->getAnnotations());
         $this->assertEquals($pod->getName(), $job->getTemplate()->getName());
-        $this->assertEquals('Never', $pod->getRestartPolicy());
+        $this->assertEquals(RestartPolicy::NEVER, $pod->getRestartPolicy());
 
         $this->assertInstanceOf(K8sPod::class, $job->getTemplate());
     }

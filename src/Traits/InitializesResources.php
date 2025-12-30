@@ -6,6 +6,8 @@ use RenokiCo\PhpK8s\Kinds\K8sClusterRole;
 use RenokiCo\PhpK8s\Kinds\K8sClusterRoleBinding;
 use RenokiCo\PhpK8s\Kinds\K8sConfigMap;
 use RenokiCo\PhpK8s\Kinds\K8sCronJob;
+use RenokiCo\PhpK8s\Kinds\K8sCSIDriver;
+use RenokiCo\PhpK8s\Kinds\K8sCSINode;
 use RenokiCo\PhpK8s\Kinds\K8sDaemonSet;
 use RenokiCo\PhpK8s\Kinds\K8sDeployment;
 use RenokiCo\PhpK8s\Kinds\K8sEndpointSlice;
@@ -34,6 +36,7 @@ use RenokiCo\PhpK8s\Kinds\K8sStatefulSet;
 use RenokiCo\PhpK8s\Kinds\K8sStorageClass;
 use RenokiCo\PhpK8s\Kinds\K8sValidatingWebhookConfiguration;
 use RenokiCo\PhpK8s\Kinds\K8sVerticalPodAutoscaler;
+use RenokiCo\PhpK8s\Kinds\K8sVolumeAttributesClass;
 
 trait InitializesResources
 {
@@ -145,6 +148,39 @@ trait InitializesResources
     public static function persistentVolumeClaim($cluster = null, array $attributes = [])
     {
         return new K8sPersistentVolumeClaim($cluster, $attributes);
+    }
+
+    /**
+     * Create a new CSIDriver kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @return \RenokiCo\PhpK8s\Kinds\K8sCSIDriver
+     */
+    public static function csiDriver($cluster = null, array $attributes = [])
+    {
+        return new K8sCSIDriver($cluster, $attributes);
+    }
+
+    /**
+     * Create a new CSINode kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @return \RenokiCo\PhpK8s\Kinds\K8sCSINode
+     */
+    public static function csiNode($cluster = null, array $attributes = [])
+    {
+        return new K8sCSINode($cluster, $attributes);
+    }
+
+    /**
+     * Create a new VolumeAttributesClass kind.
+     *
+     * @param  \RenokiCo\PhpK8s\KubernetesCluster|null  $cluster
+     * @return \RenokiCo\PhpK8s\Kinds\K8sVolumeAttributesClass
+     */
+    public static function volumeAttributesClass($cluster = null, array $attributes = [])
+    {
+        return new K8sVolumeAttributesClass($cluster, $attributes);
     }
 
     /**

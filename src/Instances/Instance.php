@@ -11,8 +11,6 @@ class Instance implements Arrayable
 
     /**
      * Initialize the class.
-     *
-     * @return void
      */
     public function __construct(array $attributes = [])
     {
@@ -21,10 +19,8 @@ class Instance implements Arrayable
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->attributes;
     }

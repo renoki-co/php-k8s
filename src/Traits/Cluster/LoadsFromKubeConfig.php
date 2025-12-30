@@ -218,6 +218,24 @@ trait LoadsFromKubeConfig
             );
         }
 
+        // Handle modern exec credential plugin format
+        if (isset($userConfig['user']['exec'])) {
+            $execConfig = $userConfig['user']['exec'];
+
+            $provider = new \RenokiCo\PhpK8s\Auth\ExecCredentialProvider($execConfig);
+
+            // If provideClusterInfo is true, pass cluster information
+            if (! empty($execConfig['provideClusterInfo'])) {
+                $provider->setClusterInfo([
+                    'server' => $url,
+                    'certificate-authority-data' => $clusterConfig['cluster']['certificate-authority-data'] ?? null,
+                    'insecure-skip-tls-verify' => $clusterConfig['cluster']['insecure-skip-tls-verify'] ?? false,
+                ]);
+            }
+
+            $this->withTokenProvider($provider);
+        }
+
         if (isset($clusterConfig['cluster']['insecure-skip-tls-verify']) && $clusterConfig['cluster']['insecure-skip-tls-verify']) {
             $this->withoutSslChecks();
         }

@@ -48,8 +48,9 @@ trait MakesWebsocketCalls
             $options['tls']['cafile'] = $this->verify;
         }
 
-        if ($this->token) {
-            $headers['Authorization'] = "Bearer {$this->token}";
+        $authToken = $this->getAuthToken();
+        if ($authToken) {
+            $headers['Authorization'] = "Bearer {$authToken}";
         } elseif ($this->auth) {
             $headers['Authorization'] = 'Basic '.base64_encode(implode(':', $this->auth));
         }
@@ -75,7 +76,8 @@ trait MakesWebsocketCalls
     /**
      * Create a new socket connection as stream context.
      *
-     * @return resource
+     *
+     * @return false|resource
      */
     protected function createSocketConnection(string $callableUrl)
     {
@@ -102,8 +104,9 @@ trait MakesWebsocketCalls
             $sslOptions['cafile'] = $this->verify;
         }
 
-        if ($this->token) {
-            $headers[] = "Authorization: Bearer {$this->token}";
+        $authToken = $this->getAuthToken();
+        if ($authToken) {
+            $headers[] = "Authorization: Bearer {$authToken}";
         } elseif ($this->auth) {
             $headers[] = 'Authorization: Basic '.base64_encode(implode(':', $this->auth));
         }

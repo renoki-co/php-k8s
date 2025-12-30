@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: CSINode
+metadata:
+  name: test-node
+spec:
+  drivers:
+    - name: test-csi-driver.example.com
+      nodeID: node-1-storage-id
+      topologyKeys:
+        - topology.test.example.com/zone
+        - topology.kubernetes.io/region
+      allocatable:
+        count: 8
