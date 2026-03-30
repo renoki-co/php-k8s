@@ -23,13 +23,18 @@ jobs:
       matrix:
         php: ["8.2", "8.3", "8.4"]
         kubernetes: ["1.32.9", "1.33.5", "1.34.1"]
-        laravel: ["11.*", "12.*"]
+        laravel: ["11.*", "12.*", "13.*"]
         prefer: [prefer-lowest, prefer-stable]
+        exclude:
+          - php: "8.2"
+            laravel: "13.*"
         include:
           - laravel: "11.*"
             testbench: "9.*"
           - laravel: "12.*"
             testbench: "10.*"
+          - laravel: "13.*"
+            testbench: "11.*"
           # PHP 8.5 only for Laravel 12
           - php: "8.5"
             kubernetes: "1.32.9"
@@ -60,6 +65,37 @@ jobs:
             kubernetes: "1.34.1"
             laravel: "12.*"
             testbench: "10.*"
+            prefer: prefer-stable
+          # PHP 8.5 only for Laravel 13
+          - php: "8.5"
+            kubernetes: "1.32.9"
+            laravel: "13.*"
+            testbench: "11.*"
+            prefer: prefer-lowest
+          - php: "8.5"
+            kubernetes: "1.32.9"
+            laravel: "13.*"
+            testbench: "11.*"
+            prefer: prefer-stable
+          - php: "8.5"
+            kubernetes: "1.33.5"
+            laravel: "13.*"
+            testbench: "11.*"
+            prefer: prefer-lowest
+          - php: "8.5"
+            kubernetes: "1.33.5"
+            laravel: "13.*"
+            testbench: "11.*"
+            prefer: prefer-stable
+          - php: "8.5"
+            kubernetes: "1.34.1"
+            laravel: "13.*"
+            testbench: "11.*"
+            prefer: prefer-lowest
+          - php: "8.5"
+            kubernetes: "1.34.1"
+            laravel: "13.*"
+            testbench: "11.*"
             prefer: prefer-stable
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - K8s v${{ matrix.kubernetes }} --${{ matrix.prefer }}
