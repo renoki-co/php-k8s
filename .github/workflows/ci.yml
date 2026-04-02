@@ -142,6 +142,6 @@ jobs:
         run: |
           vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
 
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           fail_ci_if_error: false
