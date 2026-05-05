@@ -19,7 +19,7 @@ class PhpK8sException extends Exception
      * @param  string|null  $message
      * @param  int  $code
      */
-    public function __construct($message = null, $code = 0, ?array $payload = null)
+    public function __construct($message = "", $code = 0, ?array $payload = null)
     {
         parent::__construct($message, $code);
 
